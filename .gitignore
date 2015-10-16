@@ -25,4 +25,5 @@ Thumbs.db
 
 # Archivos de results y uploads
 data/results/
+data/structure/
 data/uploads/
