@@ -17,7 +17,11 @@ __actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace("\\", "/"
 
 # Definición de directorios
 DIR_DATA = __actualpath
+DIR_RESULTS = __actualpath + "results/"
+DIR_UPLOADS = __actualpath + "uploads/"
 
 # Test
 if __name__ == '__main__':
     print DIR_DATA
+    print DIR_RESULTS
+    print DIR_UPLOADS
