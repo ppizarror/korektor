@@ -1,7 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Lang editor
-# Pablo Pizarro, 2013-2015
+
+# EDITOR
+# Editor de idiomas
+#
+# Autor: PABLO PIZARRO @ ppizarror.com
+# Fecha: 2013-2015
+# Licencia: GPLv2
 
 # Importación de librerias
 from Tkinter import *
@@ -29,7 +34,7 @@ C_DATA = [650, 450, False, False, False, "*//*", False]
 DATADOCUMENTS = "doc/"
 DATAICONS = "icons/"
 DATACONFIG = "config/"
-DATALANGS = str(os.path.abspath(os.path.dirname(__file__))).replace("bin\\langeditor", "res\\langs\\")
+DATALANGS = str(os.path.abspath(os.path.dirname(__file__))).replace("bin/langeditor", "resources/langs/")
 DATARECOVER = "recover/"
 DEFAULT_FONT_TITLE = "Arial", 10
 EMAIL = "pablo@ppizarror.com"
@@ -188,7 +193,7 @@ class pop:
             Label(self.w, text="Version: " + str(properties[7]), font=DEFAULT_FONT_TITLE, border=5).pack()
             Button(self.w, text="Cerrar", command=self.w.destroy, relief=GROOVE).pack()
             self.w.bind("<Return>", self.destruir)
-        elif typeObject in ["licence", "changelog", "ayuda", "longtext"]:
+        elif typeObject in ["license", "changelog", "ayuda", "longtext"]:
             archivo = open(properties[5], "r")
             Yscroll = Scrollbar(self.w)
             Yscroll.pack(side=RIGHT, fill=Y)
@@ -661,7 +666,7 @@ class langs:
                 for indx, val in enumerate(item):
                     ilen = tkFont.Font().measure(val)
                     if self.tree.column(ml_columns[indx], width=None) < ilen:
-                        self.tree.column(ml_columns[indx],width=ilen)
+                        self.tree.column(ml_columns[indx], width=ilen)
 
     def _show_tree(self):
         """
@@ -821,11 +826,11 @@ class langs:
 
     # Función que carga la ayuda al programa
     def helpme(self, e=False):
-        pop(["Ayuda", ICONPROGRAM, "licence", 400, 600, DATADOCUMENTS + "AYUDA.txt"]).w.mainloop(0)
+        pop(["Ayuda", ICONPROGRAM, "license", 400, 600, DATADOCUMENTS + "AYUDA.txt"]).w.mainloop(0)
 
     # Función que carga la ayuda de los estados
     def helpsates(self, e=False):
-        pop(["Estados", ICONPROGRAM, "licence", 400, 600, DATADOCUMENTS + "STATES.txt"]).w.mainloop(0)
+        pop(["Estados", ICONPROGRAM, "license", 400, 600, DATADOCUMENTS + "STATES.txt"]).w.mainloop(0)
 
     # Función que inserta un string
     def insertar(self, t="", m=False, e=False):
@@ -893,7 +898,7 @@ class langs:
 
     # Función que carga la licencia del programa
     def licencia(self, e=False):
-        pop(["Licencia GNU", ICONPROGRAM, "licence", 400, 600, DATADOCUMENTS + "GNU.txt"]).w.mainloop(0)
+        pop(["Licencia GNU", ICONPROGRAM, "license", 400, 600, DATADOCUMENTS + "GNU.txt"]).w.mainloop(0)
 
     def loadLang(self, e=False, t="Noset"):  # Función que carga un idioma
         try:
