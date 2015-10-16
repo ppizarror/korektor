@@ -11,11 +11,17 @@
 # Importación de librerías
 if __name__ == '__main__': from libpath import *
 from bin.configLoader import configLoader
-from bin.utils import isHiddenFile, isFolder
+from bin.utils import isHiddenFile, isFolder, regexCompare
 import zipfile
 from data import *
 from config import DIR_CONFIG
 import bin.errors as err
+
+
+# Constantes
+PACKAGE_TESTER_ERROR_NO_FOUND = "El archivo consultado no existe"
+ZIP_VALIDATE_FAIL = "ZIP-PACKAGE-FAIL"
+ZIP_VALIDATE_OK = "ZIP-PACKAGE-OK"
 
 
 class packageTester:
@@ -30,6 +36,7 @@ class packageTester:
         config = configLoader(DIR_CONFIG, "packages.ini")  # Configuraciones de los paquetes
         self.packageStructedFiles = []  # Lista con archivos requeridos para cada package
         self.validChars = config.getValue("VALID_CHARACTERS")  # Caracteres válidos de los archivos del paquete
+        self.validRegexChars = config.getValue("VALID_REGEX_CHARACTERS")  # Caracteres válidos para los regex
         # Genera la estructura
         self.structFiles = []
         self.loadStructure()
@@ -84,11 +91,18 @@ class packageTester:
         """
         try:
             data = zipfile.ZipFile(DIR_UPLOADS + filename)
-            data.printdir()
-            print self.structFiles
         except:
-            err.warning(err.PACKAGE_TESTER_ERROR_NO_FOUND)
+            err.warning(PACKAGE_TESTER_ERROR_NO_FOUND)
             return False
+        for structfile in self.structFiles:
+            found = False
+            for datafile in data.namelist():
+                if regexCompare(structfile, datafile):
+                    found = True
+                    break
+            if not found:
+                return False
+        return True
 
 
 # Test

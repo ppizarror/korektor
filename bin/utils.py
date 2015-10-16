@@ -396,6 +396,57 @@ def printMatrix(matrix):
         print "\n"
 
 
+def regexCompare(regString, currString, validRegexChars=None):
+    """
+    Compara dos strings el cual regString posee regex
+    :param regString: String regex
+    :param currString: String a comparar
+    :return: Boolean
+    """
+
+    def _comp(i, j):
+        """
+        Compara los carácteres de regString y currString en las posiciones
+        i y j respectivamente
+        """
+        return regString[i] == currString[j]
+
+    lr = len(regString)
+    lc = len(currString)
+    if lr > 0 and lc > 0:
+        if "*" not in regString:
+            return regString == currString
+        else:
+            i = 0
+            j = 0
+            while i < lr and j < lc:
+                if regString[i] is not "*":
+                    if not _comp(i, j):
+                        return False
+                    i = i + 1
+                    j = j + 1
+                else:
+                    if i == lr - 1:
+                        break
+                    else:
+                        i = i + 1
+                        nextc = regString[i]
+                    for k in range(0, lc):
+                        if currString[j + k] == nextc:
+                            j = j + k
+                            break
+                        else:
+                            if validRegexChars is not None:
+                                if currString[j + k] not in validRegexChars:
+                                    return False
+                        if j + k >= lc:
+                            return False
+            return True
+
+    else:
+        return False
+
+
 # noinspection PyShadowingBuiltins
 def sortAndUniq(input):
     """
@@ -454,3 +505,10 @@ if __name__ == '__main__':
     print isHiddenFile(".file")
     print isHiddenFile("file")
     print isHiddenFile(1)
+    print regexCompare("korektor test", "korektor test")
+    print regexCompare("korektor is nice", "korektor is not nice")
+    print regexCompare("*_*", "pablo.pizarro")
+    print regexCompare("*regex *", "regex are  korektor")
+    print regexCompare("cc3001/tarea2/*_*/Parte1.java", "cc3001/tarea2/pablo_pizarro*/Parte1.java")
+    print regexCompare("cc3001/tarea2/*_*/Parte1.java", "cc3001/tarea2/pablo_pizarro*/Parte1.java",
+                       "abcdefghijklmnopqrstuvwxyz")
