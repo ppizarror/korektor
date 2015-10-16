@@ -16,7 +16,7 @@ import errors
 
 # Configuración de entorno
 # noinspection PyProtectedMember
-__binconfig = configLoader(binpath._DIR_CONFIG + "bin.ini")
+__binconfig = configLoader(binpath._DIR_CONFIG, "bin.ini")
 sys.setdefaultencoding(__binconfig.getValue("SET_DEFAULT_ENCODING"))
 if __binconfig.isTrue("DONT_WRITE_BYTECODE"):
     reload(sys)

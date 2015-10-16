@@ -25,6 +25,7 @@ try:
     import signal
     import string
     import time
+    import types
 except:
     errors.throw(errors.ERROR_IMPORTSYSTEMERROR)
 
@@ -281,6 +282,29 @@ def googleTranslate(text, translate_lang, header, web, source_lang=None):
     return translate_text
 
 
+def isFolder(path, filename):
+    """
+    Función que retorna true en el caso de que el archivo sea una carpeta, False si no
+    :param path: Directorio del archivo
+    :param filename: Archivo
+    :return: Boolean
+    """
+    return "." not in (path + filename)
+
+
+def isHiddenFile(filename):
+    """
+    Función que retorna True en el caso de que el archivo empieza por .
+    :param filename: Nombre del archivo
+    :return: Boolean
+    """
+    if isinstance(filename, types.StringType):
+        if len(filename) > 0:
+            if filename[0] is not ".":
+                return False
+    return True
+
+
 def isIn(termino, matriz):
     """
     Función que comprueba si un elemento esta en una matriz (no completamente)
@@ -427,3 +451,6 @@ if __name__ == '__main__':
     print getBetweenTags("<player>Username<title></title></player>", "<player>", "</player>")
     print getBetweenTags("<player>Username</player><title>Altername</title>", "<player>", "</player>")
     print getBetweenTags("<player>Username</player><title>Altername</title>", "<title>", "</title>")
+    print isHiddenFile(".file")
+    print isHiddenFile("file")
+    print isHiddenFile(1)

@@ -34,7 +34,7 @@ TRUE = "TRUE"
 class configLoader:
     """Carga configuraciones y retorna sus elementos"""
 
-    def __init__(self, filename, **kwargs):
+    def __init__(self, directory, conffile, **kwargs):
         """
         Función constructora
         :param filename: Nombre del archivo
@@ -44,6 +44,7 @@ class configLoader:
         # Se carga el archivo de configuraciones
         try:
             # noinspection PyShadowingBuiltins
+            filename = directory+conffile
             file = open(filename.replace("\\", "/"), "r")
         except:
             errors.throw(errors.ERROR_NOCONFIGFILE, filename)
@@ -140,6 +141,24 @@ class configLoader:
                 return self.configs[param]
             else:
                 errors.warning(errors.ERROR_CONFIGNOTEXISTENT, param)
+        return None
+
+    def getValueListed(self, param, split = ";"):
+        """
+        Retorna una lista con los valores de una configuracion
+        :param param: Parámetro
+        :param split: String de separación
+        :return:
+        """
+        value = self.getValue(param)
+        if value is not None:
+            value = value.split(";")
+            valueNewList = []
+            for d in value:
+                valueNewList.append(d.strip())
+            return valueNewList
+        else:
+            return []
 
     def printParameters(self):
         """
@@ -169,7 +188,7 @@ class configLoader:
 
 # Test
 if __name__ == '__main__':
-    binconfig = configLoader(".config/bin.ini", verbose=True)
+    binconfig = configLoader(".config/", "bin.ini", verbose=True)
     binconfig.isTrue("DONT_WRITE_BYTECODE")
     binconfig.getParameters()
     binconfig.printParameters()
