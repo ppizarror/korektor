@@ -22,3 +22,7 @@ Thumbs.db
 
 # Archivos ejecutables
 *.exe
+
+# Archivos de results y uploads
+data/results/
+data/uploads/
