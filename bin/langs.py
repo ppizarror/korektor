@@ -56,7 +56,7 @@ class langLoader:
         if language + langconfig.getValue(0) in langavaiable.getParameters():
             try:
                 # noinspection PyShadowingBuiltins
-                file = open(_LANG_DIRLANGS + language + langconfig.getValue(0), "r")
+                file = open(_LANG_DIRLANGS + language + langconfig.getValue(0), "r")  # @ReservedAssignment
             except:
                 errors.throw(errors.ERROR_NOLANGFILE, language)
             self.lang = {}

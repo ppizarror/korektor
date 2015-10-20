@@ -10,7 +10,7 @@
 
 # Importación de librerías de entorno
 # noinspection PyUnresolvedReferences
-from binpath import *
+from binpath import *  # @UnusedWildImport
 import errors
 
 _IMPORTED = [1, 1]
@@ -21,7 +21,7 @@ try:
     from urllib import urlencode
     from urllib2 import urlopen, Request
     import ctypes
-    import os
+    import os  # @Reimport
     import signal
     import string
     import time
@@ -36,7 +36,7 @@ try:
 except:
     _IMPORTED[0] = 0
 try:
-    import mechanize
+    import mechanize  # @UnusedImport @UnresolvedImport
 except:
     _IMPORTED[1] = 0
 
@@ -71,7 +71,6 @@ def compareVersion(ver1, ver2):
     """
     ver1 = ver1.split(".")
     ver2 = ver2.split(".")
-    ganador = 0
     for i in range(3):
         if int(ver1[i]) > int(ver2[i]):
             return 1
@@ -90,12 +89,12 @@ def colorcmd(cmd, color):
     if color in _CMD_COLORS and _IMPORTED[0]:
         color = _CMD_COLORS[color]
         try:
-            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11), color)
+            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11), color)  # @UndefinedVariable
         except:
             pass
         print cmd,
         try:
-            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11), 0x07)
+            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11), 0x07)  # @UndefinedVariable
         except:
             pass
     else:
@@ -120,7 +119,8 @@ def delMatrix(matrix):
     """
     a = len(matrix)
     if a > 0:
-        for k in range(a): matrix.pop(0)
+        for k in range(a): # @UnusedVariable
+            matrix.pop(0)
 
 
 def clrscr():
@@ -143,7 +143,7 @@ def destroyProcess():
     if os.name == "nt":
         os.system("taskkill /PID " + str(os.getpid()) + " /F")
     else:
-        os.kill(os.getpid(), signal.SIGKILL)
+        os.kill(os.getpid(), signal.SIGKILL)  # @UndefinedVariable
 
 
 def generateRandom6():
@@ -151,7 +151,7 @@ def generateRandom6():
     Genera un string de 6 carácteres aleatorios
     :return: String
     """
-    return ''.join(choice(string.ascii_uppercase) for i in range(6))
+    return ''.join(choice(string.ascii_uppercase) for i in range(6))  # @UnusedVariable
 
 
 def generateRandom12():
@@ -159,7 +159,7 @@ def generateRandom12():
     Genera un string de 12 carácteres aleatorios
     :return: String
     """
-    return ''.join(choice(string.ascii_uppercase) for i in range(12))
+    return ''.join(choice(string.ascii_uppercase) for i in range(12))  # @UnusedVariable
 
 
 def getBetweenTags(html, tagi, tagf):
@@ -216,7 +216,7 @@ def getTerminalSize():
     # noinspection PyShadowingNames
     def ioctl_GWINSZ(fd):
         try:
-            import fcntl, termios, struct
+            import fcntl, termios, struct  # @UnresolvedImport
             cr = struct.unpack('hh', fcntl.ioctl(fd, termios.TIOCGWINSZ,
                                                  '1234'))
         except:
@@ -226,7 +226,7 @@ def getTerminalSize():
     cr = ioctl_GWINSZ(0) or ioctl_GWINSZ(1) or ioctl_GWINSZ(2)
     if not cr:
         try:
-            fd = os.open(os.ctermid(), os.O_RDONLY)
+            fd = os.open(os.ctermid(), os.O_RDONLY)  # @UndefinedVariable
             cr = ioctl_GWINSZ(fd)
             os.close(fd)
         except:
@@ -244,14 +244,14 @@ def getVersion(label, headers):
     :return:
     """
     if _IMPORTED[1]:
-        browser = Browser()
+        browser = Browser()  # @UndefinedVariable
         browser.addHeaders(headers)
         browser.abrirLink(LINK_UPDATES)
         html = browser.getHtml()
     else:
         http_headers = {"User-Agent": headers}
         request_object = Request(LINK_UPDATES, None, http_headers)
-        response = urllib2.urlopen(request_object)
+        response = urllib2.urlopen(request_object)  # @UndefinedVariable
         html = response.read()
     html = getBetweenTags(getBetweenTags(
         html, "<" + label + ">", "</" + label + ">"), "<version>", "</version>")
@@ -274,12 +274,7 @@ def googleTranslate(text, translate_lang, header, web, source_lang=None):
     http_headers = {"User-Agent": header}
     request_object = Request(web + params, None, http_headers)
     response = urlopen(request_object)
-    # noinspection PyShadowingNames
-    string = re.sub(',,,|,,', ',"0",', response.read())
-    n = json.loads(string)
-    translate_text = n[0][0][0]
-    res_source_lang = n[2]
-    return translate_text
+    return json.loads(re.sub(',,,|,,', ',"0",', response.read()))[0][0][0]  # @UndefinedVariable
 
 
 def isFolder(path, filename):
@@ -442,13 +437,12 @@ def regexCompare(regString, currString, validRegexChars=None):
                         if j + k >= lc:
                             return False
             return True
-
     else:
         return False
 
 
 # noinspection PyShadowingBuiltins
-def sortAndUniq(input):
+def sortAndUniq(input):  # @ReservedAssignment
     """
     Función que elimina datos repetidos
     :param input: Lista

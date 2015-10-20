@@ -14,7 +14,7 @@
 # Licencia: GPLv2
 
 # Importación de librerías
-if __name__ == '__main__': from binpath import *
+if __name__ == '__main__': from binpath import *  # @UnusedWildImport
 from utils import string2list
 import errors
 
@@ -45,7 +45,7 @@ class configLoader:
         try:
             # noinspection PyShadowingBuiltins
             filename = directory+conffile
-            file = open(filename.replace("\\", "/"), "r")
+            file = open(filename.replace("\\", "/"), "r")  # @ReservedAssignment
         except:
             errors.throw(errors.ERROR_NOCONFIGFILE, filename)
         # Variables

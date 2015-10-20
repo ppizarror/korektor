@@ -16,4 +16,4 @@ from libpath import DIR_LIB
 import libpath
 
 # noinspection PyProtectedMember
-__binconfig = configLoader(libpath._LIB_CONFIG + "lib.ini")
+__binconfig = configLoader(libpath._LIB_CONFIG, "lib.ini")

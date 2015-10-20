@@ -9,11 +9,11 @@
 # Licencia: GPLv2
 
 # Importación de librerías
-if __name__ == '__main__': from libpath import *
+if __name__ == '__main__': from libpath import *  # @UnusedWildImport
 from bin.configLoader import configLoader
 from bin.utils import isHiddenFile, isFolder, regexCompare
 import zipfile
-from data import *
+from data import *  # @UnusedWildImport
 from config import DIR_CONFIG
 import bin.errors as err
 
@@ -56,7 +56,8 @@ class packageTester:
                     return False
             return True
 
-        def _walk(parent, dir, depth):
+        # noinspection PyShadowingBuiltins
+        def _walk(parent, dir, depth):  # @ReservedAssignment
             """
             Función que se mueve entre las carpetas buscando archivos de forma recursiva
             :param dir: Directorio en string

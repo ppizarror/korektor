@@ -9,7 +9,7 @@
 # Licencia: GPLv2
 
 # Importación de librerías
-if __name__ == '__main__': from binpath import *
+if __name__ == '__main__': from binpath import *  # @UnusedWildImport
 import cookielib
 import errors
 import htmlentitydefs

@@ -129,10 +129,7 @@ def parseLangError(msg):
     code = code.replace("]", "")
     msg = data[1].strip()
     msg = insertEach(msg, "-\n\t    ", WRAP_ERROR_MSG)
-    ct = 0
-    ci = 0
-    msg = Color.RED + ST_WARNING_ID.format(code) + Color.END + " " + msg
-    return msg
+    return Color.RED + ST_WARNING_ID.format(code) + Color.END + " " + msg
 
 
 # Test

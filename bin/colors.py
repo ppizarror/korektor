@@ -9,8 +9,8 @@
 # Licencia: GPLv2
 
 # Importación de librerías
-if __name__ == '__main__': from binpath import *
-import os
+if __name__ == '__main__': from binpath import *  # @UnusedWildImport
+import os  # @Reimport
 
 
 # noinspection PyClassHasNoInit
