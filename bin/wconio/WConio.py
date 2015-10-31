@@ -123,11 +123,11 @@ __keydict = {
 
 def cputs(s):
     for c in s:
-        putch(c)
+        putch(c)  # @UndefinedVariable
 
 def getkey():
     n, c = getch()
-    # 0340 is 'grey' keys.  change this if you don't like 
+    # 0340 is 'grey' keys.  change this if you don't like
     # it, but I don't care what color the key is.  IMHO it
     # just confuses the end-user if they need to know.
     if n == 0 or n == 0340:
@@ -178,8 +178,8 @@ def normvideo():
 
 def movetext(left, top, right, bottom, destleft, desttop):
     s = gettext(left, top, right, bottom)
-    puttext(destleft, desttop, 
-        right + (destleft - left), 
+    puttext(destleft, desttop,
+        right + (destleft - left),
         bottom + (desttop - top), s)
 
 class WCFile:

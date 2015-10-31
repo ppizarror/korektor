@@ -89,12 +89,14 @@ def colorcmd(cmd, color):
     if color in _CMD_COLORS and _IMPORTED[0]:
         color = _CMD_COLORS[color]
         try:
-            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11), color)  # @UndefinedVariable
+            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11),
+                                                           color)  # @UndefinedVariable
         except:
             pass
         print cmd,
         try:
-            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11), 0x07)  # @UndefinedVariable
+            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11),
+                                                           0x07)  # @UndefinedVariable
         except:
             pass
     else:
@@ -119,7 +121,7 @@ def delMatrix(matrix):
     """
     a = len(matrix)
     if a > 0:
-        for k in range(a): # @UnusedVariable
+        for k in range(a):  # @UnusedVariable
             matrix.pop(0)
 
 
@@ -130,7 +132,7 @@ def clrscr():
     """
     if _IMPORTED[0]:
         try:
-            WConio.clrscr()
+            WConio.clrscr()  # @UndefinedVariable
         except:
             pass
 
@@ -418,22 +420,25 @@ def regexCompare(regString, currString, validRegexChars=None):
                 if regString[i] is not "*":
                     if not _comp(i, j):
                         return False
-                    i = i + 1
-                    j = j + 1
+                    i += 1
+                    j += 1
                 else:
                     if i == lr - 1:
                         break
                     else:
-                        i = i + 1
+                        i += 1
                         nextc = regString[i]
                     for k in range(0, lc):
-                        if currString[j + k] == nextc:
-                            j = j + k
-                            break
-                        else:
-                            if validRegexChars is not None:
-                                if currString[j + k] not in validRegexChars:
-                                    return False
+                        try:
+                            if currString[j + k] == nextc:
+                                j += k
+                                break
+                            else:
+                                if validRegexChars is not None:
+                                    if currString[j + k] not in validRegexChars:
+                                        return False
+                        except:
+                            return False
                         if j + k >= lc:
                             return False
             return True

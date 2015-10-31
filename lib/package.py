@@ -5,21 +5,22 @@
 # Testea que los paquetes entregados por los alumnos tengan una estructura correcta
 #
 # Autor: PABLO PIZARRO @ ppizarror.com
-# Fecha: ABRIL 2015
+# Fecha: OCTUBRE 2015
 # Licencia: GPLv2
 
 # Importación de librerías
 if __name__ == '__main__': from libpath import *  # @UnusedWildImport
-from bin.configLoader import configLoader
+from bin.configLoader import configLoader  # @UnresolvedImport
 from bin.utils import isHiddenFile, isFolder, regexCompare
 import zipfile
 from data import *  # @UnusedWildImport
-from config import DIR_CONFIG
-import bin.errors as err
-
+from config import DIR_CONFIG  # @UnresolvedImport
+import bin.errors as err  # @UnresolvedImport
 
 # Constantes
 PACKAGE_TESTER_ERROR_NO_FOUND = "El archivo consultado no existe"
+PACKAGE_VALIDATE_FAIL = "FOLDER-PACKAGE-FAIL"
+PACKAGE_VALIDATE_OK = "FOLDER-PACKAGE-OK"
 ZIP_VALIDATE_FAIL = "ZIP-PACKAGE-FAIL"
 ZIP_VALIDATE_OK = "ZIP-PACKAGE-OK"
 
@@ -33,7 +34,9 @@ class packageTester:
 
     def __init__(self):
         # Carga de configuraciones
-        config = configLoader(DIR_CONFIG, "packages.ini")  # Configuraciones de los paquetes
+        config = configLoader(DIR_CONFIG, "packages.ini")
+        folderConfig = configLoader(DIR_CONFIG, "folder.ini")
+        self.ignoredFiles = folderConfig.getValueListed("IGNORE")
         self.packageStructedFiles = []  # Lista con archivos requeridos para cada package
         self.validChars = config.getValue("VALID_CHARACTERS")  # Caracteres válidos de los archivos del paquete
         self.validRegexChars = config.getValue("VALID_REGEX_CHARACTERS")  # Caracteres válidos para los regex
@@ -41,14 +44,14 @@ class packageTester:
         self.structFiles = []
         self.loadStructure()
 
-    def loadStructure(self):
+    def _inspect(self, rootpath, packpath, filelist, lookdepth):
         """
-        Carga la configuración de la estructura requerida para cada tarea
-        :return: None
+        Inspecciona todos los archivos en un directorio y los retorna en una lista
+        :param rootpath: Nombre del directorio contenedor del paquete
+        :param packpath: Nombre del paquete a analizar
+        :param filelist: Lista a guardar las direcciones
+        :return:
         """
-
-        folderConfig = configLoader(DIR_CONFIG, "folder.ini")
-        ignoredFiles = folderConfig.getValueListed("IGNORE")
 
         def _isValidFile(filename):
             for c in filename:
@@ -57,7 +60,7 @@ class packageTester:
             return True
 
         # noinspection PyShadowingBuiltins
-        def _walk(parent, dir, depth):  # @ReservedAssignment
+        def _walk(parent, dir, depth, filelist):  # @ReservedAssignment
             """
             Función que se mueve entre las carpetas buscando archivos de forma recursiva
             :param dir: Directorio en string
@@ -65,33 +68,92 @@ class packageTester:
             """
             # Recorre cada archivo de dir buscando archivos y agregandolos packageStructedFiles
             for i in os.listdir(parent + dir):
-                if i not in ignoredFiles and not isHiddenFile(i) and _isValidFile(i):
+                if i not in self.ignoredFiles and not isHiddenFile(i) and _isValidFile(i):
                     if depth != 0:
                         filec = dir + "/" + i
                     else:
                         filec = i
-                    if isFolder(dir, i):
-                        _walk(parent, filec, depth + 1)
+                    if isFolder(dir, filec):
+                        _walk(parent, filec, depth + 1, filelist)
                     else:
-                        self.structFiles.append(filec)
+                        filelist.append(filec)
 
-        def _searchFiles():
-            """
-            Busca archivos válidos en la estructura de los paquetes
-            :return:
-            """
-            _walk(DIR_STRUCTURE, "", 0)
+        if isFolder(rootpath, packpath):
+            _walk(rootpath, packpath, lookdepth, filelist)  # @UndefinedVariable
 
-        _searchFiles()
+    def getStructure(self):
+        """
+        Retorna la estructura de un paquete en forma de string
+        :return: String
+        """
+        return "\n".join(self.structFiles)
 
-    def validateZip(self, filename):
+    def isFolder(self, filename):
+        """
+        Comprueba si un paquete es un directorio
+        :param filename: Nombre del archivo
+        :return:
+        """
+        if isFolder(DIR_UPLOADS, filename):
+            return True
+        return False
+
+    def isZip(self, filename):
+        """
+        Comprueba si un paquete es un zip o un directorio
+        :param filename: Nombre del archivo
+        :return:
+        """
+        if ".zip" in filename:
+            return True
+        return False
+
+    def loadStructure(self):
+        """
+        Carga la configuración de la estructura requerida para cada tarea
+        :return: None
+        """
+        self._inspect(DIR_STRUCTURE, "", self.structFiles, 0)
+
+    def validate(self, filename):
+        """
+        Función que valida si un paquete es válido
+        :param filename:
+        :return:
+        """
+        if self.isZip(filename):
+            return self._validateZip(filename)
+        elif self.isFolder(filename):
+            return self._validateFolder(filename)
+        return False
+
+    def _validateFolder(self, filename):
+        """
+        Función que valida si un paquete en forma de carpeta posee con la estructura
+        determinada
+        :param filename:
+        :return:
+        """
+        folderfiles = []
+        self._inspect(DIR_UPLOADS, filename, folderfiles, 1)
+        for structfile in self.structFiles:
+            found = False
+            for datafile in folderfiles:
+                if regexCompare(structfile, datafile):
+                    found = True
+                    break
+            if not found:
+                return False
+        return True
+
+    def _validateZip(self, filename):
         """
         Función que valida si un zip cumple con la estructura determinada
         :param filename: Nombre del archivo
         :return: Boolean
         """
         try:
-            data = zipfile.ZipFile(DIR_UPLOADS + filename)
+            data = zipfile.ZipFile(DIR_UPLOADS + filename)  # @UndefinedVariable
         except:
             err.warning(PACKAGE_TESTER_ERROR_NO_FOUND)
             return False
@@ -109,4 +171,6 @@ class packageTester:
 # Test
 if __name__ == "__main__":
     p = packageTester()
-    p.validateZip("cc3001.zip")
+    print p.getStructure()
+    # print p.validate("cc3001.zip")
+    # print p.validate("cc3001")
