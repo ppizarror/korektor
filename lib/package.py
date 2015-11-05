@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+__autor__ = 'ppizarror'
 
 # PACKAGE
 # Testea que los paquetes entregados por los alumnos tengan una estructura correcta
@@ -9,7 +10,8 @@
 # Licencia: GPLv2
 
 # Importación de librerías
-if __name__ == '__main__': from libpath import *  # @UnusedWildImport
+if __name__ == '__main__':
+    from libpath import *  # @UnusedWildImport
 from bin.configLoader import configLoader  # @UnresolvedImport
 from bin.utils import isHiddenFile, isFolder, regexCompare
 import zipfile
@@ -25,11 +27,10 @@ ZIP_VALIDATE_FAIL = "ZIP-PACKAGE-FAIL"
 ZIP_VALIDATE_OK = "ZIP-PACKAGE-OK"
 
 
-class packageTester:
+class Package:
     """
-    Clase package, carga paquetes en formato .zip y comprueba que cumplan con un
-    formato específico.
-    Posee ademas funciones utilitarias para descomprimir en un formato específico.
+    package: Paquetes de usuario el cual provee funciones para acceder a los contenidos
+    de cada paquete, como tambien la estructura básica pedida
     """
 
     def __init__(self):
@@ -38,8 +39,10 @@ class packageTester:
         folderConfig = configLoader(DIR_CONFIG, "folder.ini")
         self.ignoredFiles = folderConfig.getValueListed("IGNORE")
         self.packageStructedFiles = []  # Lista con archivos requeridos para cada package
-        self.validChars = config.getValue("VALID_CHARACTERS")  # Caracteres válidos de los archivos del paquete
-        self.validRegexChars = config.getValue("VALID_REGEX_CHARACTERS")  # Caracteres válidos para los regex
+        # Caracteres válidos de los archivos del paquete
+        self.validChars = config.getValue("VALID_CHARACTERS")
+        self.validRegexChars = config.getValue(
+            "VALID_REGEX_CHARACTERS")  # Caracteres válidos para los regex
         # Genera la estructura
         self.structFiles = []
         self.loadStructure()
@@ -60,26 +63,33 @@ class packageTester:
             return True
 
         # noinspection PyShadowingBuiltins
-        def _walk(parent, dir, depth, filelist):  # @ReservedAssignment
+        def _walk(parent, dirf, depth, filelist):  # @ReservedAssignment
             """
             Función que se mueve entre las carpetas buscando archivos de forma recursiva
             :param dir: Directorio en string
             :return:
             """
-            # Recorre cada archivo de dir buscando archivos y agregandolos packageStructedFiles
-            for i in os.listdir(parent + dir):
+            # Recorre cada archivo de dir buscando archivos y agregandolos
+            # packageStructedFiles
+            for i in os.listdir(parent + dirf):
                 if i not in self.ignoredFiles and not isHiddenFile(i) and _isValidFile(i):
                     if depth != 0:
-                        filec = dir + "/" + i
+                        filec = dirf + "/" + i
                     else:
                         filec = i
-                    if isFolder(dir, filec):
+                    if isFolder(parent, filec):
                         _walk(parent, filec, depth + 1, filelist)
                     else:
                         filelist.append(filec)
 
-        if isFolder(rootpath, packpath):
-            _walk(rootpath, packpath, lookdepth, filelist)  # @UndefinedVariable
+        if self.isFolder(rootpath, packpath):
+            _walk(rootpath, packpath, lookdepth,
+                  filelist)  # @UndefinedVariable
+        elif self.isZip(rootpath, packpath):
+            for file in zipfile.ZipFile(rootpath + packpath).namelist():
+                filelist.append(file)
+        else:
+            pass
 
     def getStructure(self):
         """
@@ -88,24 +98,26 @@ class packageTester:
         """
         return "\n".join(self.structFiles)
 
-    def isFolder(self, filename):
+    def isFolder(self, rootpath, filename):
         """
         Comprueba si un paquete es un directorio
         :param filename: Nombre del archivo
         :return:
         """
-        if isFolder(DIR_UPLOADS, filename):
-            return True
-        return False
+        return isFolder(rootpath, filename)
 
-    def isZip(self, filename):
+    def isZip(self, rootpath, filename):
         """
         Comprueba si un paquete es un zip o un directorio
         :param filename: Nombre del archivo
         :return:
         """
         if ".zip" in filename:
-            return True
+            try:
+                data = zipfile.ZipFile(rootpath + filename)
+                return True
+            except:
+                return False
         return False
 
     def loadStructure(self):
@@ -115,22 +127,9 @@ class packageTester:
         """
         self._inspect(DIR_STRUCTURE, "", self.structFiles, 0)
 
-    def validate(self, filename):
+    def validateStructure(self, filename):
         """
-        Función que valida si un paquete es válido
-        :param filename:
-        :return:
-        """
-        if self.isZip(filename):
-            return self._validateZip(filename)
-        elif self.isFolder(filename):
-            return self._validateFolder(filename)
-        return False
-
-    def _validateFolder(self, filename):
-        """
-        Función que valida si un paquete en forma de carpeta posee con la estructura
-        determinada
+        Función que valida si un paquete cumple con la estructura
         :param filename:
         :return:
         """
@@ -146,31 +145,11 @@ class packageTester:
                 return False
         return True
 
-    def _validateZip(self, filename):
-        """
-        Función que valida si un zip cumple con la estructura determinada
-        :param filename: Nombre del archivo
-        :return: Boolean
-        """
-        try:
-            data = zipfile.ZipFile(DIR_UPLOADS + filename)  # @UndefinedVariable
-        except:
-            err.warning(PACKAGE_TESTER_ERROR_NO_FOUND)
-            return False
-        for structfile in self.structFiles:
-            found = False
-            for datafile in data.namelist():
-                if regexCompare(structfile, datafile):
-                    found = True
-                    break
-            if not found:
-                return False
-        return True
-
 
 # Test
 if __name__ == "__main__":
-    p = packageTester()
+    p = Package()
     print p.getStructure()
-    # print p.validate("cc3001.zip")
-    # print p.validate("cc3001")
+    print p.validateStructure("zipupload.zip")
+    print p.validateStructure("cc3001")
+    print p.validateStructure("cc3001_fake")

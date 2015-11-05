@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
+__autor__ = "ppizarror"
+
 # Adminsitra la direccion de directorios de la aplicación
 # Se pueden incluir todos los directorios salvo bin/
 #

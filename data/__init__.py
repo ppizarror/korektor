@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+__autor__ = "ppizarror"
 
 # DATA
 # En data se incluyen todos los archivos externos lógicos requeridos por korektor para

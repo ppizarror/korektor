@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+__autor__ = 'ppizarror'
 
 # UTILS
 # Este archivo provee de funciones básicas que son globalmente usadas
@@ -109,7 +110,8 @@ def delAccent(txt):
     :param txt: String
     :return: String con acentos eliminados
     """
-    txt = txt.replace("Á", "A").replace("É", "E").replace("Í", "I").replace("Ó", "O").replace("Ú", "U")
+    txt = txt.replace("Á", "A").replace("É", "E").replace(
+        "Í", "I").replace("Ó", "O").replace("Ú", "U")
     return txt.replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
 
 
@@ -180,7 +182,9 @@ def getBetweenTags(html, tagi, tagf):
             c = 1
             while True:
                 try:
-                    if html[posi + c] == ">": posi += (c + 1); break
+                    if html[posi + c] == ">":
+                        posi += (c + 1)
+                        break
                     c += 1
                 except:
                     return errors.ERROR_TAG_INITNOTCORRECTENDING
@@ -216,9 +220,12 @@ def getTerminalSize():
     """
     env = os.environ
     # noinspection PyShadowingNames
+
     def ioctl_GWINSZ(fd):
         try:
-            import fcntl, termios, struct  # @UnresolvedImport
+            import fcntl
+            import termios
+            import struct  # @UnresolvedImport
             cr = struct.unpack('hh', fcntl.ioctl(fd, termios.TIOCGWINSZ,
                                                  '1234'))
         except:
@@ -233,7 +240,8 @@ def getTerminalSize():
             os.close(fd)
         except:
             pass
-    if not cr: cr = (env.get('LINES', 25), env.get('COLUMNS', 80))
+    if not cr:
+        cr = (env.get('LINES', 25), env.get('COLUMNS', 80))
     return int(cr[1]), int(cr[0])
 
 
@@ -271,12 +279,15 @@ def googleTranslate(text, translate_lang, header, web, source_lang=None):
     :param source_lang: Idioma origen
     :return: String traducido
     """
-    if source_lang is None: source_lang = 'auto'
-    params = urlencode({'client': 't', 'tl': translate_lang, 'q': text.encode('utf-8'), 'sl': source_lang})
+    if source_lang is None:
+        source_lang = 'auto'
+    params = urlencode({'client': 't', 'tl': translate_lang,
+                        'q': text.encode('utf-8'), 'sl': source_lang})
     http_headers = {"User-Agent": header}
     request_object = Request(web + params, None, http_headers)
     response = urlopen(request_object)
-    return json.loads(re.sub(',,,|,,', ',"0",', response.read()))[0][0][0]  # @UndefinedVariable
+    # @UndefinedVariable
+    return json.loads(re.sub(',,,|,,', ',"0",', response.read()))[0][0][0]
 
 
 def isFolder(path, filename):
@@ -286,7 +297,15 @@ def isFolder(path, filename):
     :param filename: Archivo
     :return: Boolean
     """
-    return "." not in (path + filename)
+    _abspath = (path + "/" + filename).replace("//", "/")
+
+    if "." not in (_abspath):
+        try:
+            os.listdir(_abspath)
+            return True
+        except:
+            return False
+    return False
 
 
 def isHiddenFile(filename):
@@ -311,7 +330,8 @@ def isIn(termino, matriz):
     """
     if termino is not None:
         for elem in matriz:
-            if elem in termino: return True
+            if elem in termino:
+                return True
     return False
 
 
@@ -366,9 +386,11 @@ def loadFile(archive, lang=_MSG_LOADINGFILE, **kwargs):
         for i in archive:
             l.append(i.decode('utf-8').strip())
         archive.close()
-        if kwargs.get("show_state"): print _MSG_OK
+        if kwargs.get("show_state"):
+            print _MSG_OK
     except:
-        if kwargs.get("show_state"): print "error"
+        if kwargs.get("show_state"):
+            print "error"
         l = []
     return l
 
@@ -389,7 +411,8 @@ def printMatrix(matrix):
     :return: void
     """
     for j in matrix:
-        for k in j: print k,
+        for k in j:
+            print k,
         print "\n"
 
 
@@ -481,7 +504,8 @@ def sumMatrix(matrix):
     suma = 0
     try:
         for j in matrix:
-            for k in j: suma += k
+            for k in j:
+                suma += k
         return suma
     except:
         return -1

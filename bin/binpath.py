@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+__autor__ = 'ppizarror'
 
 # BINPATH
 # Adminsitra el path de /bin

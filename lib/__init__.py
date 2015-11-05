@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+__autor__ = "ppizarror"
 
 # LIB
 # Maneja las funciones principales de korektor

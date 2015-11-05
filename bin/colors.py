@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+__autor__ = 'ppizarror'
 
 # COLORS
 # Maneja los colores en la consola

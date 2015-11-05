@@ -7,6 +7,7 @@
 # Autor: PABLO PIZARRO @ ppizarror.com
 # Fecha: ABRIL 2015
 # Licencia: GPLv2
+__autor__ = 'ppizarror'
 
 # Importación de librerías y obtención de directorios
 from configLoader import configLoader
