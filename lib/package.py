@@ -18,6 +18,7 @@ import zipfile
 from data import *  # @UnusedWildImport
 from config import DIR_CONFIG  # @UnresolvedImport
 import bin.errors as err  # @UnresolvedImport
+import bin.rarfile as rarfile
 
 # Constantes
 PACKAGE_TESTER_ERROR_NO_FOUND = "El archivo consultado no existe"
@@ -47,50 +48,6 @@ class Package:
         self.structFiles = []
         self.loadStructure()
 
-    def _inspect(self, rootpath, packpath, filelist, lookdepth):
-        """
-        Inspecciona todos los archivos en un directorio y los retorna en una lista
-        :param rootpath: Nombre del directorio contenedor del paquete
-        :param packpath: Nombre del paquete a analizar
-        :param filelist: Lista a guardar las direcciones
-        :return:
-        """
-
-        def _isValidFile(filename):
-            for c in filename:
-                if c not in self.validChars:
-                    return False
-            return True
-
-        # noinspection PyShadowingBuiltins
-        def _walk(parent, dirf, depth, filelist):  # @ReservedAssignment
-            """
-            Función que se mueve entre las carpetas buscando archivos de forma recursiva
-            :param dir: Directorio en string
-            :return:
-            """
-            # Recorre cada archivo de dir buscando archivos y agregandolos
-            # packageStructedFiles
-            for i in os.listdir(parent + dirf):
-                if i not in self.ignoredFiles and not isHiddenFile(i) and _isValidFile(i):
-                    if depth != 0:
-                        filec = dirf + "/" + i
-                    else:
-                        filec = i
-                    if isFolder(parent, filec):
-                        _walk(parent, filec, depth + 1, filelist)
-                    else:
-                        filelist.append(filec)
-
-        if self.isFolder(rootpath, packpath):
-            _walk(rootpath, packpath, lookdepth,
-                  filelist)  # @UndefinedVariable
-        elif self.isZip(rootpath, packpath):
-            for file in zipfile.ZipFile(rootpath + packpath).namelist():
-                filelist.append(file)
-        else:
-            pass
-
     def getStructure(self):
         """
         Retorna la estructura de un paquete en forma de string
@@ -98,18 +55,104 @@ class Package:
         """
         return "\n".join(self.structFiles)
 
+    def inspectFiles(self, rootpath, filename, removeOnExtract=False, filelist=None):
+        """
+        Retorna una lista con los nombres de los archivos del paquete
+        :param rootpath: Carpeta contenedora
+        :param filename: Archivo
+        :param removeOnExtract: Remover al extraer un zip o rar
+        :param filelist: lista de archivos
+        :return:
+        """
+
+        def _inspect(rootpath, filename, filelist, depth=0):
+            """
+            Inspecciona todos los archivos de un paquete
+            :param rootpath: Carpeta contenedora
+            :param filename: Nombre del paquete a inspeccionar
+            :param filelist: Lista de archivos
+            :return:
+            """
+
+            def _isValidFile(filename):
+                for f in self.ignoredFiles:
+                    if f in filename:
+                        return False
+                return not isHiddenFile(str(filename))
+
+            def _isValidFileName(filename):
+                for c in filename:
+                    if c not in self.validChars:
+                        return False
+                return "." in filename
+
+            def _getMainFolder(filelist):
+                for f in filelist:
+                    f = f.replace("\\", "/")
+                    if "/" in f:
+                        return f.split("/")[0]
+
+            if self.isFolder(rootpath, filename):  # Si el archivo es una carpeta
+                for filef in os.listdir(rootpath + filename):
+                    if _isValidFile(filef):
+                        _inspect(rootpath + filename + "/", filef, filelist, depth + 1)
+            elif self.isZip(rootpath, filename):  # Si el archivo es paquete rar
+                zipfile.ZipFile(rootpath + filename).extractall(DIR_UPLOADS)
+                folder = _getMainFolder(zipfile.ZipFile(rootpath + filename).namelist())
+                if removeOnExtract:
+                    os.remove(rootpath + filename)
+                _inspect(rootpath, folder, filelist, depth + 1)
+            elif self.isRar(rootpath, filename):  # Si el archivo es paquete zip
+                rarfile.RarFile(rootpath + filename).extractall(DIR_UPLOADS)
+                folder = _getMainFolder(rarfile.RarFile(rootpath + filename).namelist())
+                if removeOnExtract:
+                    os.remove(rootpath + filename)
+                _inspect(rootpath, str(folder), filelist, depth + 1)
+            else:  # Si es cualquier otro archivo entonces se añade
+                if depth > 0:
+                    if _isValidFileName(filename):
+                        filelist.append(rootpath + filename)
+
+        if filelist is not None:
+            _inspect(rootpath, filename, filelist)
+            for i in range(len(filelist)):
+                filelist[i] = filelist[i].replace("//", "/").replace(rootpath, "")
+        else:
+            filelist = []
+            _inspect(rootpath, filename, filelist)
+            for i in range(len(filelist)):
+                filelist[i] = filelist[i].replace("//", "/").replace(rootpath, "")
+            return filelist
+
     def isFolder(self, rootpath, filename):
         """
         Comprueba si un paquete es un directorio
         :param filename: Nombre del archivo
+        :param rootpath: Ubicación del archivo
         :return:
         """
         return isFolder(rootpath, filename)
 
+    def isRar(self, rootpath, filename):
+        """
+        Comprueba si el paquete es un archivo rar
+        :param rootpath: Ubicación del archivo
+        :param filename: Archivo a analizar
+        :return:
+        """
+        if ".rar" in filename:
+            try:
+                data = rarfile.RarFile(rootpath + filename)
+                return True
+            except:
+                return False
+        return False
+
     def isZip(self, rootpath, filename):
         """
-        Comprueba si un paquete es un zip o un directorio
+        Comprueba si un paquete es un zip
         :param filename: Nombre del archivo
+        :param rootpath: Ubicación del archivo
         :return:
         """
         if ".zip" in filename:
@@ -125,7 +168,7 @@ class Package:
         Carga la configuración de la estructura requerida para cada tarea
         :return: None
         """
-        self._inspect(DIR_STRUCTURE, "", self.structFiles, 0)
+        self.inspectFiles(DIR_STRUCTURE, "", False, self.structFiles)
 
     def validateStructure(self, filename):
         """
@@ -133,8 +176,8 @@ class Package:
         :param filename:
         :return:
         """
-        folderfiles = []
-        self._inspect(DIR_UPLOADS, filename, folderfiles, 1)
+        folderfiles = self.inspectFiles(DIR_UPLOADS, filename, False)
+        print folderfiles
         for structfile in self.structFiles:
             found = False
             for datafile in folderfiles:
@@ -143,13 +186,16 @@ class Package:
                     break
             if not found:
                 return False
-        return True
+        return True  # Test
 
 
-# Test
 if __name__ == "__main__":
     p = Package()
     print p.getStructure()
-    print p.validateStructure("zipupload.zip")
-    print p.validateStructure("cc3001")
-    print p.validateStructure("cc3001_fake")
+    for file in os.listdir(DIR_UPLOADS):
+       a = p.validateStructure(file)
+       print a
+    # p.validateStructure("Aguirre_Munoz__Daniel_Patricio.zip")
+    # p.validateStructure("zipfile.zip")
+    # p.validateStructure("rarfile.rar")
+    # p.validateStructure("pablo_pizarro")

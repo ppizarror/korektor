@@ -219,6 +219,7 @@ def getTerminalSize():
     :return: tupla
     """
     env = os.environ
+
     # noinspection PyShadowingNames
 
     def ioctl_GWINSZ(fd):
@@ -299,13 +300,11 @@ def isFolder(path, filename):
     """
     _abspath = (path + "/" + filename).replace("//", "/")
 
-    if "." not in (_abspath):
-        try:
-            os.listdir(_abspath)
-            return True
-        except:
-            return False
-    return False
+    try:
+        os.listdir(_abspath)
+        return True
+    except:
+        return False
 
 
 def isHiddenFile(filename):
