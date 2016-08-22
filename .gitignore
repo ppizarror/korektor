@@ -23,6 +23,6 @@ Thumbs.db
 # Archivos ejecutables
 
 # Archivos de results y uploads
-data/results/
-data/structure/
-data/uploads/
+#data/results/
+#data/structure/
+#data/uploads/
