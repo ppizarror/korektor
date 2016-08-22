@@ -34,11 +34,11 @@ debug = logging.getLogger("mechanize").debug
 debug_robots = logging.getLogger("mechanize.robots").debug
 
 # monkeypatch urllib2.HTTPError to show URL
-## import urllib2
-## def urllib2_str(self):
-##     return 'HTTP Error %s: %s (%s)' % (
-##         self.code, self.msg, self.geturl())
-## urllib2.HTTPError.__str__ = urllib2_str
+# # import urllib2
+# # def urllib2_str(self):
+# #     return 'HTTP Error %s: %s (%s)' % (
+# #         self.code, self.msg, self.geturl())
+# # urllib2.HTTPError.__str__ = urllib2_str
 
 
 CHUNK = 1024  # size of chunks fed to HTML HEAD parser, in bytes
@@ -71,20 +71,20 @@ class AbstractHeadParser:
         raise EndOfHeadError()
 
     def handle_entityref(self, name):
-        #debug("%s", name)
+        # debug("%s", name)
         self.handle_data(unescape(
             '&%s;' % name, self._entitydefs, self._encoding))
 
     def handle_charref(self, name):
-        #debug("%s", name)
+        # debug("%s", name)
         self.handle_data(unescape_charref(name, self._encoding))
 
     def unescape_attr(self, name):
-        #debug("%s", name)
+        # debug("%s", name)
         return unescape(name, self._entitydefs, self._encoding)
 
     def unescape_attrs(self, attrs):
-        #debug("%s", attrs)
+        # debug("%s", attrs)
         escaped_attrs = {}
         for key, val in attrs.items():
             escaped_attrs[key] = self.unescape_attr(val)
@@ -112,7 +112,7 @@ class XHTMLCompatibleHeadParser(AbstractHeadParser,
             try:
                 method = getattr(self, 'do_' + tag)
             except AttributeError:
-                pass # unknown tag
+                pass  # unknown tag
             else:
                 method(attrs)
         else:
@@ -124,7 +124,7 @@ class XHTMLCompatibleHeadParser(AbstractHeadParser,
         try:
             method = getattr(self, 'end_' + tag)
         except AttributeError:
-            pass # unknown tag
+            pass  # unknown tag
         else:
             method()
 
@@ -243,7 +243,7 @@ class MechanizeRobotFileParser(robotparser.RobotFileParser):
         except HTTPError, f:
             pass
         except (IOError, socket.error, OSError), exc:
-            debug_robots("ignoring error opening %r: %s" %
+            debug_robots("ignoring error opening %r: %s" % 
                                (self.url, exc))
             return
         lines = []
@@ -264,7 +264,7 @@ class MechanizeRobotFileParser(robotparser.RobotFileParser):
 
 class RobotExclusionError(HTTPError):
     def __init__(self, request, *args):
-        apply(HTTPError.__init__, (self,)+args)
+        apply(HTTPError.__init__, (self,) + args)
         self.request = request
 
 class HTTPRobotRulesProcessor(BaseHandler):
@@ -309,9 +309,9 @@ class HTTPRobotRulesProcessor(BaseHandler):
             try:
                 self.rfp.set_opener(self.parent)
             except AttributeError:
-                debug("%r instance does not support set_opener" %
+                debug("%r instance does not support set_opener" % 
                       self.rfp.__class__)
-            self.rfp.set_url(scheme+"://"+host+"/robots.txt")
+            self.rfp.set_url(scheme + "://" + host + "/robots.txt")
             self.rfp.set_timeout(request.timeout)
             self.rfp.read()
             self._host = host
@@ -381,11 +381,11 @@ def parse_refresh_header(refresh):
 
     ii = refresh.find(";")
     if ii != -1:
-        pause, newurl_spec = float(refresh[:ii]), refresh[ii+1:]
+        pause, newurl_spec = float(refresh[:ii]), refresh[ii + 1:]
         jj = newurl_spec.find("=")
         key = None
         if jj != -1:
-            key, newurl = newurl_spec[:jj], newurl_spec[jj+1:]
+            key, newurl = newurl_spec[:jj], newurl_spec[jj + 1:]
             newurl = clean_refresh_url(newurl)
         if key is None or key.strip().lower() != "url":
             raise ValueError()

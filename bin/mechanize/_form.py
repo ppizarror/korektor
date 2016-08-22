@@ -54,7 +54,7 @@ __all__ = ['AmbiguityError', 'CheckboxControl', 'Control',
            'HiddenControl', 'IgnoreControl', 'ImageControl', 'IsindexControl',
            'Item', 'ItemCountError', 'ItemNotFoundError', 'Label',
            'ListControl', 'LocateError', 'Missing', 'ParseError', 'ParseFile',
-           'ParseFileEx', 'ParseResponse', 'ParseResponseEx','PasswordControl',
+           'ParseFileEx', 'ParseResponse', 'ParseResponseEx', 'PasswordControl',
            'RadioControl', 'ScalarControl', 'SelectControl',
            'SubmitButtonControl', 'SubmitControl', 'TextControl',
            'TextareaControl', 'XHTMLCompatibleFormParser']
@@ -93,7 +93,7 @@ def debug(msg, *args, **kwds):
 
     caller_name = inspect.stack()[1][3]
     extended_msg = '%%s %s' % msg
-    extended_args = (caller_name,)+args
+    extended_args = (caller_name,) + args
     _logger.debug(extended_msg, *extended_args, **kwds)
 
 def _show_debug_messages():
@@ -106,7 +106,7 @@ def _show_debug_messages():
 
 
 def deprecation(message, stack_offset=0):
-    warnings.warn(message, DeprecationWarning, stacklevel=3+stack_offset)
+    warnings.warn(message, DeprecationWarning, stacklevel=3 + stack_offset)
 
 
 class Missing: pass
@@ -144,7 +144,7 @@ def unescape(data, entities, encoding=DEFAULT_ENCODING):
 def unescape_charref(data, encoding):
     name, base = data, 10
     if name.startswith("x"):
-        name, base= name[1:], 16
+        name, base = name[1:], 16
     uc = unichr(int(name, base))
     if encoding is None:
         return uc
@@ -184,7 +184,7 @@ def issequence(x):
     return True
 
 def isstringlike(x):
-    try: x+""
+    try: x + ""
     except: return False
     else: return True
 
@@ -192,7 +192,7 @@ def isstringlike(x):
 def choose_boundary():
     """Return a string usable as a multipart boundary."""
     # follow IE and firefox
-    nonce = "".join([str(random.randint(0, sys.maxint-1)) for i in 0,1,2])  # @UnusedVariable
+    nonce = "".join([str(random.randint(0, sys.maxint - 1)) for i in 0, 1, 2])  # @UnusedVariable
     return "-"*27 + nonce
 
 # This cut-n-pasted MimeWriter from standard library is here so can add
@@ -560,7 +560,7 @@ class _AbstractFormParser:
         del label["__taken"]
 
     def _add_label(self, d):
-        #debug("%s", d)
+        # debug("%s", d)
         if self._current_label is not None:
             if not self._current_label["__taken"]:
                 self._current_label["__taken"] = True
@@ -615,7 +615,7 @@ class _AbstractFormParser:
         # doesn't clash with INPUT TYPE={SUBMIT,RESET,BUTTON}
         # e.g. type for BUTTON/RESET is "resetbutton"
         #     (type for INPUT/RESET is "reset")
-        type = type+"button"  # @ReservedAssignment
+        type = type + "button"  # @ReservedAssignment
         self._add_label(d)
         controls.append((type, name, d))
 
@@ -644,20 +644,20 @@ class _AbstractFormParser:
         controls.append(("isindex", None, d))
 
     def handle_entityref(self, name):
-        #debug("%s", name)
+        # debug("%s", name)
         self.handle_data(unescape(
             '&%s;' % name, self._entitydefs, self._encoding))
 
     def handle_charref(self, name):
-        #debug("%s", name)
+        # debug("%s", name)
         self.handle_data(unescape_charref(name, self._encoding))
 
     def unescape_attr(self, name):
-        #debug("%s", name)
+        # debug("%s", name)
         return unescape(name, self._entitydefs, self._encoding)
 
     def unescape_attrs(self, attrs):
-        #debug("%s", attrs)
+        # debug("%s", attrs)
         escaped_attrs = {}
         for key, val in attrs.items():
             try:
@@ -805,8 +805,8 @@ class NestingRobustFormParser(_AbstractBSFormParser,
     bs_base_class = _beautifulsoup.ICantBelieveItsBeautifulSoup
 
 
-#FormParser = XHTMLCompatibleFormParser  # testing hack
-#FormParser = RobustFormParser  # testing hack
+# FormParser = XHTMLCompatibleFormParser  # testing hack
+# FormParser = RobustFormParser  # testing hack
 
 
 def ParseResponseEx(response,
@@ -1013,7 +1013,7 @@ def _ParseFileEx(file, base_uri,
             type, name, attrs = controls[ii]
             # index=ii*10 allows ImageControl to return multiple ordered pairs
             form.new_control(
-                type, name, attrs, select_default=select_default, index=ii*10)
+                type, name, attrs, select_default=select_default, index=ii * 10)
         forms.append(form)
     for form in forms:
         form.fixup()
@@ -1207,7 +1207,7 @@ class ScalarControl(Control):
         if name == "value":
             return self.__dict__["_value"]
         else:
-            raise AttributeError("%s instance has no attribute '%s'" %
+            raise AttributeError("%s instance has no attribute '%s'" % 
                                  (self.__class__.__name__, name))
 
     def __setattr__(self, name, value):
@@ -1528,7 +1528,7 @@ class Item:
         return res
 
     def __getattr__(self, name):
-        if name=="selected":
+        if name == "selected":
             return self._selected
         raise AttributeError(name)
 
@@ -1551,7 +1551,7 @@ class Item:
     def __repr__(self):
         # XXX appending the attrs without distinguishing them from name and id
         # is silly
-        attrs = [("name", self.name), ("id", self.id)]+self.attrs.items()
+        attrs = [("name", self.name), ("id", self.id)] + self.attrs.items()
         return "<%s %s>" % (
             self.__class__.__name__,
             " ".join(["%s=%r" % (k, v) for k, v in attrs])
@@ -1680,7 +1680,7 @@ class ListControl(Control):
         self.value = []
 
     def is_of_kind(self, kind):
-        if kind  == "list":
+        if kind == "list":
             return True
         elif kind == "multilist":
             return bool(self.multiple)
@@ -1904,7 +1904,7 @@ class ListControl(Control):
             # always count nameless elements as separate controls
             Control.add_to_form(self, form)
         else:
-            for ii in range(len(form.controls)-1, -1, -1):
+            for ii in range(len(form.controls) - 1, -1, -1):
                 control = form.controls[ii]
                 if control.name == self.name and control.type == self.type:
                     if control._closed:
@@ -1964,7 +1964,7 @@ class ListControl(Control):
             return [o.name for o in self.items if o.selected and
                     (not o.disabled or compat)]
         else:
-            raise AttributeError("%s instance has no attribute '%s'" %
+            raise AttributeError("%s instance has no attribute '%s'" % 
                                  (self.__class__.__name__, name))
 
     def __setattr__(self, name, value):
@@ -2378,11 +2378,11 @@ class ImageControl(SubmitControl):
         if name is None: return []
         pairs = [
             (self._index, "%s.x" % name, str(clicked[0])),
-            (self._index+1, "%s.y" % name, str(clicked[1])),
+            (self._index + 1, "%s.y" % name, str(clicked[1])),
             ]
         value = self._value
         if value:
-            pairs.append((self._index+2, name, value))
+            pairs.append((self._index + 2, name, value))
         return pairs
 
     get_labels = ScalarControl.get_labels
@@ -2734,7 +2734,7 @@ class HTMLForm:
             control = klass(type, name, a, index)
 
         if type == "select" and len(attrs) == 1:
-            for ii in range(len(self.controls)-1, -1, -1):
+            for ii in range(len(self.controls) - 1, -1, -1):
                 ctl = self.controls[ii]
                 if ctl.type == "select":
                     ctl.close_control()
@@ -2761,7 +2761,7 @@ class HTMLForm:
 #---------------------------------------------------
     def __str__(self):
         header = "%s%s %s %s" % (
-            (self.name and self.name+" " or ""),
+            (self.name and self.name + " " or ""),
             self.method, self.action, self.enctype)
         rep = [header]
         for control in self.controls:
@@ -2970,7 +2970,7 @@ class HTMLForm:
 #---------------------------------------------------
 # Form submission methods, applying only to clickable controls.
 
-    def click(self, name=None, type=None, id=None, nr=0, coord=(1,1),  # @ReservedAssignment
+    def click(self, name=None, type=None, id=None, nr=0, coord=(1, 1),  # @ReservedAssignment
               request_class=_request.Request,
               label=None):
         """Return request that would result from clicking on a control.
@@ -2999,7 +2999,7 @@ class HTMLForm:
 
     def click_request_data(self,
                            name=None, type=None, id=None,
-                           nr=0, coord=(1,1),
+                           nr=0, coord=(1, 1),
                            request_class=_request.Request,
                            label=None):
         """As for click method, but return a tuple (url, data, headers).
@@ -3032,7 +3032,7 @@ class HTMLForm:
                            self._request_class)
 
     def click_pairs(self, name=None, type=None, id=None,
-                    nr=0, coord=(1,1),
+                    nr=0, coord=(1, 1),
                     label=None):
         """As for click_request_data, but returns a list of (key, value) pairs.
 
@@ -3179,9 +3179,9 @@ class HTMLForm:
         description = ", ".join(description)
 
         if ambiguous:
-            raise AmbiguityError("more than one control matching "+description)
+            raise AmbiguityError("more than one control matching " + description)
         elif not found:
-            raise ControlNotFoundError("no control matching "+description)
+            raise ControlNotFoundError("no control matching " + description)
         assert False
 
     def _click(self, name, type, id, label, nr, coord, return_type,
@@ -3224,7 +3224,7 @@ class HTMLForm:
     def _request_data(self):
         """Return a tuple (url, data, headers)."""
         method = self.method.upper()
-        #scheme, netloc, path, parameters, query, frag = urlparse.urlparse(self.action)
+        # scheme, netloc, path, parameters, query, frag = urlparse.urlparse(self.action)
         parts = self._urlparse(self.action)
         rest, (query, frag) = parts[:-2], parts[-2:]
 

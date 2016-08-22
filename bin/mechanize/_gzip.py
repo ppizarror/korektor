@@ -22,18 +22,18 @@ class GzipConsumer:
             try:
                 i = 10
                 flag = ord(data[3])
-                if flag & 4: # extra
-                    x = ord(data[i]) + 256*ord(data[i+1])
+                if flag & 4:  # extra
+                    x = ord(data[i]) + 256 * ord(data[i + 1])
                     i = i + 2 + x
-                if flag & 8: # filename
+                if flag & 8:  # filename
                     while ord(data[i]):
                         i = i + 1
                     i = i + 1
-                if flag & 16: # comment
+                if flag & 16:  # comment
                     while ord(data[i]):
                         i = i + 1
                     i = i + 1
-                if flag & 2: # crc
+                if flag & 2:  # crc
                     i = i + 2
                 if len(data) < i:
                     raise IndexError("not enough data")
@@ -42,7 +42,7 @@ class GzipConsumer:
                 data = data[i:]
             except IndexError:
                 self.__data = data
-                return # need more data
+                return  # need more data
             import zlib
             self.__data = ""
             self.__decoder = zlib.decompressobj(-zlib.MAX_WBITS)

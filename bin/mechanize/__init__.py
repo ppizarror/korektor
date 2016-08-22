@@ -71,7 +71,7 @@ __all__ = [
     'make_response',
     'request_host',
     'response_seek_wrapper',  # XXX deprecate in public interface?
-    'seek_wrapped_response',   # XXX should probably use this internally in place of response_seek_wrapper()
+    'seek_wrapped_response',  # XXX should probably use this internally in place of response_seek_wrapper()
     'str2time',
     'urlopen',
     'urlretrieve',
@@ -190,7 +190,7 @@ del _urllib2
 
 # cookies
 # 2.4 raises SyntaxError due to generator / try/finally use
-if sys.version_info[:2] > (2,4):
+if sys.version_info[:2] > (2, 4):
     try:
         import sqlite3
     except ImportError:

@@ -64,7 +64,7 @@ class MozillaCookieJar(FileCookieJar):
         if not re.search(self.magic_re, magic):
             f.close()
             raise LoadError(
-                "%s does not look like a Netscape format cookies file" %
+                "%s does not look like a Netscape format cookies file" % 
                 filename)
 
         try:
@@ -118,7 +118,7 @@ class MozillaCookieJar(FileCookieJar):
 
         except:
             reraise_unmasked_exceptions((IOError, LoadError))
-            raise LoadError("invalid Netscape format file %s: %s" %
+            raise LoadError("invalid Netscape format file %s: %s" % 
                             (filename, line))
 
     def save(self, filename=None, ignore_discard=False, ignore_expires=False):
@@ -157,7 +157,7 @@ class MozillaCookieJar(FileCookieJar):
                     value = cookie.value
                 f.write(
                     "\t".join([cookie.domain, initial_dot, cookie.path,
-                               secure, expires, name, value])+
+                               secure, expires, name, value]) + 
                     "\n")
         finally:
             f.close()

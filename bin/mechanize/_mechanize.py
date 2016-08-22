@@ -152,7 +152,7 @@ class Browser(UserAgentBase):
         self.form = None
         self.request = self._response = None
         self.request = self.response = self.set_response = None
-        self.geturl =  self.reload = self.back = None
+        self.geturl = self.reload = self.back = None
         self.clear_history = self.set_cookie = self.links = self.forms = None
         self.viewing_html = self.encoding = self.title = None
         self.select_form = self.click = self.submit = self.click_link = None
@@ -178,7 +178,7 @@ class Browser(UserAgentBase):
             not (original_scheme == "https" and scheme != "https")):
             # strip URL fragment (RFC 2616 14.36)
             parts = _rfc3986.urlsplit(self.request.get_full_url())
-            parts = parts[:-1]+(None,)
+            parts = parts[:-1] + (None,)
             referer = _rfc3986.urlunsplit(parts)
             request.add_unredirected_header("Referer", referer)
         return request
@@ -234,17 +234,17 @@ class Browser(UserAgentBase):
             if error.fp is None:  # not a response
                 raise
             response = error
-##         except (IOError, socket.error, OSError), error:
-##             # Yes, urllib2 really does raise all these :-((
-##             # See test_urllib2.py for examples of socket.gaierror and OSError,
-##             # plus note that FTPHandler raises IOError.
-##             # XXX I don't seem to have an example of exactly socket.error being
-##             #  raised, only socket.gaierror...
-##             # I don't want to start fixing these here, though, since this is a
-##             # subclass of OpenerDirector, and it would break old code.  Even in
-##             # Python core, a fix would need some backwards-compat. hack to be
-##             # acceptable.
-##             raise
+# #         except (IOError, socket.error, OSError), error:
+# #             # Yes, urllib2 really does raise all these :-((
+# #             # See test_urllib2.py for examples of socket.gaierror and OSError,
+# #             # plus note that FTPHandler raises IOError.
+# #             # XXX I don't seem to have an example of exactly socket.error being
+# #             #  raised, only socket.gaierror...
+# #             # I don't want to start fixing these here, though, since this is a
+# #             # subclass of OpenerDirector, and it would break old code.  Even in
+# #             # Python core, a fix would need some backwards-compat. hack to be
+# #             # acceptable.
+# #             raise
 
         if visit:
             self._set_response(response, False)
@@ -279,7 +279,7 @@ class Browser(UserAgentBase):
 
     def open_local_file(self, filename):
         path = sanepathname2url(os.path.abspath(filename))
-        url = 'file://'+path
+        url = 'file://' + path
         return self.open(url)
 
     def set_response(self, response):
@@ -522,7 +522,7 @@ class Browser(UserAgentBase):
                 description.append("predicate %s" % predicate)
             if orig_nr is not None: description.append("nr %d" % orig_nr)
             description = ", ".join(description)
-            raise FormNotFoundError("no form matching "+description)
+            raise FormNotFoundError("no form matching " + description)
 
     def click(self, *args, **kwds):
         """See mechanize.HTMLForm.click for documentation."""

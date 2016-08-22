@@ -55,11 +55,11 @@ def is_html(ct_headers, url, allow_xhtml=False):
 def unmatched(match):
     """Return unmatched part of re.Match object."""
     start, end = match.span(0)
-    return match.string[:start]+match.string[end:]
+    return match.string[:start] + match.string[end:]
 
-token_re =        re.compile(r"^\s*([^=\s;,]+)")
+token_re = re.compile(r"^\s*([^=\s;,]+)")
 quoted_value_re = re.compile(r"^\s*=\s*\"([^\"\\]*(?:\\.[^\"\\]*)*)\"")
-value_re =        re.compile(r"^\s*=\s*([^\s;,]*)")
+value_re = re.compile(r"^\s*=\s*([^\s;,]*)")
 escape_re = re.compile(r"\\(.)")
 def split_header_words(header_values):
     r"""Parse header values into a list of lists containing key,value pairs.
@@ -140,7 +140,7 @@ def split_header_words(header_values):
                 # skip junk
                 non_junk, nr_junk_chars = re.subn("^[=\s;]*", "", text)
                 assert nr_junk_chars > 0, (
-                    "split_header_words bug: '%s', '%s', %s" %
+                    "split_header_words bug: '%s', '%s', %s" % 
                     (orig_text, text, pairs))
                 text = non_junk
         if pairs: result.append(pairs)

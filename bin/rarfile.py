@@ -79,9 +79,9 @@ __version__ = '2.7'
 # export only interesting items
 __all__ = ['is_rarfile', 'RarInfo', 'RarFile', 'RarExtFile']
 
-##
-## Imports and compat - support both Python 2.x and 3.x
-##
+# #
+# # Imports and compat - support both Python 2.x and 3.x
+# #
 
 from binascii import crc32
 from datetime import datetime
@@ -165,26 +165,26 @@ except ImportError:
         def close(self):
             pass
 
-##
-## Module configuration.  Can be tuned after importing.
-##
+# #
+# # Module configuration.  Can be tuned after importing.
+# #
 
-#: default fallback charset
+# : default fallback charset
 DEFAULT_CHARSET = "windows-1252"
 
-#: list of encodings to try, with fallback to DEFAULT_CHARSET if none succeed
+# : list of encodings to try, with fallback to DEFAULT_CHARSET if none succeed
 TRY_ENCODINGS = ('utf8', 'utf-16le')
 
-#: 'unrar', 'rar' or full path to either one
+# : 'unrar', 'rar' or full path to either one
 UNRAR_TOOL = "unrar"
 
-#: Command line args to use for opening file for reading.
+# : Command line args to use for opening file for reading.
 OPEN_ARGS = ('p', '-inul')
 
-#: Command line args to use for extracting file to disk.
+# : Command line args to use for extracting file to disk.
 EXTRACT_ARGS = ('x', '-y', '-idq')
 
-#: args for testrar()
+# : args for testrar()
 TEST_ARGS = ('t', '-idq')
 
 #
@@ -204,28 +204,28 @@ ALT_EXTRACT_ARGS = ('-x', '-f')
 ALT_TEST_ARGS = ('-t', '-f')
 ALT_CHECK_ARGS = ('--help',)
 
-#: whether to speed up decompression by using tmp archive
+# : whether to speed up decompression by using tmp archive
 USE_EXTRACT_HACK = 1
 
-#: limit the filesize for tmp archive usage
+# : limit the filesize for tmp archive usage
 HACK_SIZE_LIMIT = 20 * 1024 * 1024
 
-#: whether to parse file/archive comments.
+# : whether to parse file/archive comments.
 NEED_COMMENTS = 1
 
-#: whether to convert comments to unicode strings
+# : whether to convert comments to unicode strings
 UNICODE_COMMENTS = 0
 
-#: Convert RAR time tuple into datetime() object
+# : Convert RAR time tuple into datetime() object
 USE_DATETIME = 0
 
-#: Separator for path name components.  RAR internally uses '\\'.
-#: Use '/' to be similar with zipfile.
+# : Separator for path name components.  RAR internally uses '\\'.
+# : Use '/' to be similar with zipfile.
 PATH_SEP = '\\'
 
-##
-## rar constants
-##
+# #
+# # rar constants
+# #
 
 # block types
 RAR_BLOCK_MARK = 0x72  # r
@@ -299,9 +299,9 @@ RAR_M3 = 0x33
 RAR_M4 = 0x34
 RAR_M5 = 0x35
 
-##
-## internal constants
-##
+# #
+# # internal constants
+# #
 
 RAR_ID = bytes("Rar!\x1a\x07\x00", 'ascii')
 ZERO = bytes("\0", 'ascii')
@@ -315,9 +315,9 @@ S_BYTE = Struct('<B')
 S_COMMENT_HDR = Struct('<HBBH')
 
 
-##
-## Public interface
-##
+# #
+# # Public interface
+# #
 
 class Error(Exception):
     """Base class for rarfile errors."""
@@ -526,8 +526,8 @@ class RarFile(object):
     '''Parse RAR structure, provide access to files in archive.
     '''
 
-    #: Archive comment.  Byte string or None.  Use :data:`UNICODE_COMMENTS`
-    #: to get automatic decoding to unicode.
+    # : Archive comment.  Byte string or None.  Use :data:`UNICODE_COMMENTS`
+    # : to get automatic decoding to unicode.
     comment = None
 
     def __init__(self, rarfile, mode="r", charset=None, info_callback=None,
@@ -778,9 +778,9 @@ class RarFile(object):
         """
         return self._parse_error
 
-    ##
-    ## private methods
-    ##
+    # #
+    # # private methods
+    # #
 
     def _set_error(self, msg, *args):
         if args:
@@ -1296,9 +1296,9 @@ class RarFile(object):
         check_returncode(p, output)
 
 
-##
-## Utility classes
-##
+# #
+# # Utility classes
+# #
 
 class UnicodeFilename:
     """Handle unicode filename decompression"""
@@ -1373,7 +1373,7 @@ class RarExtFile(RawIOBase):
     access available: :meth:`RarExtFile.readline` and ``for ln in f``.
     """
 
-    #: Filename of the archive entry
+    # : Filename of the archive entry
     name = None
 
     def __init__(self, rf, inf):
@@ -1836,9 +1836,9 @@ class XFile(object):
         self.close()
 
 
-##
-## Utility functions
-##
+# #
+# # Utility functions
+# #
 
 def is_filelike(obj):
     if isinstance(obj, str) or isinstance(obj, unicode):

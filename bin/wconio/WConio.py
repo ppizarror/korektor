@@ -141,7 +141,7 @@ def cgets(l):
     s = ""
     c = getkey()
     while c != '\n' and c != '\r':
-        if c == '\010': # backspace
+        if c == '\010':  # backspace
             if s:
                 s = s[:-1]
                 gotoxy(wherex() - 1, wherey())
@@ -194,17 +194,17 @@ class WCFile:
         pass
     def isatty(self):
         return 1
-    def read(self, size = 1):
+    def read(self, size=1):
         if size <= 1:
             return getch()[1]
         else:
             return cgets(size)
-    def readline(self, size = 0):
+    def readline(self, size=0):
         rc = cgets(size)
         if size:
             rc = rc[:size]
         return rc
-    def readlines(self, sizehint = 0):
+    def readlines(self, sizehint=0):
         "readlines() is pure nonsense for WConio, so this just calls readline."
         return readline(self, sizehint)  # @UndefinedVariable
     def write(self, str):  # @ReservedAssignment
@@ -213,8 +213,8 @@ class WCFile:
         for i in l:
             cputs(i)
 
-File = WCFile()     # we just keep one of these around,
-del WCFile          # so the class gets used just once.
+File = WCFile()  # we just keep one of these around,
+del WCFile  # so the class gets used just once.
 
 if __name__ == '__main__':
     c = getkey()

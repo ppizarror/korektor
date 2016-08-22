@@ -46,8 +46,8 @@ from _urllib2_fork import \
 
 # ...and from mechanize
 # crap ATM
-## from _gzip import \
-##      HTTPGzipProcessor
+# # from _gzip import \
+# #      HTTPGzipProcessor
 if hasattr(httplib, 'HTTPS'):
     from _urllib2_fork import HTTPSHandler
 del httplib

@@ -195,7 +195,7 @@ def request_port(request):
     host = request.get_host()
     i = host.find(':')
     if i >= 0:
-        port = host[i+1:]
+        port = host[i + 1:]
         try:
             int(port)
         except ValueError:
@@ -264,11 +264,11 @@ def reach(h):
     """
     i = h.find(".")
     if i >= 0:
-        #a = h[:i]  # this line is only here to show what a is
-        b = h[i+1:]
+        # a = h[:i]  # this line is only here to show what a is
+        b = h[i + 1:]
         i = b.find(".")
         if is_HDN(h) and (i >= 0 or b == "local"):
-            return "."+b
+            return "." + b
     return h
 
 def is_third_party(request):
@@ -412,7 +412,7 @@ class Cookie:
 
     def __str__(self):
         if self.port is None: p = ""
-        else: p = ":"+self.port
+        else: p = ":" + self.port
         limit = self.domain + p + self.path
         if self.value is not None:
             namevalue = "%s=%s" % (self.name, self.value)
@@ -608,7 +608,7 @@ class DefaultCookiePolicy(CookiePolicy):
     DomainRFC2965Match = 4
 
     DomainLiberal = 0
-    DomainStrict = DomainStrictNoDots|DomainStrictNonDomain
+    DomainStrict = DomainStrictNoDots | DomainStrictNonDomain
 
     def __init__(self,
                  blocked_domains=None, allowed_domains=None,
@@ -699,7 +699,7 @@ class DefaultCookiePolicy(CookiePolicy):
         assert cookie.name is not None
 
         for n in "version", "verifiability", "name", "path", "domain", "port":
-            fn_name = "set_ok_"+n
+            fn_name = "set_ok_" + n
             fn = getattr(self, fn_name)
             if not fn(cookie, request):
                 return False
@@ -766,7 +766,7 @@ class DefaultCookiePolicy(CookiePolicy):
             if domain.count(".") == 2:
                 # domain like .foo.bar
                 i = domain.rfind(".")
-                tld = domain[i+1:]
+                tld = domain[i + 1:]
                 sld = domain[1:i]
                 if (sld.lower() in [
                     "co", "ac",
@@ -804,7 +804,7 @@ class DefaultCookiePolicy(CookiePolicy):
             if cookie.version == 0:
                 if (not erhn.endswith(domain) and
                     (not erhn.startswith(".") and
-                     not ("."+erhn).endswith(domain))):
+                     not ("." + erhn).endswith(domain))):
                     debug("   effective request-host %s (even with added "
                           "initial dot) does not end end with %s",
                           erhn, domain)
@@ -859,7 +859,7 @@ class DefaultCookiePolicy(CookiePolicy):
 
         for n in ("version", "verifiability", "secure", "expires", "port",
                   "domain"):
-            fn_name = "return_ok_"+n
+            fn_name = "return_ok_" + n
             fn = getattr(self, fn_name)
             if not fn(cookie, request):
                 return False
@@ -928,7 +928,7 @@ class DefaultCookiePolicy(CookiePolicy):
             debug("   effective request-host name %s does not domain-match "
                   "RFC 2965 cookie domain %s", erhn, domain)
             return False
-        if cookie.version == 0 and not ("."+erhn).endswith(domain):
+        if cookie.version == 0 and not ("." + erhn).endswith(domain):
             debug("   request-host %s does not match Netscape cookie domain "
                   "%s", req_host, domain)
             return False
@@ -942,12 +942,12 @@ class DefaultCookiePolicy(CookiePolicy):
         # the side of letting cookies through.
         dotted_req_host, dotted_erhn = eff_request_host_lc(request)
         if not dotted_req_host.startswith("."):
-            dotted_req_host = "."+dotted_req_host
+            dotted_req_host = "." + dotted_req_host
         if not dotted_erhn.startswith("."):
-            dotted_erhn = "."+dotted_erhn
+            dotted_erhn = "." + dotted_erhn
         if not (dotted_req_host.endswith(domain) or
                 dotted_erhn.endswith(domain)):
-            #debug("   request domain %s does not match cookie domain %s",
+            # debug("   request domain %s does not match cookie domain %s",
             #      req_host, domain)
             return False
 
@@ -1347,7 +1347,7 @@ class CookieJar:
                     # Netscape spec parts company from reality here
                     path = path[:i]
                 else:
-                    path = path[:i+1]
+                    path = path[:i + 1]
             if len(path) == 0: path = "/"
 
         # set default domain
@@ -1360,7 +1360,7 @@ class CookieJar:
             req_host, erhn = eff_request_host_lc(request)  # @UnusedVariable
             domain = erhn
         elif not domain.startswith("."):
-            domain = "."+domain
+            domain = "." + domain
 
         # set default port
         port_specified = False
@@ -1602,7 +1602,7 @@ class CookieJar:
     def __getitem__(self, i):
         if i == 0:
             self._getitem_iterator = self.__iter__()
-        elif self._prev_getitem_index != i-1: raise IndexError(
+        elif self._prev_getitem_index != i - 1: raise IndexError(
             "CookieJar.__getitem__ only supports sequential iteration")
         self._prev_getitem_index = i
         try:

@@ -45,16 +45,16 @@ def get1(sequence):
 
 
 def isstringlike(x):
-    try: x+""
+    try: x + ""
     except: return False
     else: return True
 
-## def caller():
-##     try:
-##         raise SyntaxError
-##     except:
-##         import sys
-##     return sys.exc_traceback.tb_frame.f_back.f_back.f_code.co_name
+# # def caller():
+# #     try:
+# #         raise SyntaxError
+# #     except:
+# #         import sys
+# #     return sys.exc_traceback.tb_frame.f_back.f_back.f_code.co_name
 
 
 
@@ -107,7 +107,7 @@ def time2netscape(t=None):
     if t is None: t = time.time()
     year, mon, mday, hour, min, sec, wday = time.gmtime(t)[:7]  # @ReservedAssignment
     return "%s %02d-%s-%04d %02d:%02d:%02d GMT" % (
-        days[wday], mday, months[mon-1], year, hour, min, sec)
+        days[wday], mday, months[mon - 1], year, hour, min, sec)
 
 
 UTC_ZONES = {"GMT": None, "UTC": None, "UT": None, "Z": None}
@@ -131,7 +131,7 @@ def _str2time(day, mon, yr, hr, min, sec, tz):  # @ReservedAssignment
     # translate month name to number
     # month numbers start with 1 (January)
     try:
-        mon = months_lower.index(mon.lower())+1
+        mon = months_lower.index(mon.lower()) + 1
     except ValueError:
         # maybe it's already a number
         try:
@@ -247,7 +247,7 @@ def http2time(text):
     text = wkday_re.sub("", text, 1)  # Useless weekday
 
     # tz is time zone specifier string
-    day, mon, yr, hr, min, sec, tz = [None]*7  # @ReservedAssignment
+    day, mon, yr, hr, min, sec, tz = [None] * 7  # @ReservedAssignment
 
     # loose regexp parse
     m = loose_http_re.search(text)
@@ -291,7 +291,7 @@ def iso2time(text):
     text = text.lstrip()
 
     # tz is time zone specifier string
-    day, mon, yr, hr, min, sec, tz = [None]*7  # @ReservedAssignment
+    day, mon, yr, hr, min, sec, tz = [None] * 7  # @ReservedAssignment
 
     # loose regexp parse
     m = iso_re.search(text)

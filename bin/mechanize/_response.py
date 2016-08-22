@@ -41,8 +41,8 @@ def len_of_seekable(file_):
 # invariant checking is turned on).  The invariant checking is done by module
 # ipdc, which is available here:
 # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/436834
-## from ipdbc import ContractBase
-## class seek_wrapper(ContractBase):
+# # from ipdbc import ContractBase
+# # class seek_wrapper(ContractBase):
 class seek_wrapper:
     """Adds a seek method to a file object.
 
@@ -110,7 +110,7 @@ class seek_wrapper:
             self.__dict__[name] = value
 
     def seek(self, offset, whence=0):
-        assert whence in [0,1,2]
+        assert whence in [0, 1, 2]
 
         # how much data, if any, do we need to read?
         if whence == 2:  # 2: relative to end of *wrapped* file
@@ -149,7 +149,7 @@ class seek_wrapper:
                 # of .wrapped, since fseek() doesn't complain in that case.
                 # Also like fseek(), pretend we have seek()ed past the end,
                 # i.e. not:
-                #self.__pos = self.__cache.tell()
+                # self.__pos = self.__cache.tell()
                 # but rather:
                 self.__pos = dest
         else:
@@ -181,7 +181,7 @@ class seek_wrapper:
         # enough data already cached?
         if size <= available and size != -1:
             self.__cache.seek(pos)
-            self.__pos = pos+size
+            self.__pos = pos + size
             return self.__cache.read(size)
 
         # no, so read sufficient data from wrapped file and cache it
@@ -222,10 +222,10 @@ class seek_wrapper:
         data = self.__cache.readline()
         if size != -1:
             r = data[:size]
-            self.__pos = pos+size
+            self.__pos = pos + size
         else:
             r = data
-            self.__pos = pos+len(data)
+            self.__pos = pos + len(data)
         return r
 
     def readlines(self, sizehint=-1):
@@ -247,7 +247,7 @@ class seek_wrapper:
     xreadlines = __iter__
 
     def __repr__(self):
-        return ("<%s at %s whose wrapped object = %r>" %
+        return ("<%s at %s whose wrapped object = %r>" % 
                 (self.__class__.__name__, hex(abs(id(self))), self.wrapped))
 
 

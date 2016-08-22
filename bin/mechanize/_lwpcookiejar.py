@@ -90,7 +90,7 @@ class LWPCookieJar(FileCookieJar):
                 debug("   Not saving %s: expired", cookie.name)
                 continue
             r.append("Set-Cookie3: %s" % lwp_cookie_str(cookie))
-        return "\n".join(r+[""])
+        return "\n".join(r + [""])
 
     def save(self, filename=None, ignore_discard=False, ignore_expires=False):
         if filename is None:

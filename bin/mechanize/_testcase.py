@@ -130,11 +130,11 @@ class TestCase(unittest.TestCase):
         return self._monkey_patcher.monkey_patch_environ(*args, **kwds)
 
     def assert_contains(self, container, containee):
-        self.assertTrue(containee in container, "%r not in %r" %
+        self.assertTrue(containee in container, "%r not in %r" % 
                         (containee, container))
 
     def assert_less_than(self, got, expected):
-        self.assertTrue(got < expected, "%r >= %r" %
+        self.assertTrue(got < expected, "%r >= %r" % 
                         (got, expected))
 
 

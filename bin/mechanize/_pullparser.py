@@ -85,7 +85,7 @@ class Token:
     def __ne__(self, other): return not self.__eq__(other)
     def __repr__(self):
         args = ", ".join(map(repr, [self.type, self.data, self.attrs]))
-        return self.__class__.__name__+"(%s)" % args
+        return self.__class__.__name__ + "(%s)" % args
 
     def __str__(self):
         """
@@ -299,7 +299,7 @@ class _AbstractParser:
             if tok.type == "data":
                 text.append(tok.data)
             elif tok.type == "entityref":
-                t = unescape("&%s;"%tok.data, self._entitydefs, self.encoding)
+                t = unescape("&%s;" % tok.data, self._entitydefs, self.encoding)
                 text.append(t)
             elif tok.type == "charref":
                 t = unescape_charref(tok.data, self.encoding)
@@ -350,7 +350,7 @@ class _AbstractParser:
         self._tokenstack.append(Token("decl", decl))
     def unknown_decl(self, data):
         # XXX should this call self.error instead?
-        #self.error("unknown declaration: " + `data`)
+        # self.error("unknown declaration: " + `data`)
         self._tokenstack.append(Token("decl", data))
     def handle_pi(self, data):
         self._tokenstack.append(Token("pi", data))

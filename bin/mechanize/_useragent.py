@@ -92,8 +92,8 @@ class UserAgentBase(_opener.OpenerDirector):
         _opener.OpenerDirector.__init__(self)
 
         ua_handlers = self._ua_handlers = {}
-        for scheme in (self.default_schemes+
-                       self.default_others+
+        for scheme in (self.default_schemes + 
+                       self.default_others + 
                        self.default_features):
             klass = self.handler_classes[scheme]
             ua_handlers[scheme] = klass()
@@ -126,13 +126,13 @@ class UserAgentBase(_opener.OpenerDirector):
         self._ua_handlers = None
 
     # XXX
-##     def set_timeout(self, timeout):
-##         self._timeout = timeout
-##     def set_http_connection_cache(self, conn_cache):
-##         self._http_conn_cache = conn_cache
-##     def set_ftp_connection_cache(self, conn_cache):
-##         # XXX ATM, FTP has cache as part of handler; should it be separate?
-##         self._ftp_conn_cache = conn_cache
+# #     def set_timeout(self, timeout):
+# #         self._timeout = timeout
+# #     def set_http_connection_cache(self, conn_cache):
+# #         self._http_conn_cache = conn_cache
+# #     def set_ftp_connection_cache(self, conn_cache):
+# #         # XXX ATM, FTP has cache as part of handler; should it be separate?
+# #         self._ftp_conn_cache = conn_cache
 
     def set_handled_schemes(self, schemes):
         """Set sequence of URL scheme (protocol) strings.
@@ -259,7 +259,7 @@ class UserAgentBase(_opener.OpenerDirector):
         if head_parser_class is not None:
             constructor_kwds = {"head_parser_class": head_parser_class}
         else:
-            constructor_kwds={}
+            constructor_kwds = {}
         self._set_handler("_equiv", handle, constructor_kwds=constructor_kwds)
     def set_handle_gzip(self, handle):
         """Handle gzip transfer encoding.

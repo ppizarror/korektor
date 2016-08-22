@@ -157,7 +157,7 @@ class LinksFactory:
         p = self.link_parser_class(response, encoding=encoding)
 
         try:
-            for token in p.tags(*(self.urltags.keys()+["base"])):
+            for token in p.tags(*(self.urltags.keys() + ["base"])):
                 if token.type == "endtag":
                     continue
                 if token.data == "base":
@@ -170,7 +170,7 @@ class LinksFactory:
                 text = None
                 # XXX use attr_encoding for ref'd doc if that doc does not
                 #  provide one by other means
-                #attr_encoding = attrs.get("charset")
+                # attr_encoding = attrs.get("charset")
                 url = attrs.get(self.urltags[tag])  # XXX is "" a valid URL?
                 if not url:
                     # Probably an <A NAME="blah"> link or <AREA NOHREF...>.
@@ -185,7 +185,7 @@ class LinksFactory:
                         text = p.get_compressed_text(("endtag", tag))
                     # but this doesn't work for e.g.
                     # <a href="blah"><b>Andy</b></a>
-                    #text = p.get_compressed_text()
+                    # text = p.get_compressed_text()
 
                 yield Link(base_url, url, text, tag, token.attrs)
         except sgmllib.SGMLParseError, exc:
@@ -313,7 +313,7 @@ def unescape(data, entities, encoding):
 def unescape_charref(data, encoding):
     name, base = data, 10
     if name.startswith("x"):
-        name, base= name[1:], 16
+        name, base = name[1:], 16
     uc = unichr(int(name, base))
     if encoding is None:
         return uc
@@ -341,10 +341,10 @@ class MechanizeBs(_beautifulsoup.BeautifulSoup):
             self, text, avoidParserProblems, initialTextIsEverything)
 
     def handle_charref(self, ref):
-        t = unescape("&#%s;"%ref, self._entitydefs, self._encoding)
+        t = unescape("&#%s;" % ref, self._entitydefs, self._encoding)
         self.handle_data(t)
     def handle_entityref(self, ref):
-        t = unescape("&%s;"%ref, self._entitydefs, self._encoding)
+        t = unescape("&%s;" % ref, self._entitydefs, self._encoding)
         self.handle_data(t)
     def unescape_attrs(self, attrs):
         escaped_attrs = []
@@ -389,7 +389,7 @@ class RobustLinksFactory:
         encoding = self._encoding
         for ch in bs.recursiveChildGenerator():
             if (isinstance(ch, _beautifulsoup.Tag) and
-                ch.name in self.urltags.keys()+["base"]):
+                ch.name in self.urltags.keys() + ["base"]):
                 link = ch
                 attrs = bs.unescape_attrs(link.attrs)
                 attrs_dict = dict(attrs)

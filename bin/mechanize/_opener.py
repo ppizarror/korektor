@@ -61,7 +61,7 @@ class OpenerDirector(_urllib2_fork.OpenerDirector):
 
     def add_handler(self, handler):
         if not hasattr(handler, "add_parent"):
-            raise TypeError("expected BaseHandler instance, got %r" %
+            raise TypeError("expected BaseHandler instance, got %r" % 
                             type(handler))
 
         if handler in self.handlers:
@@ -101,11 +101,11 @@ class OpenerDirector(_urllib2_fork.OpenerDirector):
 
                 ii = meth.find("_")
                 scheme = meth[:ii]
-                condition = meth[ii+1:]
+                condition = meth[ii + 1:]
 
                 if condition.startswith("error"):
-                    jj = meth[ii+1:].find("_") + ii + 1
-                    kind = meth[jj+1:]
+                    jj = meth[ii + 1:].find("_") + ii + 1
+                    kind = meth[jj + 1:]
                     try:
                         kind = int(kind)
                     except ValueError:
@@ -185,7 +185,7 @@ class OpenerDirector(_urllib2_fork.OpenerDirector):
         request_processors = list(request_processors)
         request_processors.sort()
         for processor in request_processors:
-            for meth_name in ["any_request", req_scheme+"_request"]:
+            for meth_name in ["any_request", req_scheme + "_request"]:
                 meth = getattr(processor, meth_name, None)
                 if meth:
                     req = meth(req)
@@ -201,7 +201,7 @@ class OpenerDirector(_urllib2_fork.OpenerDirector):
         response_processors = list(response_processors)
         response_processors.sort()
         for processor in response_processors:
-            for meth_name in ["any_response", req_scheme+"_response"]:
+            for meth_name in ["any_response", req_scheme + "_response"]:
                 meth = getattr(processor, meth_name, None)
                 if meth:
                     response = meth(req, response)
@@ -211,7 +211,7 @@ class OpenerDirector(_urllib2_fork.OpenerDirector):
     def error(self, proto, *args):
         if proto in ['http', 'https']:
             # XXX http[s] protocols are special-cased
-            dict = self.handle_error['http'] # https is not different than http @ReservedAssignment
+            dict = self.handle_error['http']  # https is not different than http @ReservedAssignment
             proto = args[2]  # YUCK!
             meth_name = 'http_error_%s' % proto
             http_err = 1
@@ -229,7 +229,7 @@ class OpenerDirector(_urllib2_fork.OpenerDirector):
             args = (dict, 'default', 'http_error_default') + orig_args
             return apply(self._call_chain, args)
 
-    BLOCK_SIZE = 1024*8
+    BLOCK_SIZE = 1024 * 8
     def retrieve(self, fullurl, filename=None, reporthook=None, data=None,
                  timeout=_sockettimeout._GLOBAL_DEFAULT_TIMEOUT,
                  open=open_file):  # @ReservedAssignment
@@ -257,7 +257,7 @@ class OpenerDirector(_urllib2_fork.OpenerDirector):
                 # XXX req.get_selector() seems broken here, return None,
                 #   pending sanity :-/
                 return None, headers
-                #return urllib.url2pathname(req.get_selector()), headers
+                # return urllib.url2pathname(req.get_selector()), headers
             if filename:
                 tfp = open(filename, 'wb')
             else:

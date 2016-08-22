@@ -46,7 +46,7 @@ def epoch_time_offset_from_win32_filetime(filetime):
 
     """
     if filetime < WIN32_EPOCH:
-        raise ValueError("filetime (%d) is before epoch (%d)" %
+        raise ValueError("filetime (%d) is before epoch (%d)" % 
                          (filetime, WIN32_EPOCH))
 
     return divmod((filetime - WIN32_EPOCH), 10000000L)[0]
@@ -220,7 +220,7 @@ class MSIEBase:
 
         # check that sig is valid
         if not self.magic_re.match(sig) or size != 0x4000:
-            raise LoadError("%s ['%s' %s] does not seem to contain cookies" %
+            raise LoadError("%s ['%s' %s] does not seem to contain cookies" % 
                           (str(filename), sig, size))
 
         # skip to start of first record
@@ -246,14 +246,14 @@ class MSIEBase:
 
             to_read = (size - 2) * sector
 
-##             from urllib import quote
-##             print "data", quote(data)
-##             print "sig", quote(sig)
-##             print "size in sectors", size
-##             print "size in bytes", size*sector
-##             print "size in units of 16 bytes", (size*sector) / 16
-##             print "size to read in bytes", to_read
-##             print
+# #             from urllib import quote
+# #             print "data", quote(data)
+# #             print "sig", quote(sig)
+# #             print "size in sectors", size
+# #             print "size in bytes", size*sector
+# #             print "size in units of 16 bytes", (size*sector) / 16
+# #             print "size to read in bytes", to_read
+# #             print
 
             if sig != "URL ":
                 assert sig in ("HASH", "LEAK", \
@@ -278,7 +278,7 @@ class MSIEBase:
                 if len(more_data) != to_read: break
                 data = data + more_data
 
-            cookie_re = ("Cookie\:%s\@([\x21-\xFF]+).*?" % username +
+            cookie_re = ("Cookie\:%s\@([\x21-\xFF]+).*?" % username + 
                          "(%s\@[\x21-\xFF]+\.txt)" % username)
             m = re.search(cookie_re, data, re.I)
             if m:

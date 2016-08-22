@@ -272,7 +272,7 @@ class OpenerDirector:
 
     def add_handler(self, handler):
         if not hasattr(handler, "add_parent"):
-            raise TypeError("expected BaseHandler instance, got %r" %
+            raise TypeError("expected BaseHandler instance, got %r" % 
                             type(handler))
 
         added = False
@@ -283,11 +283,11 @@ class OpenerDirector:
 
             i = meth.find("_")
             protocol = meth[:i]
-            condition = meth[i+1:]
+            condition = meth[i + 1:]
 
             if condition.startswith("error"):
                 j = condition.find("_") + i + 1
-                kind = meth[j+1:]
+                kind = meth[j + 1:]
                 try:
                     kind = int(kind)
                 except ValueError:
@@ -342,7 +342,7 @@ class OpenerDirector:
             return result
 
         protocol = req.get_type()
-        result = self._call_chain(self.handle_open, protocol, protocol +
+        result = self._call_chain(self.handle_open, protocol, protocol + 
                                   '_open', req)
         if result:
             return result
@@ -353,7 +353,7 @@ class OpenerDirector:
     def error(self, proto, *args):
         if proto in ('http', 'https'):
             # XXX http[s] protocols are special-cased
-            dict = self.handle_error['http'] # https is not different than http
+            dict = self.handle_error['http']  # https is not different than http
             proto = args[2]  # YUCK!
             meth_name = 'http_error_%s' % proto
             http_err = 1
@@ -1116,7 +1116,7 @@ class AbstractHTTPHandler(BaseHandler):
         try:
             h.request(req.get_method(), req.get_selector(), req.data, headers)
             r = h.getresponse()
-        except socket.error, err: # XXX what error?
+        except socket.error, err:  # XXX what error?
             raise URLError(err)
 
         # Pick apart the HTTPResponse object to get the addinfourl
@@ -1293,14 +1293,14 @@ class FileHandler(BaseHandler):
             modified = emailutils.formatdate(stats.st_mtime, usegmt=True)
             mtype = mimetypes.guess_type(file)[0]
             headers = mimetools.Message(StringIO(
-                'Content-type: %s\nContent-length: %d\nLast-modified: %s\n' %
+                'Content-type: %s\nContent-length: %d\nLast-modified: %s\n' % 
                 (mtype or 'text/plain', size, modified)))
             if host:
                 host, port = splitport(host)
             if not host or \
                 (not port and socket.gethostbyname(host) in self.get_names()):
                 return addinfourl(open(localfile, 'rb'),
-                                  headers, 'file:'+file)
+                                  headers, 'file:' + file)
         except OSError, msg:
             # urllib2 users shouldn't expect OSErrors coming from urlopen()
             raise URLError(msg)
@@ -1366,7 +1366,7 @@ class FTPHandler(BaseHandler):
         except TypeError:
             # Python < 2.6, no per-connection timeout support
             fw = ftpwrapper(user, passwd, host, port, dirs)
-##        fw.ftp.set_debuglevel(1)
+# #        fw.ftp.set_debuglevel(1)
         return fw
 
 class CacheFTPHandler(FTPHandler):

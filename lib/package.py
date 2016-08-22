@@ -17,9 +17,9 @@ import zipfile
 from bin.configLoader import configLoader  # @UnresolvedImport
 import bin.errors as err  # @UnresolvedImport @UnusedImport
 import bin.rarfile as rarfile  # @UnresolvedImport
-from bin.utils import isHiddenFile, isFolder, regexCompare  # @UnresolvedImport
+from bin.utils import isHiddenFile, isFolder, regexCompare, printBarsConsole  # @UnresolvedImport @Reimport
 from config import DIR_CONFIG  # @UnresolvedImport
-from data import *  # @UnusedWildImport
+from data import DIR_UPLOADS, DIR_DATA, DIR_RESULTS, DIR_STRUCTURE  # @UnusedImport
 
 
 # Constantes
@@ -41,11 +41,12 @@ class Package:
         # Carga de configuraciones
         config = configLoader(DIR_CONFIG, "packages.ini")
         folderConfig = configLoader(DIR_CONFIG, "folder.ini")
+        coreConfig = configLoader(DIR_CONFIG, "core.ini")
         self.ignoredFiles = folderConfig.getValueListed("IGNORE")
         self.packageStructedFiles = []  # Lista con archivos requeridos para cada package
         self.validChars = config.getValue("VALID_CHARACTERS")  # Caracteres válidos de los archivos del paquete
-        self.validRegexChars = config.getValue(
-            "VALID_REGEX_CHARACTERS")  # Caracteres válidos para los regex
+        self.validRegexChars = config.getValue("VALID_REGEX_CHARACTERS")  # Caracteres válidos para los regex
+        self.verbose = coreConfig.isTrue("VERBOSE")
         # Genera la estructura
         self.structFiles = []
         self.loadStructure()
@@ -93,7 +94,6 @@ class Package:
                     f = f.replace("\\", "/")
                     if "/" in f:
                         return f.split("/")[0]
-
             if self.isFolder(rootpath, filename):  # Si el archivo es una carpeta
                 for filef in os.listdir(rootpath + filename):
                     if _isValidFile(filef):
@@ -179,7 +179,6 @@ class Package:
         :return:
         """
         folderfiles = self.inspectFiles(DIR_UPLOADS, filename, False)
-        print folderfiles
         for structfile in self.structFiles:
             found = False
             for datafile in folderfiles:
@@ -192,10 +191,13 @@ class Package:
 
 
 if __name__ == "__main__":
+    printBarsConsole("Testeo de Package-Structure")
     p = Package()
     print p.getStructure()
+    printBarsConsole("Testeo de Paquetes")
     for f in os.listdir(DIR_UPLOADS):  # @ReservedAssignment
-        print p.validateStructure(f)
+        print f
+        print "\tCumple estructura:", p.validateStructure(f)
         # p.validateStructure("Aguirre_Munoz__Daniel_Patricio.zip")
         # p.validateStructure("zipfile.zip")
         # p.validateStructure("rarfile.rar")

@@ -37,7 +37,7 @@ You can subclass BeautifulStoneSoup or BeautifulSoup to create a
 parsing strategy specific to an XML schema or a particular bizarre
 HTML document. Typically your subclass would just override
 SELF_CLOSING_TAGS and/or NESTABLE_TAGS.
-""" #"
+"""  # "
 from __future__ import generators
 
 import re
@@ -67,7 +67,7 @@ class NullType(object):
 
     def __new__(cls):                    return Null
     def __call__(self, *args, **kwargs): return Null
-##    def __getstate__(self, *args):       return Null
+# #    def __getstate__(self, *args):       return Null
     def __getattr__(self, attr):         return Null
     def __getitem__(self, item):         return Null
     def __setattr__(self, attr, value):  pass
@@ -157,7 +157,7 @@ class PageElement:
         criteria."""
         return self._fetch(name, attrs, None, limit, self.parentGenerator)
 
-    #These methods do the real heavy lifting.
+    # These methods do the real heavy lifting.
 
     def _first(self, method, name, attrs, text):
         r = Null
@@ -199,8 +199,8 @@ class PageElement:
                     break
         return results
 
-    #Generators that can be used to navigate starting from both
-    #NavigableTexts and Tags.
+    # Generators that can be used to navigate starting from both
+    # NavigableTexts and Tags.
     def nextGenerator(self):
         i = self
         while i:
@@ -232,7 +232,7 @@ class PageElement:
             yield i
 
     def _matches(self, chunk, howToMatch):
-        #print 'looking for %s in %s' % (howToMatch, chunk)
+        # print 'looking for %s in %s' % (howToMatch, chunk)
         #
         # If given a list of items, return true if the list contains a
         # text element that matches.
@@ -244,10 +244,10 @@ class PageElement:
         if callable(howToMatch):
             return howToMatch(chunk)
         if isinstance(chunk, Tag):
-            #Custom match methods take the tag as an argument, but all other
-            #ways of matching match the tag name as a string
+            # Custom match methods take the tag as an argument, but all other
+            # ways of matching match the tag name as a string
             chunk = chunk.name
-        #Now we know that chunk is a string
+        # Now we know that chunk is a string
         if not isinstance(chunk, basestring):
             chunk = str(chunk)
         if hasattr(howToMatch, 'match'):
@@ -257,7 +257,7 @@ class PageElement:
             return chunk in howToMatch
         if hasattr(howToMatch, 'items'):
             return howToMatch.has_key(chunk)
-        #It's just a string
+        # It's just a string
         return str(howToMatch) == chunk
 
 class NavigableText(PageElement):
@@ -334,8 +334,8 @@ class Tag(PageElement):
         for item in self.attrs:
             if item[0] == key:
                 self.attrs.remove(item)
-                #We don't break because bad HTML can define the same
-                #attribute multiple times.
+                # We don't break because bad HTML can define the same
+                # attribute multiple times.
             self._getAttrMap()
             if self.attrMap.has_key(key):
                 del self.attrMap[key]
@@ -347,7 +347,7 @@ class Tag(PageElement):
         return apply(self.fetch, args, kwargs)
 
     def __getattr__(self, tag):
-        if len(tag) > 3 and tag.rfind('Tag') == len(tag)-3:
+        if len(tag) > 3 and tag.rfind('Tag') == len(tag) - 3:
             return self.first(tag[:-3])
         elif tag.find('__') != 0:
             return self.first(tag)
@@ -421,7 +421,7 @@ class Tag(PageElement):
         isUnicode = type(s) == types.UnicodeType
         if needUnicode and not isUnicode:
             s = unicode(s)
-        elif isUnicode and needUnicode==False:
+        elif isUnicode and needUnicode == False:
             s = str(s)
         return s
 
@@ -431,7 +431,7 @@ class Tag(PageElement):
     def renderContents(self, showStructureIndent=None, needUnicode=None):
         """Renders the contents of this tag as a (possibly Unicode)
         string."""
-        s=[]
+        s = []
         for c in self:
             text = None
             if isinstance(c, NavigableUnicodeString) or type(c) == types.UnicodeType:
@@ -449,7 +449,7 @@ class Tag(PageElement):
                 s.append(text)
         return ''.join(s)
 
-    #Soup methods
+    # Soup methods
 
     def firstText(self, text, recursive=True):
         """Convenience method to retrieve the first piece of text matching the
@@ -492,7 +492,7 @@ class Tag(PageElement):
         return self._fetch(name, attrs, text, limit, generator)
     fetchChildren = fetch
 
-    #Utility methods
+    # Utility methods
 
     def isSelfClosing(self):
         """Returns true iff this is a self-closing tag as defined in the HTML
@@ -506,7 +506,7 @@ class Tag(PageElement):
         """Appends the given tag to the contents of this tag."""
         self.contents.append(tag)
 
-    #Private methods
+    # Private methods
 
     def _getAttrMap(self):
         """Initializes a map representation of this tag's attributes,
@@ -517,7 +517,7 @@ class Tag(PageElement):
                 self.attrMap[key] = value
         return self.attrMap
 
-    #Generator methods
+    # Generator methods
     def childGenerator(self):
         for i in range(0, len(self.contents)):
             yield self.contents[i]
@@ -533,7 +533,7 @@ class Tag(PageElement):
                     yield a
                     if isinstance(a, Tag) and tag.contents:
                         if i < len(tag.contents) - 1:
-                            stack.append((tag, i+1))
+                            stack.append((tag, i + 1))
                         stack.append((a, 0))
                         break
         raise StopIteration
@@ -552,15 +552,15 @@ def buildTagMap(default, *args):
     built = {}
     for portion in args:
         if hasattr(portion, 'items'):
-            #It's a map. Merge it.
-            for k,v in portion.items():
+            # It's a map. Merge it.
+            for k, v in portion.items():
                 built[k] = v
         elif isList(portion):
-            #It's a list. Map each item to the default.
+            # It's a list. Map each item to the default.
             for k in portion:
                 built[k] = default
         else:
-            #It's a scalar. Map it to the default.
+            # It's a scalar. Map it to the default.
             built[portion] = default
     return built
 
@@ -587,8 +587,8 @@ class BeautifulStoneSoup(Tag, SGMLParser):
     RESET_NESTING_TAGS = {}
     QUOTE_TAGS = {}
 
-    #As a public service we will by default silently replace MS smart quotes
-    #and similar characters with their HTML or ASCII equivalents.
+    # As a public service we will by default silently replace MS smart quotes
+    # and similar characters with their HTML or ASCII equivalents.
     MS_CHARS = { '\x80' : '&euro;',
                  '\x81' : ' ',
                  '\x82' : '&sbquo;',
@@ -620,7 +620,7 @@ class BeautifulStoneSoup(Tag, SGMLParser):
                  '\x9c' : '&oelig;',
                  '\x9d' : '?',
                  '\x9e' : 'z',
-                 '\x9f' : '&Yuml;',}
+                 '\x9f' : '&Yuml;', }
 
     PARSER_MASSAGE = [(re.compile('(<[^<>]*)/>'),
                        lambda(x):x.group(1) + ' />'),
@@ -668,7 +668,7 @@ class BeautifulStoneSoup(Tag, SGMLParser):
         self.hidden = 1
         self.reset()
         if hasattr(text, 'read'):
-            #It's a file-type object.
+            # It's a file-type object.
             text = text.read()
         if text:
             self.feed(text)
@@ -695,7 +695,7 @@ class BeautifulStoneSoup(Tag, SGMLParser):
     def done(self):
         """Called when you're done parsing, so that the unclosed tags can be
         correctly processed."""
-        self.endData() #NEW
+        self.endData()  # NEW
         while self.currentTag.name != self.ROOT_TAG_NAME:
             self.popTag()
 
@@ -715,13 +715,13 @@ class BeautifulStoneSoup(Tag, SGMLParser):
            isinstance(self.currentTag.contents[0], NavigableText):
             self.currentTag.string = self.currentTag.contents[0]
 
-        #print "Pop", tag.name
+        # print "Pop", tag.name
         if self.tagStack:
             self.currentTag = self.tagStack[-1]
         return self.currentTag
 
     def pushTag(self, tag):
-        #print "Push", tag.name
+        # print "Push", tag.name
         if self.currentTag:
             self.currentTag.append(tag)
         self.tagStack.append(tag)
@@ -756,9 +756,9 @@ class BeautifulStoneSoup(Tag, SGMLParser):
 
         numPops = 0
         mostRecentTag = None
-        for i in range(len(self.tagStack)-1, 0, -1):
+        for i in range(len(self.tagStack) - 1, 0, -1):
             if name == self.tagStack[i].name:
-                numPops = len(self.tagStack)-i
+                numPops = len(self.tagStack) - i
                 break
         if not inclusivePop:
             numPops = numPops - 1
@@ -791,11 +791,11 @@ class BeautifulStoneSoup(Tag, SGMLParser):
         isResetNesting = self.RESET_NESTING_TAGS.has_key(name)
         popTo = None
         inclusive = True
-        for i in range(len(self.tagStack)-1, 0, -1):
+        for i in range(len(self.tagStack) - 1, 0, -1):
             p = self.tagStack[i]
             if (not p or p.name == name) and not isNestable:
-                #Non-nestable tags get popped to the top or to their
-                #last occurance.
+                # Non-nestable tags get popped to the top or to their
+                # last occurance.
                 popTo = name
                 break
             if (nestingResetTriggers != None
@@ -803,10 +803,10 @@ class BeautifulStoneSoup(Tag, SGMLParser):
                 or (nestingResetTriggers == None and isResetNesting
                     and self.RESET_NESTING_TAGS.has_key(p.name)):
 
-                #If we encounter one of the nesting reset triggers
-                #peculiar to this tag, or we encounter another tag
-                #that causes nesting to reset, pop up to but not
-                #including that tag.
+                # If we encounter one of the nesting reset triggers
+                # peculiar to this tag, or we encounter another tag
+                # that causes nesting to reset, pop up to but not
+                # including that tag.
 
                 popTo = p.name
                 inclusive = False
@@ -816,10 +816,10 @@ class BeautifulStoneSoup(Tag, SGMLParser):
             self._popToTag(popTo, inclusive)
 
     def unknown_starttag(self, name, attrs, selfClosing=0):
-        #print "Start tag %s" % name
+        # print "Start tag %s" % name
         if self.quoteStack:
-            #This is not a real tag.
-            #print "<%s> is not real!" % name
+            # This is not a real tag.
+            # print "<%s> is not real!" % name
             attrs = ''.join(map(lambda(x, y): ' %s="%s"' % (x, y), attrs))
             self.handle_data('<%s%s>' % (name, attrs))
             return
@@ -834,14 +834,14 @@ class BeautifulStoneSoup(Tag, SGMLParser):
         if selfClosing or name in self.SELF_CLOSING_TAGS:
             self.popTag()
         if name in self.QUOTE_TAGS:
-            #print "Beginning quote (%s)" % name
+            # print "Beginning quote (%s)" % name
             self.quoteStack.append(name)
             self.literal = 1
 
     def unknown_endtag(self, name):
         if self.quoteStack and self.quoteStack[-1] != name:
-            #This is not a real end tag.
-            #print "</%s> is not real!" % name
+            # This is not a real end tag.
+            # print "</%s> is not real!" % name
             self.handle_data('</%s>' % name)
             return
         self.endData()
@@ -877,12 +877,12 @@ class BeautifulStoneSoup(Tag, SGMLParser):
         """Treat a bogus SGML declaration as raw data. Treat a CDATA
         declaration as regular data."""
         j = None
-        if self.rawdata[i:i+9] == '<![CDATA[':
+        if self.rawdata[i:i + 9] == '<![CDATA[':
             k = self.rawdata.find(']]>', i)  # @IndentOk
             if k == -1:  # @IndentOk
                 k = len(self.rawdata)  # @IndentOk
-            self.handle_data(self.rawdata[i+9:k])  # @IndentOk
-            j = k+3  # @IndentOk
+            self.handle_data(self.rawdata[i + 9:k])  # @IndentOk
+            j = k + 3  # @IndentOk
         else:
             try:
                 j = SGMLParser.parse_declaration(self, i)
@@ -945,18 +945,18 @@ class BeautifulSoup(BeautifulStoneSoup):
 
     QUOTE_TAGS = {'script': None}
 
-    #According to the HTML standard, each of these inline tags can
-    #contain another tag of the same type. Furthermore, it's common
-    #to actually use these tags this way.
+    # According to the HTML standard, each of these inline tags can
+    # contain another tag of the same type. Furthermore, it's common
+    # to actually use these tags this way.
     NESTABLE_INLINE_TAGS = ['span', 'font', 'q', 'object', 'bdo', 'sub', 'sup',
                             'center']
 
-    #According to the HTML standard, these block tags can contain
-    #another tag of the same type. Furthermore, it's common
-    #to actually use these tags this way.
+    # According to the HTML standard, these block tags can contain
+    # another tag of the same type. Furthermore, it's common
+    # to actually use these tags this way.
     NESTABLE_BLOCK_TAGS = ['blockquote', 'div', 'fieldset', 'ins', 'del']
 
-    #Lists can contain other lists, but there are restrictions.
+    # Lists can contain other lists, but there are restrictions.
     NESTABLE_LIST_TAGS = { 'ol' : [],
                            'ul' : [],
                            'li' : ['ul', 'ol'],
@@ -964,7 +964,7 @@ class BeautifulSoup(BeautifulStoneSoup):
                            'dd' : ['dl'],
                            'dt' : ['dl'] }
 
-    #Tables can contain other tables, but there are restrictions.
+    # Tables can contain other tables, but there are restrictions.
     NESTABLE_TABLE_TAGS = {'table' : [],
                            'tr' : ['table', 'tbody', 'tfoot', 'thead'],
                            'td' : ['tr'],
@@ -973,8 +973,8 @@ class BeautifulSoup(BeautifulStoneSoup):
 
     NON_NESTABLE_BLOCK_TAGS = ['address', 'form', 'p', 'pre']
 
-    #If one of these tags is encountered, all tags up to the next tag of
-    #this type are popped.
+    # If one of these tags is encountered, all tags up to the next tag of
+    # this type are popped.
     RESET_NESTING_TAGS = buildTagMap(None, NESTABLE_BLOCK_TAGS, 'noscript',
                                      NON_NESTABLE_BLOCK_TAGS,
                                      NESTABLE_LIST_TAGS,
@@ -1053,14 +1053,14 @@ class BeautifulSOAP(BeautifulStoneSoup):
                 parent[tag.name] = tag.contents[0]
         BeautifulStoneSoup.popTag(self)
 
-#Enterprise class names! It has come to our attention that some people
-#think the names of the Beautiful Soup parser classes are too silly
-#and "unprofessional" for use in enterprise screen-scraping. We feel
-#your pain! For such-minded folk, the Beautiful Soup Consortium And
-#All-Night Kosher Bakery recommends renaming this file to
-#"RobustParser.py" (or, in cases of extreme enterprisitude,
-#"RobustParserBeanInterface.class") and using the following
-#enterprise-friendly class aliases:
+# Enterprise class names! It has come to our attention that some people
+# think the names of the Beautiful Soup parser classes are too silly
+# and "unprofessional" for use in enterprise screen-scraping. We feel
+# your pain! For such-minded folk, the Beautiful Soup Consortium And
+# All-Night Kosher Bakery recommends renaming this file to
+# "RobustParser.py" (or, in cases of extreme enterprisitude,
+# "RobustParserBeanInterface.class") and using the following
+# enterprise-friendly class aliases:
 class RobustXMLParser(BeautifulStoneSoup):
     pass
 class RobustHTMLParser(BeautifulSoup):
@@ -1070,10 +1070,10 @@ class RobustWackAssHTMLParser(ICantBelieveItsBeautifulSoup):
 class SimplifyingSOAPParser(BeautifulSOAP):
     pass
 
-###
+# ##
 
 
-#By default, act as an HTML pretty-printer.
+# By default, act as an HTML pretty-printer.
 if __name__ == '__main__':
     import sys
     soup = BeautifulStoneSoup(sys.stdin.read())

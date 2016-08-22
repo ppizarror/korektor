@@ -108,7 +108,7 @@ class configLoader:
         :return: booleano
         """
         if param in self.getParameters():
-            if self.configs[param] == TRUE or self.configs[param] == "1":
+            if self.configs[param].upper() == TRUE or self.configs[param] == "1":
                 return True
             else:
                 return False
