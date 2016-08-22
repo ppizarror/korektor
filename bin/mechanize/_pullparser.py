@@ -68,14 +68,14 @@ class Token:
      (or None if token does not represent an opening tag)
 
     """
-    def __init__(self, type, data, attrs=None):
+    def __init__(self, type, data, attrs=None):  # @ReservedAssignment
         self.type = type
         self.data = data
         self.attrs = attrs
     def __iter__(self):
         return iter((self.type, self.data, self.attrs))
     def __eq__(self, other):
-        type, data, attrs = other
+        type, data, attrs = other  # @ReservedAssignment
         if (self.type == type and
             self.data == data and
             self.attrs == attrs):
@@ -384,8 +384,8 @@ class TolerantPullParser(_AbstractParser, sgmllib.SGMLParser):
 
 
 def _test():
-   import doctest, _pullparser
-   return doctest.testmod(_pullparser)
+    import doctest, _pullparser
+    return doctest.testmod(_pullparser)
 
 if __name__ == "__main__":
-   _test()
+    _test()

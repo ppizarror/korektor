@@ -26,7 +26,7 @@ try:
     set
 except NameError:
     import sets
-    set = sets.Set
+    set = sets.Set  # @ReservedAssignment
 
 
 open_file = open
@@ -211,13 +211,13 @@ class OpenerDirector(_urllib2_fork.OpenerDirector):
     def error(self, proto, *args):
         if proto in ['http', 'https']:
             # XXX http[s] protocols are special-cased
-            dict = self.handle_error['http'] # https is not different than http
+            dict = self.handle_error['http'] # https is not different than http @ReservedAssignment
             proto = args[2]  # YUCK!
             meth_name = 'http_error_%s' % proto
             http_err = 1
             orig_args = args
         else:
-            dict = self.handle_error
+            dict = self.handle_error  # @ReservedAssignment
             meth_name = proto + '_error'
             http_err = 0
         args = (dict, proto, meth_name) + args
@@ -232,7 +232,7 @@ class OpenerDirector(_urllib2_fork.OpenerDirector):
     BLOCK_SIZE = 1024*8
     def retrieve(self, fullurl, filename=None, reporthook=None, data=None,
                  timeout=_sockettimeout._GLOBAL_DEFAULT_TIMEOUT,
-                 open=open_file):
+                 open=open_file):  # @ReservedAssignment
         """Returns (filename, headers).
 
         For remote objects, the default filename will refer to a temporary
@@ -416,7 +416,7 @@ class OpenerFactory:
 build_opener = OpenerFactory().build_opener
 
 _opener = None
-urlopen_lock = _threading.Lock()
+urlopen_lock = _threading.Lock()  # @UndefinedVariable
 def urlopen(url, data=None, timeout=_sockettimeout._GLOBAL_DEFAULT_TIMEOUT):
     global _opener
     if _opener is None:

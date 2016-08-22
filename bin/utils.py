@@ -11,9 +11,10 @@ __autor__ = 'ppizarror'
 
 # Importación de librerías de entorno
 # noinspection PyUnresolvedReferences
-from binpath import *  # @UnusedWildImport
 from accents import delAccent, delAccentByOS  # @UnusedImport
+from binpath import *  # @UnusedWildImport
 import errors
+
 
 # Importación de librerías de sistema
 _IMPORTED = [1, 1]
@@ -91,14 +92,12 @@ def colorcmd(cmd, color):
     if color in _CMD_COLORS and _IMPORTED[0]:
         color = _CMD_COLORS[color]
         try:
-            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11),  # @UndefinedVariable
-                                                           color)  # @UndefinedVariable
+            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11),color)  # @UndefinedVariable
         except:
             pass
         print cmd,
         try:
-            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11),  # @UndefinedVariable
-                                                           0x07)  # @UndefinedVariable
+            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11), 0x07)  # @UndefinedVariable
         except:
             pass
     else:
@@ -402,8 +401,7 @@ def printBarsConsole(s):
     l = len(s)
     u = ""
     for i in range(l):  # @UnusedVariable
-        u+="-"
-    print "\n"
+        u += "-"
     print u
     print s
     print u

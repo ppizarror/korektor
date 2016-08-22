@@ -15,6 +15,7 @@ import binpath
 from configLoader import configLoader
 import errors
 
+
 # Configuración de entorno
 # noinspection PyProtectedMember
 __binconfig = configLoader(binpath._DIR_CONFIG, "bin.ini")

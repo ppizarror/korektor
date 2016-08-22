@@ -20,7 +20,7 @@ honestly don't understand it well enough anyway.  Patches are welcome!
 
 __version__ = "1.5"
 
-from _WConio import *
+from _WConio import *  # @UnusedWildImport
 
 
 BLACK = 0
@@ -206,8 +206,8 @@ class WCFile:
         return rc
     def readlines(self, sizehint = 0):
         "readlines() is pure nonsense for WConio, so this just calls readline."
-        return readline(self, sizehint)
-    def write(self, str):
+        return readline(self, sizehint)  # @UndefinedVariable
+    def write(self, str):  # @ReservedAssignment
         cputs(str)
     def writelines(self, l):
         for i in l:

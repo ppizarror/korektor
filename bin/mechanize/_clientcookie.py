@@ -16,7 +16,7 @@ them clearly from Python attributes.
                   |   ---MSIEBase |       \
                   |  /      |     |        \
                   | /   MSIEDBCookieJar BSDDBCookieJar
-                  |/    
+                  |/
                MSIECookieJar
 
 Comments to John J Lee <jjl@pobox.com>.
@@ -58,7 +58,7 @@ def reraise_unmasked_exceptions(unmasked=()):
     # There are a few catch-all except: statements in this module, for
     # catching input that's bad in unexpected ways.
     # This function re-raises some exceptions we don't want to trap.
-    import mechanize, warnings
+    import mechanize, warnings  # @UnresolvedImport
     if not mechanize.USE_BARE_EXCEPT:
         raise
     unmasked = unmasked + (KeyboardInterrupt, SystemExit, MemoryError)
@@ -291,7 +291,7 @@ try:
     all
 except NameError:
     # python 2.4
-    def all(iterable):
+    def all(iterable):  # @ReservedAssignment
         for x in iterable:
             if not x:
                 return False
@@ -1357,7 +1357,7 @@ class CookieJar:
         if domain_specified:
             domain_initial_dot = bool(domain.startswith("."))
         if domain is Absent:
-            req_host, erhn = eff_request_host_lc(request)
+            req_host, erhn = eff_request_host_lc(request)  # @UnusedVariable
             domain = erhn
         elif not domain.startswith("."):
             domain = "."+domain
@@ -1410,7 +1410,7 @@ class CookieJar:
         for cookie in cookies:
             if cookie.version == 1:
                 cookie.rfc2109 = True
-                if rfc2109_as_netscape: 
+                if rfc2109_as_netscape:
                     # treat 2109 cookies as Netscape cookies rather than
                     # as RFC2965 cookies
                     cookie.version = 0
@@ -1616,7 +1616,7 @@ class CookieJar:
     def __len__(self):
         """Return number of contained cookies."""
         i = 0
-        for cookie in self: i = i + 1
+        for cookie in self: i = i + 1  # @UnusedVariable
         return i
 
     def __repr__(self):

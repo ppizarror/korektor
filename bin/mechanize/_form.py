@@ -192,7 +192,7 @@ def isstringlike(x):
 def choose_boundary():
     """Return a string usable as a multipart boundary."""
     # follow IE and firefox
-    nonce = "".join([str(random.randint(0, sys.maxint-1)) for i in 0,1,2])
+    nonce = "".join([str(random.randint(0, sys.maxint-1)) for i in 0,1,2])  # @UnusedVariable
     return "-"*27 + nonce
 
 # This cut-n-pasted MimeWriter from standard library is here so can add
@@ -574,15 +574,15 @@ class _AbstractFormParser:
             # attributes, but it has two special keys, one of which is the
             # special "contents" key contains text between OPTION tags (the
             # other is the "__select" key: see the end_option method)
-            map = self._option
+            map = self._option  # @ReservedAssignment
             key = "contents"
         elif self._textarea is not None:
-            map = self._textarea
+            map = self._textarea  # @ReservedAssignment
             key = "value"
             data = normalize_line_endings(data)
         # not if within option or textarea
         elif self._current_label is not None:
-            map = self._current_label
+            map = self._current_label  # @ReservedAssignment
             key = "__text"
         else:
             return
@@ -609,13 +609,13 @@ class _AbstractFormParser:
             d[key] = self.unescape_attr_if_required(val)
         controls = self._current_form[2]
 
-        type = d["type"]
+        type = d["type"]  # @ReservedAssignment
         name = d.get("name")
         # we don't want to lose information, so use a type string that
         # doesn't clash with INPUT TYPE={SUBMIT,RESET,BUTTON}
         # e.g. type for BUTTON/RESET is "resetbutton"
         #     (type for INPUT/RESET is "reset")
-        type = type+"button"
+        type = type+"button"  # @ReservedAssignment
         self._add_label(d)
         controls.append((type, name, d))
 
@@ -627,7 +627,7 @@ class _AbstractFormParser:
             d[key] = self.unescape_attr_if_required(val)
         controls = self._current_form[2]
 
-        type = d["type"]
+        type = d["type"]  # @ReservedAssignment
         name = d.get("name")
         self._add_label(d)
         controls.append((type, name, d))
@@ -1159,7 +1159,7 @@ class Control:
 
     def get_labels(self):
         """Return all labels (Label instances) for this control.
-        
+
         If the control was surrounded by a <label> tag, that will be the first
         label; all other labels, connected by 'for' and 'id', are in the order
         that appear in the HTML.
@@ -1506,12 +1506,12 @@ class Item:
 
     def get_labels(self):
         """Return all labels (Label instances) for this item.
-        
+
         For items that represent radio buttons or checkboxes, if the item was
         surrounded by a <label> tag, that will be the first label; all other
         labels, connected by 'for' and 'id', are in the order that appear in
         the HTML.
-        
+
         For items that represent select options, if the option had a label
         attribute, that will be the first label.  If the option has contents
         (text within the option tags) and it is not the same as the label
@@ -1820,9 +1820,9 @@ class ListControl(Control):
 
     def toggle_single(self, by_label=None):
         """Deprecated: toggle the selection of the single item in this control.
-        
+
         Raises ItemCountError if the control does not contain only one item.
-        
+
         by_label argument is ignored, and included only for backwards
         compatibility.
 
@@ -1837,9 +1837,9 @@ class ListControl(Control):
 
     def set_single(self, selected, by_label=None):
         """Deprecated: set the selection of the single item in this control.
-        
+
         Raises ItemCountError if the control does not contain only one item.
-        
+
         by_label argument is ignored, and included only for backwards
         compatibility.
 
@@ -1951,8 +1951,8 @@ class ListControl(Control):
         # RFC 1866 if the _select_default attribute is set, and Netscape and IE
         # otherwise.  RFC 1866 and HTML 4 are always violated insofar as you
         # can deselect all items in a RadioControl.
-        
-        for o in self.items: 
+
+        for o in self.items:
             # set items' controls to self, now that we've merged
             o.__dict__["_control"] = self
 
@@ -2281,7 +2281,7 @@ class SelectControl(ListControl):
             o = Item(self, attrs, index)
             o.__dict__["_selected"] = attrs.has_key("selected")
             # add 'label' label and contents label, if different.  If both are
-            # provided, the 'label' label is used for display in HTML 
+            # provided, the 'label' label is used for display in HTML
             # 4.0-compliant browsers (and any lower spec? not sure) while the
             # contents are used for display in older or less-compliant
             # browsers.  We make label objects for both, if the values are
@@ -2687,7 +2687,7 @@ class HTMLForm:
             value = bool(value)
             for cc in self.controls:
                 try:
-                    items = cc.items 
+                    items = cc.items
                 except AttributeError:
                     continue
                 else:
@@ -2923,7 +2923,7 @@ class HTMLForm:
         """  # by_label ignored and deprecated
         self._find_list_control(
             name, type, kind, id, label, nr).set_single(selected)
-    def toggle_single(self, name=None, type=None, kind=None, id=None,
+    def toggle_single(self, name=None, type=None, kind=None, id=None,  # @ReservedAssignment @DontTrace
                       nr=None, by_label=None, label=None):  # deprecated
         """Toggle selected state of list item in control having only one item.
 
@@ -2936,7 +2936,7 @@ class HTMLForm:
 # Form-filling method applying only to FileControls.
 
     def add_file(self, file_object, content_type=None, filename=None,
-                 name=None, id=None, nr=None, label=None):
+                 name=None, id=None, nr=None, label=None):  # @ReservedAssignment
         """Add a file to be uploaded.
 
         file_object: file-like object (with read method) from which to read
@@ -2970,7 +2970,7 @@ class HTMLForm:
 #---------------------------------------------------
 # Form submission methods, applying only to clickable controls.
 
-    def click(self, name=None, type=None, id=None, nr=0, coord=(1,1),
+    def click(self, name=None, type=None, id=None, nr=0, coord=(1,1),  # @ReservedAssignment
               request_class=_request.Request,
               label=None):
         """Return request that would result from clicking on a control.
@@ -3103,14 +3103,14 @@ class HTMLForm:
 # Private methods.
 
     def _find_list_control(self,
-                           name=None, type=None, kind=None, id=None, 
+                           name=None, type=None, kind=None, id=None,
                            label=None, nr=None):
         if ((name is None) and (type is None) and (kind is None) and
             (id is None) and (label is None) and (nr is None)):
             raise ValueError(
                 "at least one argument must be supplied to specify control")
 
-        return self._find_control(name, type, kind, id, label, 
+        return self._find_control(name, type, kind, id, label,
                                   is_listcontrol, nr)
 
     def _find_control(self, name, type, kind, id, label, predicate, nr):

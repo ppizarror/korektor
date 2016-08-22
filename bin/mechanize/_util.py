@@ -62,7 +62,7 @@ def isstringlike(x):
 
 EPOCH = 1970
 def my_timegm(tt):
-    year, month, mday, hour, min, sec = tt[:6]
+    year, month, mday, hour, min, sec = tt[:6]  # @ReservedAssignment
     if ((year >= EPOCH) and (1 <= month <= 12) and (1 <= mday <= 31) and
         (0 <= hour <= 24) and (0 <= min <= 59) and (0 <= sec <= 61)):
         return timegm(tt)
@@ -89,7 +89,7 @@ def time2isoz(t=None):
 
     """
     if t is None: t = time.time()
-    year, mon, mday, hour, min, sec = time.gmtime(t)[:6]
+    year, mon, mday, hour, min, sec = time.gmtime(t)[:6]  # @ReservedAssignment
     return "%04d-%02d-%02d %02d:%02d:%02dZ" % (
         year, mon, mday, hour, min, sec)
 
@@ -105,7 +105,7 @@ def time2netscape(t=None):
 
     """
     if t is None: t = time.time()
-    year, mon, mday, hour, min, sec, wday = time.gmtime(t)[:7]
+    year, mon, mday, hour, min, sec, wday = time.gmtime(t)[:7]  # @ReservedAssignment
     return "%s %02d-%s-%04d %02d:%02d:%02d GMT" % (
         days[wday], mday, months[mon-1], year, hour, min, sec)
 
@@ -127,7 +127,7 @@ def offset_from_tz_string(tz):
                 offset = -offset
     return offset
 
-def _str2time(day, mon, yr, hr, min, sec, tz):
+def _str2time(day, mon, yr, hr, min, sec, tz):  # @ReservedAssignment
     # translate month name to number
     # month numbers start with 1 (January)
     try:
@@ -145,13 +145,13 @@ def _str2time(day, mon, yr, hr, min, sec, tz):
 
     # make sure clock elements are defined
     if hr is None: hr = 0
-    if min is None: min = 0
+    if min is None: min = 0  # @ReservedAssignment
     if sec is None: sec = 0
 
     yr = int(yr)
     day = int(day)
     hr = int(hr)
-    min = int(min)
+    min = int(min)  # @ReservedAssignment
     sec = int(sec)
 
     if yr < 1000:
@@ -247,12 +247,12 @@ def http2time(text):
     text = wkday_re.sub("", text, 1)  # Useless weekday
 
     # tz is time zone specifier string
-    day, mon, yr, hr, min, sec, tz = [None]*7
+    day, mon, yr, hr, min, sec, tz = [None]*7  # @ReservedAssignment
 
     # loose regexp parse
     m = loose_http_re.search(text)
     if m is not None:
-        day, mon, yr, hr, min, sec, tz = m.groups()
+        day, mon, yr, hr, min, sec, tz = m.groups()  # @ReservedAssignment
     else:
         return None  # bad format
 
@@ -291,14 +291,14 @@ def iso2time(text):
     text = text.lstrip()
 
     # tz is time zone specifier string
-    day, mon, yr, hr, min, sec, tz = [None]*7
+    day, mon, yr, hr, min, sec, tz = [None]*7  # @ReservedAssignment
 
     # loose regexp parse
     m = iso_re.search(text)
     if m is not None:
         # XXX there's an extra bit of the timezone I'm ignoring here: is
         #   this the right thing to do?
-        yr, mon, day, hr, min, sec, tz, _ = m.groups()
+        yr, mon, day, hr, min, sec, tz, _ = m.groups()  # @ReservedAssignment
     else:
         return None  # bad format
 

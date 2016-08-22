@@ -10,8 +10,9 @@ __autor__ = 'ppizarror'
 # Licencia: GPLv2
 
 # Importación de librerías
-from colors import Color
 from accents import delAccentByOS
+from colors import Color
+
 
 # Constantes
 BR_ERRORxERROR_SET_FORM = 8

@@ -55,7 +55,7 @@ class HTTPProxyPasswordMgr(HTTPPasswordMgr):
     def is_suburi(self, base, test):
         if base is None:
             # default to the proxy's host/port
-            hostport, path = test
+            hostport, path = test  # @UnusedVariable
             base = (hostport, "/")
         return HTTPPasswordMgr.is_suburi(self, base, test)
 

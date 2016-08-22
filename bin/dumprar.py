@@ -5,12 +5,16 @@
 from binascii import crc32, hexlify  # @UnusedImport
 from datetime import datetime
 import sys
+
 import rarfile as rf
+
 
 try:
     bytearray
 except NameError:
     import array
+
+
     def bytearray(v):  # @ReservedAssignment
         return array.array('B', v)
 
@@ -36,10 +40,12 @@ os_list = ['DOS', 'OS2', 'WIN', 'UNIX', 'MACOS', 'BEOS']
 block_strs = ['MARK', 'MAIN', 'FILE', 'OLD_COMMENT', 'OLD_EXTRA',
               'OLD_SUB', 'OLD_RECOVERY', 'OLD_AUTH', 'SUB', 'ENDARC']
 
+
 def rarType(type):  # @ReservedAssignment
     if type < rf.RAR_BLOCK_MARK or type > rf.RAR_BLOCK_ENDARC:
         return "*UNKNOWN*"
     return block_strs[type - rf.RAR_BLOCK_MARK]
+
 
 main_bits = (
     (rf.RAR_MAIN_VOLUME, "VOL"),
@@ -88,6 +94,7 @@ generic_bits = (
 file_parms = ("D64", "D128", "D256", "D512",
               "D1024", "D2048", "D4096", "DIR")
 
+
 def xprint(m, *args):
     if sys.hexversion < 0x3000000:
         m = m.decode('utf8')
@@ -97,6 +104,7 @@ def xprint(m, *args):
         m = m.encode('utf8')
     sys.stdout.write(m)
     sys.stdout.write('\n')
+
 
 def render_flags(flags, bit_list):
     res = []
@@ -115,6 +123,7 @@ def render_flags(flags, bit_list):
 
     return ",".join(res)
 
+
 def get_file_flags(flags):
     res = render_flags(flags & ~rf.RAR_FILE_DICTMASK, file_bits)
 
@@ -122,27 +131,32 @@ def get_file_flags(flags):
     res += "," + file_parms[xf]
     return res
 
+
 def get_main_flags(flags):
     return render_flags(flags, main_bits)
+
 
 def get_endarc_flags(flags):
     return render_flags(flags, endarc_bits)
 
+
 def get_generic_flags(flags):
     return render_flags(flags, generic_bits)
+
 
 def fmt_time(t):
     if isinstance(t, datetime):
         return t.isoformat(' ')
     return "%04d-%02d-%02d %02d:%02d:%02d" % t
 
+
 def show_item(h):
     st = rarType(h.type)
     unknown = h.header_size - h.header_base
     xprint("%s: hdrlen=%d datlen=%d hdr_unknown=%d", st, h.header_size,
-                h.add_size, unknown)
+           h.add_size, unknown)
     if unknown > 0 and cf_verbose > 1:
-        dat = h.header_data[h.header_base : ]
+        dat = h.header_data[h.header_base:]
         xprint("  unknown: %s", hexlify(dat))
     if h.type in (rf.RAR_BLOCK_FILE, rf.RAR_BLOCK_SUB):
         if h.host_os == rf.RAR_OS_UNIX:
@@ -155,9 +169,9 @@ def show_item(h):
         else:
             s_os = "?"
         xprint("  os=%d:%s ver=%d mode=%s meth=%c cmp=%d dec=%d vol=%d",
-                h.host_os, s_os,
-                h.extract_version, s_mode, h.compress_type,
-                h.compress_size, h.file_size, h.volume)
+               h.host_os, s_os,
+               h.extract_version, s_mode, h.compress_type,
+               h.compress_size, h.file_size, h.volume)
         ucrc = (h.CRC + (1 << 32)) & ((1 << 32) - 1)
         xprint("  crc=0x%08x (%d) time=%s", ucrc, h.CRC, fmt_time(h.date_time))
         xprint("  name=%s", h.filename)
@@ -184,6 +198,7 @@ def show_item(h):
             cm = cm[1:]
         xprint("  comment=%s", cm)
 
+
 cf_show_comment = 0
 cf_verbose = 0
 cf_charset = None
@@ -191,12 +206,14 @@ cf_extract = 0
 cf_test_read = 0
 cf_test_unrar = 0
 
+
 def check_crc(f, inf):
     ucrc = f.CRC
     if ucrc < 0:
         ucrc += (long(1) << 32)
     if ucrc != inf.CRC:
         print ('crc error')
+
 
 def test_read_long(r, inf):
     f = r.open(inf.filename)
@@ -213,14 +230,14 @@ def test_read_long(r, inf):
 
     # test .seek() & .readinto()
     if cf_test_read > 1:
-        f.seek(0,0)
+        f.seek(0, 0)
 
         # hack: re-enable crc calc
         f.crc_check = 1
         f.CRC = 0
 
         total = 0
-        buf = bytearray(rf.ZERO*4096)
+        buf = bytearray(rf.ZERO * 4096)
         while 1:
             res = f.readinto(buf)
             if not res:
@@ -230,6 +247,7 @@ def test_read_long(r, inf):
             xprint(" *** readinto failed: got=%d, need=%d ***\n", total, inf.file_size)
         check_crc(f, inf)
     f.close()
+
 
 def test_read(r, inf):
     test_read_long(r, inf)
@@ -248,7 +266,7 @@ def test_real(fn, psw):
         return
 
     # open
-    r = rf.RarFile(fn, charset = cf_charset, info_callback = cb)
+    r = rf.RarFile(fn, charset=cf_charset, info_callback=cb)
     # set password
     if r.needs_password():
         if psw:
@@ -285,6 +303,7 @@ def test_real(fn, psw):
     if cf_test_unrar:
         r.testrar()
 
+
 def test(fn, psw):
     try:
         test_real(fn, psw)
@@ -298,6 +317,7 @@ def test(fn, psw):
         exc, msg, tb = sys.exc_info()
         xprint("\n *** %s: %s ***\n", exc.__name__, msg)
         del tb
+
 
 def main():
     global cf_verbose, cf_show_comment, cf_charset
@@ -336,7 +356,7 @@ def main():
         elif a[1] == 'C':
             cf_charset = a[2:]
         else:
-            raise Exception("unknown switch: "+a)
+            raise Exception("unknown switch: " + a)
     if not args:
         xprint(usage)
 
@@ -349,4 +369,3 @@ if __name__ == '__main__':
         main()
     except KeyboardInterrupt:
         pass
-

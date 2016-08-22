@@ -100,8 +100,8 @@ CREATE TABLE IF NOT EXISTS moz_cookies (id INTEGER PRIMARY KEY, name TEXT,
     lastAccessed INTEGER, isSecure INTEGER, isHttpOnly INTEGER)""")
 
     def _cookie_from_row(self, row):
-        (pk, name, value, domain, path, expires,
-         last_accessed, secure, http_only) = row
+        (pk, name, value, domain, path, expires,  # @UnusedVariable
+         last_accessed, secure, http_only) = row  # @UnusedVariable
 
         version = 0
         domain = domain.encode("ascii", "ignore")
@@ -227,7 +227,7 @@ SELECT * FROM moz_cookies ORDER BY name, path, host"""):
         return session_cookies + persistent_coookies
 
     def _persistent_cookies_for_domain(self, domain, request, cur):
-        cookies = []
+        cookies = []  # @UnusedVariable
         if not self._policy.domain_return_ok(domain, request):
             return []
         debug("Checking %s for cookies to return", domain)

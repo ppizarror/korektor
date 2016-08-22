@@ -13,6 +13,7 @@ __autor__ = 'ppizarror'
 if __name__ == '__main__':
     from libpath import *  # @UnusedWildImport
 import zipfile
+
 from bin.configLoader import configLoader  # @UnresolvedImport
 import bin.errors as err  # @UnresolvedImport @UnusedImport
 import bin.rarfile as rarfile  # @UnresolvedImport
@@ -20,12 +21,14 @@ from bin.utils import isHiddenFile, isFolder, regexCompare  # @UnresolvedImport
 from config import DIR_CONFIG  # @UnresolvedImport
 from data import *  # @UnusedWildImport
 
+
 # Constantes
 PACKAGE_TESTER_ERROR_NO_FOUND = "El archivo consultado no existe"
 PACKAGE_VALIDATE_FAIL = "FOLDER-PACKAGE-FAIL"
 PACKAGE_VALIDATE_OK = "FOLDER-PACKAGE-OK"
 ZIP_VALIDATE_FAIL = "ZIP-PACKAGE-FAIL"
 ZIP_VALIDATE_OK = "ZIP-PACKAGE-OK"
+
 
 # noinspection PyUnresolvedReferences
 class Package:
@@ -40,7 +43,7 @@ class Package:
         folderConfig = configLoader(DIR_CONFIG, "folder.ini")
         self.ignoredFiles = folderConfig.getValueListed("IGNORE")
         self.packageStructedFiles = []  # Lista con archivos requeridos para cada package
-        self.validChars = config.getValue("VALID_CHARACTERS") # Caracteres válidos de los archivos del paquete
+        self.validChars = config.getValue("VALID_CHARACTERS")  # Caracteres válidos de los archivos del paquete
         self.validRegexChars = config.getValue(
             "VALID_REGEX_CHARACTERS")  # Caracteres válidos para los regex
         # Genera la estructura
@@ -193,7 +196,7 @@ if __name__ == "__main__":
     print p.getStructure()
     for f in os.listdir(DIR_UPLOADS):  # @ReservedAssignment
         print p.validateStructure(f)
-    # p.validateStructure("Aguirre_Munoz__Daniel_Patricio.zip")
-    # p.validateStructure("zipfile.zip")
-    # p.validateStructure("rarfile.rar")
-    # p.validateStructure("pablo_pizarro")
+        # p.validateStructure("Aguirre_Munoz__Daniel_Patricio.zip")
+        # p.validateStructure("zipfile.zip")
+        # p.validateStructure("rarfile.rar")
+        # p.validateStructure("pablo_pizarro")

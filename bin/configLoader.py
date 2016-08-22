@@ -19,6 +19,7 @@ if __name__ == '__main__': from binpath import *  # @UnusedWildImport
 import errors
 from utils import string2list
 
+
 # Definición de constantes
 CONFIG_COMMENT = "#"
 CONFIG_LOAD = "El archivo de configuraciones '{0}' ha sido cargado correctamente"
@@ -45,7 +46,7 @@ class configLoader:
         # Se carga el archivo de configuraciones
         try:
             # noinspection PyShadowingBuiltins
-            filename = directory+conffile
+            filename = directory + conffile
             file = open(filename.replace("\\", "/"), "r")  # @ReservedAssignment
         except:
             errors.throw(errors.ERROR_NOCONFIGFILE, filename)
@@ -145,7 +146,7 @@ class configLoader:
                 errors.warning(errors.ERROR_CONFIGNOTEXISTENT, param)
         return None
 
-    def getValueListed(self, param, split = ";"):
+    def getValueListed(self, param, split=";"):
         """
         Retorna una lista con los valores de una configuracion
         :param param: Parámetro
