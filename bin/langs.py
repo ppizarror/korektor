@@ -20,10 +20,10 @@ from utils import googleTranslate
 
 # noinspection PyProtectedMember
 # Se cargan las configuraciones
-langselfconfig = configLoader(_DIR_CONFIG + "langs.ini")
-langconfig = configLoader(_LANG_DIRCONFIG + "const.ini")
-langavaiable = configLoader(_LANG_DIRCONFIG + "langs.txt")
-langtranslateconfig = configLoader(_DIR_CONFIG + "langstransl.ini")
+langselfconfig = configLoader(_DIR_CONFIG, "langs.ini")
+langconfig = configLoader(_LANG_DIRCONFIG, "const.ini")
+langavaiable = configLoader(_LANG_DIRCONFIG, "langs.txt")
+langtranslateconfig = configLoader(_DIR_CONFIG, "langstransl.ini")
 
 # Constantes del programa
 _SPACE = "|"

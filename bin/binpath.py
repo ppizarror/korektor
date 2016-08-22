@@ -25,7 +25,9 @@ _LANG_DIRLANGS = __actualpath.replace("/bin/", "/resources/langs/")
 
 reload(sys)
 sys.path.append(DIR_BIN)
+sys.path.append(DIR_BIN + "/easyprocess/")
 sys.path.append(DIR_BIN + "/mechanize/")
+sys.path.append(DIR_BIN + "/pyunpack/")
 sys.path.append(DIR_BIN + "/wconio/")
 
 # Test

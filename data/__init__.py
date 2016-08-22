@@ -13,14 +13,13 @@ __autor__ = "ppizarror"
 
 # Importación de librerías
 import os
-
-
 __actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace("\\", "/") + "/"
 
 # Definición de directorios
 DIR_DATA = __actualpath
 DIR_RESULTS = __actualpath + "results/"
 DIR_STRUCTURE = __actualpath + "structure/"
+DIR_TEST = __actualpath + "_test/"
 DIR_UPLOADS = __actualpath + "uploads/"
 
 # Test

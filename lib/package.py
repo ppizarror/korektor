@@ -17,10 +17,15 @@ import zipfile
 from bin.configLoader import configLoader  # @UnresolvedImport
 import bin.errors as err  # @UnresolvedImport @UnusedImport
 import bin.rarfile as rarfile  # @UnresolvedImport
-from bin.utils import isHiddenFile, isFolder, regexCompare, printBarsConsole  # @UnresolvedImport @Reimport
+from bin.utils import isHiddenFile, isFolder, regexCompare, printBarsConsole, isWindows  # @UnresolvedImport @Reimport
 from config import DIR_CONFIG  # @UnresolvedImport
 from data import DIR_UPLOADS, DIR_DATA, DIR_RESULTS, DIR_STRUCTURE  # @UnusedImport
 
+
+# Se define el ejecutable de unrar para Windows
+if isWindows():
+    from bin.binpath import DIR_BIN
+    rarfile.UNRAR_TOOL = DIR_BIN + "unrar.exe"
 
 # Constantes
 PACKAGE_TESTER_ERROR_NO_FOUND = "El archivo consultado no existe"
@@ -105,7 +110,11 @@ class Package:
                     os.remove(rootpath + filename)
                 _inspect(rootpath, folder, filelist, depth + 1)
             elif self.isRar(rootpath, filename):  # Si el archivo es paquete zip
-                rarfile.RarFile(rootpath + filename).extractall(DIR_UPLOADS)
+                try:
+                    rarfile.RarFile(rootpath + filename).extractall(DIR_UPLOADS)
+                except:
+                    print ""
+                    err.st_error(err.ERROR_RARNOTINSTALLED, True, "unrar")
                 folder = _getMainFolder(rarfile.RarFile(rootpath + filename).namelist())
                 if removeOnExtract:
                     os.remove(rootpath + filename)
@@ -144,7 +153,7 @@ class Package:
         """
         if ".rar" in filename:
             try:
-                data = rarfile.RarFile(rootpath + filename)  # @UnusedVariable
+                rarfile.RarFile(rootpath + filename)
                 return True
             except:
                 return False
@@ -159,7 +168,7 @@ class Package:
         """
         if ".zip" in filename:
             try:
-                data = zipfile.ZipFile(rootpath + filename)  # @UnusedVariable
+                zipfile.ZipFile(rootpath + filename)
                 return True
             except:
                 return False
@@ -179,6 +188,7 @@ class Package:
         :return:
         """
         folderfiles = self.inspectFiles(DIR_UPLOADS, filename, False)
+        print folderfiles
         for structfile in self.structFiles:
             found = False
             for datafile in folderfiles:
@@ -198,7 +208,3 @@ if __name__ == "__main__":
     for f in os.listdir(DIR_UPLOADS):  # @ReservedAssignment
         print f
         print "\tCumple estructura:", p.validateStructure(f)
-        # p.validateStructure("Aguirre_Munoz__Daniel_Patricio.zip")
-        # p.validateStructure("zipfile.zip")
-        # p.validateStructure("rarfile.rar")
-        # p.validateStructure("pablo_pizarro")
