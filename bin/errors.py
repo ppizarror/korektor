@@ -11,6 +11,7 @@ __autor__ = 'ppizarror'
 
 # Importación de librerías
 from colors import Color
+from accents import delAccentByOS
 
 # Constantes
 BR_ERRORxERROR_SET_FORM = 8
@@ -28,6 +29,7 @@ ERROR_BADINDEXCONFIG = "El indice seleccionado <{0}> no pertenece a las configur
 ERROR_BADLAUNCHBIN = "La clase debe ser importada desde bin"
 ERROR_CANTTRANSLATE = "El texto no se puede traducir"
 ERROR_CONFIGBADEXPORT = "No se pudo guardar el archivo de configuraciones"
+ERROR_CONFIGCORRUPT = "El archivo de configuraciones '{0}' está corrupto"
 ERROR_CONFIGNOTEXISTENT = "El parametro <{0}> no existe en las configuraciones"
 ERROR_CREATE_MENU = "No se puede crear el menu inicial, posible error en archivo de configuraciones"
 ERROR_HEADER = Color.RED + "[ERROR] " + Color.END
@@ -69,18 +71,19 @@ def createMSG(message, *args):
 def st_error(msg, callExit=False, module=None, errname=None):
     """Muestra un mensaje de error en pantalla"""
     if module is None:
-        print Color.RED + ST_ERROR + Color.END + " {0}".format(msg)
+        print delAccentByOS(Color.RED + ST_ERROR + Color.END + " {0}".format(msg))
     else:
-        print Color.RED + ST_ERROR + Color.END + " {0} ".format(msg) + "[" + Color.UNDERLINE + module + Color.END + "]"
+        print delAccentByOS(Color.RED + ST_ERROR + Color.END + " {0} ".format(msg) + \
+                            "[" + Color.UNDERLINE + module + Color.END + "]")
     if errname is not None:
-        print "      {0}".format(str(errname))
+        print delAccentByOS("      {0}".format(str(errname)))
     if callExit:
         exit()
 
 
 def st_info(msg, callExit=False):
     """Muestra un mensaje de información en pantalla"""
-    print Color.DARKCYAN + ST_INFO + Color.END + " {0}".format(msg)
+    print delAccentByOS(Color.DARKCYAN + ST_INFO + Color.END + " {0}".format(msg))
     if callExit:
         exit()
 
@@ -89,13 +92,12 @@ def throw(errcode, *args):
     """
     Lanza un error terminal
     """
-    errcode = createMSG(errcode, args)
-    st_error(errcode, True)
+    st_error(createMSG(errcode, *args), True)
 
 
 def st_warning(msg, callExit=False):
     """Muestra un mensaje de precaución en pantalla"""
-    print Color.BLUE + ST_WARNING + Color.END + " {0}".format(msg)
+    print delAccentByOS(Color.BLUE + ST_WARNING + Color.END + " {0}".format(msg))
     if callExit:
         exit()
 

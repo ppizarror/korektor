@@ -10,9 +10,9 @@ __autor__ = 'ppizarror'
 # Licencia: GPLv2
 
 # Importación de librerías iniciales
-from configLoader import configLoader
 from binpath import DIR_BIN, sys
 import binpath
+from configLoader import configLoader
 import errors
 
 # Configuración de entorno

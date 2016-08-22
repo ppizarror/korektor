@@ -11,6 +11,7 @@
 # Importación de librerías
 import os
 
+
 # Definición de directorios
 __actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace("\\", "/") + "/"
 DIR_CONFIG = __actualpath

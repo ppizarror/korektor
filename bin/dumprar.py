@@ -2,16 +2,16 @@
 
 """Dump archive contents, test extraction."""
 
+from binascii import crc32, hexlify  # @UnusedImport
+from datetime import datetime
 import sys
 import rarfile as rf
-from binascii import crc32, hexlify
-from datetime import datetime
 
 try:
     bytearray
 except NameError:
     import array
-    def bytearray(v):
+    def bytearray(v):  # @ReservedAssignment
         return array.array('B', v)
 
 rf.UNICODE_COMMENTS = 1
@@ -36,11 +36,11 @@ os_list = ['DOS', 'OS2', 'WIN', 'UNIX', 'MACOS', 'BEOS']
 block_strs = ['MARK', 'MAIN', 'FILE', 'OLD_COMMENT', 'OLD_EXTRA',
               'OLD_SUB', 'OLD_RECOVERY', 'OLD_AUTH', 'SUB', 'ENDARC']
 
-def rarType(type):
+def rarType(type):  # @ReservedAssignment
     if type < rf.RAR_BLOCK_MARK or type > rf.RAR_BLOCK_ENDARC:
         return "*UNKNOWN*"
     return block_strs[type - rf.RAR_BLOCK_MARK]
-                                 
+
 main_bits = (
     (rf.RAR_MAIN_VOLUME, "VOL"),
     (rf.RAR_MAIN_COMMENT, "COMMENT"),
@@ -343,7 +343,7 @@ def main():
     for fn in args:
         test(fn, psw)
 
-    
+
 if __name__ == '__main__':
     try:
         main()

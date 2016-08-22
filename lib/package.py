@@ -12,13 +12,13 @@ __autor__ = 'ppizarror'
 # Importación de librerías
 if __name__ == '__main__':
     from libpath import *  # @UnusedWildImport
-from bin.configLoader import configLoader  # @UnresolvedImport
-from bin.utils import isHiddenFile, isFolder, regexCompare
 import zipfile
-from data import *  # @UnusedWildImport
+from bin.configLoader import configLoader  # @UnresolvedImport
+import bin.errors as err  # @UnresolvedImport @UnusedImport
+import bin.rarfile as rarfile  # @UnresolvedImport
+from bin.utils import isHiddenFile, isFolder, regexCompare  # @UnresolvedImport
 from config import DIR_CONFIG  # @UnresolvedImport
-import bin.errors as err  # @UnresolvedImport
-import bin.rarfile as rarfile
+from data import *  # @UnusedWildImport
 
 # Constantes
 PACKAGE_TESTER_ERROR_NO_FOUND = "El archivo consultado no existe"
@@ -27,7 +27,7 @@ PACKAGE_VALIDATE_OK = "FOLDER-PACKAGE-OK"
 ZIP_VALIDATE_FAIL = "ZIP-PACKAGE-FAIL"
 ZIP_VALIDATE_OK = "ZIP-PACKAGE-OK"
 
-
+# noinspection PyUnresolvedReferences
 class Package:
     """
     package: Paquetes de usuario el cual provee funciones para acceder a los contenidos
@@ -40,8 +40,7 @@ class Package:
         folderConfig = configLoader(DIR_CONFIG, "folder.ini")
         self.ignoredFiles = folderConfig.getValueListed("IGNORE")
         self.packageStructedFiles = []  # Lista con archivos requeridos para cada package
-        # Caracteres válidos de los archivos del paquete
-        self.validChars = config.getValue("VALID_CHARACTERS")
+        self.validChars = config.getValue("VALID_CHARACTERS") # Caracteres válidos de los archivos del paquete
         self.validRegexChars = config.getValue(
             "VALID_REGEX_CHARACTERS")  # Caracteres válidos para los regex
         # Genera la estructura
@@ -142,7 +141,7 @@ class Package:
         """
         if ".rar" in filename:
             try:
-                data = rarfile.RarFile(rootpath + filename)
+                data = rarfile.RarFile(rootpath + filename)  # @UnusedVariable
                 return True
             except:
                 return False
@@ -157,7 +156,7 @@ class Package:
         """
         if ".zip" in filename:
             try:
-                data = zipfile.ZipFile(rootpath + filename)
+                data = zipfile.ZipFile(rootpath + filename)  # @UnusedVariable
                 return True
             except:
                 return False
@@ -192,9 +191,8 @@ class Package:
 if __name__ == "__main__":
     p = Package()
     print p.getStructure()
-    for file in os.listdir(DIR_UPLOADS):
-       a = p.validateStructure(file)
-       print a
+    for f in os.listdir(DIR_UPLOADS):  # @ReservedAssignment
+        print p.validateStructure(f)
     # p.validateStructure("Aguirre_Munoz__Daniel_Patricio.zip")
     # p.validateStructure("zipfile.zip")
     # p.validateStructure("rarfile.rar")

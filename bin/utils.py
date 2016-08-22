@@ -12,10 +12,11 @@ __autor__ = 'ppizarror'
 # Importación de librerías de entorno
 # noinspection PyUnresolvedReferences
 from binpath import *  # @UnusedWildImport
+from accents import delAccent, delAccentByOS  # @UnusedImport
 import errors
 
-_IMPORTED = [1, 1]
 # Importación de librerías de sistema
+_IMPORTED = [1, 1]
 try:
     from datetime import date
     from random import choice
@@ -90,29 +91,18 @@ def colorcmd(cmd, color):
     if color in _CMD_COLORS and _IMPORTED[0]:
         color = _CMD_COLORS[color]
         try:
-            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11),
+            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11),  # @UndefinedVariable
                                                            color)  # @UndefinedVariable
         except:
             pass
         print cmd,
         try:
-            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11),
+            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11),  # @UndefinedVariable
                                                            0x07)  # @UndefinedVariable
         except:
             pass
     else:
         print cmd,
-
-
-def delAccent(txt):
-    """
-    Elimina los acentos de un string
-    :param txt: String
-    :return: String con acentos eliminados
-    """
-    txt = txt.replace("Á", "A").replace("É", "E").replace(
-        "Í", "I").replace("Ó", "O").replace("Ú", "U")
-    return txt.replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
 
 
 def delMatrix(matrix):
@@ -224,8 +214,8 @@ def getTerminalSize():
 
     def ioctl_GWINSZ(fd):
         try:
-            import fcntl
-            import termios
+            import fcntl  # @UnresolvedImport
+            import termios  # @UnresolvedImport
             import struct  # @UnresolvedImport
             cr = struct.unpack('hh', fcntl.ioctl(fd, termios.TIOCGWINSZ,
                                                  '1234'))
@@ -288,7 +278,7 @@ def googleTranslate(text, translate_lang, header, web, source_lang=None):
     request_object = Request(web + params, None, http_headers)
     response = urlopen(request_object)
     # @UndefinedVariable
-    return json.loads(re.sub(',,,|,,', ',"0",', response.read()))[0][0][0]
+    return json.loads(re.sub(',,,|,,', ',"0",', response.read()))[0][0][0]  # @UndefinedVariable
 
 
 def isFolder(path, filename):
@@ -403,6 +393,22 @@ def obtenerFecha():
     return str(fecha.day) + "/" + str(fecha.month) + "/" + str(fecha.year)
 
 
+def printBarsConsole(s):
+    """
+    Función que imprime unas barras en un mensaje
+    :param s: String a imprimir
+    :return: void
+    """
+    l = len(s)
+    u = ""
+    for i in range(l):  # @UnusedVariable
+        u+="-"
+    print "\n"
+    print u
+    print s
+    print u
+
+
 def printMatrix(matrix):
     """
     Función que imprime una matriz en pantalla
@@ -512,6 +518,7 @@ def sumMatrix(matrix):
 
 # Test
 if __name__ == '__main__':
+    printBarsConsole("Test funciones varias")
     print string2list("foo bar", " ")
     print getDate()
     print getHour()
@@ -521,12 +528,15 @@ if __name__ == '__main__':
     # noinspection PyTypeChecker
     print loadFile("__init__.ini")
     print sortAndUniq([1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 10, 5])
+    printBarsConsole("GetBetweenTags Test")
     print getBetweenTags("<player>Username<title></title></player>", "<player>", "</player>")
     print getBetweenTags("<player>Username</player><title>Altername</title>", "<player>", "</player>")
     print getBetweenTags("<player>Username</player><title>Altername</title>", "<title>", "</title>")
+    printBarsConsole("Is Hidden File Test")
     print isHiddenFile(".file")
     print isHiddenFile("file")
     print isHiddenFile(1)
+    printBarsConsole("Regex Test")
     print regexCompare("korektor test", "korektor test")
     print regexCompare("korektor is nice", "korektor is not nice")
     print regexCompare("*_*", "pablo.pizarro")

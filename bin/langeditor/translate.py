@@ -27,7 +27,7 @@ except:
 
 # Manejo y configuración de librerías
 reload(sys)
-sys.setdefaultencoding('UTF8')
+sys.setdefaultencoding('UTF8')  # @UndefinedVariable
 
 # Definición de constantes
 ARCHIVE_LANGS = "config/translates.ini"  # archivo de idiomas disponibles para la traducción
@@ -59,7 +59,7 @@ def get_google_translate(text, translate_lang, source_lang=None):  # Traduce una
         string = re.sub(',,,|,,', ',"0",', response.read())
         n = json.loads(string)
         translate_text = n[0][0][0]
-        res_source_lang = n[2]
+        res_source_lang = n[2]  # @UnusedVariable
         return translate_text
     except Exception, e:
         print e

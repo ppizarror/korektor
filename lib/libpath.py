@@ -25,7 +25,6 @@ reload(sys)
 sys.path.append(DIR_LIB)
 sys.path.append(__actualpath.replace("/lib/", "/"))
 
-
 # Test
 if __name__ == '__main__':
     print DIR_LIB

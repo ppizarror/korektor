@@ -12,10 +12,11 @@ __autor__ = 'ppizarror'
 # Importación de librerías
 if __name__ == '__main__': from binpath import *  # @UnusedWildImport
 import cookielib
-import errors
 import htmlentitydefs
-import mechanize
 import re
+
+import errors
+import mechanize
 
 
 # Funciones de clase

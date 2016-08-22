@@ -13,6 +13,7 @@ __autor__ = 'ppizarror'
 import hashlib
 import os
 
+
 # Constantes del programa
 _FOLDERSEP = "/"
 _FOLDERTYPE = "_FOLDER_"

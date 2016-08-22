@@ -12,9 +12,10 @@ __autor__ = "ppizarror"
 # Configuración de entorno
 # noinspection PyUnresolvedReferences
 from bin import configLoader
-# noinspection PyUnresolvedReferences
 from libpath import DIR_LIB
 import libpath
 
+
+# noinspection PyUnresolvedReferences
 # noinspection PyProtectedMember
 __binconfig = configLoader(libpath._LIB_CONFIG, "lib.ini")

@@ -83,12 +83,13 @@ __all__ = ['is_rarfile', 'RarInfo', 'RarFile', 'RarExtFile']
 ## Imports and compat - support both Python 2.x and 3.x
 ##
 
-import sys, os, struct, errno
-from struct import pack, unpack
 from binascii import crc32
-from tempfile import mkstemp
-from subprocess import Popen, PIPE, STDOUT
 from datetime import datetime
+from struct import pack, unpack
+from subprocess import Popen, PIPE, STDOUT
+import sys, os, struct, errno
+from tempfile import mkstemp
+
 
 # only needed for encryped headers
 try:
@@ -104,19 +105,19 @@ except ImportError:
 # compat with 2.x
 if sys.hexversion < 0x3000000:
     # prefer 3.x behaviour
-    range = xrange
+    range = xrange  # @ReservedAssignment
     # py2.6 has broken bytes()
-    def bytes(s, enc):
+    def bytes(s, enc):  # @ReservedAssignment
         return str(s)
 else:
-    unicode = str
+    unicode = str  # @ReservedAssignment
 
 # see if compat bytearray() is needed
 try:
     bytearray
 except NameError:
     import array
-    class bytearray:
+    class bytearray:  # @ReservedAssignment
         def __init__(self, val = ''):
             self.arr = array.array('B', val)
             self.append = self.arr.append
@@ -369,7 +370,7 @@ class RarInfo(object):
     r'''An entry in rar archive.
 
     :mod:`zipfile`-compatible fields:
-    
+
         filename
             File name with relative path.
             Default path separator is '\\', to change set rarfile.PATH_SEP.
@@ -479,7 +480,7 @@ class RarFile(object):
     def __init__(self, rarfile, mode="r", charset=None, info_callback=None,
                  crc_check = True, errors = "stop"):
         """Open and parse a RAR archive.
-        
+
         Parameters:
 
             rarfile
@@ -525,7 +526,7 @@ class RarFile(object):
     def __enter__(self):
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, type, value, traceback):  # @ReservedAssignment
         self.close()
 
     def setpassword(self, password):
@@ -577,7 +578,7 @@ class RarFile(object):
     def open(self, fname, mode = 'r', psw = None):
         '''Returns file-like object (:class:`RarExtFile`),
         from where the data can be read.
-        
+
         The object implements :class:`io.RawIOBase` interface, so it can
         be further wrapped with :class:`io.BufferedReader`
         and :class:`io.TextIOWrapper`.
@@ -643,7 +644,7 @@ class RarFile(object):
 
     def read(self, fname, psw = None):
         """Return uncompressed data for archive entry.
-        
+
         For longer files using :meth:`RarFile.open` may be better idea.
 
         Parameters:
@@ -671,7 +672,7 @@ class RarFile(object):
 
     def extract(self, member, path=None, pwd=None):
         """Extract single file into current directory.
-        
+
         Parameters:
 
             member
@@ -689,7 +690,7 @@ class RarFile(object):
 
     def extractall(self, path=None, members=None, pwd=None):
         """Extract all files into current directory.
-        
+
         Parameters:
 
             path
@@ -784,7 +785,7 @@ class RarFile(object):
     def _parse_real(self):
         fd = XFile(self.rarfile)
         self._fd = fd
-        id = fd.read(len(RAR_ID))
+        id = fd.read(len(RAR_ID))  # @ReservedAssignment
         if id != RAR_ID:
             raise NotRarFile("Not a Rar archive: "+self.rarfile)
 
@@ -1032,7 +1033,7 @@ class RarFile(object):
         while pos < len(hdata):
             # ordinary block header
             t = S_BLK_HDR.unpack_from(hdata, pos)
-            scrc, stype, sflags, slen = t
+            scrc, stype, sflags, slen = t  # @UnusedVariable
             pos_next = pos + slen
             pos += S_BLK_HDR.size
 
@@ -1078,7 +1079,7 @@ class RarFile(object):
                 pos += 4
             rem = 0
             cnt = flag & 3
-            for i in range(cnt):
+            for i in range(cnt):  # @UnusedVariable
                 b = S_BYTE.unpack_from(data, pos)[0]
                 rem = (b << 16) | (rem >> 8)
                 pos += 1
@@ -1294,11 +1295,11 @@ class UnicodeFilename:
                 n = self.enc_byte()
                 if n & 0x80:
                     c = self.enc_byte()
-                    for i in range((n & 0x7f) + 2):
+                    for i in range((n & 0x7f) + 2):  # @UnusedVariable
                         lo = (self.std_byte() + c) & 0xFF
                         self.put(lo, hi)
                 else:
-                    for i in range(n + 2):
+                    for i in range(n + 2):  # @UnusedVariable
                         self.put(self.std_byte(), 0)
         return self.buf.decode("utf-16le", "replace")
 
@@ -1410,7 +1411,7 @@ class RarExtFile(RawIOBase):
         try:
             buf[:n] = data
         except TypeError:
-            import array
+            import array  # @Reimport @NoMove
             if not isinstance(buf, array.array):
                 raise
             buf[:n] = array.array(buf.typecode, data)
@@ -1422,7 +1423,7 @@ class RarExtFile(RawIOBase):
 
     def seek(self, ofs, whence = 0):
         """Seek in data.
-        
+
         On uncompressed files, the seeking works by actual
         seeks so it's fast.  On compresses files its slow
         - forward seeking happends by reading ahead,
@@ -1478,13 +1479,13 @@ class RarExtFile(RawIOBase):
 
     def writable(self):
         """Returns False.
-        
+
         Writing is not supported."""
         return False
 
     def seekable(self):
         """Returns True.
-        
+
         Seeking is supported, although it's slow on compressed files.
         """
         return True
@@ -1888,7 +1889,7 @@ def parse_dos_time(stamp):
     """Parse standard 32-bit DOS timestamp."""
 
     sec = stamp & 0x1F; stamp = stamp >> 5
-    min = stamp & 0x3F; stamp = stamp >> 6
+    min = stamp & 0x3F; stamp = stamp >> 6  # @ReservedAssignment
     hr  = stamp & 0x1F; stamp = stamp >> 5
     day = stamp & 0x1F; stamp = stamp >> 5
     mon = stamp & 0x0F; stamp = stamp >> 4
@@ -1918,7 +1919,7 @@ def custom_popen(cmd):
 def custom_check(cmd, ignore_retcode=False):
     """Run command, collect output, raise error if needed."""
     p = custom_popen(cmd)
-    out, err = p.communicate()
+    out, err = p.communicate()  # @UnusedVariable
     if p.returncode and not ignore_retcode:
         raise RarExecError("Check-run failed")
     return out

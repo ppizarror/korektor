@@ -16,8 +16,8 @@ __autor__ = 'ppizarror'
 
 # Importación de librerías
 if __name__ == '__main__': from binpath import *  # @UnusedWildImport
-from utils import string2list
 import errors
+from utils import string2list
 
 # Definición de constantes
 CONFIG_COMMENT = "#"
@@ -53,6 +53,7 @@ class configLoader:
         self.config_single = []
         self.configs = {}
         self.filename = filename
+        self.filename_title = conffile
         self.totalconfigs = 0
         # Se cargan las configuraciones
         # noinspection PyUnboundLocalVariable
@@ -170,7 +171,10 @@ class configLoader:
             print CONFIG_PRINTPARAMETER
             if self.totalconfigs > 0:
                 for parameter in self.getParameters():
-                    print CONFIG_PRINTPARAM.format(parameter, self.configs[parameter])
+                    try:
+                        print CONFIG_PRINTPARAM.format(parameter, self.configs[parameter])
+                    except:
+                        errors.throw(errors.ERROR_CONFIGCORRUPT, self.filename_title)
             for config in self.config_single:
                 print CONFIG_PRINTPARAMSIMPLE.format(config)
         else:

@@ -9,12 +9,13 @@
 # Licencia: GPLv2
 
 # Importación de librerias
-from Tkinter import *
+from Tkinter import *  # @UnusedWildImport
 import os
-import sys
-from tkFileDialog import *
+import sys  # @UnusedImport @Reimport
+from tkFileDialog import *  # @UnusedWildImport
 import tkFont
 import ttk
+
 
 try:
     # noinspection PyUnresolvedReferences
@@ -91,7 +92,7 @@ def delMatrix(matrix):
     """
     a = len(matrix)
     if a > 0:
-        for k in range(a):
+        for k in range(a):  # @UnusedVariable
             matrix.pop(0)  # @UnusedVariable
 
 
