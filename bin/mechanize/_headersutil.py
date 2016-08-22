@@ -140,7 +140,7 @@ def split_header_words(header_values):
                 # skip junk
                 non_junk, nr_junk_chars = re.subn("^[=\s;]*", "", text)
                 assert nr_junk_chars > 0, (
-                    "split_header_words bug: '%s', '%s', %s" % 
+                    "split_header_words bug: '%s', '%s', %s" %
                     (orig_text, text, pairs))
                 text = non_junk
         if pairs: result.append(pairs)
@@ -237,7 +237,7 @@ def parse_ns_headers(ns_headers):
 
 
 def _test():
-    import doctest, _headersutil
+    import doctest, _headersutil  # @UnresolvedImport
     return doctest.testmod(_headersutil)
 
 if __name__ == "__main__":

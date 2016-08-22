@@ -128,7 +128,7 @@ def urljoin(base_uri, uri_reference):
 # #         return (scheme, authority, tpath, rquery, rfragment)
 
 def urljoin_parts(base_parts, reference_parts):
-    scheme, authority, path, query, fragment = base_parts
+    scheme, authority, path, query, fragment = base_parts  # @UnusedVariable
     rscheme, rauthority, rpath, rquery, rfragment = reference_parts
 
     if rscheme == scheme:

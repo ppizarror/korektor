@@ -384,7 +384,7 @@ class TolerantPullParser(_AbstractParser, sgmllib.SGMLParser):
 
 
 def _test():
-    import doctest, _pullparser
+    import doctest, _pullparser  # @UnresolvedImport
     return doctest.testmod(_pullparser)
 
 if __name__ == "__main__":

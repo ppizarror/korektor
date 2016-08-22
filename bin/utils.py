@@ -35,7 +35,7 @@ except:
 # Importación de librerías externas
 try:
     # noinspection PyUnresolvedReferences
-    import WConio
+    import WConio  # @UnresolvedImport
 except:
     _IMPORTED[0] = 0
 try:
