@@ -13,14 +13,12 @@ __autor__ = 'ppizarror'
 if __name__ == '__main__':
     from libpath import *  # @UnusedWildImport
 import zipfile
-
 from bin.configLoader import configLoader  # @UnresolvedImport
 import bin.errors as err  # @UnresolvedImport @UnusedImport
 import bin.rarfile as rarfile  # @UnresolvedImport
 from bin.utils import isHiddenFile, isFolder, regexCompare, printBarsConsole, isWindows  # @UnresolvedImport @Reimport
 from config import DIR_CONFIG  # @UnresolvedImport
 from data import DIR_UPLOADS, DIR_DATA, DIR_RESULTS, DIR_STRUCTURE  # @UnusedImport
-
 
 # Se define el ejecutable de unrar para Windows
 if isWindows():

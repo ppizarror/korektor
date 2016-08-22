@@ -11,12 +11,10 @@
 
 # Importación de librerías
 import os
-
-
 __actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace("\\", "/") + "/"
 
 # Definición de directorios
-# \
+# .\
 DIR_DOC = __actualpath + "doc/"
 DIR_ICONS = __actualpath + "icons/"
 DIR_IMAGES = __actualpath + "images/"

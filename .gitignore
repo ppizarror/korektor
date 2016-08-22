@@ -20,9 +20,8 @@ Thumbs.db
 # Hashing
 .hash
 
-# Archivos ejecutables
-
 # Archivos de results y uploads
 data/results/
 data/structure/
 data/uploads/
+data/.test_private/

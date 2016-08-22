@@ -19,7 +19,7 @@ __actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace("\\", "/"
 DIR_DATA = __actualpath
 DIR_RESULTS = __actualpath + "results/"
 DIR_STRUCTURE = __actualpath + "structure/"
-DIR_TEST = __actualpath + "_test/"
+DIR_TEST = __actualpath + ".test/"
 DIR_UPLOADS = __actualpath + "uploads/"
 
 # Test
