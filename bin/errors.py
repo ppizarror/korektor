@@ -13,7 +13,6 @@ __autor__ = 'ppizarror'
 from accents import delAccentByOS
 from colors import Color
 
-
 # Constantes
 BR_ERRORxERROR_SET_FORM = 8
 BR_ERRORxERROR_SET_SUBMIT = 9
@@ -28,7 +27,8 @@ BR_ERRORxNO_VALID_SUBMIT_NOT_EQUAL = 7
 ERROR_BADCONFIG = "La linea '{0}' del archivo de configuraciones '{1}' no es valida"
 ERROR_BADINDEXCONFIG = "El indice seleccionado <{0}> no pertenece a las configuraciones cargadas"
 ERROR_BADLAUNCHBIN = "La clase debe ser importada desde bin"
-ERROR_BADWD = "La nueva dirección del Working Directory no es una carpeta"
+ERROR_BADSOURCEFOLDER = "La nueva dirección del 'Source Folder' no es una carpeta"
+ERROR_BADWD = "La nueva dirección del 'Working Directory' no es una carpeta"
 ERROR_CANTTRANSLATE = "El texto no se puede traducir"
 ERROR_CONFIGBADEXPORT = "No se pudo guardar el archivo de configuraciones"
 ERROR_CONFIGCORRUPT = "El archivo de configuraciones '{0}' está corrupto"

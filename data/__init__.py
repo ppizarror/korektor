@@ -20,6 +20,7 @@ DIR_DATA = __actualpath
 DIR_RESULTS = __actualpath + "results/"
 DIR_STRUCTURE = __actualpath + "structure/"
 DIR_TEST = __actualpath + ".test/"
+DIR_TEST_PRIVATE = __actualpath + ".test_private/"
 DIR_UPLOADS = __actualpath + "uploads/"
 
 # Test
@@ -27,4 +28,6 @@ if __name__ == '__main__':
     print DIR_DATA
     print DIR_RESULTS
     print DIR_STRUCTURE
+    print DIR_TEST
+    print DIR_TEST_PRIVATE
     print DIR_UPLOADS

@@ -14,6 +14,7 @@ if __name__ == '__main__':
     from libpath import *  # @UnusedWildImport
 import shutil  # @UnusedImport
 import zipfile
+import os  # @Reimport
 from bin.configLoader import configLoader  # @UnresolvedImport
 import bin.errors as err  # @UnresolvedImport @UnusedImport
 from bin.utils import isHiddenFile, isFolder, printBarsConsole, isWindows  # @UnresolvedImport @Reimport @UnusedImport
@@ -35,13 +36,6 @@ else:
         from pyunpack import Archive  # @UnusedImport @UnresolvedImport
     except:
         err.st_error(err.ERROR_RARNOTINSTALLED_NOTWIN, True, "pyunpack")
-
-# Constantes
-PACKAGE_TESTER_ERROR_NO_FOUND = "El archivo consultado no existe"
-PACKAGE_VALIDATE_FAIL = "FOLDER-PACKAGE-FAIL"
-PACKAGE_VALIDATE_OK = "FOLDER-PACKAGE-OK"
-ZIP_VALIDATE_FAIL = "ZIP-PACKAGE-FAIL"
-ZIP_VALIDATE_OK = "ZIP-PACKAGE-OK"
 
 
 # noinspection PyUnresolvedReferences
@@ -72,6 +66,7 @@ class Filemanager:
 
         # Variables del FD
         self._wd = wd
+        self._defaultwd = DIR_UPLOADS
 
     def disable_autoExtract(self):
         """
@@ -195,9 +190,8 @@ class Filemanager:
                 _inspect(rootpath, newfilename, filelist, extractedFolders, depth + 1)
 
             else:  # Si es cualquier otro archivo entonces se añade
-                if depth > 0:
-                    if _isValidFileName(filename):
-                        filelist.append(rootpath + filename)
+                if _isValidFileName(filename):
+                    filelist.append(rootpath + filename)
 
         def _removeExtractedFolders():
             """
@@ -301,14 +295,27 @@ class Filemanager:
         """
         for f in os.listdir(self._wd):  # @ReservedAssignment
             if f is not None:
-                fm.printSingleFile(f)
+                self.printSingleFile(f)
 
     def restoreWD(self):
         """
         Retorna el wd al estado por defecto
         :return: void
         """
-        self.setWorkingDirectory(DIR_UPLOADS)
+        self.setWorkingDirectory(self._defaultwd)
+
+    def setDefaultWorkingDirectory(self, new_wd):
+        """
+        Establece el directorio root de los archivos
+        :return: String
+        """
+        if self._isFolder(new_wd, "") and len(new_wd) > 0:
+            new_wd = new_wd.replace("\\", "/")
+            if new_wd[len(new_wd) - 1] != "/":
+                new_wd += "/"
+            self._defaultwd = new_wd
+        else:
+            err.throw(err.ERROR_BADWD)
 
     def setWorkingDirectory(self, new_wd):
         """
@@ -323,11 +330,22 @@ class Filemanager:
         else:
             err.throw(err.ERROR_BADWD)
 
+    def tree(self):
+        """
+        Retorna una lista con todos los archivos de cada uno de los elementos
+        :return: list
+        """
+        treelist = []
+        for f in os.listdir(self._wd):  # @ReservedAssignment
+            if f is not None:
+                treelist.append(self.inspectSingleFile(f))
+        return treelist
+
 
 if __name__ == "__main__":
 
     # Importación de recursos para el testeo
-    from data import DIR_TEST
+    from data import DIR_TEST, DIR_TEST_PRIVATE
 
     # Creación del objeto de filemanager
     fm = Filemanager()
@@ -378,5 +396,6 @@ if __name__ == "__main__":
     fm.printSingleFile("ABOUT")
 
     # Testeo de una carpeta real
-    fm.setWorkingDirectory("C:\Users\pablo\Downloads\Tarea_5")
+    fm.setWorkingDirectory(DIR_TEST_PRIVATE)
     fm.printTree()
+    # print fm.tree()

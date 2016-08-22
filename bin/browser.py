@@ -14,10 +14,8 @@ if __name__ == '__main__': from binpath import *  # @UnusedWildImport
 import cookielib
 import htmlentitydefs
 import re
-
 import errors
 import mechanize
-
 
 # Funciones de clase
 def unescape(text):

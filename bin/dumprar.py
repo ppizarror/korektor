@@ -1,22 +1,17 @@
 #! /usr/bin/env python
-
 """Dump archive contents, test extraction."""
 
 from binascii import crc32, hexlify  # @UnusedImport
 from datetime import datetime
 import sys
-
 import rarfile as rf
-
-
 try:
     bytearray
 except NameError:
     import array
 
-
-    def bytearray(v):  # @ReservedAssignment
-        return array.array('B', v)
+def bytearray(v):  # @ReservedAssignment
+    return array.array('B', v)
 
 rf.UNICODE_COMMENTS = 1
 rf.USE_DATETIME = 1

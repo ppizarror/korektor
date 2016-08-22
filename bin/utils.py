@@ -15,7 +15,6 @@ from accents import delAccent, delAccentByOS  # @UnusedImport
 from binpath import *  # @UnusedWildImport
 import errors
 
-
 # Importación de librerías de sistema
 _IMPORTED = [1, 1]
 try:
@@ -63,6 +62,17 @@ _MSG_LOADINGFILE = "Cargando archivo '{0}' ..."
 _MSG_OK = "[OK]"
 LINK_PROJECT = "https://github.com/ppizarror/korektor/"
 LINK_UPDATES = "http://projects.ppizarror.com/version?product=KR"
+
+
+def appendListToList(origin, l):
+    """
+    Añade los elementos de la lista l a la lista origin
+    :param origin: Lista a añadir elementos
+    :param l: Lista con elementos a ser agregados
+    :return: void
+    """
+    for i in l:
+        origin.append(i)
 
 
 def compareVersion(ver1, ver2):
@@ -437,13 +447,13 @@ def regexCompare(regString, currString, validRegexChars=None):
     lr = len(regString)
     lc = len(currString)
     if lr > 0 and lc > 0:
-        if "*" not in regString:
+        if "*" not in regString and "#" not in regString:
             return regString == currString
         else:
             i = 0
             j = 0
             while i < lr and j < lc:
-                if regString[i] is not "*":
+                if regString[i] is not "*" and regString[i] is not "#":
                     if not _comp(i, j):
                         return False
                     i += 1
@@ -538,7 +548,10 @@ if __name__ == '__main__':
     print regexCompare("korektor test", "korektor test")
     print regexCompare("korektor is nice", "korektor is not nice")
     print regexCompare("*_*", "pablo.pizarro")
+    print regexCompare("#.#", "pablo.pizarro")
     print regexCompare("*regex *", "regex are  korektor")
     print regexCompare("cc3001/tarea2/*_*/Parte1.java", "cc3001/tarea2/pablo_pizarro*/Parte1.java")
     print regexCompare("cc3001/tarea2/*_*/Parte1.java", "cc3001/tarea2/pablo_pizarro*/Parte1.java",
                        "abcdefghijklmnopqrstuvwxyz")
+    print regexCompare("*/cc3001/tarea2/*_*/Parte1.java", "Aguirre_Munoz__Daniel_Patricio.zip/cc3001/tarea2/pablo_pizarro*/Parte1.java")
+    print regexCompare("cc3001/tarea5/#_#/Parte1.java", "Aguirre_Munoz__Daniel_Patricio.zip/cc3001/tarea5/daniel_aguirre/Parte1.java")

@@ -13,7 +13,6 @@ __autor__ = 'ppizarror'
 import os
 import sys
 
-
 # Definición de directorios
 __actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace("\\", "/") + "/"
 DIR_BIN = __actualpath

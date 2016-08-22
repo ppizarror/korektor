@@ -14,7 +14,7 @@ __autor__ = "ppizarror"
 from bin import configLoader
 from libpath import DIR_LIB
 import libpath
-
+import filemanager  # @UnresolvedImport
 
 # noinspection PyUnresolvedReferences
 # noinspection PyProtectedMember
