@@ -11,7 +11,7 @@ __autor__ = "ppizarror"
 # Importación de librerías
 if __name__ == '__main__':
     from testpath import *  # @UnusedWildImport
-from bin.VerticalScrolledFrame import *  # @UnusedWildImport
+from bin.verticalScrolledFrame import *  # @UnusedWildImport
 
 if __name__ == '__main__':
     pass
