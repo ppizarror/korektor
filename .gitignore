@@ -24,4 +24,6 @@ Thumbs.db
 data/results/
 data/structure/
 data/uploads/
-data/.test_private/
+
+# Archivos de tests
+tests/.data_tests_private/
