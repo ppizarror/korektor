@@ -12,6 +12,7 @@ __autor__ = 'ppizarror'
 # Importación de librerías
 from accents import delAccentByOS
 from colors import Color
+# from langs import langLoader  # @UnusedImport
 
 # Constantes
 BR_ERRORxERROR_SET_FORM = 8
@@ -55,6 +56,8 @@ ERROR_TAG_INITNOTCORRECTENDING = 14
 ERROR_TAG_INITNOTFINDED = 13
 ERROR_TAG_LASTNOTFINDED = 15
 NO_ERROR = "OK"
+PACKAGE_ERROR_NOT_INDEXED_FILES_YET = "Los archivos del paquete aún no han sido indexados"
+PACKAGE_ERROR_NO_NAME = "El nombre del paquete aún no ha sido definido"
 ST_ERROR = "[ERR]"
 ST_INFO = "[INF]"
 ST_WARNING = "[WRN]"

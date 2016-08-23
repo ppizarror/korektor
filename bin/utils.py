@@ -429,6 +429,21 @@ def printMatrix(matrix):
         print "\n"
 
 
+def printHierachyList(lst, level=0):
+    """
+    Función que imprime una lista de jerarquía.
+    Obtenida desde: http://stackoverflow.com/questions/30521991/
+    :param lst: Lista
+    :param level: Nivel de profunididad
+    :return: void
+    """
+    print('    ' * (level - 1) + '+---' * (level > 0) + lst[0])
+    for l in lst[1:]:
+        if type(l) is list:
+            printHierachyList(l, level + 1)
+        else:
+            print('    ' * level + '+---' + l)
+
 def regexCompare(regString, currString, validRegexChars=None):
     """
     Compara dos strings el cual regString posee regex

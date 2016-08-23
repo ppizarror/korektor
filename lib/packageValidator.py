@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 __autor__ = 'ppizarror'
 
-# PACKAGE
+# PACKAGE VALIDATOR
 # Testea que los paquetes entregados por los alumnos tengan una estructura correcta
+# Además testea de que las estructuras de archivos tengan también una estructura correcta
 #
 # Autor: PABLO PIZARRO @ ppizarror.com
 # Fecha: OCTUBRE 2015
@@ -14,10 +15,11 @@ if __name__ == '__main__':
     from libpath import *  # @UnusedWildImport
 from bin.configLoader import configLoader  # @UnresolvedImport
 import bin.errors as err  # @UnresolvedImport @UnusedImport
-from lib.filemanager import Filemanager  # @UnusedImport @UnresolvedImport
+from lib.fileManager import FileManager  # @UnusedImport @UnresolvedImport
 from config import DIR_CONFIG  # @UnresolvedImport
 from data import DIR_UPLOADS, DIR_STRUCTURE, DIR_DATA  # @UnusedImport
 from bin.utils import regexCompare, appendListToList, isFolder
+import os  # @Reimport @NoMove
 
 # Constantes
 PACKAGE_TESTER_ERROR_NO_FOUND = "El archivo consultado no existe"
@@ -28,7 +30,7 @@ ZIP_VALIDATE_OK = "ZIP-PACKAGE-OK"
 
 
 # noinspection PyUnresolvedReferences
-class Packages:
+class PackageValidator:
     """
     package: Paquetes de usuario el cual provee funciones para acceder a los contenidos
     de cada paquete, como tambien la estructura básica pedida
@@ -55,7 +57,7 @@ class Packages:
         self._structureroot = DIR_STRUCTURE
 
         # Instancia un filemanager
-        self._fm = Filemanager()
+        self._fm = FileManager()
         self._fm.setDefaultWorkingDirectory(self._defaultsourceroot)
         self._fm.restoreWD()
 
@@ -118,9 +120,9 @@ class Packages:
         else:
             err.throw(err.ERROR_BADSOURCEFOLDER)
 
-    def validateStructureFile(self, filename):
+    def _validateStructureFile(self, filename):
         """
-        Función que valida si un archivo cumple con la estructura
+        Función que valida si un archivo cumple con la estructura pedida
         :param filename: Archivo a comprobar
         :return:
         """

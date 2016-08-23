@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 __autor__ = 'ppizarror'
 
-# Filemanager
+# FILE MANAGER
 # Administra archivos, permite obtener orden jerárquico, descomprime zip y rar, elimina archivos, etc.
 #
 # Autor: PABLO PIZARRO @ ppizarror.com
@@ -39,7 +39,7 @@ else:
 
 
 # noinspection PyUnresolvedReferences
-class Filemanager:
+class FileManager:
     """
     filemanager: Administra archivos, carga archivos, etc.
     """

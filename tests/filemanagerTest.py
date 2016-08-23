@@ -11,12 +11,13 @@ __autor__ = "ppizarror"
 # Importación de librerías
 if __name__ == '__main__':
     from testpath import *  # @UnusedWildImport
-from lib.filemanager import *  # @UnusedWildImport
+from lib.fileManager import *  # @UnusedWildImport
+from bin.utils import printBarsConsole
 
 if __name__ == '__main__':
 
     # Creación del objeto de filemanager
-    fm = Filemanager()
+    fm = FileManager()
 
     # Configuración del filemanager
     fm.enable_autoExtract()

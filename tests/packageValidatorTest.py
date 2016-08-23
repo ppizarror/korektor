@@ -11,12 +11,14 @@ __autor__ = "ppizarror"
 # Importación de librerías
 if __name__ == '__main__':
     from testpath import *  # @UnusedWildImport
-from lib.packages import *  # @UnusedWildImport
+from lib.packageValidator import *  # @UnusedWildImport
+from bin.utils import printBarsConsole
+import os  # @Reimport @UnusedImport
 
 if __name__ == '__main__':
 
     # Se crea un nuevo package
-    p = Packages()
+    p = PackageValidator()
 
     # Se imprime la estructura necesaria
     printBarsConsole("Formato de estructura válido")
@@ -27,5 +29,5 @@ if __name__ == '__main__':
 
     # Se testea un elemento
     printBarsConsole("Testeo de paquetes")
-    print p.validateStructureFile("Aguirre_Munoz__Daniel_Patricio.zip")
-    print p.validateStructureFile("Leiva_Castro__Francisco_Ignacio.rar")
+    print p._validateStructureFile("Aguirre_Munoz__Daniel_Patricio.zip")
+    print p._validateStructureFile("Leiva_Castro__Francisco_Ignacio.rar")
