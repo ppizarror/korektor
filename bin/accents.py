@@ -19,8 +19,8 @@ def delAccent(txt):
     :param txt: String
     :return: String con acentos eliminados
     """
-    txt = txt.replace("�?", "A").replace("É", "E").replace(
-        "�?", "I").replace("Ó", "O").replace("Ú", "U")
+    txt = txt.replace("Á", "A").replace("É", "E").replace(
+        "Í", "I").replace("Ó", "O").replace("Ú", "U")
     return txt.replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
 
 

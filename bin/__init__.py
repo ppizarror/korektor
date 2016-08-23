@@ -23,7 +23,7 @@ if __binconfig.isTrue("DONT_WRITE_BYTECODE"):
     reload(sys)
     sys.dont_write_bytecode = True
 
-# Test
+# Module test
 if __name__ == '__main__':
     try:
         import mechanize

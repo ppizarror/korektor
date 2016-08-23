@@ -139,10 +139,3 @@ def parseLangError(msg):
     msg = data[1].strip()
     msg = insertEach(msg, "-\n\t    ", WRAP_ERROR_MSG)
     return Color.RED + ST_WARNING_ID.format(code) + Color.END + " " + msg
-
-
-# Test
-if __name__ == '__main__':
-    st_error("Este es un error grave", False)
-    st_info("Esta es una información")
-    st_warning("Esta es una advertencia")

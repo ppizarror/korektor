@@ -28,9 +28,3 @@ sys.path.append(DIR_BIN + "/easyprocess/")
 sys.path.append(DIR_BIN + "/mechanize/")
 sys.path.append(DIR_BIN + "/pyunpack/")
 sys.path.append(DIR_BIN + "/wconio/")
-
-# Test
-if __name__ == '__main__':
-    print DIR_BIN
-    print _LANG_DIRCONFIG
-    print _LANG_DIRLANGS

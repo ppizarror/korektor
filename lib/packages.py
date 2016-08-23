@@ -17,7 +17,7 @@ import bin.errors as err  # @UnresolvedImport @UnusedImport
 from lib.filemanager import Filemanager  # @UnusedImport @UnresolvedImport
 from config import DIR_CONFIG  # @UnresolvedImport
 from data import DIR_UPLOADS, DIR_STRUCTURE, DIR_DATA  # @UnusedImport
-from bin.utils import regexCompare, printBarsConsole, appendListToList, isFolder
+from bin.utils import regexCompare, appendListToList, isFolder
 
 # Constantes
 PACKAGE_TESTER_ERROR_NO_FOUND = "El archivo consultado no existe"
@@ -134,26 +134,3 @@ class Packages:
             if not found:
                 return False
         return True
-
-
-if __name__ == "__main__":
-
-    # Importación de variables
-    from data import DIR_TEST_PRIVATE  # @UnusedImport
-
-    # Se crea un nuevo package
-    p = Packages()
-
-    # Se imprime la estructura necesaria
-    printBarsConsole("Formato de estructura válido")
-    print p._getStructure()
-
-    # Se cambia la carpeta de sources
-    p.setSourceFolder(DIR_TEST_PRIVATE)
-
-    # Se testea un elemento
-    printBarsConsole("Testeo de paquetes")
-    print p.validateStructureFile("Aguirre_Munoz__Daniel_Patricio.zip")
-    print p.validateStructureFile("Leiva_Castro__Francisco_Ignacio.rar")
-
-

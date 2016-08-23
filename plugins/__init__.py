@@ -15,6 +15,6 @@ __actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace("\\", "/"
 # Definición de directorios
 DIR_PLUGINS = __actualpath
 
-# Test
+# Module test
 if __name__ == '__main__':
     print DIR_PLUGINS

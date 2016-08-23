@@ -357,10 +357,3 @@ def main():
 
     for fn in args:
         test(fn, psw)
-
-
-if __name__ == '__main__':
-    try:
-        main()
-    except KeyboardInterrupt:
-        pass

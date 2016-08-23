@@ -6,7 +6,7 @@ __autor__ = 'ppizarror'
 # Permite cargar configuraciones dado un archivo dado por parámetro
 # Formato de archivo:
 #
-#    #comentario
+#    # Comentario
 #    CONFIG_1 = VALUE
 #    CONFIG_2 = VALUE2
 #
@@ -189,20 +189,3 @@ class configLoader:
         :return: void
         """
         self.configs[paramName] = paramValue
-
-
-# Test
-if __name__ == '__main__':
-    binconfig = configLoader(".config/", "bin.ini", verbose=True)
-    binconfig.isTrue("DONT_WRITE_BYTECODE")
-    binconfig.getParameters()
-    binconfig.printParameters()
-    binconfig.setParameter("PARAM1", "VALUE1")
-    binconfig.setParameter("PARAM2", "VALUE2")
-    binconfig.setParameter("PARAM3", "VALUE3")
-    binconfig.setParameter("SET_DEFAULT_ENCODING", "W-850")
-    binconfig.printParameters()
-    # binconfig.export(False, "test.ini")
-    print binconfig.getValue(binconfig.getParameters()[1])
-    print binconfig.getValue("DONT_WRITE_BYTECODE")
-    print binconfig.getValue("SET_DEFAULT_ENCODING")

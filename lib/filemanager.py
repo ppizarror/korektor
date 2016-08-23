@@ -17,7 +17,7 @@ import zipfile
 import os  # @Reimport
 from bin.configLoader import configLoader  # @UnresolvedImport
 import bin.errors as err  # @UnresolvedImport @UnusedImport
-from bin.utils import isHiddenFile, isFolder, printBarsConsole, isWindows  # @UnresolvedImport @Reimport @UnusedImport
+from bin.utils import isHiddenFile, isFolder, isWindows, appendListToList
 from config import DIR_CONFIG  # @UnresolvedImport
 from data import DIR_UPLOADS  # @UnusedImport
 
@@ -26,16 +26,16 @@ if isWindows():
     from bin.binpath import DIR_BIN
     try:
         import bin.rarfile as rarfile  # @UnresolvedImport
-    except:
-        err.st_error(err.ERROR_RARNOTINSTALLED_WIN, True, "rarfile")
+    except Exception, e:
+        err.st_error(err.ERROR_RARNOTINSTALLED_WIN, True, "rarfile", e)
     rarfile.UNRAR_TOOL = DIR_BIN + "unrar.exe"
 
 # Si no es windows se utiliza la librería patool
 else:
     try:
         from pyunpack import Archive  # @UnusedImport @UnresolvedImport
-    except:
-        err.st_error(err.ERROR_RARNOTINSTALLED_NOTWIN, True, "pyunpack")
+    except Exception, e:
+        err.st_error(err.ERROR_RARNOTINSTALLED_NOTWIN, True, "pyunpack", e)
 
 
 # noinspection PyUnresolvedReferences
@@ -50,23 +50,36 @@ class Filemanager:
         :param wd: Working directory
         :return: void
         """
-
         # Carga de configuraciones
         config = configLoader(DIR_CONFIG, "filemanager.ini")
         coreConfig = configLoader(DIR_CONFIG, "core.ini")
         folderConfig = configLoader(DIR_CONFIG, "folder.ini")
         packageConfig = configLoader(DIR_CONFIG, "packages.ini")
         self._autoExtract = config.isTrue("AUTOEXTRACT")  # Auto extraer un archivo comprimido
-        self._doRemoveExtractedFolders = config.isTrue("DO_REMOVE_EXTRACTED_FOLDERS")  # Eliminar carpetas extraidas tras el análisis
+        # Eliminar carpetas extraidas tras el análisis
+        self._doRemoveExtractedFolders = config.isTrue("DO_REMOVE_EXTRACTED_FOLDERS")
         self._ignoredFiles = folderConfig.getValueListed("IGNORE")
-        self._removeOnExtract = config.isTrue("REMOVE_ON_EXTRACT")  # Eliminar un archivo comprimido tras extraerlo
-        self._validChars = packageConfig.getValue("VALID_CHARACTERS")  # Caracteres válidos de los archivos del paquete
-        self._validRegexChars = packageConfig.getValue("VALID_REGEX_CHARACTERS")  # Caracteres válidos para los regex
+        self._removeOnExtract = config.isTrue("REMOVE_ON_EXTRACT")
+        # Eliminar un archivo comprimido tras extraerlo
+        self._validChars = packageConfig.getValue("VALID_CHARACTERS")
+        # Caracteres válidos de los archivos del paquete
+        self._validRegexChars = packageConfig.getValue("VALID_REGEX_CHARACTERS")
+        # Caracteres válidos para los regex
         self._verbose = coreConfig.isTrue("VERBOSE")  # Imprimir el estado del sistema
 
         # Variables del FD
         self._wd = wd
         self._defaultwd = DIR_UPLOADS
+        self._lastExecutionExtractedFilelist = []
+
+    def deleteLastExtractedFiles(self):
+        """
+        Elimina los archivos presentes en la última ejecución del programa
+        :return: void
+        """
+        for i in self._lastExecutionExtractedFilelist:
+            shutil.rmtree(i, True)
+        self._lastExecutionExtractedFilelist = []
 
     def disable_autoExtract(self):
         """
@@ -170,20 +183,19 @@ class Filemanager:
                 if isWindows():
                     try:
                         rarfile.RarFile(rootpath + filename).extractall(rootpath + newfilename + "/")
-                    except:
+                    except Exception, e:
                         print ""
-                        err.st_error(err.ERROR_RARUNCOMPRESS, True, "rarfile")
+                        err.st_error(err.ERROR_RARUNCOMPRESS, True, "rarfile", e)
                 else:
                     try:
                         os.mkdir(rootpath + newfilename + "/")
                     except:
                         pass
-                    Archive(rootpath + filename).extractall(rootpath + newfilename + "/")
                     try:
                         Archive(rootpath + filename).extractall(rootpath + newfilename + "/")
-                    except:
+                    except Exception, e:
                         print ""
-                        err.st_error(err.ERROR_RARUNCOMPRESS, True, "pyunpack")
+                        err.st_error(err.ERROR_RARUNCOMPRESS, True, "pyunpack", e)
                 if self._removeOnExtract:
                     os.remove(rootpath + filename)
                 extractedFolders.append(rootpath + newfilename + "/")
@@ -198,9 +210,10 @@ class Filemanager:
             Función que elimina las carpetas extraidas durante el proceso de análisis
             :return: void
             """
+            self._lastExecutionExtractedFilelist = []
+            appendListToList(self._lastExecutionExtractedFilelist, foldersExtractedOnProcess)
             if self._doRemoveExtractedFolders:
-                for i in foldersExtractedOnProcess:
-                    shutil.rmtree(i, True)
+                self.deleteLastExtractedFiles()
 
         if filelist is not None:
             _inspect(rootpath, filename, filelist, foldersExtractedOnProcess, 0)
@@ -340,62 +353,3 @@ class Filemanager:
             if f is not None:
                 treelist.append(self.inspectSingleFile(f))
         return treelist
-
-
-if __name__ == "__main__":
-
-    # Importación de recursos para el testeo
-    from data import DIR_TEST, DIR_TEST_PRIVATE
-
-    # Creación del objeto de filemanager
-    fm = Filemanager()
-
-    # Configuración del filemanager
-    fm.enable_autoExtract()
-    fm.enable_doRemoveExtractedFolders()
-    fm.disable_removeOnExtract()
-
-    # Testeo del cambio del wd
-    printBarsConsole("Testeo del wd")
-    fm.setWorkingDirectory("C:/")
-    print "Wd actual", fm.getWorkingDirectory()
-    print "Restaurando WD"
-    fm.restoreWD()
-    print "Wd actual", fm.getWorkingDirectory()
-    print "Definiendo WD de testeo"
-    fm.setWorkingDirectory(DIR_TEST)
-    print "Wd actual", fm.getWorkingDirectory()
-
-    # Testeo de carpetas unicas sin archivos comprimidos
-    printBarsConsole("Testeo carpetas unicas")
-    fm.printSingleFile("Folder 1")
-    fm.printSingleFile("Folder 2")
-
-    # Testeo de un archivo zip
-    printBarsConsole("Testeo de archivo zip")
-    fm.printSingleFile("Zip Folder.zip")
-
-    # Testeo de archivos prohibidos
-    printBarsConsole("Testeo de archivos prohibidos")
-    fm.printSingleFile("__MACOSX")
-
-    # Testeo de un archivo rar
-    printBarsConsole("Testeo de archivo rar")
-    fm.printSingleFile("Rar Folder.rar")
-
-    # Testeo de una carpeta con un archivo zip
-    printBarsConsole("Testeo de una carpeta con un archivo zip dentro")
-    fm.printSingleFile("Folder 4")
-
-    # Testeo de una carpeta con un archivo rar
-    printBarsConsole("Testeo de una carpeta con un archivo rar dentro")
-    fm.printSingleFile("Folder 3")
-
-    # Testeo de un archivo
-    printBarsConsole("Testeo de un solo archivo")
-    fm.printSingleFile("ABOUT")
-
-    # Testeo de una carpeta real
-    fm.setWorkingDirectory(DIR_TEST_PRIVATE)
-    fm.printTree()
-    # print fm.tree()

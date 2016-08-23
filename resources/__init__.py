@@ -28,7 +28,7 @@ DIR_DOCUMENTATION = DIR_DOC + "documentation"
 DIR_HELP = DIR_DOC + "help"
 DIR_LICENSE = DIR_DOC + "licence"
 
-# Test
+# Module test
 if __name__ == '__main__':
     print DIR_CHANGELOG
     print DIR_DEV

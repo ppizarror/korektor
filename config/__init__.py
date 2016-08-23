@@ -15,6 +15,6 @@ import os
 __actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace("\\", "/") + "/"
 DIR_CONFIG = __actualpath
 
-# Test
+# Module test
 if __name__ == '__main__':
     print DIR_CONFIG
