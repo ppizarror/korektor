@@ -1,7 +1,13 @@
-# Clase para usar el frame vertical, gracias a:
-# http://tkinter.unpythonic.net/wiki/VerticalScrolledFrame
-# @UnusedWildImport
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 __autor__ = 'ppizarror'
+
+# VERTICALSCROLLEDFRAME
+# Este archivo provee una clase para administrar ventanas con barras de deslizamiento en Tkinter
+#
+# Autor: http://tkinter.unpythonic.net/wiki/VerticalScrolledFrame
+
+# Importación de liberías
 from Tkinter import Frame, Scrollbar, Canvas, NW, BOTH, TRUE, LEFT, RIGHT, VERTICAL, FALSE, Y
 
 

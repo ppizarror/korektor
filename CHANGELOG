@@ -1,0 +1,435 @@
+			CHANGELOG
+
+[0.0.1]
+	+Creada la estructura del programa, creados bin y lib.
+	>Bin: Sirve para almacenar modulos externos y funciones
+	auxiliares.
+	>Lib: Sirve para almacenar los modulos del programa.
+	+Se agrega un editor de idiomas (Langeditor).
+	+Se agrega la libreria mechanize para el manejo de paginas
+	 web.
+	+Se agrega la libreria wconio para manejar la ventana de
+	 comandos.
+	+Se agrega el modulo VerticalScrolledFrame.
+	+Se agrega una licencia.
+	+Se agrega un README basico.
+	+Se agrega un .gitignore.
+
+[0.0.2]
+	+Se agregan los __init__.py a las carpetas bin y lib.
+	+Se añaden las carpetas config, data y resources.
+	>Config: Almancena configuraciones.
+	>Data: Almacena archivos de tareas, etc.
+	>Resources: Almacena recursos audiovisuales a utilizar.
+	+Se mueven las librerias wconio, mechanize y el modulo
+	 VerticalScrolledFrame al paquete bin.
+	+Se agrega un archivo de configuracion para las actualiza-
+	 ciones: updates.ini.
+	+Se configuran las direcciones de los paquetes, almacena
+	 das en constantes en los modulos *path.py.
+	+Se agrega el modulo package.py y libpath.py.
+	>package.py: Administra paquetes de usuarios.
+	>libpath.py: Administra las carpetas dentro de /lib.
+	+Se agregan los modulos binpath.py, browser.py, colors.py,
+	 configLoader.py, errors.py, hashdir.py, langs.py, noStdO-
+	 ut.py y utils.py al paquete /bin.
+	>binpath.py: Administra las carpetas dentro de /bin.
+	>browser.py: Clase para manejar una pagina web de manera
+	 sencilla.
+	>colors.py: Administra colores para ser usados en la ter-
+	 minal.
+	>configLoader.py: Maneja las configuraciones del programa.
+	>errors.py: Administra los errores de la aplicacion.
+	>hashdir.py: Crea un checksum de archivos.
+	>langs.py: Maneja los idiomas de la aplicacion.
+	>noStdOut.py: Modulo que permite desabilitar el printing
+	 en la consola.
+	>utils.py: Maneja archivos utilitarios.
+	+Se agregan test a cada uno de los modulos.
+	+Se agrega una carpeta langs a recursos.
+	+Se añade un idioma de prueba.
+	+Modificado el .gitignore para evitar archivos *.pyc.
+	+Se agrega un archivo de configuraciones para las traducc-
+	 iones, los idiomas y el modulo bin en /bin/.config/.
+	+Se corrige la ortografia de algunos comentarios.
+	+Se modiica el archivo export.py del langeditor.
+	+Se modifica el archivo transformer.py del langeditor.
+	+Se modifica el archivo editor.py del langeditor.
+	+Se modifica el archivo translate.py del langeditor.
+
+[0.0.3]
+	+Se agregan las carpetas plugins, results y uploads.
+	>/plugins/: Administra los plugins de la aplicacion.
+	>/data/results/: Almacena los resultados de la aplicaicon
+	 de los test para los modulos.
+	>/data/uploads/: Almacena las subidas de las tareas de los
+	 alumnos.
+	+Se configura el .gitignore para evitar elementos dentro
+	 de las carpetas uploads y results.
+	+Se agregan funciones auxiliares a utils: regexCompare y
+	 manejo de tags html.
+	+Se agrega un .config/ al modulo /lib.
+	+Se agrega un .config/ al modulo /bin.
+	+Se corrigen errores asociados a la importacion de libre-
+	 rias.
+	+Se refactoriza en general el codigo existente.
+	+Se agrega un __init__.py a plugins, indicando estructura
+	 y direccion principal de directorios.
+
+[0.0.4]
+	+Se agrega la carpeta /data/structure/ para almacenar la
+	 estructura que deben cumplir las tareas para poder ser
+	 evaluadas y testeadas.
+	+Se corrige el .gitignore para evitar los elementos dentro
+	 de la carpeta /structure.
+	+Modifaciones al modulo bin/configLoader.py, agregando
+	 la funcion getValueListed con lista de valores por para-
+	 metro de configuracion.
+	+Se agrega la funcion isFolder y isHiddenFile al modulo
+	 utils.py. Ambas funciones estan relacionadas con el manejo
+	 de archivos.
+	+Se agregan archivos de configuraciones para el nucleo,las
+	 carpetas, los paquetes y la interfaz grafica.
+	+Se agrega la clase packageTester en package.py. La cual
+	 carga apaquetes en formato .zip y comprueba que tengan un
+	 formato especifico determinado por la disposicion de los
+	 archivos en /structure.
+
+[0.0.5]
+	+Se agregan varias instrucciones de error en errors.py.
+	+Se actualiza la funcion regexCompare en utils.py, la cual
+	 debe comparar strings que tengan regex (#, *) que pueden
+	 tomar cualquier valor.
+	+Se agregan multitud de tests al modulo utils.py.
+	+Se agregan varias constantes de estado para package.py, en
+	 concreto se añaden PACKAGE_TESTER_ERROR_NO_FOUND, ZIP_VALI-
+	 DATE_FAIL y ZIP_VALIDATE_OK.
+	+Se agrega la posibilidad de comparar por regex los paquetes
+	 en packageTester.
+	+Correccion de errores a la hora de descomprimir archivos con
+	 packageTester.
+
+[0.0.6]
+	+Refactorizacion de 33 lineas en utils.py, adaptando al fo-
+	 rmato PEP-8.
+	+Refactorizacion de 8 lineas en Wconio.py.
+	-Se elimina el directorio DIR en el testeo del modulo en
+	 libpath.py.
+	+Se agrega la funcion de cargar estructura en packageTester,
+	 esta funcion realiza un tree en /structure/ y almacena los
+	 achivos en una lista con el fin de comparar luego con regex.
+	+Se agregan las funciones getters y setters en packageTester.
+	+Se agregan funciones isFolder, isZip y validate en package-
+	 tester, las cuales estan destinadas a manejar archivos en el
+	 filesistem del sistema operativo huesped. Ambas usan exten-
+	 sivamente la libreria OS.
+
+[0.0.7]
+	+Se agrega __autor__ a todos los modulos de la aplicacion.
+	+Se corrige la identacion en utils.py.
+	-Se renombra la clase packageTester a Package.
+	+Se corrigen errores en la inspeccion de archivos en Package,
+	 agregando nuevas funcionalidades en el walk interno.
+	+Se corrigen las funciones isZip y isFolder.
+	+Refactorizacion de la funcion validate, la cual se renombro
+	 a validateStructure.
+	+Se agrega un test al modulo package.py.
+
+[0.0.8]
+	+Se agrega la funcionalidad de descompresion RAR en los sis-
+	 temas operativos de Windows y OS-X. Para ello se incluyo la
+	 libreria de dominio publico rarfile.
+	 https://pypi.python.org/pypi/rarfile/
+	+Se agregan los modulos rarfile.py, dumprar.py al paquete /bin.
+	+Se modifica el modulo utisl.py, corrigiendo errores en la
+	 funcion isFolder.
+	
+[0.0.9]	
+	+Se da soporte a WINDOWS.
+	+Se agrega la carpeta __MACOSX/ a los elemntos ignorados a la
+	 hora de hacer walk por el directorio de archivos.
+	+Refactorizacion completa de la funcion getStructure de
+	 Package.
+	+Correccion de errores en general en el modulo Package.
+	+Se agrega la funcion isRar al modulo Package.
+	+Se agregan test relacionados al manejo de archivos .rar.
+
+[0.1.0]
+	+Refactorizacion de todos los archivos de configuraciones. Se
+	 eliminan espacios en muerto, se cambian los comentarios en
+	 cada uno de ellos.
+	+Se agrega la importacion de configuraciones en el __init__
+	 del paquete bin.
+	+Se agrega el modulo accents.py el cual maneja los acentos en
+	 la aplicacion (ES), posee funciones las cuales desactivan los
+	 mismos en un sistema operativo huesped que maneje Windows.
+	+Reparacion de la importacion de modulos en browser.py.
+	+Se corrigen errores en la importacion de configuraciones.
+	+Refactorizacion del archivo dumprar.py.
+	+Se agregan entradas de acentos en errors.py
+	+Refactorizacion del modulo hashdir.py.
+	+Refactorizacion de la libreria langeditor.
+	+Refactorizacion de la libreria mechanize.
+	+Se repara la importacion de modulos en package.py.
+	+Se corrigen errores en las funciones de identificacion de pa-
+	 quetes .zip y .rar en Package.
+	+Refactorizacion de los __init__.py en /plugins y /resources.
+
+[0.1.1]
+	+Modificacion del modulo configLoader, se repara un error a la
+	 hora de cargar configuraciones booleanas, acentando tantos
+	 los valores, 1, TRUE y true como validas (mismo caso para el
+	 false).
+	+Refactorizacion de la libreria langeditor.
+	+Refactorizacion del modulo mechanize.
+	+Se especifican los elementos importados en el modulo package.
+	+Se eliminan printigs en el codigo de package.
+	-Se eliminan algunos test en package.
+	+Refactorizacion menor de utils.py
+
+[0.1.2]
+	+Se elimina la restriccion del *.exe en el .gitignore.
+	+Se corrige el __init__.py de /bin.
+	+Se agregan nuevos directorios a binpath.py.
+	+Se agrega una nueva libreria: easyprocess, asociada a la des
+	 compresion de archivos .rar en linux.
+	+Se agregan nuevas entradas de error asociadas a la tarea de
+	 descompresion de archivos, busqueda de archivos, y manejo
+	 de archivos en general.
+	+Se corrige el archivo langs.py, solucionado error al importar
+	 las configuraciones especificas de los idiomas.
+	+Refactorizacion del modulo mechanize-
+	+Se agrega una nueva libreria: pyunpack. Asociada a la desco-
+	 mpresion de archivos.
+	+Refactorizacion del modulo rarfile.py a su version 2.8.
+	+Se agrega el binario unrar.exe para el manejo de archivos .rar
+	 desde windows sin necesidad de archivos ni software externo.
+	 Obtenido desde un dominio publico.
+	+Se corrigen errores en espaciados invalidos en los archivos de
+	 configuracion folder.ini y packages.ini.
+	+Se agrega el directorio _test/ dentro de /data destinado al
+	 testeo de los archivos.
+	+Se agregan multiples carpetas, archivos dummy y archivos .zip
+	 y .rar a _test/.
+	+Nuevo modulo: filemanager.py. El cual esta encargado de admi-
+	 nistrar archivos, permite obtener ordenes jerarquicos, descom
+	 prime .zip y .rar, elimina archivos compresos y comprueba
+	 el tipo de cada archivo.
+	>El modulo se basa en una pequeña state-machine. Posee multi-
+	 ples configuraciones para activar o desactivar comportamientos
+	 a la hora de comprimir, analizar, escanear o eliminar archivos.
+	>Se movio la funcion _inspectFiles de packages a filemanager. La
+	 cual fue refactorizada para eliminar multiples errores a la hora
+	 de hacer walk por los distintos directorios.
+	>Contiene ademas las funciones auxiliares de isZip y isRar,
+	 originales del modulo package.
+	+Se agregan mutiples test a filemanager.
+	-Se eliminan las funciones asociadas al manejo de paquetes
+	 comprimidos en package.py.
+	-Se elimian varios test invalidos en package.py
+
+[0.1.3]
+	+Se agregan archivos dummy .gitkeep en varios directorios vacios
+	 por defecto con el fin de no ser eliminados por git.
+	+Se configura el .gitignore para admitir este tipo de archivos.
+	+Se modifica el nombre de la carpeta de tests, de _test/ a .test/
+	 con el fin de permanecer ocultas en sistemas operativos con
+	 arquitectura POSIX.
+	+Se corrigen los __init__.py respectivos para hacer valida la mo-
+	 dificacion de los direcotiors.
+	+Refactorizacion menor de package.py y plugins.py.
+
+[0.1.4]
+	+Refactorizacion del modulo VerticalScrolledFrame.py.
+	+Refactorizacion menor del modulo binpath.py.
+	+Refactorizacion menor del modulo browser.py.
+	+Refactorizacion menor del modulo configLoader.py.
+	+Refactorizacion del modulo dumprar.py.
+	+Se agregan errores asociados al filemanager en errors.py.
+	+Refactorizacion menor del modulo hashdir.py.
+	+Refactorizacion menor del modulo langs.py.
+	+Se agrega la funcion appendListToList a utils.py, la cual perm-
+	 mite clonar los contenidos de una lista a otra, similar a un
+	 merge.
+	+Se agregan tests asociados al regex en utils.py.
+	+Refactorizacion menor de __init__.py en config/.
+	+Se agrega el archivo .gitkeep a los archivos a ser ignorados
+	 por el filemanager en folder.ini.
+	+Se agrega una carpeta de tests privados .test_private/ la cual
+	 contendra test que solo pueden ser vistos y manipulados solo por
+	 la computadora local. Esto implica que los tests privados no
+	 seran subidos a la plataforma de github por contener nombres,
+	 datos sensibles, etc.
+	+Se eliminan multiples constantes en filemanager.py dado que
+	 no son usadas.
+	+Se añade la funcionalidad de un working directory al filemana-
+	 ger. El working directory es el directorio en el cual el file-
+	 manager trabajara y analizará contenidos. Se agregan funciones
+	 setters y getters.
+	+Se corrige un error grave el cual los archivos de la carpeta
+	 origen que no eran subcarpetas no eran agregadas a la lista de
+	 archivos.
+	+Se agrega la funcion de tree para el filemanager.
+	+Se agregan tests al filemanager asociados al cambio del work-
+	 ing directory.
+	+Refactorizacion menor del modulo libpath.py.
+	+El modulo package se cambia de nombre a packages.py.
+
+[0.1.5]
+	-Se eliminan los test unitarios de cada uno de los modulos del
+	 programa (aquellos que residian en las sentencias __name__ ==
+	 "__main__"). Concretamente se eliminan los test de:
+	 >bin/
+	 	__init__.py
+		binpath.py
+	 	configLoader.py
+	 	dumprar.py
+		errors.py
+		langs.py
+		utils.py
+	>data/
+		__init__.py
+	>lib/
+		filemanager.py
+		libpath.py
+		packages.py
+	>plugins/
+		__init__.py
+	+Se corrigen errores asociados al manejo de acentos dentro de 
+	 la aplicacion. Concretamente se reparan errores asociados a la
+	 configuracion UTF-8 de bin/accents.py.
+	+Se agrega el caracter / a la lista de elementos validos en el
+	 regexCompare.
+	+Se corrigen errores a la hora de descomprimir archivos .rar en
+	 Windows o Linux. Para ello se importan distintas librerias en 
+	 cada uno de los sistemas operativos huespedes.
+	+Se cambia el nombre de algunas variables en el filemanager.
+	+Correccion de errores en la importacion de modulos en el file-
+	 manager.py.
+	+Se corrigen errores a la hora de extraer los archivos .rar y
+	 .zip. Ademas se agrega una lista de carpetas extraidas con el
+	 fin de poder eliminarlas tras analizar los archivos que conti-
+	 ene un determinado paquete.
+	
+[0.1.6]
+	+Se agregan archivos de test para cada uno de los modulos,
+	 estos test corresponden tanto a los test borrados anteriormente
+	 como a nuevos test con el fin de poder probar el funcionamiento
+	 adecuado de cada uno de los modulos utilizados en el programa y
+	 sus correspondientes librerias. Los modulos se crearon en un
+	 nuevo directorio tests/ el cual contiene un __init__.py que
+	 almacena la direccion de los directorios de la misma.
+	+Se crean los siguientes archivos de test:
+	>bin/
+		accentsTest.py
+		binpathTest.py
+		browserTest.py
+		colorsTest.py
+		configLoaderTest.py
+		dumprarTest.py
+		errorsTest.py
+		hashdir.py
+		langsTest.py
+		noStdOutTest.py
+		rarfileTest.py
+		utilsTest.py
+		verticalScrolledFrameTest.py
+	>lib/
+		filemanagerTest.py
+		libpathTest.py
+	>tests/
+		testpath.py
+		packagesTest.py
+	-Se elimina la carpeta data/.tests
+	+Se crea una carpeta .data_tests dentro de /tests con el fin
+	 de almacenar tests publicos.
+	+Se crean varios archivos de testeo publico el cual contienen
+	 combinaciones de archivos rar, zip, subcarpetas y archivos.
+	+Se modifica el archivo .gitignore para evitar subir contenido
+	 que se almacene dentro de .data_tests_private/.
+	
+[0.1.7]
+	+Se renombra el archivo VerticalScrolledFrame.py a verticalSc-
+	 crolledFrame.py
+	+Se modifican los archivos de configuracion para ser validos
+	 con el salto de linea de Windows.
+	+Se reemplaza el modulo de packages.py por packageValidator.py
+	 el cual tiene por objetivo testear que los paquetes entregados
+	 por los alumnos cumplan con una estrucctura determinada por
+	 los archivos en /structure. El nuevo modulo hace uso de anti-
+	 guas funciones de package.py, con la diferencia que instancia
+	 un filemanager con diversas propiedades para escanear la es-
+	 tructura pedida y validar la estructura de cada uno de los
+	 paquetes.
+	+Se agrega una funcion generadora de jerarquia para el package-
+	 Validator.py, esta toma la lista de archivos provenientes del
+	 analisis de archivos del filemanager y crea una lista de arc-
+	 hivos y carpetas en modo logico.
+	+Se agrega una funcion para imprimir trees en utils.py
+	+Se agregan entradas de errores de paquetes en errors.py.
+	+Se refactoriza el archivo de las configuraciones del sistema
+	 de idiomas.
+	+Se arreglan comentarios en los archivos de configuraciones
+	 core.ini y folder.ini.
+	+Refactorizacion menor en lib/__init__.py.
+	+El modulo filemanager.py se renombra a fileManager.py.
+	+Se crean los modulos de testeo fileManagerTest.py y paclage-
+	 ValidatorTest.py.
+
+[0.1.8]
+	+Se modifica el archivo .gitignore agregando una restriccion a
+	 los archivos de test privados (aquellos que prueban modulos
+	 que hagan mencion a nombres privados, etc). Y se agrego
+	 ademas una entrada para evitar los archivos residuales de VIM.
+	+Se agregan entradas de errores en el archivo errors.py debido
+	 a la extension del modulo packages.
+	+Se agregan acentos a los caracteres restringidos en el archivo
+	 de configuraciones packages.ini.
+	+Se agregan las opciones de no necesitar un punto en el archivo
+	 para ser validado (NEED_DOT_ON_FILE) y evitar archivos que no
+	 cumplan con un determinado set de caracteres (CHARACTERS_DO-
+	 RESTRICT) en el fileManager.
+	+Se agrega la opcion de codificacion UTF-8 en la descompresion
+	 de archivos rar.
+	+Correccion de error al detectar archivos .zip o .rar por su
+	 extension.
+	+Se agrega la opcion de lanzar errores como string en Package.
+	+Nuevas funciones para consultar si un nombre es un archivo o
+	 una carpeta en Package.
+	+Se agregan nuevas comprobaciones de errores en Package.
+	+Se agregan funciones para contar archivos y numero de carpetas
+	 que contiene un paquete (package.py)
+	+Se modifican los test publicos para agregar mas variedad en
+	 el analisis.
+	+Refactorizacion menor de accentsTest.py, binpathTest.py, bro-
+	 wserTest.py, colorsTest.py, configLoaderTest.py, dumprarTes-
+	 t.py, errorsTest.py, filemanagerTest.py, hashdirTest.py, la-
+	 ngsTest.py, libpathTest.py, noStdOutTest.py, packageTest.py,
+	 packageValidationTest.py, rarfileTest.py y verticalScrolled-
+	 FramTest.py.
+	+Se agregan nuevos test para packageTest.
+	-Se eliminan entradas a archivos de tests privados en package-
+	 ValidationTest.py y fileManagerTest.py.
+	+Correccion de errores menores en general.
+
+[0.1.9]
+	+Se crea un control de versiones (CHANGELOG).
+	+Se agrega comprobacion de tipo de variable en Package.
+	+Se agregan constantes de tipo de variable en utils.py.
+	+Se agrega funcion para comprobar si es que un archivo existe
+	 en un paquete (package.py).
+	+Se modifica direccion de actualizacion.
+	+Se agrega modulo para manejar control de versiones.
+	+Se crea el test updateTest.py para testear la actualizacion.
+	+Refactorizacion de la importacion de modulos para el lang-
+	 editor.
+	+Se agrega una carpeta de testeo con sucesivas carpetas den-
+	 tro de otras (Folder 6).
+	+Se modifica la direccion del autor en cada uno de los modu-
+	 los del programa.
+	+Se renombra el archivo filemanagerTest.py a fileManagerTe-
+	 st.py.
+	+Se agrega un directorio de iconos en resources/
+	+Se refactorizan algunos modulos.
+	+Se cambia el header al archivo verticalScrolledFrame.py.
+	+Se incluye autor en archivos externos.

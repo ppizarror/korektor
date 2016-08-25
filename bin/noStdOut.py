@@ -6,7 +6,7 @@ __autor__ = 'ppizarror'
 # NOSTDOUT
 # Desactiva el standard output de python
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
+# Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: OCTUBRE 2015
 # Licencia: GPLv2
 

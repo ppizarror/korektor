@@ -5,8 +5,8 @@ __autor__ = 'ppizarror'
 # BIN
 # Posee módulos utilitarios y programas externos
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
-# Fecha: OCTUBRE 2015
+# Autor: PABLO PIZARRO @ pgithub.com/ppizarror
+# Fecha: OCTUBRE 2015 - 2016
 # Licencia: GPLv2
 
 # Importación de librerías iniciales

@@ -4,7 +4,7 @@ __autor__ = "ppizarror"
 
 # bin/errors TEST
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
+# Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: AGOSTO 2016
 # Licencia: GPLv2
 

@@ -4,7 +4,7 @@
 # EDITOR
 # Editor de idiomas
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
+# Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: 2013-2015
 # Licencia: GPLv2
 
@@ -12,22 +12,18 @@
 from Tkinter import *  # @UnusedWildImport
 import os
 import sys  # @UnusedImport @Reimport
+# Configuración de librerías
+reload(sys)
+# noinspection PyUnresolvedReferences
+sys.setdefaultencoding('UTF8')  # @UndefinedVariable
 from tkFileDialog import *  # @UnusedWildImport
 import tkFont
 import ttk
-
-
 try:
     # noinspection PyUnresolvedReferences
     import winsound
 except:
     pass
-
-
-# Configuración de librerías
-reload(sys)
-# noinspection PyUnresolvedReferences
-sys.setdefaultencoding('UTF8')
 
 # Constantes del programa
 AUTOR = "Pablo Pizarro"

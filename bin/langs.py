@@ -4,7 +4,7 @@
 # LANGS
 # Maneja los idiomas
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
+# Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: ABRIL 2015
 # Licencia: GPLv2
 __autor__ = 'ppizarror'

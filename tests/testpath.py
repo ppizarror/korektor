@@ -5,7 +5,7 @@ __autor__ = "ppizarror"
 # Adminsitra la direccion de directorios de la aplicación
 # Se pueden incluir todos los directorios salvo bin/
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
+# Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: AGOSTO 2016
 # Licencia: GPLv2
 

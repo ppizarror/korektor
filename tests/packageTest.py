@@ -4,7 +4,7 @@ __autor__ = "ppizarror"
 
 # lib/package TEST
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
+# Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: AGOSTO 2016
 # Licencia: GPLv2
 
@@ -78,3 +78,9 @@ if __name__ == '__main__':
     # Testeo de error en String
     p = Package([], False, True)
     print "Codigo del error:", p.printHierachy()
+
+    # Testeo de muchas carpetas seguidas
+    printBarsConsole("Testeo folder 6 - Carpetas seguidas")
+    p = Package(f.inspectSingleFile("Folder 6"), True)
+    p.printHierachy()
+    print "Chequeo de existencia de Hello world:", p.checkIfFileExist("Hello world.txt")

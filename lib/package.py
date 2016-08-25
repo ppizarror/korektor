@@ -6,7 +6,7 @@ __autor__ = 'ppizarror'
 # Los paquetes corresponden a elementos lógicos que manejan los archivos que entregan los alumnos
 # Contienen direcciones físicas en memoria, Archivos y Jerarquía
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
+# Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: AGOSTO 2016
 # Licencia: GPLv2
 
@@ -17,6 +17,7 @@ from bin.errors import *  # @UnusedWildImport
 from bin.utils import printHierachyList
 
 # Constantes del módulo
+PACKAGE_FILE_NOT_FOUND = "PACKAGE_FILE_NOT_FOUND"
 PACKAGE_NO_NAME = "PACKAGE_EMPTY"
 
 
@@ -47,6 +48,23 @@ class Package:
         self._generatePackageFiles(files)
         if generateHierachy:
             self.generateHierachy()
+
+    def checkIfFileExist(self, f):
+        """
+        Comprueba si un archivo existe en el paquete
+        :param f: Nombre del archivo
+        :return: Boolean
+        """
+        return self._isFile(f)[0] or self._isFolder(f)[0]
+
+    def _checkVariableType(self, var, clss):
+        """
+        Chequea si una variable es de una determinada clase o no
+        :param var: Variable a revisar
+        :param clss: Clase a comprobar, String
+        :return: void
+        """
+        pass
 
     def disable_exceptionAsString(self):
         """
@@ -86,7 +104,7 @@ class Package:
                 else:
                     if str(i) == f:  # Comprobación final
                         return [True, s + "/" + i, d]
-            return [False, "", 0]
+            return [False, PACKAGE_FILE_NOT_FOUND, 0]
 
         if self._isgeneratedHierachyFiles:
             return _recursiveSearchFile(self._hierachyFiles, f, 0, "")
@@ -134,7 +152,7 @@ class Package:
                         return [True, s + "/" + i + "/", d]
                 j += 1
             if d == 0:
-                return [False, "", 0]
+                return [False, PACKAGE_FILE_NOT_FOUND, 0]
 
         if self._isgeneratedHierachyFiles:
             return _recursiveSearchFolder(self._hierachyFiles, f, 0, "")

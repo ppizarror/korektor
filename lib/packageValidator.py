@@ -6,8 +6,8 @@ __autor__ = 'ppizarror'
 # Testea que los paquetes entregados por los alumnos tengan una estructura correcta
 # Además testea de que las estructuras de archivos tengan también una estructura correcta
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
-# Fecha: OCTUBRE 2015
+# Autor: PABLO PIZARRO @ github.com/ppizarror
+# Fecha: OCTUBRE 2015 - 2016
 # Licencia: GPLv2
 
 # Importación de librerías

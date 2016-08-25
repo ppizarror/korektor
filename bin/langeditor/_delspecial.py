@@ -1,7 +1,15 @@
-# importacion de librerias
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# DELSPECIAL
+# Elimina carácteres especiales
+#
+# Autor: PABLO PIZARRO @ github.com/ppizarror
+# Fecha: 2014-2015
+# Licencia: GPLv2
+
+# importación de librerias
 import sys
-
-
 reload(sys)
 sys.setdefaultencoding('UTF8')  # @UndefinedVariable
 

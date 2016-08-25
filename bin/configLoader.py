@@ -10,8 +10,8 @@ __autor__ = 'ppizarror'
 #    CONFIG_1 = VALUE
 #    CONFIG_2 = VALUE2
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
-# Fecha: ABRIL 2015
+# Autor: PABLO PIZARRO @ github.com/ppizarror
+# Fecha: ABRIL 2015 - 2016
 # Licencia: GPLv2
 
 # Importación de librerías

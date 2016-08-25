@@ -5,7 +5,7 @@ __autor__ = 'ppizarror'
 # ACCENTS
 # Este archivo provee de funciones básicas para el tratamiento de acentos [ES-LANG]
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
+# Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: AGOSTO 2016
 # Licencia: GPLv2
 

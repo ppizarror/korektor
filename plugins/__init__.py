@@ -4,8 +4,8 @@
 # PLUGINS
 # Directorio de plugins
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
-# Fecha: OCTUBRE 2015
+# Autor: PABLO PIZARRO @ github.com/ppizarror
+# Fecha: OCTUBRE 2015 - 2016
 # Licencia: GPLv2
 
 # Importación de librerías

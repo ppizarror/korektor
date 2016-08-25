@@ -5,8 +5,8 @@ __autor__ = 'ppizarror'
 # BINPATH
 # Adminsitra el path de /bin
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
-# Fecha: OCTUBRE 2015
+# Autor: PABLO PIZARRO @ github.com/ppizarror
+# Fecha: OCTUBRE 2015 - 2016
 # Licencia: GPLv2
 
 # Importación de librerías

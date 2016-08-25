@@ -5,7 +5,7 @@ __autor__ = 'ppizarror'
 # FILE MANAGER
 # Administra archivos, permite obtener orden jerárquico, descomprime zip y rar, elimina archivos, etc.
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
+# Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: AGOSTO 2016
 # Licencia: GPLv2
 

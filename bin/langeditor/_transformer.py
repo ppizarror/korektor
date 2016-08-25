@@ -4,14 +4,13 @@
 # TRANSFORMER
 # Permite adaptar los archivos traducidos desde google a archivos válidos para hoa
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
+# Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: 2014-2015
 # Licencia: GPLv2
 
+# Importación de librerías
 import os
 import sys
-
-
 reload(sys)
 sys.setdefaultencoding('UTF8')  # @UndefinedVariable
 

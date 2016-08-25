@@ -5,8 +5,8 @@ __autor__ = 'ppizarror'
 # BROWSER
 # Sencillo navegador web
 #
-# Autor: PABLO PIZARRO @ ppizarro.com
-# Fecha: ABRIL-OCTUBRE 2015
+# Autor: PABLO PIZARRO @ github.com/ppizarror
+# Fecha: ABRIL-OCTUBRE 2015 - 2016
 # Licencia: GPLv2
 
 # Importación de librerías

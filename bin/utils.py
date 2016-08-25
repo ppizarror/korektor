@@ -5,8 +5,8 @@ __autor__ = 'ppizarror'
 # UTILS
 # Este archivo provee de funciones básicas que son globalmente usadas
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
-# Fecha: SEPTIEMBRE-OCTUBRE 2015
+# Autor: PABLO PIZARRO @ github.com/ppizarror
+# Fecha: SEPTIEMBRE-OCTUBRE 2015 - 2016
 # Licencia: GPLv2
 
 # Importación de librerías de entorno
@@ -14,6 +14,7 @@ __autor__ = 'ppizarror'
 from accents import delAccent, delAccentByOS  # @UnusedImport
 from binpath import *  # @UnusedWildImport
 import errors
+from browser import Browser
 
 # Importación de librerías de sistema
 _IMPORTED = [1, 1]
@@ -61,7 +62,10 @@ _CONSOLE_WRAP = -25
 _MSG_LOADINGFILE = "Cargando archivo '{0}' ..."
 _MSG_OK = "[OK]"
 LINK_PROJECT = "https://github.com/ppizarror/korektor/"
-LINK_UPDATES = "http://projects.ppizarror.com/version?product=KR"
+VARIABLE_INT = "INT"
+VARIABLE_LIST = "LST"
+VARIABLE_OTHER = "OTHR"
+VARIABLE_STR = "STR"
 
 
 def appendListToList(origin, l):
@@ -246,7 +250,7 @@ def getTerminalSize():
 
 
 # noinspection PyUnresolvedReferences
-def getVersion(label, headers):
+def getVersion(label, headers, linkUpdates):
     """
     Obtener la versión del programa de forma local
     :param label: Label del programa
@@ -256,11 +260,11 @@ def getVersion(label, headers):
     if _IMPORTED[1]:
         browser = Browser()  # @UndefinedVariable
         browser.addHeaders(headers)
-        browser.abrirLink(LINK_UPDATES)
+        browser.abrirLink(linkUpdates)
         html = browser.getHtml()
     else:
         http_headers = {"User-Agent": headers}
-        request_object = Request(LINK_UPDATES, None, http_headers)
+        request_object = Request(linkUpdates, None, http_headers)
         response = urllib2.urlopen(request_object)  # @UndefinedVariable
         html = response.read()
     html = getBetweenTags(getBetweenTags(

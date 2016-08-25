@@ -4,14 +4,13 @@
 # EXPORT
 # Permite adaptar un archivo a un texto normal para ser traducido correctamente en google
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
+# Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: 2014-2015
 # Licencia: GPLv2
 
+# Importación de librerías
 import os
 import sys
-
-
 reload(sys)
 sys.setdefaultencoding('UTF8')  # @UndefinedVariable
 

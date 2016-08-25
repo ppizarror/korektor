@@ -5,7 +5,7 @@
 # Traduce gracias a google traductor los idiomas de Hero of Antair
 # Método lento pero automático
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
+# Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: 2014-2015
 # Licencia: GPLv2
 
@@ -17,7 +17,6 @@ import sys
 import time
 from urllib import urlencode
 from urllib2 import urlopen, Request
-
 
 # Elimino el archivo pyc generado
 try:
@@ -46,7 +45,6 @@ except:  # Error al cargar
     print "Error :: No se pueden cargar los idiomas disponibles"
     exit()
 
-
 # Función adquirida desde
 # http://www.3engine.net/wp/2013/12/python-como-traducir-textos-usando-google-translate/
 def get_google_translate(text, translate_lang, source_lang=None):  # Traduce una linea
@@ -63,7 +61,6 @@ def get_google_translate(text, translate_lang, source_lang=None):  # Traduce una
         return translate_text
     except Exception, e:
         print e
-
 
 try:  # Comienza la ejecución
     # Obtengo el nombre del archivo a traducir

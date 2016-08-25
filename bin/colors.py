@@ -5,8 +5,8 @@ __autor__ = 'ppizarror'
 # COLORS
 # Maneja los colores en la consola
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
-# Fecha: AGOSTO 2015
+# Autor: PABLO PIZARRO @ github.com/ppizarror
+# Fecha: AGOSTO 2015 - 2016
 # Licencia: GPLv2
 
 # Importación de librerías

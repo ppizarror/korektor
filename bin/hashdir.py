@@ -5,7 +5,7 @@ __autor__ = 'ppizarror'
 # HASHDIR
 # Maneja el checksum de los archivos
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
+# Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: ABRIL 2015
 # Licencia: GPLv2
 

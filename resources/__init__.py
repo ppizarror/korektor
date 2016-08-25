@@ -5,7 +5,7 @@
 # Posee todos los recursos binarios utilizados por la aplicación, como imágenes, iconos
 # etc.
 #
-# Autor: PABLO PIZARRO @ ppizarror.com
+# Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: OCTUBRE 2015
 # Licencia: GPLv2
 
