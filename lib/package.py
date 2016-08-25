@@ -22,9 +22,11 @@ PACKAGE_NO_NAME = "PACKAGE_EMPTY"
 
 class Package:
 
-    def __init__(self, files=[]):
+    def __init__(self, files=[], generateHierachy=False, exceptionAsString=False):
         """
         Constructor
+        :param generateHierachy: Generar Jerarquía automáticamente
+        :param exceptionAsString: Retorna las excepciones como un String
         :return: void
         """
 
@@ -35,15 +37,122 @@ class Package:
         self._rawfiles = files
 
         # Variables de estado
+        self._exceptionStrBehaviour = exceptionAsString
         self._isGeneratedName = False
+        self._isgeneratedHierachyFiles = False
         self._isGeneratedPackageFiles = False
 
         # Se crea el paquete
         self._generatePackageName(files)
         self._generatePackageFiles(files)
-        self._generateHierachy()
+        if generateHierachy:
+            self.generateHierachy()
 
-    def _generateHierachy(self):
+    def disable_exceptionAsString(self):
+        """
+        Desactiva el retornar los errores como String
+        :return: void
+        """
+        self._exceptionStrBehaviour = True
+
+    def enable_exceptionAsString(self):
+        """
+        Activa el retornar los errores como String
+        :return: void
+        """
+        self._exceptionStrBehaviour = False
+
+    def _isFile(self, f):
+        """
+        Retorna un vector de valores indicando si el nombre mencionado corresponde o no a un archivo
+        :param f: String
+        :return: List
+        """
+
+        def _recursiveSearchFile(l, f, d, s):
+            """
+            Función auxiliar que busca un fichero f en una lista cualquiera l de forma recursiva
+            :param l: Lista
+            :param f: Archivo
+            :return: Boolean
+            """
+            for i in l:
+                if isinstance(i, list):
+                    r = len(i)
+                    if r > 1:
+                        k = _recursiveSearchFile(i, f, d + 1, s + "/" + i[0])
+                        if k is not None and k[0]:
+                            return k
+                else:
+                    if str(i) == f:  # Comprobación final
+                        return [True, s + "/" + i, d]
+            return [False, "", 0]
+
+        if self._isgeneratedHierachyFiles:
+            return _recursiveSearchFile(self._hierachyFiles, f, 0, "")
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+
+    def isFile(self, f):
+        """
+        Retorna un booleano indicando si el nombre mencionado corresponde o no a un archivo
+        :param f: String
+        :return: Boolean
+        """
+        if self._isgeneratedHierachyFiles:
+            return self._isFile(f)[0]
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+
+    def _isFolder(self, f):
+        """
+        Retorna un vector de valores indicando si el nombre mencionado corresponde o no a una carpeta
+        :param f: String
+        :return: List
+        """
+
+        def _recursiveSearchFolder(l, f, d, s):
+            """
+            Función auxiliar que busca una carpeta f en una lista cualquiera l de forma recursiva
+            :param l: Lista
+            :param f: Nombre de la carpeta
+            :return: Boolean
+            """
+            j = 0
+            for i in l:
+                if isinstance(i, list):
+                    r = len(i)
+                    if r >= 1:
+                        if i[0] == f:  # Comprobación final
+                            return [True, s + "/" + i[0] + "/", d]
+                        else:
+                            k = _recursiveSearchFolder(i, f, d + 1, s + "/" + i[0])
+                            if k is not None and k[0]:
+                                return k
+                else:
+                    if i == f and j == 0:  # Comprobación final
+                        return [True, s + "/" + i + "/", d]
+                j += 1
+            if d == 0:
+                return [False, "", 0]
+
+        if self._isgeneratedHierachyFiles:
+            return _recursiveSearchFolder(self._hierachyFiles, f, 0, "")
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+
+    def isFolder(self, f):
+        """
+        Retorna un booleano indicando si el nombre mencionado corresponde o no a una carpeta
+        :param f: String
+        :return: Boolean
+        """
+        if self._isgeneratedHierachyFiles:
+            return self._isFolder(f)[0]
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+
+    def generateHierachy(self):
         """
         Crea una lista de jerarquía de archivos
         :return: void
@@ -76,8 +185,9 @@ class Package:
                             sublvl = sublvl[len(sublvl) - 1]
                     # Se añade el archivo
                     sublvl.append(j[len(j) - 1])
+            self._isgeneratedHierachyFiles = True
         else:
-            throw(PACKAGE_ERROR_NOT_INDEXED_FILES_YET)
+            return self._throwException("PACKAGE_ERROR_NOT_INDEXED_FILES_YET")
 
     def _generatePackageFiles(self, filelist):
         """
@@ -96,7 +206,7 @@ class Package:
                 self._packageFiles.append(b)
             self._isGeneratedPackageFiles = True
         else:
-            throw(PACKAGE_ERROR_NO_NAME)
+            return self._throwException("PACKAGE_ERROR_NO_NAME")
 
     def _generatePackageName(self, filelist):
         """
@@ -118,7 +228,40 @@ class Package:
         if self._isGeneratedPackageFiles:
             return self._packageFiles
         else:
-            throw(PACKAGE_ERROR_NOT_INDEXED_FILES_YET)
+            return self._throwException("PACKAGE_ERROR_NOT_INDEXED_FILES_YET")
+
+    def getNumberOfElements(self):
+        """
+        Retorna el número de archivos que contiene el paquete
+        :return: int
+        """
+        if self._isGeneratedPackageFiles:
+            return len(self._rawfiles)
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_INDEXED_FILES_YET")
+
+    def getNumberOfSubfolders(self):
+        """
+        Retorna el número sub-carpetas que tiene un paquete
+        :return: int
+        """
+
+        def _numberLists(l):
+            """
+            Retorna el numero de sublistas que contiene una lista
+            :param list: Lista a calcular
+            :return: int
+            """
+            count = 0
+            for i in l:
+                if isinstance(i, list):
+                    count = count + 1 + _numberLists(i)
+            return count
+
+        if self._isgeneratedHierachyFiles:
+            return _numberLists(self._hierachyFiles)
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
 
     def getPackageName(self):
         """
@@ -128,7 +271,7 @@ class Package:
         if self._isGeneratedName:
             return self._packageName
         else:
-            throw(PACKAGE_ERROR_NO_NAME)
+            return self._throwException("PACKAGE_ERROR_NO_NAME")
 
     def printFiles(self):
         """
@@ -138,17 +281,17 @@ class Package:
         if self._isGeneratedPackageFiles:
             print self._packageFiles
         else:
-            throw(PACKAGE_ERROR_NOT_INDEXED_FILES_YET)
+            return self._throwException("PACKAGE_ERROR_NOT_INDEXED_FILES_YET")
 
     def printHierachy(self):
         """
         Imprime la lista de archivos en forma de jerarquía
         :return: void
         """
-        if self._isGeneratedPackageFiles:
+        if self._isgeneratedHierachyFiles:
             printHierachyList(self._hierachyFiles)
         else:
-            throw(PACKAGE_ERROR_NOT_INDEXED_FILES_YET)
+            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
 
     def printRawFiles(self):
         """
@@ -156,3 +299,18 @@ class Package:
         :return: void
         """
         print self._rawfiles
+
+    def _throwException(self, e):
+        """
+        Función que lanza una excepción según comportamiento
+        :param e: Error string
+        :return: String o void
+        """
+        if self._exceptionStrBehaviour:
+            return e
+        else:
+            try:
+                err = eval(e)
+            except:
+                err = PACKAGE_ERROR_NAME_NOT_FOUND
+            throw(err)

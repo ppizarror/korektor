@@ -13,5 +13,6 @@ if __name__ == '__main__':
     from testpath import *  # @UnusedWildImport
 from lib.libpath import *  # @UnusedWildImport
 
+# Test
 if __name__ == '__main__':
     print DIR_LIB

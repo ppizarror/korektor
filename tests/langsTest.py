@@ -14,6 +14,7 @@ if __name__ == '__main__':
 from bin.langs import *  # @UnusedWildImport
 from bin.langs import _LANG_DIRCONFIG, _LANG_DIRLANGS
 
+# Test
 if __name__ == '__main__':
     print _LANG_DIRCONFIG
     print _LANG_DIRLANGS

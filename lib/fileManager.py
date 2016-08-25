@@ -50,6 +50,7 @@ class FileManager:
         :param wd: Working directory
         :return: void
         """
+
         # Carga de configuraciones
         config = configLoader(DIR_CONFIG, "filemanager.ini")
         coreConfig = configLoader(DIR_CONFIG, "core.ini")
@@ -57,8 +58,10 @@ class FileManager:
         packageConfig = configLoader(DIR_CONFIG, "packages.ini")
         self._autoExtract = config.isTrue("AUTOEXTRACT")  # Auto extraer un archivo comprimido
         # Eliminar carpetas extraidas tras el análisis
+        self._doCharactersRestricted = packageConfig.isTrue("CHARACTERS_DO_RESTRICT")
         self._doRemoveExtractedFolders = config.isTrue("DO_REMOVE_EXTRACTED_FOLDERS")
         self._ignoredFiles = folderConfig.getValueListed("IGNORE")
+        self._needDotOnFile = packageConfig.isTrue("NEED_DOT_ON_FILE")
         self._removeOnExtract = config.isTrue("REMOVE_ON_EXTRACT")
         # Eliminar un archivo comprimido tras extraerlo
         self._validChars = packageConfig.getValue("VALID_CHARACTERS")
@@ -158,10 +161,15 @@ class FileManager:
                 return not isHiddenFile(str(filename))
 
             def _isValidFileName(filename):
-                for c in filename:
-                    if c not in self._validChars:
-                        return False
-                return "." in filename
+                # Si los carácteres son restrictivos
+                if self._doCharactersRestricted:
+                    for c in filename:
+                        if c not in self._validChars:
+                            return False
+                # Si requiere . en un archivo
+                if self._needDotOnFile:
+                    return "." in filename
+                return True
 
             if not _isValidFile(filename):  # Si el archivo no es válido
                 return
@@ -182,7 +190,7 @@ class FileManager:
                 newfilename = filename.replace(".rar", "").replace(".RAR", "")
                 if isWindows():
                     try:
-                        rarfile.RarFile(rootpath + filename).extractall(rootpath + newfilename + "/")
+                        rarfile.RarFile(rootpath + filename, "r", 'utf8').extractall(rootpath + newfilename + "/")
                     except Exception, e:
                         print ""
                         err.st_error(err.ERROR_RARUNCOMPRESS, True, "rarfile", e)
@@ -251,10 +259,10 @@ class FileManager:
         :param filename: Archivo a analizar
         :return:
         """
-        if ".rar" in filename:
+        if ".rar" in filename.lower():
             if isWindows():
                 try:
-                    rarfile.RarFile(rootpath + filename)
+                    rarfile.RarFile(rootpath + filename, "r", "utf8")
                     return True
                 except:
                     return False
@@ -273,7 +281,7 @@ class FileManager:
         :param rootpath: Ubicación del archivo
         :return:
         """
-        if ".zip" in filename:
+        if ".zip" in filename.lower():
             try:
                 zipfile.ZipFile(rootpath + filename)
                 return True

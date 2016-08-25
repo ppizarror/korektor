@@ -27,3 +27,9 @@ data/uploads/
 
 # Archivos de tests
 tests/.data_tests_private/
+
+# Archivos de tests privados
+tests/private*.py
+
+# Archivos residuales de VIM
+*.swp

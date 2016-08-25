@@ -23,11 +23,3 @@ if __name__ == '__main__':
     # Se imprime la estructura necesaria
     printBarsConsole("Formato de estructura válido")
     print p._getStructure()
-
-    # Se cambia la carpeta de sources
-    p.setSourceFolder(DIR_DATA_TEST_PRIVATE)
-
-    # Se testea un elemento
-    printBarsConsole("Testeo de paquetes")
-    print p._validateStructureFile("Aguirre_Munoz__Daniel_Patricio.zip")
-    print p._validateStructureFile("Leiva_Castro__Francisco_Ignacio.rar")

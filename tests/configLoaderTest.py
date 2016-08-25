@@ -13,6 +13,7 @@ if __name__ == '__main__':
     from testpath import *  # @UnusedWildImport
 from bin.configLoader import *  # @UnusedWildImport
 
+# Test
 if __name__ == '__main__':
     binconfig = configLoader(DIR_BIN + ".config/", "bin.ini", verbose=True)
     binconfig.isTrue("DONT_WRITE_BYTECODE")

@@ -11,8 +11,9 @@ __autor__ = "ppizarror"
 # Importación de librerías
 if __name__ == '__main__':
     from testpath import *  # @UnusedWildImport
-from bin.binpath import _LANG_DIRCONFIG, DIR_BIN, _LANG_DIRLANGS
+from bin.binpath import _LANG_DIRCONFIG, DIR_BIN, _LANG_DIRLANGS  # @Reimport
 
+# Test
 if __name__ == '__main__':
     print DIR_BIN
     print _LANG_DIRCONFIG

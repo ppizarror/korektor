@@ -14,6 +14,7 @@ if __name__ == '__main__':
 from lib.fileManager import *  # @UnusedWildImport
 from bin.utils import printBarsConsole
 
+# Test
 if __name__ == '__main__':
 
     # Creación del objeto de filemanager
@@ -67,4 +68,3 @@ if __name__ == '__main__':
     # Testeo de una carpeta real
     fm.setWorkingDirectory(DIR_DATA_TEST_PRIVATE)
     fm.printTree()
-    # print fm.tree()

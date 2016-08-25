@@ -13,6 +13,7 @@ if __name__ == '__main__':
     from testpath import *  # @UnusedWildImport
 from bin.errors import *  # @UnusedWildImport
 
+# Test
 if __name__ == '__main__':
     st_error("Este es un error grave", False)
     st_info("Esta es una información")
