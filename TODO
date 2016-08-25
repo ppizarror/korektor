@@ -1,0 +1,23 @@
+CORTO PLAZO:
++ Agregar comprobación tipos de variables a todos los modulos de /lib.
++ Agregar tests de modulos privados.
++ Agregar funciones de conteo de subcarpetas de una carpeta determinada, asi como archivos de una carpeta determinada.
++ Agregar funciones para obtener la ruta y profundidad de un archivo o carpeta cualquiera (utilizar funciones ya hechas).
++ Agregar condicion de no extraccion si es que ya existe una carpeta con un nombre similiar al archivo a extraer en ese momento.
++ Verificar estado de ejecucion en linux.
+
+
+
+LARGO PLAZO:
++ Crear un icono para la aplicacion
++ Copiar iconos clasicos
++ Diseñar la GUI
+
+
+
+COSAS EN MENTE:
++ Hacer funcion para copiar package a una carpeta.
++ Hacer funcion que evalue archivos
++ Tener en mente compilacion (utilizar software año pasado).
++ Ver plugins.
+
