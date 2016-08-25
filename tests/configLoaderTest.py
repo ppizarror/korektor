@@ -9,22 +9,39 @@ __autor__ = "ppizarror"
 # Licencia: GPLv2
 
 # Importación de librerías
-if __name__ == '__main__':
-    from testpath import *  # @UnusedWildImport
+from _testpath import *  # @UnusedWildImport
 from bin.configLoader import *  # @UnusedWildImport
+import unittest
 
-# Test
+# Constantes de los test
+VERBOSE = False
+
+# Clase UnitTest
+class testConfigLoader(unittest.TestCase):
+
+    # Inicio de los test
+    def setUp(self):
+        self.binconfig = configLoader(DIR_BIN + ".config/", "bin.ini", verbose=VERBOSE)
+
+    def testMain(self):
+        if VERBOSE:
+            print "Parametros:", self.binconfig.getParameters()
+            self.binconfig.printParameters()
+        self.binconfig.setParameter("PARAM1", "VALUE1")
+        self.binconfig.setParameter("PARAM2", "VALUE2")
+        self.binconfig.setParameter("PARAM3", "VALUE3")
+        self.binconfig.setParameter("SET_DEFAULT_ENCODING", "W-850")
+        if VERBOSE:
+            print "Parametros:", self.binconfig.getParameters()
+            self.binconfig.printParameters()
+        assert self.binconfig.isTrue("DONT_WRITE_BYTECODE")==False, "Parametro DONT_WRITE_BYTECODE debe ser Falso"
+        self.binconfig.setParameter("DONT_WRITE_BYTECODE", True)
+        assert self.binconfig.isTrue("DONT_WRITE_BYTECODE")==True, "Parametro DONT_WRITE_BYTECODE debe ser Verdadero"
+        assert self.binconfig.getValue("PARAM1")=="VALUE1", "Valor parametro PARAM1 incorrecto"
+        self.binconfig.setParameter("PARAM1", 11)
+        assert self.binconfig.getValue("PARAM1")=="11", "Valor parametro PARAM1 incorrecto"
+        assert self.binconfig.getValue("SET_DEFAULT_ENCODING")=="W-850", "Parametro SET_DEFAULT_ENCODING erroneo"
+
+# Main test
 if __name__ == '__main__':
-    binconfig = configLoader(DIR_BIN + ".config/", "bin.ini", verbose=True)
-    binconfig.isTrue("DONT_WRITE_BYTECODE")
-    binconfig.getParameters()
-    binconfig.printParameters()
-    binconfig.setParameter("PARAM1", "VALUE1")
-    binconfig.setParameter("PARAM2", "VALUE2")
-    binconfig.setParameter("PARAM3", "VALUE3")
-    binconfig.setParameter("SET_DEFAULT_ENCODING", "W-850")
-    binconfig.printParameters()
-    # binconfig.export(False, "test.ini")
-    print binconfig.getValue(binconfig.getParameters()[1])
-    print binconfig.getValue("DONT_WRITE_BYTECODE")
-    print binconfig.getValue("SET_DEFAULT_ENCODING")
+    unittest.main()

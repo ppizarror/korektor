@@ -17,8 +17,10 @@ from bin.errors import *  # @UnusedWildImport
 from bin.utils import printHierachyList
 
 # Constantes del módulo
+PACKAGE_DO_NOT_EXIST = "PACKAGE_DO_NOT_EXIST"
+PACKAGE_EMPTY = "PACKAGE_EMPTY"
 PACKAGE_FILE_NOT_FOUND = "PACKAGE_FILE_NOT_FOUND"
-PACKAGE_NO_NAME = "PACKAGE_EMPTY"
+PACKAGE_NO_NAME = "PACKAGE_NO_NAME"
 
 
 class Package:
@@ -49,13 +51,13 @@ class Package:
         if generateHierachy:
             self.generateHierachy()
 
-    def checkIfFileExist(self, f):
+    def checkIfExist(self, f):
         """
         Comprueba si un archivo existe en el paquete
         :param f: Nombre del archivo
         :return: Boolean
         """
-        return self._isFile(f)[0] or self._isFolder(f)[0]
+        return self.isFile(f) or self.isFolder(f)
 
     def _checkVariableType(self, var, clss):
         """
@@ -98,7 +100,7 @@ class Package:
                 if isinstance(i, list):
                     r = len(i)
                     if r > 1:
-                        k = _recursiveSearchFile(i, f, d + 1, s + "/" + i[0])
+                        k = _recursiveSearchFile(i[1:r], f, d + 1, s + "/" + i[0])
                         if k is not None and k[0]:
                             return k
                 else:
@@ -118,7 +120,10 @@ class Package:
         :return: Boolean
         """
         if self._isgeneratedHierachyFiles:
-            return self._isFile(f)[0]
+            if len(f)>0:
+                return self._isFile(f)[0]
+            else:
+                return False
         else:
             return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
 
@@ -166,7 +171,10 @@ class Package:
         :return: Boolean
         """
         if self._isgeneratedHierachyFiles:
-            return self._isFolder(f)[0]
+            if len(f)>0:
+                return self._isFolder(f)[0]
+            else:
+                return False
         else:
             return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
 
@@ -254,7 +262,10 @@ class Package:
         :return: int
         """
         if self._isGeneratedPackageFiles:
-            return len(self._rawfiles)
+            if len(self._packageFiles) == 1 and self._packageFiles[0] == "":
+                return 0
+            else:
+                return len(self._packageFiles)
         else:
             return self._throwException("PACKAGE_ERROR_NOT_INDEXED_FILES_YET")
 
@@ -291,7 +302,7 @@ class Package:
         else:
             return self._throwException("PACKAGE_ERROR_NO_NAME")
 
-    def printFiles(self):
+    def printFileList(self):
         """
         Imprime en consola la lista de archivos del paquete
         :return: void
@@ -307,7 +318,12 @@ class Package:
         :return: void
         """
         if self._isgeneratedHierachyFiles:
-            printHierachyList(self._hierachyFiles)
+            if len(self._packageFiles) == 0:
+                print PACKAGE_FILE_NOT_FOUND
+            elif self.getNumberOfElements() == 0:
+                print PACKAGE_EMPTY
+            else:
+                printHierachyList(self._hierachyFiles)
         else:
             return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
 

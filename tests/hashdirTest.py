@@ -9,8 +9,7 @@ __autor__ = "ppizarror"
 # Licencia: GPLv2
 
 # Importación de librerías
-if __name__ == '__main__':
-    from testpath import *  # @UnusedWildImport
+from _testpath import *  # @UnusedWildImport
 from bin.hashdir import *  # @UnusedWildImport
 
 # Test

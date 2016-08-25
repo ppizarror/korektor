@@ -433,3 +433,27 @@
 	+Se refactorizan algunos modulos.
 	+Se cambia el header al archivo verticalScrolledFrame.py.
 	+Se incluye autor en archivos externos.
+
+[0.2.0]
+	+Se repara error en la no distincion entre package inexiste-
+	 nte y package vacio.
+	+Se repara error logico en el retorno de resultados entre pa-
+	 ckage vacio e inexistente.
+	+Se repara descompresion en linux, dejando rarfile por defe-
+	 cto. No se habilitara pyunpack hasta otra version.
+	+Nuevo formato de tests: Se incluye UnitTest para ejecutar
+	 los tests de todos los modulos.
+	+Se corrige informacion sensible en los tests sobre packag-
+	 es.
+	+Correccion de errores en la busqueda de archivos en el Pac-
+	 kage.
+	+Correccion de errores en la busqueda de carpetas en el Pac-
+	 kage.
+	+Se agregan nuevas carpetas para los tests de paquetes pub-
+	 licos: Folder 6-EMPTY/ y Folder 7/.
+	+Se agrega un template para la creacion sencilla de modulos
+	 de testeo. Incluye impotacion basica de modulos y un esqu-
+	 ema de clase de UnitTest.
+	+Se renombra testpath.py a _testpath.py. Ademas se modifica
+	 la carga por defecto de este modulo a obligatoria para to-
+	 dos los tests.

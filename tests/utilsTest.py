@@ -9,36 +9,50 @@ __autor__ = "ppizarror"
 # Licencia: GPLv2
 
 # Importación de librerías
-if __name__ == '__main__':
-    from testpath import *  # @UnusedWildImport
+from _testpath import *  # @UnusedWildImport
 from bin.utils import *  # @UnusedWildImport
+import unittest
 
-# Test
+# Constantes de los test
+ERR_HDNFL = "Error al ejecutar isHiddenFile"
+ERR_GBT = "Error al ejecutar getBetweenTags"
+ERR_REGX = "Error al ejecutar regexCompare"
+VERBOSE = False
+
+# Clase UnitTest
+class testUtils(unittest.TestCase):
+
+    # Inicio de los test
+    def setUp(self):
+        pass
+
+    def testMain(self):
+        if VERBOSE:
+            printBarsConsole("Test funciones varias")
+            print string2list("foo bar", " ")
+            print getDate()
+            print getHour()
+            colorcmd("test in purple\n", "purple")
+            print generateRandom6()
+            print getTerminalSize()
+        assert equalLists(loadFile("__init__.ini"), []) == True, "Error al cargar archivo vacio"
+        t = [1, 2, 3, 4, 5, 10]
+        r = sortAndUniq([1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 10, 5])
+        assert equalLists(t, r) == True, "Error al ordenar lista"
+        del t, r
+        assert getBetweenTags("<player>Username<title></title></player>", "<player>", "</player>") == "Username<title></title>", ERR_GBT
+        assert getBetweenTags("<player>Username</player><title>Altername</title>", "<player>", "</player>") == "Username", ERR_GBT
+        assert getBetweenTags("<player>Username</player><title>Altername</title>", "<title>", "</title>") == "Altername", ERR_GBT
+        assert isHiddenFile(".file") == True, ERR_HDNFL
+        assert isHiddenFile("file") == False, ERR_HDNFL
+        assert isHiddenFile(1) == True, ERR_HDNFL
+        assert regexCompare("korektor test", "korektor test") == True, ERR_REGX
+        assert regexCompare("korektor is nice", "korektor is not nice") == False, ERR_REGX
+        assert regexCompare("*_*", "lorem.ipsum") == False, ERR_REGX
+        assert regexCompare("#.#", "lorem.ipsum") == True, ERR_REGX
+        assert regexCompare("*regex *", "regex are  korektor")==True, ERR_REGX
+        assert regexCompare("cc3001/tarea2/#_#/Parte1.java", "cc3001/tarea2/lorem_ipsum#/Parte1.java")==True, ERR_REGX
+
+# Main test
 if __name__ == '__main__':
-    printBarsConsole("Test funciones varias")
-    print string2list("foo bar", " ")
-    print getDate()
-    print getHour()
-    colorcmd("test in purple\n", "purple")
-    print generateRandom6()
-    print getTerminalSize()
-    # noinspection PyTypeChecker
-    print loadFile("__init__.ini")
-    print sortAndUniq([1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 10, 5])
-    printBarsConsole("GetBetweenTags Test")
-    print getBetweenTags("<player>Username<title></title></player>", "<player>", "</player>")
-    print getBetweenTags("<player>Username</player><title>Altername</title>", "<player>", "</player>")
-    print getBetweenTags("<player>Username</player><title>Altername</title>", "<title>", "</title>")
-    printBarsConsole("Is Hidden File Test")
-    print isHiddenFile(".file")
-    print isHiddenFile("file")
-    print isHiddenFile(1)
-    printBarsConsole("Regex Test")
-    print regexCompare("korektor test", "korektor test")
-    print regexCompare("korektor is nice", "korektor is not nice")
-    print regexCompare("*_*", "pablo.pizarro")
-    print regexCompare("#.#", "pablo.pizarro")
-    print regexCompare("*regex *", "regex are  korektor")
-    print regexCompare("cc3001/tarea2/*_*/Parte1.java", "cc3001/tarea2/pablo_pizarro*/Parte1.java")
-    print regexCompare("cc3001/tarea2/*_*/Parte1.java", "cc3001/tarea2/pablo_pizarro*/Parte1.java",
-                       "abcdefghijklmnopqrstuvwxyz")
+    unittest.main()

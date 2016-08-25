@@ -188,4 +188,4 @@ class configLoader:
         :param paramValue: Valor del parámetro
         :return: void
         """
-        self.configs[paramName] = paramValue
+        self.configs[str(paramName)] = str(paramValue)

@@ -32,10 +32,11 @@ if isWindows():
 
 # Si no es windows se utiliza la librería patool
 else:
-    try:
-        from pyunpack import Archive  # @UnusedImport @UnresolvedImport
-    except Exception, e:
-        err.st_error(err.ERROR_RARNOTINSTALLED_NOTWIN, True, "pyunpack", e)
+    import bin.rarfile as rarfile  # @UnresolvedImport @Reimport
+    # try:
+    #    from pyunpack import Archive  # @UnusedImport @UnresolvedImport
+    # except Exception, e:
+    #    err.st_error(err.ERROR_RARNOTINSTALLED_NOTWIN, True, "pyunpack", e)
 
 
 # noinspection PyUnresolvedReferences
@@ -145,6 +146,33 @@ class FileManager:
 
         foldersExtractedOnProcess = []  # Carpetas extraidas @UnusedVariable
 
+        def _isValidFile(filename):
+            """
+            Verifica si un nombre de un archivo es valido
+            :param filename: String del nombre del archivo
+            :return: Boolean
+            """
+            for f in self._ignoredFiles:
+                if f in filename:
+                    return False
+            return not isHiddenFile(str(filename))
+
+        def _isValidFileName(filename):
+            """
+            Verifica si un nombre de un archivo es valido (carácteres)
+            :param filename: String del nombre del archivo
+            :return: Boolean
+            """
+            # Si los carácteres son restrictivos
+            if self._doCharactersRestricted:
+                for c in filename:
+                    if c not in self._validChars:
+                        return False
+            # Si requiere . en un archivo
+            if self._needDotOnFile:
+                return "." in filename
+            return True
+
         def _inspect(rootpath, filename, filelist, extractedFolders, depth=0):
             """
             Inspecciona todos los archivos de un paquete
@@ -153,23 +181,6 @@ class FileManager:
             :param filelist: Lista de archivos
             :return:
             """
-
-            def _isValidFile(filename):
-                for f in self._ignoredFiles:
-                    if f in filename:
-                        return False
-                return not isHiddenFile(str(filename))
-
-            def _isValidFileName(filename):
-                # Si los carácteres son restrictivos
-                if self._doCharactersRestricted:
-                    for c in filename:
-                        if c not in self._validChars:
-                            return False
-                # Si requiere . en un archivo
-                if self._needDotOnFile:
-                    return "." in filename
-                return True
 
             if not _isValidFile(filename):  # Si el archivo no es válido
                 return
@@ -195,15 +206,18 @@ class FileManager:
                         print ""
                         err.st_error(err.ERROR_RARUNCOMPRESS, True, "rarfile", e)
                 else:
+                    # Para linux y con Archive/pyunpack
+                    # try:
+                    #    os.mkdir(rootpath + newfilename + "/")
+                    # except:
+                    #    pass
                     try:
-                        os.mkdir(rootpath + newfilename + "/")
-                    except:
-                        pass
-                    try:
-                        Archive(rootpath + filename).extractall(rootpath + newfilename + "/")
+                        rarfile.RarFile(rootpath + filename, "r", 'utf8').extractall(rootpath + newfilename + "/")
+                        # Archive(rootpath + filename).extractall(rootpath + newfilename + "/") # Para linux con Archive/pyunpack
                     except Exception, e:
                         print ""
-                        err.st_error(err.ERROR_RARUNCOMPRESS, True, "pyunpack", e)
+                        # err.st_error(err.ERROR_RARUNCOMPRESS, True, "pyunpack", e) # Para linux con Archive/pyunpack
+                        err.st_error(err.ERROR_RARUNCOMPRESS_LINUX, True, "rarfile", e)
                 if self._removeOnExtract:
                     os.remove(rootpath + filename)
                 extractedFolders.append(rootpath + newfilename + "/")
@@ -211,7 +225,8 @@ class FileManager:
 
             else:  # Si es cualquier otro archivo entonces se añade
                 if _isValidFileName(filename):
-                    filelist.append(rootpath + filename)
+                    if filename in os.listdir(rootpath):
+                        filelist.append(rootpath + filename)
 
         def _removeExtractedFolders():
             """
@@ -223,17 +238,28 @@ class FileManager:
             if self._doRemoveExtractedFolders:
                 self.deleteLastExtractedFiles()
 
+        def _appendIfEmpty(l, f, r):
+            """
+            Función que añade un fichero en caso de que la lista de archivos no esta vacia
+            :return: void
+            """
+            if len(l) == 0:
+                if f in os.listdir(r) and _isValidFile(f):
+                    l.append(f)
+
         if filelist is not None:
             _inspect(rootpath, filename, filelist, foldersExtractedOnProcess, 0)
             for i in range(len(filelist)):
                 filelist[i] = filelist[i].replace("//", "/").replace(rootpath, "")
             _removeExtractedFolders()
+            _appendIfEmpty(filelist, filename, rootpath)
         else:
             filelist = []
             _inspect(rootpath, filename, filelist, foldersExtractedOnProcess, 0)
             for i in range(len(filelist)):
                 filelist[i] = filelist[i].replace("//", "/").replace(rootpath, "")
             _removeExtractedFolders()
+            _appendIfEmpty(filelist, filename, rootpath)
             return filelist
 
     def inspectSingleFile(self, filename):
@@ -260,18 +286,12 @@ class FileManager:
         :return:
         """
         if ".rar" in filename.lower():
-            if isWindows():
-                try:
-                    rarfile.RarFile(rootpath + filename, "r", "utf8")
-                    return True
-                except:
-                    return False
-            else:
-                try:
-                    Archive(rootpath + filename)
-                    return True
-                except:
-                    return False
+            try:
+                rarfile.RarFile(rootpath + filename, "r", "utf8")
+                # Archive(rootpath + filename) para linux
+                return True
+            except:
+                return False
         return False
 
     def _isZip(self, rootpath, filename):

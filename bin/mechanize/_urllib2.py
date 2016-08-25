@@ -1,5 +1,3 @@
-# urllib2 work-alike interface
-# ...from urllib2...
 import httplib
 from urllib2 import URLError, HTTPError  # @UnusedImport
 

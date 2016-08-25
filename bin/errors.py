@@ -51,6 +51,7 @@ ERROR_NOTRANSLATECONECTION = "No se pudo establecer comunicacion con el servidor
 ERROR_RARNOTINSTALLED_NOTWIN = "Error, se requieren de algunas librerías para poder descomprimir archivos RAR. Pruebe utilizando el comando 'pip install pyunpack, easyprocess, patool' en la terminal"
 ERROR_RARNOTINSTALLED_WIN = "Error, librería rarfile no instalada. Pruebe utilizando el comando 'pip install rarfile' en la CMD de Windows"
 ERROR_RARUNCOMPRESS = "Error al descomprimir el archivo RAR"
+ERROR_RARUNCOMPRESS_LINUX = "Error al descomprimir el archivo RAR. Compruebe si tiene los permisos necesarios para ejecutar el programa o pruebe reinstalando unrar con el comando 'sudo apt-get install unrar' en Linux o 'brew install unrar' en OSX"
 ERROR_TAG_CANTRETRIEVEHTML = 16
 ERROR_TAG_INITNOTCORRECTENDING = 14
 ERROR_TAG_INITNOTFINDED = 13

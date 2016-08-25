@@ -153,6 +153,21 @@ def destroyProcess():
         os.kill(os.getpid(), signal.SIGKILL)  # @UndefinedVariable
 
 
+def equalLists(list1, list2):
+    """
+    Comprueba si dos listas son idénticas en elementos
+    :param list1: Lista 1
+    :param list2: Lista 2
+    :return: Boolean
+    """
+    if len(list1)!=len(list2):
+        return False
+    else:
+        for i in range(0, len(list1)):
+            if list1[i]!=list2[i]:
+                return False
+        return True
+
 def generateRandom6():
     """
     Genera un string de 6 carácteres aleatorios

@@ -2,14 +2,15 @@
 # -*- coding: utf-8 -*-
 __autor__ = "ppizarror"
 
-# bin/accents TEST
+# package/module TEST
+# Descripción del test
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: AGOSTO 2016
 # Licencia: GPLv2
 
 # Importación de librerías
-from bin.accents import *  # @UnusedWildImport
+from bin.colors import *  # @UnusedWildImport
 from _testpath import *  # @UnusedWildImport
 import unittest
 
@@ -17,7 +18,7 @@ import unittest
 VERBOSE = False
 
 # Clase UnitTest
-class testAccents(unittest.TestCase):
+class testTest(unittest.TestCase):
 
     # Inicio de los test
     def setUp(self):
