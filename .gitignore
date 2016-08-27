@@ -26,7 +26,7 @@ data/structure/
 data/uploads/
 
 # Archivos de tests
-test/.data_tests_private/
+# test/.data_tests_private/
 
 # Archivos de tests privados
 test/private*.py
