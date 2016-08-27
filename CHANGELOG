@@ -495,3 +495,4 @@
 	+Refactorizacion menor en utilsTest.py.
 	+Se crea un nuevo archivo de testeo varTypeTest.py el cual
 	 prueba las funciones de bin/varType.
+	+Renombrada la carpeta de tests de tests/ a test/.

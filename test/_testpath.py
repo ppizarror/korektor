@@ -18,12 +18,12 @@ __actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace("\\", "/"
 DIR_DATA_TEST = __actualpath + ".data_tests/"
 DIR_DATA_TEST_PRIVATE = __actualpath + ".data_tests_private/"
 DIR_TESTS = __actualpath
-DIR_BIN = __actualpath.replace("/tests/", "/") + "bin/"
+DIR_BIN = __actualpath.replace("/test/", "/") + "bin/"
 
 # Se agregan las carpetas actuales al path
 reload(sys)
 sys.path.append(DIR_TESTS)
-sys.path.append(__actualpath.replace("/tests/", "/"))
+sys.path.append(__actualpath.replace("/test/", "/"))
 
 # Test
 if __name__ == '__main__':

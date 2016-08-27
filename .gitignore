@@ -26,10 +26,10 @@ data/structure/
 data/uploads/
 
 # Archivos de tests
-tests/.data_tests_private/
+test/.data_tests_private/
 
 # Archivos de tests privados
-tests/private*.py
+test/private*.py
 
 # Archivos residuales de VIM
 *.swp
