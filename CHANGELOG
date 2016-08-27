@@ -496,3 +496,5 @@
 	+Se crea un nuevo archivo de testeo varTypeTest.py el cual
 	 prueba las funciones de bin/varType.
 	+Renombrada la carpeta de tests de tests/ a test/.
+	+Se corrige error al no subir la carpeta .data_tests_pri-
+	 vate/ a la estructura de los tests debido a estar vacia.
