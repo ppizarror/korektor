@@ -62,10 +62,6 @@ _CONSOLE_WRAP = -25
 _MSG_LOADINGFILE = "Cargando archivo '{0}' ..."
 _MSG_OK = "[OK]"
 LINK_PROJECT = "https://github.com/ppizarror/korektor/"
-VARIABLE_INT = "INT"
-VARIABLE_LIST = "LST"
-VARIABLE_OTHER = "OTHR"
-VARIABLE_STR = "STR"
 
 
 def appendListToList(origin, l):
@@ -160,11 +156,11 @@ def equalLists(list1, list2):
     :param list2: Lista 2
     :return: Boolean
     """
-    if len(list1)!=len(list2):
+    if len(list1) != len(list2):
         return False
     else:
         for i in range(0, len(list1)):
-            if list1[i]!=list2[i]:
+            if list1[i] != list2[i]:
                 return False
         return True
 

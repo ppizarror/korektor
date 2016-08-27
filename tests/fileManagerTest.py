@@ -122,6 +122,39 @@ class testFileManager(unittest.TestCase):
         assert equalLists(t, self.fm.inspectSingleFile("Folder 3"))==True, "Escaneo erroneo"
         del t
 
+    def testFolder5(self):
+        if VERBOSE:
+            printBarsConsole("Testeo Folder 5")
+            print self.fm.inspectSingleFile("Folder 5")
+        t = ['Folder 5/Content 1.txt', \
+             'Folder 5/Content 2.txt', \
+             'Folder 5/Subfolder 1/Content 3.txt', \
+             'Folder 5/Subfolder 1/Content 4.txt', \
+             'Folder 5/Subfolder 1/Folder 1 inside subfolder 1/Content 5.txt', \
+             'Folder 5/Subfolder 1/Folder 2 inside subfolder 1/Content 6.txt', \
+             'Folder 5/Subfolder 1/Folder 2 inside subfolder 1/Content 7.txt', \
+             'Folder 5/Subfolder 1/Folder 2 inside subfolder 1/Folder 1 inside folder 2 inside subfolder 1/Content C.txt', \
+             'Folder 5/Subfolder 1/Folder 2 inside subfolder 1/Folder 1 inside folder 2 inside subfolder 1/README.txt', \
+             'Folder 5/Subfolder 1/Folder 2 inside subfolder 1/Folder 1 inside folder 2 inside subfolder 1/Subfolder 1/A1.txt', \
+             'Folder 5/Subfolder 1/Folder 2 inside subfolder 1/Folder 1 inside folder 2 inside subfolder 1/Subfolder 1/A2.txt', \
+             'Folder 5/Subfolder 1/Folder 2 inside subfolder 1/Folder 1 inside folder 2 inside subfolder 1/Subfolder with zip/Content K.txt',
+             'Folder 5/Subfolder 1/Folder 2 inside subfolder 1/Folder 1 inside folder 2 inside subfolder 1/Subfolder with zip/Content X.txt', \
+             'Folder 5/Subfolder 1/Folder 2 inside subfolder 1/Folder 1 inside folder 2 inside subfolder 1/Subfolder with zip/Zip Folder/main.java', \
+             'Folder 5/Subfolder 1/Folder 2 inside subfolder 1/Folder 1 inside folder 2 inside subfolder 1/Subfolder with zip/Zip Folder/Parte1.java', \
+             'Folder 5/Subfolder 1/Folder 2 inside subfolder 1/Folder 1 inside folder 2 inside subfolder 1/Zip Folder/Content 1 inside zip.txt', \
+             'Folder 5/Subfolder 1/Folder 2 inside subfolder 1/Folder 1 inside folder 2 inside subfolder 1/Zip Folder/Content 2 inside zip.txt', \
+             'Folder 5/Subfolder 2 with zip/Content 8.txt', \
+             'Folder 5/Subfolder 2 with zip/Content 9.txt', \
+             'Folder 5/Subfolder 2 with zip/Zip Folder inside subfolder 2/Content 10', \
+             'Folder 5/Subfolder 2 with zip/Zip Folder inside subfolder 2/Content 11.java', \
+             'Folder 5/Zip Folder/Content A', \
+             'Folder 5/Zip Folder/Content B.jar', \
+             'Folder 5/Zip Folder/Rar Folder inside Zip Folder/Content 1 inside rar.txt', \
+             'Folder 5/Zip Folder/Rar Folder inside Zip Folder/Content 2 inside rar.txt']
+        assert equalLists(t, self.fm.inspectSingleFile("Folder 5"))==True, "Escaneo erroneo"
+        del t
+
+
 # Main test
 if __name__ == '__main__':
     unittest.main()

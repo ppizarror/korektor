@@ -15,6 +15,8 @@ if __name__ == '__main__':
     from libpath import *  # @UnusedWildImport
 from bin.errors import *  # @UnusedWildImport
 from bin.utils import printHierachyList
+from bin.varType import *  # @UnusedWildImport
+from lib.fileManager import FileManager
 
 # Constantes del módulo
 PACKAGE_DO_NOT_EXIST = "PACKAGE_DO_NOT_EXIST"
@@ -23,15 +25,25 @@ PACKAGE_FILE_NOT_FOUND = "PACKAGE_FILE_NOT_FOUND"
 PACKAGE_NO_NAME = "PACKAGE_NO_NAME"
 
 
+# Clase principal
 class Package:
+    """
+    Clase paquete, necesita de una lista de archivos provista por un filemanager
+    """
 
     def __init__(self, files=[], generateHierachy=False, exceptionAsString=False):
         """
         Constructor
+        :param files: Lista de archivos generada por un FileManager
         :param generateHierachy: Generar Jerarquía automáticamente
         :param exceptionAsString: Retorna las excepciones como un String
         :return: void
         """
+
+        # Se chequean los tipos de variable
+        self._checkVariableType(files, TYPE_LIST, "files")
+        self._checkVariableType(generateHierachy, TYPE_BOOL, "generateHierachy")
+        self._checkVariableType(exceptionAsString, TYPE_BOOL, "exceptionAsString")
 
         # Variables de clase
         self._hierachyFiles = []
@@ -59,14 +71,17 @@ class Package:
         """
         return self.isFile(f) or self.isFolder(f)
 
-    def _checkVariableType(self, var, clss):
+    def _checkVariableType(self, var, clss, paramName, otherClass=None):
         """
         Chequea si una variable es de una determinada clase o no
         :param var: Variable a revisar
         :param clss: Clase a comprobar, String
+        :param paramName: Nombre del parámetro
+        :param otherClass: Clase requerida si es que la clase a comprobar es del tipo TYPE_OTHER
         :return: void
         """
-        pass
+        if not checkVariableType(var, clss, otherClass):
+            throw(ERROR_BADPARAMETERTYPE_MSG.format(paramName, clss))
 
     def disable_exceptionAsString(self):
         """
@@ -120,7 +135,8 @@ class Package:
         :return: Boolean
         """
         if self._isgeneratedHierachyFiles:
-            if len(f)>0:
+            self._checkVariableType(f, TYPE_STR, "f")
+            if len(f) > 0:
                 return self._isFile(f)[0]
             else:
                 return False
@@ -171,7 +187,8 @@ class Package:
         :return: Boolean
         """
         if self._isgeneratedHierachyFiles:
-            if len(f)>0:
+            self._checkVariableType(f, TYPE_STR, "f")
+            if len(f) > 0:
                 return self._isFolder(f)[0]
             else:
                 return False
@@ -348,3 +365,28 @@ class Package:
             except:
                 err = PACKAGE_ERROR_NAME_NOT_FOUND
             throw(err)
+
+
+# Clase paquete que utiliza un filemanager
+class PackageFileManager(Package):
+    """
+    Clase paquete. Exactamente la misma que Package salvo que utiliza un filemanager externo
+    y un string indicando el nombre del archivo a analizar
+    """
+
+    def __init__(self, fileManager, packageName, generateHierachy=False, exceptionAsString=False):
+        """
+        Constructor
+        :param fileManager: Filemanager a utilizar
+        :param packageName: Nombre del paquete a analizar
+        :param generateHierachy: Generar Jerarquía automáticamente
+        :param exceptionAsString: Retorna las excepciones como un String
+        :return: void
+        """
+
+        # Comprobacion de tipos
+        self._checkVariableType(fileManager, TYPE_OTHER, "fileManager", FileManager)
+        self._checkVariableType(packageName, TYPE_STR, "packageName")
+
+        # Se crea un paquete normal
+        Package.__init__(self, fileManager.inspectSingleFile(packageName), generateHierachy, exceptionAsString)

@@ -55,7 +55,7 @@ class History:
     def clear(self):
         del self._history[:]
     def close(self):
-        for request, response in self._history:
+        for request, response in self._history:  # @UnusedVariable
             if response is not None:
                 response.close()
         del self._history[:]
@@ -143,7 +143,7 @@ class Browser(UserAgentBase):
     def close(self):
         UserAgentBase.close(self)
         if self._response is not None:
-            self._response.close()    
+            self._response.close()
         if self._history is not None:
             self._history.close()
             self._history = None
@@ -209,7 +209,7 @@ class Browser(UserAgentBase):
             url.get_full_url
         except AttributeError:
             # string URL -- convert to absolute URL if required
-            scheme, authority = _rfc3986.urlsplit(url)[:2]
+            scheme, authority = _rfc3986.urlsplit(url)[:2]  # @UnusedVariable
             if scheme is None:
                 # relative URL
                 if self._response is None:

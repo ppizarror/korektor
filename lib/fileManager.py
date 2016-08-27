@@ -38,6 +38,9 @@ else:
     # except Exception, e:
     #    err.st_error(err.ERROR_RARNOTINSTALLED_NOTWIN, True, "pyunpack", e)
 
+# Constantes
+_FILEMANAGER_NO_EXTRACT_COMPRSD_FILE = "_inspectFiles no extrayó el archivo '{0}' dado que este ya existe."
+
 
 # noinspection PyUnresolvedReferences
 class FileManager:
@@ -61,6 +64,7 @@ class FileManager:
         # Eliminar carpetas extraidas tras el análisis
         self._doCharactersRestricted = packageConfig.isTrue("CHARACTERS_DO_RESTRICT")
         self._doRemoveExtractedFolders = config.isTrue("DO_REMOVE_EXTRACTED_FOLDERS")
+        self._extractIfFolderAlreadyExists = config.isTrue("REPLACE_IF_FOLDER_ALREADY_EXISTS")
         self._ignoredFiles = folderConfig.getValueListed("IGNORE")
         self._needDotOnFile = packageConfig.isTrue("NEED_DOT_ON_FILE")
         self._removeOnExtract = config.isTrue("REMOVE_ON_EXTRACT")
@@ -106,6 +110,13 @@ class FileManager:
         """
         self._removeOnExtract = False
 
+    def disable_extractIfFolderAlreadyExists(self):
+        """
+        Desactiva el extraer un archivo comprimido si es que este ya se encuentra en la carpeta padre
+        :return: void
+        """
+        self._extractIfFolderAlreadyExists = False
+
     def enable_autoExtract(self):
         """
         Activa el extraer automáticamente un archivo comprimido
@@ -126,6 +137,13 @@ class FileManager:
         :return: void
         """
         self._removeOnExtract = True
+
+    def enable_extractIfFolderAlreadyExists(self):
+        """
+        Activa el extraer un archivo comprimido si es que este ya se encuentra en la carpeta padre
+        :return: void
+        """
+        self._extractIfFolderAlreadyExists = True
 
     def getWorkingDirectory(self):
         """
@@ -191,6 +209,12 @@ class FileManager:
 
             elif self._isZip(rootpath, filename) and self._autoExtract:  # Si el archivo es paquete zip
                 newfilename = filename.replace(".zip", "").replace(".ZIP", "")
+#                 fileAlreadyExists = False
+#                 try:
+#                     fileAlreadyExists = newfilename in os.listdir(rootpath)
+#                 except:
+#                     pass
+#                 print fileAlreadyExists
                 zipfile.ZipFile(rootpath + filename).extractall(rootpath + newfilename + "/")
                 if self._removeOnExtract:
                     os.remove(rootpath + filename)

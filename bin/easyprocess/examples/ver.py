@@ -1,4 +1,4 @@
-from easyprocess import EasyProcess
+from easyprocess import EasyProcess  # @UnresolvedImport
 import sys
 
 v = EasyProcess([sys.executable, '--version']).call().stderr

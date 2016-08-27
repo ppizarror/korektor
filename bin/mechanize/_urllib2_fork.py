@@ -44,7 +44,7 @@ import time
 from urllib import (unwrap, unquote, splittype, quote,
      addinfourl, splitport,
      splitattr, ftpwrapper, splituser, splitpasswd, splitvalue)
-from urllib import localhost, url2pathname, getproxies
+from urllib import localhost, url2pathname, getproxies  # @UnusedImport
 import urllib
 from urllib2 import HTTPError, URLError
 import urlparse
@@ -67,14 +67,14 @@ except ImportError:
     # python 2.4
     import md5
     import sha
-    def sha1_digest(bytes):
+    def sha1_digest(bytes):  # @ReservedAssignment
         return sha.new(bytes).hexdigest()
-    def md5_digest(bytes):
+    def md5_digest(bytes):  # @ReservedAssignment
         return md5.new(bytes).hexdigest()
 else:
-    def sha1_digest(bytes):
+    def sha1_digest(bytes):  # @ReservedAssignment
         return hashlib.sha1(bytes).hexdigest()
-    def md5_digest(bytes):
+    def md5_digest(bytes):  # @ReservedAssignment
         return hashlib.md5(bytes).hexdigest()
 
 
@@ -94,7 +94,7 @@ def splithost(url):
     """splithost('//host[:port]/path') --> 'host[:port]', '/path'."""
     global _hostprog
     if _hostprog is None:
-        import re
+        import re  # @Reimport
         _hostprog = re.compile('^//([^/?]*)(.*)$')
 
     match = _hostprog.match(url)
@@ -209,14 +209,14 @@ class Request:
         return self.host
 
     def get_selector(self):
-        scheme, authority, path, query, fragment = _rfc3986.urlsplit(
+        scheme, authority, path, query, fragment = _rfc3986.urlsplit(  # @UnusedVariable
             self.__r_host)
         if path == "":
             path = "/"  # RFC 2616, section 3.2.2
         fragment = None  # RFC 3986, section 3.5
         return _rfc3986.urlunsplit([scheme, authority, path, query, fragment])
 
-    def set_proxy(self, host, type):
+    def set_proxy(self, host, type):  # @ReservedAssignment
         orig_host = self.get_host()
         if self.get_type() == 'https' and not self._tunnel_host:
             self._tunnel_host = orig_host
@@ -272,7 +272,7 @@ class OpenerDirector:
 
     def add_handler(self, handler):
         if not hasattr(handler, "add_parent"):
-            raise TypeError("expected BaseHandler instance, got %r" % 
+            raise TypeError("expected BaseHandler instance, got %r" %
                             type(handler))
 
         added = False
@@ -342,7 +342,7 @@ class OpenerDirector:
             return result
 
         protocol = req.get_type()
-        result = self._call_chain(self.handle_open, protocol, protocol + 
+        result = self._call_chain(self.handle_open, protocol, protocol +
                                   '_open', req)
         if result:
             return result
@@ -353,13 +353,13 @@ class OpenerDirector:
     def error(self, proto, *args):
         if proto in ('http', 'https'):
             # XXX http[s] protocols are special-cased
-            dict = self.handle_error['http']  # https is not different than http
+            dict = self.handle_error['http']  # https is not different than http @ReservedAssignment
             proto = args[2]  # YUCK!
             meth_name = 'http_error_%s' % proto
             http_err = 1
             orig_args = args
         else:
-            dict = self.handle_error
+            dict = self.handle_error  # @ReservedAssignment
             meth_name = proto + '_error'
             http_err = 0
         args = (dict, proto, meth_name) + args
@@ -662,15 +662,14 @@ class ProxyHandler(BaseHandler):
 
         assert hasattr(proxies, 'has_key'), "proxies must be a mapping"
         self.proxies = proxies
-        for type, url in proxies.items():
+        for type, url in proxies.items():  # @ReservedAssignment
             setattr(self, '%s_open' % type,
-                    lambda r, proxy=url, type=type, meth=self.proxy_open: \
-                    meth(r, proxy, type))
+                    lambda r, proxy=url, type=type, meth=self.proxy_open: meth(r, proxy, type))  # @ReservedAssignment
         if proxy_bypass is None:
             proxy_bypass = urllib.proxy_bypass
         self._proxy_bypass = proxy_bypass
 
-    def proxy_open(self, req, proxy, type):
+    def proxy_open(self, req, proxy, type):  # @ReservedAssignment
         orig_type = req.get_type()
         proxy_type, user, password, hostport = _parse_proxy(proxy)
 
@@ -855,7 +854,7 @@ def randombytes(n):
         f.close()
         return s
     else:
-        L = [chr(random.randrange(0, 256)) for i in range(n)]
+        L = [chr(random.randrange(0, 256)) for i in range(n)]  # @UnusedVariable
         return "".join(L)
 
 class AbstractDigestAuthHandler:
@@ -899,7 +898,7 @@ class AbstractDigestAuthHandler:
                 return self.retry_http_digest_auth(req, authreq)
 
     def retry_http_digest_auth(self, req, auth):
-        token, challenge = auth.split(' ', 1)
+        token, challenge = auth.split(' ', 1)  # @UnusedVariable
         chal = parse_keqv_list(parse_http_list(challenge))
         auth = self.get_authorization(req, chal)
         if auth:
@@ -1056,8 +1055,8 @@ class AbstractHTTPHandler(BaseHandler):
 
         sel_host = host
         if request.has_proxy():
-            scheme, sel = splittype(request.get_selector())
-            sel_host, sel_path = splithost(sel)
+            scheme, sel = splittype(request.get_selector())  # @UnusedVariable
+            sel_host, sel_path = splithost(sel)  # @UnusedVariable
 
         if not request.has_header('Host'):
             request.add_unredirected_header('Host', sel_host)
@@ -1199,7 +1198,7 @@ class HTTPCookieProcessor(BaseHandler):
 
 class UnknownHandler(BaseHandler):
     def unknown_open(self, req):
-        type = req.get_type()
+        type = req.get_type()  # @ReservedAssignment
         raise URLError('unknown url type: %s' % type)
 
 def parse_keqv_list(l):
@@ -1285,7 +1284,7 @@ class FileHandler(BaseHandler):
             import email.Utils as emailutils
         import mimetypes
         host = req.get_host()
-        file = req.get_selector()
+        file = req.get_selector()  # @ReservedAssignment
         localfile = url2pathname(file)
         try:
             stats = os.stat(localfile)
@@ -1293,7 +1292,7 @@ class FileHandler(BaseHandler):
             modified = emailutils.formatdate(stats.st_mtime, usegmt=True)
             mtype = mimetypes.guess_type(file)[0]
             headers = mimetools.Message(StringIO(
-                'Content-type: %s\nContent-length: %d\nLast-modified: %s\n' % 
+                'Content-type: %s\nContent-length: %d\nLast-modified: %s\n' %
                 (mtype or 'text/plain', size, modified)))
             if host:
                 host, port = splitport(host)
@@ -1336,17 +1335,17 @@ class FTPHandler(BaseHandler):
         path, attrs = splitattr(req.get_selector())
         dirs = path.split('/')
         dirs = map(unquote, dirs)
-        dirs, file = dirs[:-1], dirs[-1]
+        dirs, file = dirs[:-1], dirs[-1]  # @ReservedAssignment
         if dirs and not dirs[0]:
             dirs = dirs[1:]
         try:
             fw = self.connect_ftp(user, passwd, host, port, dirs, req.timeout)
-            type = file and 'I' or 'D'
+            type = file and 'I' or 'D'  # @ReservedAssignment
             for attr in attrs:
                 attr, value = splitvalue(attr)
                 if attr.lower() == 'type' and \
                    value in ('a', 'A', 'i', 'I', 'd', 'D'):
-                    type = value.upper()
+                    type = value.upper()  # @ReservedAssignment
             fp, retrlen = fw.retrfile(file, type)
             headers = ""
             mtype = mimetypes.guess_type(req.get_full_url())[0]

@@ -130,11 +130,11 @@ class TestCase(unittest.TestCase):
         return self._monkey_patcher.monkey_patch_environ(*args, **kwds)
 
     def assert_contains(self, container, containee):
-        self.assertTrue(containee in container, "%r not in %r" % 
+        self.assertTrue(containee in container, "%r not in %r" %
                         (containee, container))
 
     def assert_less_than(self, got, expected):
-        self.assertTrue(got < expected, "%r >= %r" % 
+        self.assertTrue(got < expected, "%r >= %r" %
                         (got, expected))
 
 
@@ -149,7 +149,7 @@ class GoldenTestCase(TestCase):
         proc = subprocess.Popen(["diff", "--recursive", "-u", "-N",
                                  "--exclude=.*", dir_expect, dir_got],
                                 stdout=subprocess.PIPE)
-        stdout, stderr = proc.communicate()
+        stdout, stderr = proc.communicate()  # @UnusedVariable
         if len(stdout) > 0:
             if self.run_meld:
                 # Put expected output on the right because that is the

@@ -1,4 +1,4 @@
-from easyprocess import EasyProcess
+from easyprocess import EasyProcess  # @UnresolvedImport
 
 print(
     '-- Run program, wait for it to complete, get stdout (command is string):')

@@ -1,5 +1,5 @@
-from entrypoint2 import entrypoint
-from pyunpack import Archive
+from entrypoint2 import entrypoint  # @UnresolvedImport
+from pyunpack import Archive  # @UnresolvedImport
 import logging
 
 log = logging.getLogger(__name__)

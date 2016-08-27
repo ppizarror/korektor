@@ -533,9 +533,9 @@ def test(args=None):
         klass = TestSGMLParser
 
     if args:
-        file = args[0]
+        file = args[0]  # @ReservedAssignment
     else:
-        file = 'test.html'
+        file = 'test.html'  # @ReservedAssignment
 
     if file == '-':
         f = sys.stdin

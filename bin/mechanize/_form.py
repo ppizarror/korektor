@@ -843,7 +843,7 @@ def ParseResponseEx(response,
                         _urlunparse=_urlunparse,
                         )
 
-def ParseFileEx(file, base_uri,
+def ParseFileEx(file, base_uri,  # @ReservedAssignment
                 select_default=False,
                 form_parser_class=FormParser,
                 request_class=_request.Request,
@@ -943,7 +943,7 @@ def ParseResponse(response, *args, **kwds):
     """
     return _ParseFileEx(response, response.geturl(), *args, **kwds)[1:]
 
-def ParseFile(file, base_uri, *args, **kwds):
+def ParseFile(file, base_uri, *args, **kwds):  # @ReservedAssignment
     """Parse HTML and return a list of HTMLForm instances.
 
     mechanize.ParseError is raised on parse errors.
@@ -959,7 +959,7 @@ def ParseFile(file, base_uri, *args, **kwds):
     """
     return _ParseFileEx(file, base_uri, *args, **kwds)[1:]
 
-def _ParseFileEx(file, base_uri,
+def _ParseFileEx(file, base_uri,  # @ReservedAssignment
                  select_default=False,
                  ignore_errors=False,
                  form_parser_class=FormParser,
@@ -1010,7 +1010,7 @@ def _ParseFileEx(file, base_uri,
         form._urlparse = _urlparse
         form._urlunparse = _urlunparse
         for ii in range(len(controls)):
-            type, name, attrs = controls[ii]
+            type, name, attrs = controls[ii]  # @ReservedAssignment
             # index=ii*10 allows ImageControl to return multiple ordered pairs
             form.new_control(
                 type, name, attrs, select_default=select_default, index=ii * 10)
@@ -1105,7 +1105,7 @@ class Control:
     id: value of id HTML attribute
 
     """
-    def __init__(self, type, name, attrs, index=None):
+    def __init__(self, type, name, attrs, index=None):  # @ReservedAssignment
         """
         type: string describing type of control (see the keys of the
          HTMLForm.type2class dictionary for the allowable values)
@@ -1134,7 +1134,7 @@ class Control:
     def pairs(self):
         """Return list of (key, value) pairs suitable for passing to urlencode.
         """
-        return [(k, v) for (i, k, v) in self._totally_ordered_pairs()]
+        return [(k, v) for (i, k, v) in self._totally_ordered_pairs()]  # @UnusedVariable
 
     def _totally_ordered_pairs(self):
         """Return list of (key, value, index) tuples.
@@ -1186,7 +1186,7 @@ class ScalarControl(Control):
      control to their values
 
     """
-    def __init__(self, type, name, attrs, index=None):
+    def __init__(self, type, name, attrs, index=None):  # @ReservedAssignment
         self._index = index
         self._label = _get_label(attrs)
         self.__dict__["type"] = type.lower()
@@ -1207,7 +1207,7 @@ class ScalarControl(Control):
         if name == "value":
             return self.__dict__["_value"]
         else:
-            raise AttributeError("%s instance has no attribute '%s'" % 
+            raise AttributeError("%s instance has no attribute '%s'" %
                                  (self.__class__.__name__, name))
 
     def __setattr__(self, name, value):
@@ -1263,7 +1263,7 @@ class TextControl(ScalarControl):
     TEXTAREA
 
     """
-    def __init__(self, type, name, attrs, index=None):
+    def __init__(self, type, name, attrs, index=None):  # @ReservedAssignment
         ScalarControl.__init__(self, type, name, attrs, index)
         if self.type == "hidden": self.readonly = True
         if self._value is None:
@@ -1281,7 +1281,7 @@ class FileControl(ScalarControl):
 
     """
 
-    def __init__(self, type, name, attrs, index=None):
+    def __init__(self, type, name, attrs, index=None):  # @ReservedAssignment
         ScalarControl.__init__(self, type, name, attrs, index)
         self._value = None
         self._upload_data = []
@@ -1363,7 +1363,7 @@ class FileControl(ScalarControl):
             value = "<No files added>"
         else:
             value = []
-            for file, ctype, filename in self._upload_data:
+            for file, ctype, filename in self._upload_data:  # @UnusedVariable @ReservedAssignment
                 if filename is None:
                     value.append("<Unnamed file>")
                 else:
@@ -1407,7 +1407,7 @@ class IsindexControl(ScalarControl):
     result = mechanize.urlopen(url)
 
     """
-    def __init__(self, type, name, attrs, index=None):
+    def __init__(self, type, name, attrs, index=None):  # @ReservedAssignment
         ScalarControl.__init__(self, type, name, attrs, index)
         if self._value is None:
             self._value = ""
@@ -1424,7 +1424,7 @@ class IsindexControl(ScalarControl):
         # deprecated in 4.01, but it should still say how to submit it).
         # Submission of ISINDEX is explained in the HTML 3.2 spec, though.
         parts = self._urlparse(form.action)
-        rest, (query, frag) = parts[:-2], parts[-2:]
+        rest, (query, frag) = parts[:-2], parts[-2:]  # @UnusedVariable
         parts = rest + (urllib.quote_plus(self.value), None)
         url = self._urlunparse(parts)
         req_data = url, None, []
@@ -1468,7 +1468,7 @@ class IgnoreControl(ScalarControl):
     The value attribute of IgnoreControl is always None.
 
     """
-    def __init__(self, type, name, attrs, index=None):
+    def __init__(self, type, name, attrs, index=None):  # @ReservedAssignment
         ScalarControl.__init__(self, type, name, attrs, index)
         self._value = None
 
@@ -1647,7 +1647,7 @@ class ListControl(Control):
 
     _label = None
 
-    def __init__(self, type, name, attrs={}, select_default=False,
+    def __init__(self, type, name, attrs={}, select_default=False,  # @ReservedAssignment
                  called_as_base_class=False, index=None):
         """
         select_default: for RADIO and multiple-selection SELECT controls, pick
@@ -1689,7 +1689,7 @@ class ListControl(Control):
         else:
             return False
 
-    def get_items(self, name=None, label=None, id=None,
+    def get_items(self, name=None, label=None, id=None,  # @ReservedAssignment
                   exclude_disabled=False):
         """Return matching items by name or label.
 
@@ -1721,7 +1721,7 @@ class ListControl(Control):
             items.append(o)
         return items
 
-    def get(self, name=None, label=None, id=None, nr=None,
+    def get(self, name=None, label=None, id=None, nr=None,  # @ReservedAssignment
             exclude_disabled=False):
         """Return item by name or label, disambiguating if necessary with nr.
 
@@ -1801,7 +1801,7 @@ class ListControl(Control):
             raise AttributeError("control '%s' is disabled" % self.name)
         if self.readonly:
             raise AttributeError("control '%s' is readonly" % self.name)
-        action == bool(action)
+        action == bool(action)  # @NoEffect
         compat = self._form.backwards_compat
         if not compat and item.disabled:
             raise AttributeError("item is disabled")
@@ -1964,7 +1964,7 @@ class ListControl(Control):
             return [o.name for o in self.items if o.selected and
                     (not o.disabled or compat)]
         else:
-            raise AttributeError("%s instance has no attribute '%s'" % 
+            raise AttributeError("%s instance has no attribute '%s'" %
                                  (self.__class__.__name__, name))
 
     def __setattr__(self, name, value):
@@ -2035,7 +2035,7 @@ class ListControl(Control):
                 names[nn] = 1
         for name, count in names.items():
             on, off = self._get_items(name, count)
-            for i in range(count):
+            for i in range(count):  # @UnusedVariable
                 if on:
                     item = on[0]
                     del on[0]
@@ -2159,7 +2159,7 @@ class RadioControl(ListControl):
     INPUT/RADIO
 
     """
-    def __init__(self, type, name, attrs, select_default=False, index=None):
+    def __init__(self, type, name, attrs, select_default=False, index=None):  # @ReservedAssignment
         attrs.setdefault("value", "on")
         ListControl.__init__(self, type, name, attrs, select_default,
                              called_as_base_class=True, index=index)
@@ -2192,7 +2192,7 @@ class CheckboxControl(ListControl):
     INPUT/CHECKBOX
 
     """
-    def __init__(self, type, name, attrs, select_default=False, index=None):
+    def __init__(self, type, name, attrs, select_default=False, index=None):  # @ReservedAssignment
         attrs.setdefault("value", "on")
         ListControl.__init__(self, type, name, attrs, select_default,
                              called_as_base_class=True, index=index)
@@ -2260,7 +2260,7 @@ class SelectControl(ListControl):
     # -Subsequent SelectControls have both OPTION HTML-attribute in attrs and
     #  the __select dictionary containing the SELECT HTML-attributes.
 
-    def __init__(self, type, name, attrs, select_default=False, index=None):
+    def __init__(self, type, name, attrs, select_default=False, index=None):  # @ReservedAssignment
         # fish out the SELECT HTML attributes from the OPTION HTML attributes
         # dictionary
         self.attrs = attrs["__select"].copy()
@@ -2327,7 +2327,7 @@ class SubmitControl(ScalarControl):
     BUTTON/SUBMIT
 
     """
-    def __init__(self, type, name, attrs, index=None):
+    def __init__(self, type, name, attrs, index=None):  # @ReservedAssignment
         ScalarControl.__init__(self, type, name, attrs, index)
         # IE5 defaults SUBMIT value to "Submit Query"; Firebird 0.6 leaves it
         # blank, Konqueror 3.1 defaults to "Submit".  HTML spec. doesn't seem
@@ -2366,7 +2366,7 @@ class ImageControl(SubmitControl):
     Coordinates are specified using one of the HTMLForm.click* methods.
 
     """
-    def __init__(self, type, name, attrs, index=None):
+    def __init__(self, type, name, attrs, index=None):  # @ReservedAssignment
         SubmitControl.__init__(self, type, name, attrs, index)
         self.readonly = False
 
@@ -2696,7 +2696,7 @@ class HTMLForm:
                             ll._backwards_compat = value
         self.__dict__[name] = value
 
-    def new_control(self, type, name, attrs,
+    def new_control(self, type, name, attrs,  # @ReservedAssignment
                     ignore_unknown=False, select_default=False, index=None):
         """Adds a new control to the form.
 
@@ -2719,7 +2719,7 @@ class HTMLForm:
          MoreFormTests.test_interspersed_controls for motivation)
 
         """
-        type = type.lower()
+        type = type.lower()  # @ReservedAssignment
         klass = self.type2class.get(type)
         if klass is None:
             if ignore_unknown:
@@ -2783,7 +2783,7 @@ class HTMLForm:
             raise ValueError(str(e))
 
     def get_value(self,
-                  name=None, type=None, kind=None, id=None, nr=None,
+                  name=None, type=None, kind=None, id=None, nr=None,  # @ReservedAssignment
                   by_label=False,  # by_label is deprecated
                   label=None):
         """Return value of control.
@@ -2807,7 +2807,7 @@ class HTMLForm:
         else:
             return c.value
     def set_value(self, value,
-                  name=None, type=None, kind=None, id=None, nr=None,
+                  name=None, type=None, kind=None, id=None, nr=None,  # @ReservedAssignment
                   by_label=False,  # by_label is deprecated
                   label=None):
         """Set value of control.
@@ -2831,7 +2831,7 @@ class HTMLForm:
         else:
             c.value = value
     def get_value_by_label(
-        self, name=None, type=None, kind=None, id=None, label=None, nr=None):
+        self, name=None, type=None, kind=None, id=None, label=None, nr=None):  # @ReservedAssignment
         """
 
         All arguments should be passed by name.
@@ -2842,7 +2842,7 @@ class HTMLForm:
 
     def set_value_by_label(
         self, value,
-        name=None, type=None, kind=None, id=None, label=None, nr=None):
+        name=None, type=None, kind=None, id=None, label=None, nr=None):  # @ReservedAssignment
         """
 
         All arguments should be passed by name.
@@ -2865,7 +2865,7 @@ class HTMLForm:
             control.clear()
 
     def clear(self,
-              name=None, type=None, kind=None, id=None, nr=None, label=None):
+              name=None, type=None, kind=None, id=None, nr=None, label=None):  # @ReservedAssignment
         """Clear the value attribute of a control.
 
         As a result, the affected control will not be successful until a value
@@ -2880,14 +2880,14 @@ class HTMLForm:
 # Form-filling methods applying only to ListControls.
 
     def possible_items(self,  # deprecated
-                       name=None, type=None, kind=None, id=None,
+                       name=None, type=None, kind=None, id=None,  # @ReservedAssignment
                        nr=None, by_label=False, label=None):
         """Return a list of all values that the specified control can take."""
         c = self._find_list_control(name, type, kind, id, label, nr)
         return c.possible_items(by_label)
 
     def set(self, selected, item_name,  # deprecated
-            name=None, type=None, kind=None, id=None, nr=None,
+            name=None, type=None, kind=None, id=None, nr=None,  # @ReservedAssignment
             by_label=False, label=None):
         """Select / deselect named list item.
 
@@ -2897,14 +2897,14 @@ class HTMLForm:
         self._find_list_control(name, type, kind, id, label, nr).set(
             selected, item_name, by_label)
     def toggle(self, item_name,  # deprecated
-               name=None, type=None, kind=None, id=None, nr=None,
+               name=None, type=None, kind=None, id=None, nr=None,  # @ReservedAssignment
                by_label=False, label=None):
         """Toggle selected state of named list item."""
         self._find_list_control(name, type, kind, id, label, nr).toggle(
             item_name, by_label)
 
     def set_single(self, selected,  # deprecated
-                   name=None, type=None, kind=None, id=None,
+                   name=None, type=None, kind=None, id=None,  # @ReservedAssignment
                    nr=None, by_label=None, label=None):
         """Select / deselect list item in a control having only one item.
 
@@ -2998,7 +2998,7 @@ class HTMLForm:
                            self._request_class)
 
     def click_request_data(self,
-                           name=None, type=None, id=None,
+                           name=None, type=None, id=None,  # @ReservedAssignment
                            nr=0, coord=(1, 1),
                            request_class=_request.Request,
                            label=None):
@@ -3031,7 +3031,7 @@ class HTMLForm:
         return self._click(name, type, id, label, nr, coord, "request_data",
                            self._request_class)
 
-    def click_pairs(self, name=None, type=None, id=None,
+    def click_pairs(self, name=None, type=None, id=None,  # @ReservedAssignment
                     nr=0, coord=(1, 1),
                     label=None):
         """As for click_request_data, but returns a list of (key, value) pairs.
@@ -3053,7 +3053,7 @@ class HTMLForm:
 #---------------------------------------------------
 
     def find_control(self,
-                     name=None, type=None, kind=None, id=None,
+                     name=None, type=None, kind=None, id=None,  # @ReservedAssignment
                      predicate=None, nr=None,
                      label=None):
         """Locate and return some specific control within the form.
@@ -3103,7 +3103,7 @@ class HTMLForm:
 # Private methods.
 
     def _find_list_control(self,
-                           name=None, type=None, kind=None, id=None,
+                           name=None, type=None, kind=None, id=None,  # @ReservedAssignment
                            label=None, nr=None):
         if ((name is None) and (type is None) and (kind is None) and
             (id is None) and (label is None) and (nr is None)):
@@ -3113,7 +3113,7 @@ class HTMLForm:
         return self._find_control(name, type, kind, id, label,
                                   is_listcontrol, nr)
 
-    def _find_control(self, name, type, kind, id, label, predicate, nr):
+    def _find_control(self, name, type, kind, id, label, predicate, nr):  # @ReservedAssignment
         if ((name is not None) and (name is not Missing) and
             not isstringlike(name)):
             raise TypeError("control name must be string-like")
@@ -3184,7 +3184,7 @@ class HTMLForm:
             raise ControlNotFoundError("no control matching " + description)
         assert False
 
-    def _click(self, name, type, id, label, nr, coord, return_type,
+    def _click(self, name, type, id, label, nr, coord, return_type,  # @ReservedAssignment
                request_class=_request.Request):
         try:
             control = self._find_control(
@@ -3201,7 +3201,7 @@ class HTMLForm:
 
     def _pairs(self):
         """Return sequence of (key, value) pairs suitable for urlencoding."""
-        return [(k, v) for (i, k, v, c_i) in self._pairs_and_controls()]
+        return [(k, v) for (i, k, v, c_i) in self._pairs_and_controls()]  # @UnusedVariable
 
 
     def _pairs_and_controls(self):
@@ -3226,7 +3226,7 @@ class HTMLForm:
         method = self.method.upper()
         # scheme, netloc, path, parameters, query, frag = urlparse.urlparse(self.action)
         parts = self._urlparse(self.action)
-        rest, (query, frag) = parts[:-2], parts[-2:]
+        rest, (query, frag) = parts[:-2], parts[-2:]  # @UnusedVariable
 
         if method == "GET":
             if self.enctype != "application/x-www-form-urlencoded":
@@ -3247,7 +3247,7 @@ class HTMLForm:
                 mw = MimeWriter(data, http_hdrs)
                 mw.startmultipartbody("form-data", add_to_http_hdrs=True,
                                       prefix=0)
-                for ii, k, v, control_index in self._pairs_and_controls():
+                for ii, k, v, control_index in self._pairs_and_controls():  # @UnusedVariable
                     self.controls[control_index]._write_mime_data(mw, k, v)
                 mw.lastpart()
                 return uri, data.getvalue(), http_hdrs

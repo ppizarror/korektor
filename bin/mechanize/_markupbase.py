@@ -118,7 +118,7 @@ class ParserBase:
                     return -1  # incomplete
                 j = m.end()
             elif c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ":
-                name, j = self._scan_name(j, i)
+                name, j = self._scan_name(j, i)  # @UnusedVariable
             elif c in self._decl_otherchars:
                 j = j + 1
             elif c == "[":
@@ -246,7 +246,7 @@ class ParserBase:
 
     # Internal -- scan past <!ELEMENT declarations
     def _parse_doctype_element(self, i, declstartpos):
-        name, j = self._scan_name(i, declstartpos)
+        name, j = self._scan_name(i, declstartpos)  # @UnusedVariable
         if j == -1:
             return -1
         # style content model; just skip until '>'
@@ -258,7 +258,7 @@ class ParserBase:
     # Internal -- scan past <!ATTLIST declarations
     def _parse_doctype_attlist(self, i, declstartpos):
         rawdata = self.rawdata
-        name, j = self._scan_name(i, declstartpos)
+        name, j = self._scan_name(i, declstartpos)  # @UnusedVariable
         c = rawdata[j:j + 1]
         if c == "":
             return -1
@@ -267,7 +267,7 @@ class ParserBase:
         while 1:
             # scan a series of attribute descriptions; simplified:
             #   name type [value] [#constraint]
-            name, j = self._scan_name(j, declstartpos)
+            name, j = self._scan_name(j, declstartpos)  # @UnusedVariable
             if j < 0:
                 return j
             c = rawdata[j:j + 1]
@@ -285,7 +285,7 @@ class ParserBase:
                     # end of buffer, incomplete
                     return -1
             else:
-                name, j = self._scan_name(j, declstartpos)
+                name, j = self._scan_name(j, declstartpos)  # @UnusedVariable
             c = rawdata[j:j + 1]
             if not c:
                 return -1
@@ -302,7 +302,7 @@ class ParserBase:
                 if rawdata[j:] == "#":
                     # end of buffer
                     return -1
-                name, j = self._scan_name(j + 1, declstartpos)
+                name, j = self._scan_name(j + 1, declstartpos)  # @UnusedVariable
                 if j < 0:
                     return j
                 c = rawdata[j:j + 1]
@@ -314,7 +314,7 @@ class ParserBase:
 
     # Internal -- scan past <!NOTATION declarations
     def _parse_doctype_notation(self, i, declstartpos):
-        name, j = self._scan_name(i, declstartpos)
+        name, j = self._scan_name(i, declstartpos)  # @UnusedVariable
         if j < 0:
             return j
         rawdata = self.rawdata
@@ -331,7 +331,7 @@ class ParserBase:
                     return -1
                 j = m.end()
             else:
-                name, j = self._scan_name(j, declstartpos)
+                name, j = self._scan_name(j, declstartpos)  # @UnusedVariable
                 if j < 0:
                     return j
 
@@ -350,7 +350,7 @@ class ParserBase:
                     break
         else:
             j = i
-        name, j = self._scan_name(j, declstartpos)
+        name, j = self._scan_name(j, declstartpos)  # @UnusedVariable
         if j < 0:
             return j
         while 1:
@@ -366,7 +366,7 @@ class ParserBase:
             elif c == ">":
                 return j + 1
             else:
-                name, j = self._scan_name(j, declstartpos)
+                name, j = self._scan_name(j, declstartpos)  # @UnusedVariable
                 if j < 0:
                     return j
 

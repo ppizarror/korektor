@@ -1,6 +1,6 @@
 """Easy to use python subprocess interface."""
 
-from easyprocess.unicodeutil import split_command, unidecode, uniencode
+from easyprocess.unicodeutil import split_command, unidecode, uniencode  # @UnresolvedImport
 import logging
 import os.path
 import platform
@@ -10,7 +10,7 @@ import tempfile
 import threading
 import time
 
-from easyprocess.about import __version__
+from easyprocess.about import __version__  # @UnresolvedImport
 
 log = logging.getLogger(__name__)
 
@@ -80,7 +80,7 @@ class EasyProcess(object):
 
     :param env: If *env* is not ``None``, it must be a mapping that defines the environment
                    variables for the new process; these are used instead of inheriting the current
-                   process' environment, which is the default behavior. 
+                   process' environment, which is the default behavior.
                    (check :mod:`subprocess`  for more information)
     '''
     def __init__(self, cmd, ubuntu_package=None, url=None, cwd=None, use_temp_files=True, env=None):
@@ -357,7 +357,7 @@ class EasyProcess(object):
                     try:
                         self.popen.terminate()
                     except AttributeError:
-                        os.kill(self.popen.pid, signal.SIGKILL)
+                        os.kill(self.popen.pid, signal.SIGKILL)  # @UndefinedVariable
                 except OSError, oserror:
                     log.debug('exception in terminate:%s', oserror)
 
