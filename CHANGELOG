@@ -457,3 +457,41 @@
 	+Se renombra testpath.py a _testpath.py. Ademas se modifica
 	 la carga por defecto de este modulo a obligatoria para to-
 	 dos los tests.
+
+[0.2.1]
+	+Se refactorizan y eliminan errores de importacion en las
+	 librerias externas easyprocess, pyunpack y mechanize.
+	+Se agregan entradas de errores de tipos de parametros en
+	 bin/errors.py.
+	+Refactorizacion menor en bin/utils.py.
+	+Nuevo modulo en bin: varType. Este modulo maneja funciones
+	 auxiliares para comprobar los tipos de las variables. Esto
+	 se hizo con el fin de evitar errores en tiempo de ejecucion
+	 relacionado con los tipos de parametros en funciones.
+	+Se agrega entrada en el archivo de configuraciones del fi-
+	 lemanager 'REPLACE_IF_FOLDER_ALREADY_EXISTS'. Este parame-
+	 tro permite modificar el comportamiento de la extraccion
+	 de archivos comprimidos, permitiendo reemplazar una carpeta
+	 si es que existe en el directorio padre o no.
+	+Se agregan funciones al filemanager para evitar descompri-
+	 mir un archivo comprimido si es que ya existe una carpeta
+	 con el mismo nombre dentro de la carpeta padre.
+	+Se agregan chequeos de tipos de variable en el constructor
+	 y funciones isFile y isFolder de lib/package.py.
+	+Se agrega una nueva clase 'PackageFileManager' dentro de
+	 lib/package.py. Esta clase funciona exactamente igual que
+	 la clase Package salvo que toma como argumento una insta-
+	 ncia de fileManager y un string indicando el nombre del
+	 paquete a cargar.
+	+Se agrega el testeo del 'Folder 5' en fileManagerTest.py.
+	+Se corrige error en 'Folder 0' el cual no se subia a gith-
+	 ub debido a estar vacia, lo cual resultaba en un error en
+	 la bateria de tests.
+	+Se refactoriza el archivo de testeo packageTest, corrigi-
+	 endo la importacion de librerias, y las funciones testBig,
+	 testSeguidas, testSimple, testSeguidasEmpty y testF4.
+	+Se agrega funcion de testeo para la nueva clase Package-
+	 FileManager dentro de fileManagerTest.py.
+	+Refactorizacion menor en utilsTest.py.
+	+Se crea un nuevo archivo de testeo varTypeTest.py el cual
+	 prueba las funciones de bin/varType.
