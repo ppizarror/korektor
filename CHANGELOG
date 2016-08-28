@@ -498,3 +498,41 @@
 	+Renombrada la carpeta de tests de tests/ a test/.
 	+Se corrige error al no subir la carpeta .data_tests_pri-
 	 vate/ a la estructura de los tests debido a estar vacia.
+
+[0.2.2]
+	+Se agrega entrada de error asociado a la instalacion de la
+	 libreria Tkinter en errors.py.
+	+Se agrega la opcion de no descomprimir archivos .zip y
+	 .rar si es que existe una carpeta del mismo nombre en el
+	 directorio padre en el fileManager.
+	+Se agrega la opcion de activar y desactivar el verbose en
+	 el fileManager y el packageValidator.
+	+Se corrige un error critico al agregar archivos con el mi-
+	 smo nombre de forma repetida tras analizar una carpeta con
+	 el fileManager.
+	+Se corrige error critico en el modulo Package al generar
+	 la jerarquia de archivos (generateHierachy).
+	+Se agrega el archivo runtests.py en el directorio princi-
+	 pal con el fin de probar la bateria de tests deste la ter-
+	 minal de comandos de forma sencilla.
+	+Se agrega el directorio de pruebas 'Folder 8-COMPSD' con
+	 el fin de testear el comportamiento de la no-extraccion si
+	 es que hay colisiones de nombres.
+	+Se agrega el directorio .results en test/ para guardar el
+	 resultado de los test que se hagan con el archivo runtest-
+	 s.py. Este directorio contiene un archivo results.txt el
+	 cual almacenara las distintas pruebas a lo largo del tie-
+	 mpo, el sistema operativo huesped, el numero de pruebas r-
+	 ealizado y el tiempo total de la prueba. En la carpeta
+	 log/ se almacenaran los resultados de cada prueba por se-
+	 parado.
+	+Se modifica el nombre de los archivos de testeo que no u-
+	 tilizen la interfaz de Unittest de *Test.py a *_test.py
+	 con el fin de no ser utilizados por runtests.py.
+	+Se modifica la forma de imprimir errores en el fileManag-
+	 erTest.py. Ademas se agregan pruebas tanto en este archi-
+	 vo como en packageTest.py los cuales testean con el dire-
+	 ctorio 'Folder 8-COMPSD'.
+	+Se agrega una clase unittest a verticalScrolledFrame deb-
+	 ido a errores detectados en sistemas Linux tras no tener
+	 instalada la libreria Tkinter (python-tk).

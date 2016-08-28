@@ -3,8 +3,8 @@ CORTO PLAZO:
 + Agregar tests de modulos privados.
 + Agregar funciones de conteo de subcarpetas de una carpeta determinada, asi como archivos de una carpeta determinada.
 + Agregar funciones para obtener la ruta y profundidad de un archivo o carpeta cualquiera (utilizar funciones ya hechas).
-+ Agregar condicion de no extraccion si es que ya existe una carpeta con un nombre similiar al archivo a extraer en ese momento.
-+ Verificar estado de ejecucion en linux.
+[DONE] Agregar condicion de no extraccion si es que ya existe una carpeta con un nombre similiar al archivo a extraer en ese momento.
+[DONE] Verificar estado de ejecucion en linux.
 
 
 
