@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = "ppizarror"
+__author__ = "ppizarror"
 
 # bin/varType TEST
 # Testeo de modulo que comprueba tipos de variable
@@ -10,13 +10,19 @@ __autor__ = "ppizarror"
 # Licencia: GPLv2
 
 # Importación de librerías
-from bin.varType import *  # @UnusedWildImport
 from _testpath import *  # @UnusedWildImport
+from bin.varType import *  # @UnusedWildImport
+from bin.errors import ERR_CHECKTYPE
 import unittest
 
 # Constantes de los test
-ERR_CHECKTYPE = "Error al chequear un tipo de variable"
 VERBOSE = False
+
+# Se cargan argumentos desde la consola
+if __name__ == '__main__':
+    from bin.arguments import argumentParserFactory
+    argparser = argumentParserFactory("VarType Test", verbose=True, version=True).parse_args()
+    VERBOSE = argparser.verbose
 
 # Clase para testear
 class testDummyClass():

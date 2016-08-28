@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+__author__ = "ppizarror"
 
 # CONFIG
-# Carpeta de configuraciones
+# Carpeta de configuraciones.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: OCTUBRE 2015 - 2016

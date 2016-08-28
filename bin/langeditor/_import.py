@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+__author__ = "ppizarror"
 
 # IMPORT
 # Permite adaptar un exportado traducido a uno válido para hoa

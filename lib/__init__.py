@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = "ppizarror"
+__author__ = "ppizarror"
 
 # LIB
-# Maneja las funciones principales de korektor
+# Maneja las funciones principales de korektor.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: OCTUBRE 2015
@@ -12,11 +12,9 @@ __autor__ = "ppizarror"
 # Configuración de entorno
 # noinspection PyUnresolvedReferences
 from libpath import *
-from libpath import _LIB_CONFIG
-from bin import configLoader
+from bin import configLoader, __version__
 from lib import fileManager
-from version import __version__  # @UnresolvedImport
 
 # noinspection PyUnresolvedReferences
 # noinspection PyProtectedMember
-__binconfig = configLoader(_LIB_CONFIG, "lib.ini")
+__binconfig = configLoader(LIB_CONFIG, "lib.ini")

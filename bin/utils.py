@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = 'ppizarror'
+__author__ = "ppizarror"
 
 # UTILS
-# Este archivo provee de funciones básicas que son globalmente usadas
+# Este archivo provee de funciones básicas que son globalmente usadas.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: SEPTIEMBRE-OCTUBRE 2015 - 2016

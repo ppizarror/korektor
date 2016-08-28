@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = "ppizarror"
+__author__ = "ppizarror"
 
 # bin/langs TEST
+# Test visual al módulo encargado de cargar los idiomas.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: AGOSTO 2016
 # Licencia: GPLv2
 
-# Test visual
+# Main test
 if __name__ == '__main__':
 
     # Importación de librerías

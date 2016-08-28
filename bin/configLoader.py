@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = 'ppizarror'
+__author__ = "ppizarror"
 
 # CONFIGLOADER
-# Permite cargar configuraciones dado un archivo dado por parámetro
+# Permite cargar configuraciones dado un archivo dado por parámetro.
 # Formato de archivo:
 #
 #    # Comentario

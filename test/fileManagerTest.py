@@ -1,24 +1,29 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = "ppizarror"
+__author__ = "ppizarror"
 
-# lib/filemanager TEST
+# lib/fileManager TEST
+# Test del fileManager, módulo relacionado con el manejo y escaneo de archivos en una carpeta.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: AGOSTO 2016
 # Licencia: GPLv2
 
 # Importación de librerías
-from _testpath import DIR_DATA_TEST  # @UnusedWildImport
+from _testpath import *  # @UnusedWildImport
 from lib.fileManager import *  # @UnusedWildImport
 from bin.utils import printBarsConsole, equalLists
+from bin.errors import FILEMANAGER_ERROR_RESTORE_WD, FILEMANAGER_ERROR_SCAN, FILEMANAGER_ERROR_WD
 import unittest
 
 # Constantes de los test
-FILEMANAGER_ERROR_RESTORE_WD = "Restauracion de WD erronea"
-FILEMANAGER_ERROR_SCAN = "Escaneo de archivo erroneo"
-FILEMANAGER_ERROR_WD = "WD erroneo"
 VERBOSE = False
+
+# Se cargan argumentos desde la consola
+if __name__ == '__main__':
+    from bin.arguments import argumentParserFactory
+    argparser = argumentParserFactory("FileManager Test", verbose=True, version=True).parse_args()
+    VERBOSE = argparser.verbose
 
 # Clase UnitTest
 class testFileManager(unittest.TestCase):

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = "ppizarror"
+__author__ = "ppizarror"
 
 # bin/verticalScrolledFrame TEST
 #
@@ -10,8 +10,8 @@ __autor__ = "ppizarror"
 
 # Importación de librerías
 from _testpath import *  # @UnusedWildImport
-import unittest
 from bin.errors import throw, ERROR_TKINTER_NOT_INSTALLED  # @UnusedImport
+import unittest
 
 # Clase UnitTest
 class testColors(unittest.TestCase):

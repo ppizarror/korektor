@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+__author__ = "ppizarror"
 
 # LANGS
-# Maneja los idiomas
+# Maneja los idiomas.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: ABRIL 2015
+# Fecha: ABRIL 2015 - 2016
 # Licencia: GPLv2
-__autor__ = 'ppizarror'
 
 # Importación de librerías y obtención de directorios
 import math
-
 from binpath import _LANG_DIRCONFIG, _LANG_DIRLANGS, _DIR_CONFIG
 from configLoader import configLoader
 import errors

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+__author__ = "ppizarror"
 
 # EXPORT
 # Permite adaptar un archivo a un texto normal para ser traducido correctamente en google

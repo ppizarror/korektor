@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = 'ppizarror'
+__author__ = "ppizarror"
 
 # COLORS
-# Maneja los colores en la consola
+# Maneja los colores en la consola.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: AGOSTO 2015 - 2016

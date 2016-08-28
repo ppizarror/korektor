@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = 'ppizarror'
+__author__ = "ppizarror"
 
 # HASHDIR
-# Maneja el checksum de los archivos
+# Maneja el checksum de los archivos.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: ABRIL 2015
+# Fecha: ABRIL 2015 - 2016
 # Licencia: GPLv2
 
 # Importación de librerías

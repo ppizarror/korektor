@@ -1,18 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = 'ppizarror'
+__author__ = "ppizarror"
 
 # BIN
-# Posee módulos utilitarios y programas externos
+# Posee módulos utilitarios y programas externos.
 #
-# Autor: PABLO PIZARRO @ pgithub.com/ppizarror
+# Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: OCTUBRE 2015 - 2016
 # Licencia: GPLv2
 
 # Importación de librerías iniciales
 from binpath import DIR_BIN, sys
-import binpath
 from configLoader import configLoader
+from bin._version import __version__
+import binpath
 import errors
 
 # Configuración de entorno
@@ -39,3 +40,4 @@ if __name__ == '__main__':
     utils.clrscr()
     __binconfig.printParameters()
     print DIR_BIN
+    print __version__

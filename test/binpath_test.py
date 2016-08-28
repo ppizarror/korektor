@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = "ppizarror"
+__author__ = "ppizarror"
 
 # bin/binpath TEST
+# Test del manejo de carpetas en el paquete bin.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: AGOSTO 2016
 # Licencia: GPLv2
 
-# Test
+# Main test
 if __name__ == '__main__':
 
     # Importación de librerías

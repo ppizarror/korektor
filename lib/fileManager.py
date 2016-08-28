@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = 'ppizarror'
+__author__ = "ppizarror"
 
 # FILE MANAGER
 # Administra archivos, permite obtener orden jerárquico, descomprime zip y rar, elimina archivos, etc.
@@ -12,30 +12,29 @@ __autor__ = 'ppizarror'
 # Importación de librerías
 if __name__ == '__main__':
     from libpath import *  # @UnusedWildImport
+import os  # @Reimport
 import shutil  # @UnusedImport
 import zipfile
-import os  # @Reimport
 from bin.configLoader import configLoader  # @UnresolvedImport
 import bin.errors as err  # @UnresolvedImport @UnusedImport
 from bin.utils import isHiddenFile, isFolder, isWindows, appendListToList
 from config import DIR_CONFIG  # @UnresolvedImport
 from data import DIR_UPLOADS  # @UnusedImport
 
-# Se define el ejecutable de unrar para Windows
-if isWindows():
+if isWindows():  # Se define el ejecutable de unrar para Windows
     from bin.binpath import DIR_BIN
     try:
         import bin.rarfile as rarfile  # @UnresolvedImport
     except Exception, e:
         err.st_error(err.ERROR_RARNOTINSTALLED_WIN, True, "rarfile", e)
     rarfile.UNRAR_TOOL = DIR_BIN + "unrar.exe"
-# Si no es windows se utiliza la librería patool
-else:
+else:  # Si no es windows se utiliza la librería patool
     import bin.rarfile as rarfile  # @UnresolvedImport @Reimport
     # try:
     #    from pyunpack import Archive  # @UnusedImport @UnresolvedImport
     # except Exception, e:
     #    err.st_error(err.ERROR_RARNOTINSTALLED_NOTWIN, True, "pyunpack", e)
+
 # Constantes
 _FILEMANAGER_Y_EXTRACT_COMPRSD_FILE = "_inspectFiles extrayo el archivo '{0}' a pesar de que ya existe como carpeta."
 _FILEMANAGER_NO_EXTRACT_COMPRSD_FILE = "_inspectFiles no extrayo el archivo '{0}' dado que este ya existe."
@@ -60,19 +59,15 @@ class FileManager:
         folderConfig = configLoader(DIR_CONFIG, "folder.ini")
         packageConfig = configLoader(DIR_CONFIG, "packages.ini")
         self._autoExtract = config.isTrue("AUTOEXTRACT")  # Auto extraer un archivo comprimido
-        # Eliminar carpetas extraidas tras el análisis
         self._doCharactersRestricted = packageConfig.isTrue("CHARACTERS_DO_RESTRICT")
         self._doRemoveExtractedFolders = config.isTrue("DO_REMOVE_EXTRACTED_FOLDERS")
         self._extractIfFolderAlreadyExists = config.isTrue("REPLACE_IF_FOLDER_ALREADY_EXISTS")
         self._ignoredFiles = folderConfig.getValueListed("IGNORE")
         self._needDotOnFile = packageConfig.isTrue("NEED_DOT_ON_FILE")
         self._removeOnExtract = config.isTrue("REMOVE_ON_EXTRACT")
-        # Eliminar un archivo comprimido tras extraerlo
         self._validChars = packageConfig.getValue("VALID_CHARACTERS")
-        # Caracteres válidos de los archivos del paquete
         self._validRegexChars = packageConfig.getValue("VALID_REGEX_CHARACTERS")
-        # Caracteres válidos para los regex
-        self._verbose = coreConfig.isTrue("VERBOSE")  # Imprimir el estado del sistema
+        self._verbose = coreConfig.isTrue("VERBOSE")
 
         # Variables del FD
         self._wd = wd

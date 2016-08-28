@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = 'ppizarror'
+__author__ = "ppizarror"
 
 # PACKAGE VALIDATOR
 # Testea que los paquetes entregados por los alumnos tengan una estructura correcta
-# Además testea de que las estructuras de archivos tengan también una estructura correcta
+# Además testea de que las estructuras de archivos tengan también una estructura correcta.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: OCTUBRE 2015 - 2016
@@ -19,7 +19,6 @@ from lib.fileManager import FileManager  # @UnusedImport @UnresolvedImport
 from config import DIR_CONFIG  # @UnresolvedImport
 from data import DIR_UPLOADS, DIR_STRUCTURE, DIR_DATA  # @UnusedImport
 from bin.utils import regexCompare, appendListToList, isFolder
-import os  # @Reimport @NoMove
 
 # Constantes
 PACKAGE_TESTER_ERROR_NO_FOUND = "El archivo consultado no existe"

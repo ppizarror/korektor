@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = 'ppizarror'
+__author__ = "ppizarror"
 
 # BINPATH
-# Adminsitra el path de /bin
+# Adminsitra el path de /bin.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: OCTUBRE 2015 - 2016

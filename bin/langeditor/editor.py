@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+__author__ = "ppizarror"
 
 # EDITOR
 # Editor de idiomas
@@ -19,20 +20,22 @@ sys.setdefaultencoding('UTF8')  # @UndefinedVariable
 from tkFileDialog import *  # @UnusedWildImport
 import tkFont
 import ttk
+import datetime
 try:
     # noinspection PyUnresolvedReferences
     import winsound
 except:
     pass
+__actualeditorpath__ = str(os.path.abspath(os.path.dirname(__file__))).replace("\\", "/")
 
 # Constantes del programa
 AUTOR = "Pablo Pizarro"
-C_DATA = [650, 450, False, False, False, "*//*", False]
+C_DATA = [650, 450, False, False, False, "*//*", False, False]
 DATADOCUMENTS = "doc/"
 DATAICONS = "icons/"
 DATACONFIG = "config/"
-DATALANGS = str(os.path.abspath(os.path.dirname(__file__))).replace("bin/langeditor", "resources/langs/")
-DATARECOVER = "recover/"
+DATALANGS = __actualeditorpath__.replace("bin/langeditor", "resources/langs/")
+DATARECOVER = DATALANGS + ".recover/"
 DEFAULT_FONT_TITLE = "Arial", 10
 EMAIL = "pablo@ppizarror.com"
 LANGFILE = DATACONFIG + "langs.txt"
@@ -414,6 +417,12 @@ try:
                 C_DATA[6] = True
             else:
                 C_DATA[6] = False
+        if c_command[0].strip() == "AUTOSAVE":
+            c_after_command = str(c_command[1]).split(",")
+            if c_after_command[0].strip().upper() == "ON":
+                C_DATA[7] = True
+            else:
+                C_DATA[7] = False
     conf_file.close()
 except:
     # Se genera un nuevo archivo de configuraciones
@@ -433,11 +442,14 @@ except:
     archivo.write("#Delimitador de los archivos\n")
     archivo.write("DELIMITER = " + str(C_DATA[5]).replace(" ", "*") + "\n\n")
     archivo.write("#Automaticamente se formatea el string\n")
-    archivo.write("AUTOTITLE = OFF")
+    archivo.write("AUTOTITLE = OFF\n\n")
+    archivo.write("#Auto guardar\n")
+    archivo.write("AUTOSAVE = ON")
     archivo.close()
 
 # Constantes tras configuración
 AUTOFOCUS = C_DATA[3]
+AUTOSAVE = C_DATA[7]
 AUTOTITLE = C_DATA[6]
 DATADELIMITER = C_DATA[5]
 PROGRAMSIZE = [C_DATA[0], C_DATA[1]]
@@ -948,12 +960,16 @@ class langs:
                 for i in self.ml_data: archive.write(
                     str(int(i[0])) + DATADELIMITER + str(i[1]).replace(" ", "|") + "\n")
                 archive.close()
-                # Se guarda el archivo de idioma en la carpeta de recuperación
-                # archive = open(DATARECOVER + self.namelang.replace(LANGEND, \
-                #                " - ") + str(datetime.datetime.now())[0:19].replace(":", "-") + LANGEND, "w")
-                # for i in self.ml_data:
-                #   archive.write(str(int(i[0])) + DATADELIMITER + str(i[1]).replace(" ", "|") + "\n")
-                #   archive.close()
+                if AUTOSAVE:
+                    try:
+                        # Se guarda el archivo de idioma en la carpeta de recuperación
+                        archive = open(DATARECOVER + self.namelang.replace(LANGEND, " - ") + \
+                                       str(datetime.datetime.now())[0:19].replace(":", "-") + LANGEND, "w")
+                        for i in self.ml_data:
+                            archive.write(str(int(i[0])) + DATADELIMITER + str(i[1]).replace(" ", "|") + "\n")
+                            archive.close()
+                    except:
+                        pass
                 self.titlefy()
             except:
                 e = pop(["Error", ALERTICON, "error", 75, 275, "Error al guardar el idioma"])

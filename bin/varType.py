@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = 'ppizarror'
+__author__ = "ppizarror"
 
 # VARTYPE
-# Maneja los tipos de variables
+# Maneja los tipos de variables.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: AGOSTO 2016
 # Licencia: GPLv2
 
 # Importación de librerías
-if __name__ == '__main__': from binpath import *  # @UnusedWildImport
+if __name__ == "__main__": from binpath import *  # @UnusedWildImport
 
 # Tipos de variables permitidos
 TYPE_BOOL = "Boolean"

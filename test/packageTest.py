@@ -1,27 +1,30 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = "ppizarror"
+__author__ = "ppizarror"
 
 # lib/package TEST
+# Test que prueba la creación de paquetes por el módulo Package, tanto como sus
+# respectivas subclases.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: AGOSTO 2016
 # Licencia: GPLv2
 
 # Importación de librerías
-from _testpath import DIR_DATA_TEST  # @UnusedWildImport
+from _testpath import *  # @UnusedWildImport
 from lib.package import *  # @UnusedWildImport
 from bin.utils import printBarsConsole
+from bin.errors import *  # @UnusedWildImport
 import unittest
 
 # Constantes test
-PACKAGE_TEST_ERROR_COUNT_FILES = "Numero de archivos malo"
-PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS = "Numero de subcarpetas malas"
-PACKAGE_TEST_ERROR_INVALID_NAME = "El nombre de la carpeta es invalido"
-PACKAGE_TEST_FOUND_INEXISTENT_FILE = "Encontro un archivo inexistente"
-PACKAGE_TEST_FOUND_NOT_CORRECT_FILE = "Encontro un archivo inexistente"
-PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER = "Encontro una carpeta inexistente"
 VERBOSE = False
+
+# Se cargan argumentos desde la consola
+if __name__ == '__main__':
+    from bin.arguments import argumentParserFactory
+    argparser = argumentParserFactory("Package Test", verbose=True, version=True).parse_args()
+    VERBOSE = argparser.verbose
 
 
 # Clase test

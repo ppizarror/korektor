@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = "ppizarror"
+__author__ = "ppizarror"
 
 # bin/utils TEST
 #
@@ -11,13 +11,17 @@ __autor__ = "ppizarror"
 # Importación de librerías
 from _testpath import *  # @UnusedWildImport
 from bin.utils import *  # @UnusedWildImport
+from bin.errors import ERR_GBT, ERR_HDNFL, ERR_REGX
 import unittest
 
 # Constantes de los test
-ERR_GBT = "Error al ejecutar getBetweenTags"
-ERR_HDNFL = "Error al ejecutar isHiddenFile"
-ERR_REGX = "Error al ejecutar regexCompare"
 VERBOSE = False
+
+# Se cargan argumentos desde la consola
+if __name__ == '__main__':
+    from bin.arguments import argumentParserFactory
+    argparser = argumentParserFactory("Utils Test", verbose=True, version=True).parse_args()
+    VERBOSE = argparser.verbose
 
 
 # Clase UnitTest

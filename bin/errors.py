@@ -1,9 +1,9 @@
 # !/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = 'ppizarror'
+__author__ = "ppizarror"
 
 # ERRORS
-# Tratamiento de errores
+# Tratamiento de errores.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: OCTUBRE 2015 - 2016
@@ -59,11 +59,24 @@ ERROR_TAG_INITNOTCORRECTENDING = 14
 ERROR_TAG_INITNOTFINDED = 13
 ERROR_TAG_LASTNOTFINDED = 15
 ERROR_TKINTER_NOT_INSTALLED = "Error, la libreria Tkinter no esta instalada (python-tk)."
+ERR_CHECKTYPE = "Error al chequear un tipo de variable"
+ERR_GBT = "Error al ejecutar getBetweenTags"
+ERR_HDNFL = "Error al ejecutar isHiddenFile"
+ERR_REGX = "Error al ejecutar regexCompare"
+FILEMANAGER_ERROR_RESTORE_WD = "Restauracion de WD erronea"
+FILEMANAGER_ERROR_SCAN = "Escaneo de archivo erroneo"
+FILEMANAGER_ERROR_WD = "WD erroneo"
 NO_ERROR = "OK"
 PACKAGE_ERROR_NAME_NOT_FOUND = "El código de error no existe"
 PACKAGE_ERROR_NOT_HIERACHY_CREATED = "La jerarquía de archivos aún no ha sido construida"
 PACKAGE_ERROR_NOT_INDEXED_FILES_YET = "Los archivos del paquete aún no han sido indexados"
 PACKAGE_ERROR_NO_NAME = "El nombre del paquete aún no ha sido definido"
+PACKAGE_TEST_ERROR_COUNT_FILES = "Numero de archivos malo"
+PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS = "Numero de subcarpetas malas"
+PACKAGE_TEST_ERROR_INVALID_NAME = "El nombre de la carpeta es invalido"
+PACKAGE_TEST_FOUND_INEXISTENT_FILE = "Encontro un archivo inexistente"
+PACKAGE_TEST_FOUND_NOT_CORRECT_FILE = "Encontro un archivo inexistente"
+PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER = "Encontro una carpeta inexistente"
 ST_ERROR = "[ERR]"
 ST_INFO = "[INF]"
 ST_WARNING = "[WRN]"

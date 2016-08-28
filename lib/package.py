@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = 'ppizarror'
+__author__ = "ppizarror"
 
 # PACKAGE
 # Los paquetes corresponden a elementos lógicos que manejan los archivos que entregan los alumnos
-# Contienen direcciones físicas en memoria, Archivos y Jerarquía
+# Contienen direcciones físicas en memoria, Archivos y Jerarquía.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: AGOSTO 2016

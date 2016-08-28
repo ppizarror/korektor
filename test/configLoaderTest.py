@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = "ppizarror"
+__author__ = "ppizarror"
 
 # bin/configLoader TEST
+# Test del configLoader, el cual maneja la importación y manejo de configuraciones
+# de la aplicación.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: AGOSTO 2016
@@ -15,6 +17,12 @@ import unittest
 
 # Constantes de los test
 VERBOSE = False
+
+# Se cargan argumentos desde la consola
+if __name__ == '__main__':
+    from bin.arguments import argumentParserFactory
+    argparser = argumentParserFactory("ConfigLoader Test", verbose=True, version=True).parse_args()
+    VERBOSE = argparser.verbose
 
 # Clase UnitTest
 class testConfigLoader(unittest.TestCase):

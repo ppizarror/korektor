@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = 'ppizarror'
+__author__ = "ppizarror"
 
 # BROWSER
-# Sencillo navegador web
+# Sencillo navegador web.
 #
 # Autor: PABLO PIZARRO @ github.com/ppizarror
 # Fecha: ABRIL-OCTUBRE 2015 - 2016

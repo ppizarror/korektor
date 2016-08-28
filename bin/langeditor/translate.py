@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+__author__ = "ppizarror"
 
 # TRANSLATE
 # Traduce gracias a google traductor los idiomas de Hero of Antair

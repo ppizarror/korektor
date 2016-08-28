@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = 'ppizarror'
 
 # VERTICALSCROLLEDFRAME
-# Este archivo provee una clase para administrar ventanas con barras de deslizamiento en Tkinter
+# Este archivo provee una clase para administrar ventanas con barras de deslizamiento en Tkinter.
 #
 # Autor: http://tkinter.unpythonic.net/wiki/VerticalScrolledFrame
 

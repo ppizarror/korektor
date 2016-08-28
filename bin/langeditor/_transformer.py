@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+__author__ = "ppizarror"
 
 # TRANSFORMER
 # Permite adaptar los archivos traducidos desde google a archivos válidos para hoa

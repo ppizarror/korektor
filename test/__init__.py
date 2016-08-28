@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__autor__ = "ppizarror"
+__author__ = "ppizarror"
 
 # TEST
 # Maneja los test de la aplicación, estos se clasifican en dos tipos:
@@ -15,5 +15,6 @@ __autor__ = "ppizarror"
 # Licencia: GPLv2
 
 # Importación de librerías
+from _testpath import *
 from bin import *
-from lib.version import __version__  # @UnresolvedImport
+from bin import __version__
