@@ -536,3 +536,5 @@
 	+Se agrega una clase unittest a verticalScrolledFrame deb-
 	 ido a errores detectados en sistemas Linux tras no tener
 	 instalada la libreria Tkinter (python-tk).
+	+Se agrega restriccion al .gitignore para evitar archivos
+	 en la carpeta .results/ tras ejecutar los diversos tests.
