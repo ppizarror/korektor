@@ -379,26 +379,27 @@
 [0.1.8]
 	+Se modifica el archivo .gitignore agregando una restriccion a
 	 los archivos de test privados (aquellos que prueban modulos
-	 que hagan mencion a nombres privados, etc). Y se agrego
-	 ademas una entrada para evitar los archivos residuales de VIM.
-	+Se agregan entradas de errores en el archivo errors.py debido
-	 a la extension del modulo packages.
-	+Se agregan acentos a los caracteres restringidos en el archivo
-	 de configuraciones packages.ini.
-	+Se agregan las opciones de no necesitar un punto en el archivo
-	 para ser validado (NEED_DOT_ON_FILE) y evitar archivos que no
-	 cumplan con un determinado set de caracteres (CHARACTERS_DO-
-	 RESTRICT) en el fileManager.
+	 que hagan mencion a nombres privados, etc). Y se agrego ade-
+	 mas una entrada para evitar los archivos residuales de VIM.
+	+Se agregan entradas de errores en el archivo errors.py debi-
+	 do a la extension del modulo packages.
+	+Se agregan acentos a los caracteres restringidos en el arch-
+	 ivo de configuraciones packages.ini.
+	+Se agregan las opciones de no necesitar un punto en el archi-
+	 vo para ser validado (NEED_DOT_ON_FILE) y evitar archivos que
+	 no cumplan con un determinado set de caracteres (CHARACTERS_
+	 DO_RESTRICT) en el fileManager.
 	+Se agrega la opcion de codificacion UTF-8 en la descompresion
 	 de archivos rar.
 	+Correccion de error al detectar archivos .zip o .rar por su
 	 extension.
-	+Se agrega la opcion de lanzar errores como string en Package.
+	+Se agrega la opcion de lanzar errores como string en Packa-
+	 ge.
 	+Nuevas funciones para consultar si un nombre es un archivo o
 	 una carpeta en Package.
 	+Se agregan nuevas comprobaciones de errores en Package.
-	+Se agregan funciones para contar archivos y numero de carpetas
-	 que contiene un paquete (package.py)
+	+Se agregan funciones para contar archivos y numero de carpe-
+	 tas que contiene un paquete (package.py)
 	+Se modifican los test publicos para agregar mas variedad en
 	 el analisis.
 	+Refactorizacion menor de accentsTest.py, binpathTest.py, bro-
@@ -416,8 +417,8 @@
 	+Se crea un control de versiones (CHANGELOG).
 	+Se agrega comprobacion de tipo de variable en Package.
 	+Se agregan constantes de tipo de variable en utils.py.
-	+Se agrega funcion para comprobar si es que un archivo existe
-	 en un paquete (package.py).
+	+Se agrega funcion para comprobar si es que un archivo exis-
+	 te en un paquete (package.py).
 	+Se modifica direccion de actualizacion.
 	+Se agrega modulo para manejar control de versiones.
 	+Se crea el test updateTest.py para testear la actualizacion.
@@ -437,8 +438,8 @@
 [0.2.0]
 	+Se repara error en la no distincion entre package inexiste-
 	 nte y package vacio.
-	+Se repara error logico en el retorno de resultados entre pa-
-	 ckage vacio e inexistente.
+	+Se repara error logico en el retorno de resultados entre
+	 package vacio e inexistente.
 	+Se repara descompresion en linux, dejando rarfile por defe-
 	 cto. No se habilitara pyunpack hasta otra version.
 	+Nuevo formato de tests: Se incluye UnitTest para ejecutar
@@ -466,8 +467,8 @@
 	+Refactorizacion menor en bin/utils.py.
 	+Nuevo modulo en bin: varType. Este modulo maneja funciones
 	 auxiliares para comprobar los tipos de las variables. Esto
-	 se hizo con el fin de evitar errores en tiempo de ejecucion
-	 relacionado con los tipos de parametros en funciones.
+	 se hizo con el fin de evitar errores en tiempo de ejecuci-
+	 on relacionado con los tipos de parametros en funciones.
 	+Se agrega entrada en el archivo de configuraciones del fi-
 	 lemanager 'REPLACE_IF_FOLDER_ALREADY_EXISTS'. Este parame-
 	 tro permite modificar el comportamiento de la extraccion
@@ -500,30 +501,30 @@
 	 vate/ a la estructura de los tests debido a estar vacia.
 
 [0.2.2]
-	+Se agrega entrada de error asociado a la instalacion de la
-	 libreria Tkinter en errors.py.
+	+Se agrega entrada de error asociado a la instalacion de
+	 la libreria Tkinter en errors.py.
 	+Se agrega la opcion de no descomprimir archivos .zip y
 	 .rar si es que existe una carpeta del mismo nombre en el
 	 directorio padre en el fileManager.
 	+Se agrega la opcion de activar y desactivar el verbose en
 	 el fileManager y el packageValidator.
-	+Se corrige un error critico al agregar archivos con el mi-
-	 smo nombre de forma repetida tras analizar una carpeta con
-	 el fileManager.
+	+Se corrige un error critico al agregar archivos con el
+	 mismo nombre de forma repetida tras analizar una carpeta
+	 con el fileManager.
 	+Se corrige error critico en el modulo Package al generar
 	 la jerarquia de archivos (generateHierachy).
 	+Se agrega el archivo runtests.py en el directorio princi-
 	 pal con el fin de probar la bateria de tests deste la ter-
 	 minal de comandos de forma sencilla.
 	+Se agrega el directorio de pruebas 'Folder 8-COMPSD' con
-	 el fin de testear el comportamiento de la no-extraccion si
-	 es que hay colisiones de nombres.
+	 el fin de testear el comportamiento de la no-extraccion
+	 si es que hay colisiones de nombres.
 	+Se agrega el directorio .results en test/ para guardar el
-	 resultado de los test que se hagan con el archivo runtest-
-	 s.py. Este directorio contiene un archivo results.txt el
+	 resultado de los test que se hagan con el archivo runtes-
+	 ts.py. Este directorio contiene un archivo results.txt el
 	 cual almacenara las distintas pruebas a lo largo del tie-
-	 mpo, el sistema operativo huesped, el numero de pruebas r-
-	 ealizado y el tiempo total de la prueba. En la carpeta
+	 mpo, el sistema operativo huesped, el numero de pruebas
+	 realizado y el tiempo total de la prueba. En la carpeta
 	 log/ se almacenaran los resultados de cada prueba por se-
 	 parado.
 	+Se modifica el nombre de los archivos de testeo que no u-
@@ -538,3 +539,71 @@
 	 instalada la libreria Tkinter (python-tk).
 	+Se agrega restriccion al .gitignore para evitar archivos
 	 en la carpeta .results/ tras ejecutar los diversos tests.
+
+[0.2.3]
+	-Se elimina la carpeta licence/ de resources/.
+	+Se agrega entrada al .gitignore para evitar archivos de
+	 recuperacion de los idiomas.
+	+Se modifica error grave en el metadata __author__ en to-
+	 dos los archivos al estar mal escrita.
+	+Se modifica la entrada Autor en el header de varios ar-
+	 chivos al estar mal escrito el enlace al github.
+	-Eliminacion del archivo lib/version.py.
+	+La version del software se almacena en el archivo _vers-
+	 ion.py la cual contiene tanto la version como el estatus
+	 del desarrollo del proyecto. Se agregan entradas a vari-
+	 os modulos del software para incluir esta nueva entrada.
+	+Se agrega el archivo _author.py el cual contiene variab-
+	 les metadatas __author__, __credits__, __email__ y __ma-
+	 intainer__.
+	+Se crea el archivo _template.py en bin con el fin de ho-
+	 mogeneizar la produccion y mantencion de modulos dentro
+	 del paquete.
+	+Correccion ortografica y gramatica en todos los headers
+	 de los modulos y librerias del programa.
+	+Se crea el modulo arguments dentro de bin/. Este modulo
+	 provee de la funcion argumentParserFactory la cual crea
+	 y establece los diversos argumentos que pueden ser usa-
+	 dos por el software. Por defecto se pueden agregar los
+	 comandos --author, --verbose, --version y --help.
+	+Se mueven las entradas de los errores de los archivos
+	 de testeo a bin/errors.py. Ademas se ordenaron las ent-
+	 radas de errores en orden ascendente segun su nombre.
+	+Actualizacion de fechas de edicion en varios modulos.
+	+Se agrega el autor a los archivos del programa langedi-
+	 tor en bin/.
+	+Se agrega el parametro de configuracion AUTOSAVE en
+	 bin/langeditor/config/config.ini. Este parametro indica
+	 si realizar una copia de seguridad del archivo de idio-
+	 ma guardado en la carpeta resources/langs/.recover/.
+	+Se habilita el guardado automatico en el editor del
+	 programa langeditor.
+	+Se eliminan lineas invalidas en los archivos de confi-
+	 guracion dentro de config/.
+	+Se hacen cambios en los comentarios de inicio del tes-
+	 teo en varios modulos de test/.
+	+Se agrega la carga de la version del software en lib/
+	 __init__.py.
+	+Se modifica el nombre de la carpeta de configuraciones
+	 del paquete lib de _LIB_CONFIG A LIB_CONFIG.
+	+Se eliminan varias lineas de comentarios en el fileMa-
+	 nager.py con el fin de simplificar el codigo.
+	-Se elimina la importacion de la libreria os en packa-
+	 geValidator.py.
+	+Refactorizacion menor del archivo __init__.py en el
+	 paquete de recursos.
+	+El archivo de pruebas runtest.py almacena el estado de
+	 ejecucion de las pruebas y el log de cada una de ellas
+	 dentro de .results/ en test/. Estos comportamientos
+	 ademas pueden ser configurados por la incorporacion
+	 de los comandos --disable-verbose, --dont-save-log y
+	 --dont-save-results.
+	+Refactorizacion de los archivos _template.py y _test-
+	 path.py en test/.
+	+El VERBOSE de los test ahora se carga como argumento
+	 de la consola en los archivos de testeo accentsTest.py,
+	 configLoaderTest.py, errorsTest.py, fileManagerTest.py,
+	 packageTest.py, packageValidatorTest.py, rarfileTes-
+	 t.py, utilsTest.py y verTypeTest.py.
+	+Correccion menor en entradas del CHANGELOG.
+

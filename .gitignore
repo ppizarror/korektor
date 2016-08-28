@@ -29,7 +29,7 @@ data/uploads/
 test/.data_tests_private/
 
 # Archivos de tests privados
-test/private*.py
+test/*_private.py
 
 # Archivos de resultados de tests
 test/.results/results.txt
@@ -37,3 +37,6 @@ test/.results/log/*
 
 # Archivos residuales de VIM
 *.swp
+
+# Archivos de recuperación de idiomas guardados
+resources/langs/.recover/*
