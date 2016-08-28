@@ -65,6 +65,20 @@ class PackageValidator:
         self._structFiles = []
         self._loadStructure()
 
+    def disable_verbose(self):
+        """
+        Desactiva el printing de errores y estados de sistema
+        :return: void
+        """
+        self._verbose = False
+
+    def enable_verbose(self):
+        """
+        Desactiva el printing de errores y estados de sistema
+        :return: void
+        """
+        self._verbose = True
+
     def _getStructure(self):
         """
         Retorna la estructura de un paquete en forma de string

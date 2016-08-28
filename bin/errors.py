@@ -58,6 +58,7 @@ ERROR_TAG_CANTRETRIEVEHTML = 16
 ERROR_TAG_INITNOTCORRECTENDING = 14
 ERROR_TAG_INITNOTFINDED = 13
 ERROR_TAG_LASTNOTFINDED = 15
+ERROR_TKINTER_NOT_INSTALLED = "Error, la libreria Tkinter no esta instalada (python-tk)."
 NO_ERROR = "OK"
 PACKAGE_ERROR_NAME_NOT_FOUND = "El código de error no existe"
 PACKAGE_ERROR_NOT_HIERACHY_CREATED = "La jerarquía de archivos aún no ha sido construida"

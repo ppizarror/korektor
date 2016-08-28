@@ -8,15 +8,15 @@ __autor__ = "ppizarror"
 # Fecha: AGOSTO 2016
 # Licencia: GPLv2
 
-# Importación de librerías
-from _testpath import *  # @UnusedWildImport
-from bin.configLoader import configLoader
-from bin.utils import compareVersion, getVersion, printBarsConsole
-from config import DIR_CONFIG
-from lib import __version__
-
-# Test
+# Test visual
 if __name__ == '__main__':
+
+    # Importación de librerías
+    from _testpath import *  # @UnusedWildImport
+    from bin.configLoader import configLoader
+    from bin.utils import compareVersion, getVersion, printBarsConsole
+    from config import DIR_CONFIG
+    from lib import __version__
 
     # Arreglo de comparaciones
     versionDict = {1:">", 2:"<", 0:"=="}

@@ -218,11 +218,6 @@ class Package:
                                     sublvl = sublvl[m]
                                     found = True
                                     break
-                            else:  # Si es un string
-                                if sublvl[m] == j[k]:
-                                    sublvl = sublvl[m]
-                                    found = True
-                                    break
                         if not found:
                             sublvl.append([j[k]])
                             sublvl = sublvl[len(sublvl) - 1]

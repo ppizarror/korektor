@@ -31,6 +31,10 @@ class packageTest(unittest.TestCase):
     def setUp(self):
         self.f = FileManager()
         self.f.setWorkingDirectory(DIR_DATA_TEST)
+        if VERBOSE:
+            self.f.enable_verbose()
+        else:
+            self.f.disable_verbose()
 
     def testF3(self):
         p = Package(self.f.inspectSingleFile("Folder 3"), True)
@@ -208,6 +212,33 @@ class packageTest(unittest.TestCase):
         assert p.isFile("Zip Folder") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
         assert p.isFile("") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
         del p
+
+    def testPackageWithCompressedAlreadyExistsDisableExtract(self):
+        self.f.disable_extractIfFolderAlreadyExists()
+        p = PackageFileManager(self.f, "Folder 8-COMPSD", True)
+        if VERBOSE:
+            printBarsConsole("Testeo folder 8 con archivos comprimidos de igual nombre - extraccion dehabilitada")
+            p.printHierachy()
+        assert p.getPackageName() == "Folder 8-COMPSD", PACKAGE_TEST_ERROR_INVALID_NAME
+        assert p.getNumberOfElements() == 15, PACKAGE_TEST_ERROR_COUNT_FILES
+        assert p.getNumberOfSubfolders() == 9, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
+
+        # Asserts file
+        assert p.isFile("Zip Folder") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.isFile("Parte1.java") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.isFile("Parte2.java") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.isFile("PartE1.java") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.isFile("Content 1 inside rar.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.isFile("Content 1 inside rAr.txt") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.isFile("Content 1.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+
+        # Asserts folder
+        assert p.isFolder("Zip Folder") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.isFolder("Zip FOlder") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.isFolder("Rar Folder") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.isFolder("Zip Folder TARGET") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.isFolder("Zip Folder TARGEt") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+
 
 # Main test
 if __name__ == '__main__':

@@ -8,13 +8,14 @@ __autor__ = "ppizarror"
 # Fecha: AGOSTO 2016
 # Licencia: GPLv2
 
-# Importación de librerías
-from _testpath import *  # @UnusedWildImport
-from bin.langs import *  # @UnusedWildImport
-from bin.langs import _LANG_DIRCONFIG, _LANG_DIRLANGS
-
-# Test
+# Test visual
 if __name__ == '__main__':
+
+    # Importación de librerías
+    from _testpath import *  # @UnusedWildImport
+    from bin.langs import *  # @UnusedWildImport
+    from bin.langs import _LANG_DIRCONFIG, _LANG_DIRLANGS
+
     print _LANG_DIRCONFIG
     print _LANG_DIRLANGS
     lang = langLoader("TEST", verbose=True)

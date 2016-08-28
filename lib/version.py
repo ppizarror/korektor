@@ -9,4 +9,4 @@ __autor__ = "ppizarror"
 # Fecha: AGOSTO 2016
 # Licencia: GPLv2
 
-__version__ = '0.1.9'
+__version__ = '0.2.2'

@@ -29,7 +29,6 @@ if isWindows():
     except Exception, e:
         err.st_error(err.ERROR_RARNOTINSTALLED_WIN, True, "rarfile", e)
     rarfile.UNRAR_TOOL = DIR_BIN + "unrar.exe"
-
 # Si no es windows se utiliza la librería patool
 else:
     import bin.rarfile as rarfile  # @UnresolvedImport @Reimport
@@ -37,9 +36,9 @@ else:
     #    from pyunpack import Archive  # @UnusedImport @UnresolvedImport
     # except Exception, e:
     #    err.st_error(err.ERROR_RARNOTINSTALLED_NOTWIN, True, "pyunpack", e)
-
 # Constantes
-_FILEMANAGER_NO_EXTRACT_COMPRSD_FILE = "_inspectFiles no extrayó el archivo '{0}' dado que este ya existe."
+_FILEMANAGER_Y_EXTRACT_COMPRSD_FILE = "_inspectFiles extrayo el archivo '{0}' a pesar de que ya existe como carpeta."
+_FILEMANAGER_NO_EXTRACT_COMPRSD_FILE = "_inspectFiles no extrayo el archivo '{0}' dado que este ya existe."
 
 
 # noinspection PyUnresolvedReferences
@@ -103,13 +102,6 @@ class FileManager:
         """
         self._doRemoveExtractedFolders = False
 
-    def disable_removeOnExtract(self):
-        """
-        Desactiva el borrar un archivo comprimido tras extraerlo
-        :return: void
-        """
-        self._removeOnExtract = False
-
     def disable_extractIfFolderAlreadyExists(self):
         """
         Desactiva el extraer un archivo comprimido si es que este ya se encuentra en la carpeta padre
@@ -117,12 +109,33 @@ class FileManager:
         """
         self._extractIfFolderAlreadyExists = False
 
+    def disable_removeOnExtract(self):
+        """
+        Desactiva el borrar un archivo comprimido tras extraerlo
+        :return: void
+        """
+        self._removeOnExtract = False
+
+    def disable_verbose(self):
+        """
+        Desactiva el printing de errores y estados de sistema
+        :return: void
+        """
+        self._verbose = False
+
     def enable_autoExtract(self):
         """
         Activa el extraer automáticamente un archivo comprimido
         :return: void
         """
         self._autoExtract = True
+
+    def enable_extractIfFolderAlreadyExists(self):
+        """
+        Activa el extraer un archivo comprimido si es que este ya se encuentra en la carpeta padre
+        :return: void
+        """
+        self._extractIfFolderAlreadyExists = True
 
     def enable_doRemoveExtractedFolders(self):
         """
@@ -138,12 +151,12 @@ class FileManager:
         """
         self._removeOnExtract = True
 
-    def enable_extractIfFolderAlreadyExists(self):
+    def enable_verbose(self):
         """
-        Activa el extraer un archivo comprimido si es que este ya se encuentra en la carpeta padre
+        Desactiva el printing de errores y estados de sistema
         :return: void
         """
-        self._extractIfFolderAlreadyExists = True
+        self._verbose = True
 
     def getWorkingDirectory(self):
         """
@@ -209,48 +222,74 @@ class FileManager:
 
             elif self._isZip(rootpath, filename) and self._autoExtract:  # Si el archivo es paquete zip
                 newfilename = filename.replace(".zip", "").replace(".ZIP", "")
-#                 fileAlreadyExists = False
-#                 try:
-#                     fileAlreadyExists = newfilename in os.listdir(rootpath)
-#                 except:
-#                     pass
-#                 print fileAlreadyExists
-                zipfile.ZipFile(rootpath + filename).extractall(rootpath + newfilename + "/")
-                if self._removeOnExtract:
-                    os.remove(rootpath + filename)
-                extractedFolders.append(rootpath + newfilename + "/")
-                _inspect(rootpath, newfilename, filelist, extractedFolders, depth + 1)
+                fileAlreadyExists = False
+                doExtract = True
+                try:
+                    fileAlreadyExists = newfilename in os.listdir(rootpath)
+                except:
+                    pass
+                if fileAlreadyExists:
+                    doExtract = doExtract and self._extractIfFolderAlreadyExists
+                    if self._verbose:
+                        if doExtract:
+                            print _FILEMANAGER_Y_EXTRACT_COMPRSD_FILE.format(newfilename)
+                        else:
+                            print _FILEMANAGER_NO_EXTRACT_COMPRSD_FILE.format(newfilename)
+                if doExtract:
+                    zipfile.ZipFile(rootpath + filename).extractall(rootpath + newfilename + "/")
+                    if self._removeOnExtract:
+                        os.remove(rootpath + filename)
+                    extractedFolders.append(rootpath + newfilename + "/")
+                    _inspect(rootpath, newfilename, filelist, extractedFolders, depth + 1)
 
             elif self._isRar(rootpath, filename) and self._autoExtract:  # Si el archivo es paquete rar
                 newfilename = filename.replace(".rar", "").replace(".RAR", "")
-                if isWindows():
-                    try:
-                        rarfile.RarFile(rootpath + filename, "r", 'utf8').extractall(rootpath + newfilename + "/")
-                    except Exception, e:
-                        print ""
-                        err.st_error(err.ERROR_RARUNCOMPRESS, True, "rarfile", e)
-                else:
-                    # Para linux y con Archive/pyunpack
-                    # try:
-                    #    os.mkdir(rootpath + newfilename + "/")
-                    # except:
-                    #    pass
-                    try:
-                        rarfile.RarFile(rootpath + filename, "r", 'utf8').extractall(rootpath + newfilename + "/")
-                        # Archive(rootpath + filename).extractall(rootpath + newfilename + "/") # Para linux con Archive/pyunpack
-                    except Exception, e:
-                        print ""
-                        # err.st_error(err.ERROR_RARUNCOMPRESS, True, "pyunpack", e) # Para linux con Archive/pyunpack
-                        err.st_error(err.ERROR_RARUNCOMPRESS_LINUX, True, "rarfile", e)
-                if self._removeOnExtract:
-                    os.remove(rootpath + filename)
-                extractedFolders.append(rootpath + newfilename + "/")
-                _inspect(rootpath, newfilename, filelist, extractedFolders, depth + 1)
+                fileAlreadyExists = False
+                doExtract = True
+                try:
+                    fileAlreadyExists = newfilename in os.listdir(rootpath)
+                except:
+                    pass
+                if fileAlreadyExists:
+                    doExtract = doExtract and self._extractIfFolderAlreadyExists
+                    if self._verbose:
+                        if doExtract:
+                            print _FILEMANAGER_Y_EXTRACT_COMPRSD_FILE.format(newfilename)
+                        else:
+                            print _FILEMANAGER_NO_EXTRACT_COMPRSD_FILE.format(newfilename)
+                if doExtract:
+                    # Si el sistema operativo huesped es Windows
+                    if isWindows():
+                        try:
+                            rarfile.RarFile(rootpath + filename, "r", 'utf8').extractall(rootpath + newfilename + "/")
+                        except Exception, e:
+                            print ""
+                            err.st_error(err.ERROR_RARUNCOMPRESS, True, "rarfile", e)
+                    # Para sistemas basados en POSIX - OSX
+                    else:
+                        # Para linux y con Archive/pyunpack
+                        # try:
+                        #    os.mkdir(rootpath + newfilename + "/")
+                        # except:
+                        #    pass
+                        try:
+                            rarfile.RarFile(rootpath + filename, "r", 'utf8').extractall(rootpath + newfilename + "/")
+                            # Archive(rootpath + filename).extractall(rootpath + newfilename + "/") # Para linux con Archive/pyunpack
+                        except Exception, e:
+                            print ""
+                            # err.st_error(err.ERROR_RARUNCOMPRESS, True, "pyunpack", e) # Para linux con Archive/pyunpack
+                            err.st_error(err.ERROR_RARUNCOMPRESS_LINUX, True, "rarfile", e)
+                    if self._removeOnExtract:
+                        os.remove(rootpath + filename)
+                    extractedFolders.append(rootpath + newfilename + "/")
+                    _inspect(rootpath, newfilename, filelist, extractedFolders, depth + 1)
 
             else:  # Si es cualquier otro archivo entonces se añade
                 if _isValidFileName(filename):
                     if filename in os.listdir(rootpath):
-                        filelist.append(rootpath + filename)
+                        newfilename = rootpath + filename
+                        if newfilename not in filelist:  # Evitar archivos duplicados
+                            filelist.append(newfilename)
 
         def _removeExtractedFolders():
             """
