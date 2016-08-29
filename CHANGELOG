@@ -607,3 +607,15 @@
 	 t.py, utilsTest.py y verTypeTest.py.
 	+Correccion menor en entradas del CHANGELOG.
 
+[0.2.4]
+	+Formateo completo del codigo para todos los modulos se-
+	 gun el formato PEP-8.
+	+Runtests ahora crea graficos de los tiempos medios de
+	 cada prueba, guardandolos en el directorio .results/.
+	 En cada uno de ellos se indica el tiempo medio de las
+	 pruebas y su evolucion temporal.
+	+Nueva entrada en configuraciones: plot.ini, para mane-
+	 jar las configuraciones de ploteo generales del softwa-
+	 re.
+	+Nuevas entradas de errores asociados a runtests.py en
+	 bin/errors.py.
