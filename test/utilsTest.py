@@ -20,13 +20,13 @@ VERBOSE = False
 # Se cargan argumentos desde la consola
 if __name__ == '__main__':
     from bin.arguments import argumentParserFactory
+
     argparser = argumentParserFactory("Utils Test", verbose=True, version=True).parse_args()
     VERBOSE = argparser.verbose
 
 
 # Clase UnitTest
 class testUtils(unittest.TestCase):
-
     # Inicio de los test
     def setUp(self):
         pass
@@ -47,9 +47,12 @@ class testUtils(unittest.TestCase):
         del t, r
 
     def testGetBetweenTags(self):
-        assert getBetweenTags("<player>Username<title></title></player>", "<player>", "</player>") == "Username<title></title>", ERR_GBT
-        assert getBetweenTags("<player>Username</player><title>Altername</title>", "<player>", "</player>") == "Username", ERR_GBT
-        assert getBetweenTags("<player>Username</player><title>Altername</title>", "<title>", "</title>") == "Altername", ERR_GBT
+        assert getBetweenTags("<player>Username<title></title></player>", "<player>",
+                              "</player>") == "Username<title></title>", ERR_GBT
+        assert getBetweenTags("<player>Username</player><title>Altername</title>", "<player>",
+                              "</player>") == "Username", ERR_GBT
+        assert getBetweenTags("<player>Username</player><title>Altername</title>", "<title>",
+                              "</title>") == "Altername", ERR_GBT
 
     def testIsHiddenFile(self):
         assert isHiddenFile(".file") == True, ERR_HDNFL
@@ -63,6 +66,7 @@ class testUtils(unittest.TestCase):
         assert regexCompare("#.#", "lorem.ipsum") == True, ERR_REGX
         assert regexCompare("*regex *", "regex are  korektor") == True, ERR_REGX
         assert regexCompare("cc3001/tarea2/#_#/Parte1.java", "cc3001/tarea2/lorem_ipsum#/Parte1.java") == True, ERR_REGX
+
 
 # Main test
 if __name__ == '__main__':

@@ -10,7 +10,8 @@ __author__ = "ppizarror"
 # Licencia: GPLv2
 
 # Importación de librerías
-if __name__ == '__main__': from binpath import *  # @UnusedWildImport
+if __name__ == '__main__':
+    from binpath import *  # @UnusedWildImport
 import os  # @Reimport
 
 

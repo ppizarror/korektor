@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 __author__ = "ppizarror"
 
+
 # NOSTDOUT
 # Desactiva el standard output de python.
 #

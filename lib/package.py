@@ -26,12 +26,13 @@ PACKAGE_NO_NAME = "PACKAGE_NO_NAME"
 
 
 # Clase principal
+# noinspection PyMethodMayBeStatic
 class Package:
     """
     Clase paquete, necesita de una lista de archivos provista por un filemanager
     """
 
-    def __init__(self, files=[], generateHierachy=False, exceptionAsString=False):
+    def __init__(self, files, generateHierachy=False, exceptionAsString=False):
         """
         Constructor
         :param files: Lista de archivos generada por un FileManager
@@ -97,10 +98,10 @@ class Package:
         """
         self._exceptionStrBehaviour = False
 
-    def _isFile(self, f):
+    def _isFile(self, fl):
         """
         Retorna un vector de valores indicando si el nombre mencionado corresponde o no a un archivo
-        :param f: String
+        :param fl: String
         :return: List
         """
 
@@ -124,7 +125,7 @@ class Package:
             return [False, PACKAGE_FILE_NOT_FOUND, 0]
 
         if self._isgeneratedHierachyFiles:
-            return _recursiveSearchFile(self._hierachyFiles, f, 0, "")
+            return _recursiveSearchFile(self._hierachyFiles, fl, 0, "")
         else:
             return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
 
@@ -143,10 +144,10 @@ class Package:
         else:
             return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
 
-    def _isFolder(self, f):
+    def _isFolder(self, fl):
         """
         Retorna un vector de valores indicando si el nombre mencionado corresponde o no a una carpeta
-        :param f: String
+        :param fl: String
         :return: List
         """
 
@@ -176,7 +177,7 @@ class Package:
                 return [False, PACKAGE_FILE_NOT_FOUND, 0]
 
         if self._isgeneratedHierachyFiles:
-            return _recursiveSearchFolder(self._hierachyFiles, f, 0, "")
+            return _recursiveSearchFolder(self._hierachyFiles, fl, 0, "")
         else:
             return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
 

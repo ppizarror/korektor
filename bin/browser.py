@@ -10,12 +10,14 @@ __author__ = "ppizarror"
 # Licencia: GPLv2
 
 # Importación de librerías
-if __name__ == '__main__': from binpath import *  # @UnusedWildImport
+if __name__ == '__main__':
+    from binpath import *  # @UnusedWildImport
 import cookielib
 import htmlentitydefs
 import re
 import errors
 import mechanize
+
 
 # Funciones de clase
 def unescape(text):
@@ -182,7 +184,8 @@ class Browser:
             if len(form) > 0 and len(values) > 0:
                 if len(form) == len(values):
                     try:
-                        for i in range(len(form)): self.br.form[form[i]] = values[i]
+                        for i in range(len(form)):
+                            self.br.form[form[i]] = values[i]
                         self.br.submit()
                     except:
                         return errors.BR_ERRORxERROR_SET_SUBMIT

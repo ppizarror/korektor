@@ -20,6 +20,7 @@ _TITLE_POSITIONALS = "Argumentos posicionales"
 _TITLE_VERBOSE = "Activa el verbose."
 _TITLE_VERSION = "Muestra la version del programa."
 
+
 def argumentParserFactory(descripcion="", **kwargs):
     """
     Crea un parser de argumentos
@@ -111,6 +112,7 @@ def argumentParserFactory(descripcion="", **kwargs):
     # Se agrega la version
     if version:
         from bin._version import __version__
-        parser.add_argument('--version', dest='version', action='version', version='%(prog)s ' + __version__, help=title_version)
+        parser.add_argument('--version', dest='version', action='version', version='%(prog)s ' + __version__,
+                            help=title_version)
 
     return parser

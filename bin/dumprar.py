@@ -5,13 +5,17 @@ from binascii import crc32, hexlify  # @UnusedImport
 from datetime import datetime
 import sys
 import rarfile as rf
+
 try:
     bytearray
 except NameError:
     import array
 
+
+# noinspection PyShadowingBuiltins
 def bytearray(v):  # @ReservedAssignment
     return array.array('B', v)
+
 
 rf.UNICODE_COMMENTS = 1
 rf.USE_DATETIME = 1
@@ -36,6 +40,7 @@ block_strs = ['MARK', 'MAIN', 'FILE', 'OLD_COMMENT', 'OLD_EXTRA',
               'OLD_SUB', 'OLD_RECOVERY', 'OLD_AUTH', 'SUB', 'ENDARC']
 
 
+# noinspection PyShadowingBuiltins
 def rarType(type):  # @ReservedAssignment
     if type < rf.RAR_BLOCK_MARK or type > rf.RAR_BLOCK_ENDARC:
         return "*UNKNOWN*"
@@ -101,6 +106,7 @@ def xprint(m, *args):
     sys.stdout.write('\n')
 
 
+# noinspection PyAugmentAssignment
 def render_flags(flags, bit_list):
     res = []
     known = 0
@@ -159,6 +165,7 @@ def show_item(h):
         else:
             s_mode = "0x%x" % h.mode
         xprint("  flags=0x%04x:%s", h.flags, get_file_flags(h.flags))
+        # noinspection PyChainedComparisons
         if h.host_os >= 0 and h.host_os < len(os_list):
             s_os = os_list[h.host_os]
         else:

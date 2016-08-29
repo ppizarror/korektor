@@ -23,18 +23,20 @@ VERBOSE = False
 # Se cargan argumentos desde la consola
 if __name__ == '__main__':
     from bin.arguments import argumentParserFactory
+
     argparser = argumentParserFactory("PackageValidator Test", verbose=True, version=True).parse_args()
     VERBOSE = argparser.verbose
 
+
 # Clase UnitTest
 class testPackageValidator(unittest.TestCase):
-
     # Inicio de los test
     def setUp(self):
         pass
 
     def testA(self):
         pass
+
 
 # Main test
 if __name__ == '__main__':

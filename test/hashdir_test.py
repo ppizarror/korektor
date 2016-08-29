@@ -11,7 +11,6 @@ __author__ = "ppizarror"
 
 # Main test
 if __name__ == '__main__':
-
     # Importación de librerías
     from _testpath import *  # @UnusedWildImport
     from bin.hashdir import *  # @UnusedWildImport

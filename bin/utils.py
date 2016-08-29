@@ -102,12 +102,14 @@ def colorcmd(cmd, color):
     if color in _CMD_COLORS and _IMPORTED[0]:
         color = _CMD_COLORS[color]
         try:
-            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11), color)  # @UndefinedVariable
+            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11),
+                                                           color)  # @UndefinedVariable
         except:
             pass
         print cmd,
         try:
-            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11), 0x07)  # @UndefinedVariable
+            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11),
+                                                           0x07)  # @UndefinedVariable
         except:
             pass
     else:
@@ -164,6 +166,8 @@ def equalLists(list1, list2):
                 return False
         return True
 
+
+# noinspection PyUnusedLocal
 def generateRandom6():
     """
     Genera un string de 6 carácteres aleatorios
@@ -172,6 +176,7 @@ def generateRandom6():
     return ''.join(choice(string.ascii_uppercase) for i in range(6))  # @UnusedVariable
 
 
+# noinspection PyUnusedLocal
 def generateRandom12():
     """
     Genera un string de 12 carácteres aleatorios
@@ -260,7 +265,7 @@ def getTerminalSize():
     return int(cr[1]), int(cr[0])
 
 
-# noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences,PyIncorrectDocstring
 def getVersion(label, headers, linkUpdates):
     """
     Obtener la versión del programa de forma local
@@ -459,6 +464,8 @@ def printHierachyList(lst, level=0):
         else:
             print('    ' * level + '+---' + l)
 
+
+# noinspection PyIncorrectDocstring
 def regexCompare(regString, currString, validRegexChars=None):
     """
     Compara dos strings el cual regString posee regex
@@ -467,6 +474,7 @@ def regexCompare(regString, currString, validRegexChars=None):
     :return: Boolean
     """
 
+    # noinspection PyShadowingNames
     def _comp(i, j):
         """
         Compara los carácteres de regString y currString en las posiciones

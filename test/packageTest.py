@@ -23,13 +23,13 @@ VERBOSE = False
 # Se cargan argumentos desde la consola
 if __name__ == '__main__':
     from bin.arguments import argumentParserFactory
+
     argparser = argumentParserFactory("Package Test", verbose=True, version=True).parse_args()
     VERBOSE = argparser.verbose
 
 
 # Clase test
 class packageTest(unittest.TestCase):
-
     # Inicio de los test
     def setUp(self):
         self.f = FileManager()

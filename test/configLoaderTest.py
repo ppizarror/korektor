@@ -21,12 +21,13 @@ VERBOSE = False
 # Se cargan argumentos desde la consola
 if __name__ == '__main__':
     from bin.arguments import argumentParserFactory
+
     argparser = argumentParserFactory("ConfigLoader Test", verbose=True, version=True).parse_args()
     VERBOSE = argparser.verbose
 
+
 # Clase UnitTest
 class testConfigLoader(unittest.TestCase):
-
     # Inicio de los test
     def setUp(self):
         self.binconfig = configLoader(DIR_BIN + ".config/", "bin.ini", verbose=VERBOSE)
@@ -42,13 +43,14 @@ class testConfigLoader(unittest.TestCase):
         if VERBOSE:
             print "Parametros:", self.binconfig.getParameters()
             self.binconfig.printParameters()
-        assert self.binconfig.isTrue("DONT_WRITE_BYTECODE")==False, "Parametro DONT_WRITE_BYTECODE debe ser Falso"
+        assert self.binconfig.isTrue("DONT_WRITE_BYTECODE") == False, "Parametro DONT_WRITE_BYTECODE debe ser Falso"
         self.binconfig.setParameter("DONT_WRITE_BYTECODE", True)
-        assert self.binconfig.isTrue("DONT_WRITE_BYTECODE")==True, "Parametro DONT_WRITE_BYTECODE debe ser Verdadero"
-        assert self.binconfig.getValue("PARAM1")=="VALUE1", "Valor parametro PARAM1 incorrecto"
+        assert self.binconfig.isTrue("DONT_WRITE_BYTECODE") == True, "Parametro DONT_WRITE_BYTECODE debe ser Verdadero"
+        assert self.binconfig.getValue("PARAM1") == "VALUE1", "Valor parametro PARAM1 incorrecto"
         self.binconfig.setParameter("PARAM1", 11)
-        assert self.binconfig.getValue("PARAM1")=="11", "Valor parametro PARAM1 incorrecto"
-        assert self.binconfig.getValue("SET_DEFAULT_ENCODING")=="W-850", "Parametro SET_DEFAULT_ENCODING erroneo"
+        assert self.binconfig.getValue("PARAM1") == "11", "Valor parametro PARAM1 incorrecto"
+        assert self.binconfig.getValue("SET_DEFAULT_ENCODING") == "W-850", "Parametro SET_DEFAULT_ENCODING erroneo"
+
 
 # Main test
 if __name__ == '__main__':

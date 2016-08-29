@@ -23,6 +23,7 @@ from data import DIR_UPLOADS  # @UnusedImport
 
 if isWindows():  # Se define el ejecutable de unrar para Windows
     from bin.binpath import DIR_BIN
+
     try:
         import bin.rarfile as rarfile  # @UnresolvedImport
     except Exception, e:
@@ -40,7 +41,7 @@ _FILEMANAGER_Y_EXTRACT_COMPRSD_FILE = "_inspectFiles extrayo el archivo '{0}' a 
 _FILEMANAGER_NO_EXTRACT_COMPRSD_FILE = "_inspectFiles no extrayo el archivo '{0}' dado que este ya existe."
 
 
-# noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences,PyShadowingNames,PyMethodMayBeStatic
 class FileManager:
     """
     filemanager: Administra archivos, carga archivos, etc.

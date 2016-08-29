@@ -21,17 +21,19 @@ VERBOSE = False
 # Se cargan argumentos desde la consola
 if __name__ == '__main__':
     from bin.arguments import argumentParserFactory
+
     argparser = argumentParserFactory("VarType Test", verbose=True, version=True).parse_args()
     VERBOSE = argparser.verbose
 
+
 # Clase para testear
-class testDummyClass():
+class testDummyClass:
     def __init__(self):
         pass
 
+
 # Clase UnitTest
 class testTest(unittest.TestCase):
-
     # Inicio de los test
     def setUp(self):
         pass
@@ -48,6 +50,7 @@ class testTest(unittest.TestCase):
         assert checkVariableType(r, TYPE_INT) == False, ERR_CHECKTYPE
         del r
         assert checkVariableType(True, TYPE_BOOL) == True, ERR_CHECKTYPE
+
 
 # Main test
 if __name__ == '__main__':

@@ -12,9 +12,8 @@ __author__ = "ppizarror"
 # Importación de librerías
 from accents import delAccentByOS
 from colors import Color
-# from langs import langLoader  # @UnusedImport
 
-# Constantes
+# Códigos de errores
 BR_ERRORxERROR_SET_FORM = 8
 BR_ERRORxERROR_SET_SUBMIT = 9
 BR_ERRORxNO_ACCESS_WEB = 1
@@ -45,6 +44,7 @@ ERROR_IMPORTSYSTEMERROR = "Ha ocurrido un error al importar las librerias de sis
 ERROR_IMPORTWCONIO = "Error al importar WConio"
 ERROR_LANGBADINDEX = "El indice <{0}> debe ser un numero entero mayor o igual a 10"
 ERROR_LANGNOTEXIST = "ID[{0}] no existe en el archivo de idiomas <{1}>"
+ERROR_MATPLOTLIB_NOT_INSTALLED = "Error, la libreria grafica matplotlib no esta instalada. Pruebe utilizando el comando 'pip install matplotlib' en la terminal"
 ERROR_NOCONFIGFILE = "No existe archivo de configuraciones '{0}'"
 ERROR_NOFILES = "No hay archivos"
 ERROR_NOLANGDEFINED = "El idioma no existe y/o no ha sido definido"
@@ -54,6 +54,9 @@ ERROR_RARNOTINSTALLED_NOTWIN = "Error, se requieren de algunas librerías para p
 ERROR_RARNOTINSTALLED_WIN = "Error, librería rarfile no instalada. Pruebe utilizando el comando 'pip install rarfile' en la CMD de Windows"
 ERROR_RARUNCOMPRESS = "Error al descomprimir el archivo RAR"
 ERROR_RARUNCOMPRESS_LINUX = "Error al descomprimir el archivo RAR. Compruebe si tiene los permisos necesarios para ejecutar el programa o pruebe reinstalando unrar con el comando 'sudo apt-get install unrar' en Linux o 'brew install unrar' en OSX"
+ERROR_RUNTESTS_CREATE_PLOT = "Ha ocurrido un error al crear el plot de los resultados"
+ERROR_RUNTESTS_SAVE_LOG = "Ha ocurrido un error al guardar el log del test"
+ERROR_RUNTESTS_SAVE_RESULTS = "Ha ocurrido un error al guardar el resultado de los tests"
 ERROR_TAG_CANTRETRIEVEHTML = 16
 ERROR_TAG_INITNOTCORRECTENDING = 14
 ERROR_TAG_INITNOTFINDED = 13
@@ -85,6 +88,7 @@ WARNING_HEADER = Color.BLUE + "[WARNING] " + Color.END
 WARNING_NOCONFIGFOUND = "No se han encontrado configuraciones en el archivo '{0}'"
 WRAP_ERROR_MSG = 70
 
+
 def createMSG(message, *args):
     """
     Función que crea un mensaje de error dado argumentos iniciales
@@ -96,7 +100,14 @@ def createMSG(message, *args):
 
 
 def st_error(msg, callExit=False, module=None, errname=None):
-    """Muestra un mensaje de error en pantalla"""
+    """
+    Muestra un mensaje de error en pantalla
+    :param msg: String del mensaje
+    :param callExit: Booleano, indica si el programa debe cerrarse o no
+    :param module: String indicando el nombre del modulo que produjo el error
+    :param errname: Excepcion
+    :return: void
+    """
     if module is None:
         print delAccentByOS(Color.RED + ST_ERROR + Color.END + " {0}".format(msg))
     else:
@@ -109,7 +120,12 @@ def st_error(msg, callExit=False, module=None, errname=None):
 
 
 def st_info(msg, callExit=False):
-    """Muestra un mensaje de información en pantalla"""
+    """
+    Muestra un mensaje de información en pantalla
+    :param msg: String del mensaje
+    :param callExit: Booleano, indica si el programa debe cerrarse o no
+    :return: void
+    """
     print delAccentByOS(Color.DARKCYAN + ST_INFO + Color.END + " {0}".format(msg))
     if callExit:
         exit()
@@ -118,13 +134,27 @@ def st_info(msg, callExit=False):
 def throw(errcode, *args):
     """
     Lanza un error terminal
+    :param errcode: Código de error
+    :param args: Argumentos
+    :return: void
     """
     st_error(createMSG(errcode, *args), True)
 
 
-def st_warning(msg, callExit=False):
-    """Muestra un mensaje de precaución en pantalla"""
-    print delAccentByOS(Color.BLUE + ST_WARNING + Color.END + " {0}".format(msg))
+def st_warning(msg, callExit=False, module=None, errname=None):
+    """
+    Muestra un mensaje de precaución en pantalla
+    :param msg: Mensaje en string
+    :param callExit: Booleano, indica si el programa debe cerrarse o no
+    :return: void
+    """
+    if module is None:
+        print delAccentByOS(Color.BLUE + ST_WARNING + Color.END + " {0}".format(msg))
+    else:
+        print delAccentByOS(Color.BLUE + ST_ERROR + Color.END + " {0} ".format(msg) + \
+                            "[" + Color.UNDERLINE + module + Color.END + "]")
+    if errname is not None:
+        print delAccentByOS("      {0}".format(str(errname)))
     if callExit:
         exit()
 
@@ -132,6 +162,9 @@ def st_warning(msg, callExit=False):
 def warning(warcode, *args):
     """
     Lanza un error terminal
+    :param warcode: Código de error
+    :param args: Argumentos extras
+    :return: void
     """
     warcode = createMSG(warcode, args)
     st_warning(warcode, False)
@@ -140,8 +173,8 @@ def warning(warcode, *args):
 def parseLangError(msg):
     """
     Formatea un código de error
-    :param msg:
-    :return:
+    :param msg: Mensaje de error
+    :return: String
     """
 
     def insertEach(string, each, every):

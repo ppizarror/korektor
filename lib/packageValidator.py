@@ -48,7 +48,7 @@ class PackageValidator:
         self.packageStructedFiles = []  # Lista con archivos requeridos para cada package
         self.validChars = config.getValue("VALID_CHARACTERS")  # Caracteres válidos de los archivos del paquete
         self.validRegexChars = config.getValue("VALID_REGEX_CHARACTERS")  # Caracteres válidos para los regex
-        self.verbose = coreConfig.isTrue("VERBOSE")
+        self._verbose = coreConfig.isTrue("VERBOSE")
 
         # Carpeta de los paquetes a analizar
         self._defaultsourceroot = DIR_UPLOADS

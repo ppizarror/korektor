@@ -11,7 +11,6 @@ __author__ = "ppizarror"
 
 # Main test
 if __name__ == '__main__':
-
     # Importación de librerías
     from _testpath import *  # @UnusedWildImport
     from bin.configLoader import configLoader
@@ -20,7 +19,7 @@ if __name__ == '__main__':
     from bin import __version__
 
     # Arreglo de comparaciones
-    versionDict = {1:">", 2:"<", 0:"=="}
+    versionDict = {1: ">", 2: "<", 0: "=="}
 
     # Se cargan las configuraciones del update
     printBarsConsole("Cargando configuraciones")
