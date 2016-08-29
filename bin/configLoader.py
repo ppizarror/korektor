@@ -1,23 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+CONFIGLOADER
+Permite cargar configuraciones dado un archivo dado por parámetro.
+Formato de archivo:
+
+   # Comentario
+   CONFIG_1 = VALUE
+   CONFIG_2 = VALUE2
+
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: ABRIL 2015 - 2016
+Licencia: GPLv2
+"""
 __author__ = "ppizarror"
 
-# CONFIGLOADER
-# Permite cargar configuraciones dado un archivo dado por parámetro.
-# Formato de archivo:
-#
-#    # Comentario
-#    CONFIG_1 = VALUE
-#    CONFIG_2 = VALUE2
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: ABRIL 2015 - 2016
-# Licencia: GPLv2
-
 # Importación de librerías
-if __name__ == '__main__': from binpath import *  # @UnusedWildImport
+if __name__ == '__main__':
+    # noinspection PyUnresolvedReferences
+    from binpath import *  # @UnusedWildImport
+from kwargsUtils import kwargIsTrueParam
+from utils import convertToNumber, string2list
 import errors
-from utils import string2list
 
 # Definición de constantes
 CONFIG_COMMENT = "#"
@@ -33,30 +37,43 @@ TRUE = "TRUE"
 
 
 class configLoader:
-    """Carga configuraciones y retorna sus elementos"""
+    """
+    Carga configuraciones y retorna sus elementos.
+    """
 
+    # noinspection PyUnboundLocalVariable
     def __init__(self, directory, conffile, **kwargs):
         """
-        Función constructora
-        :param filename: Nombre del archivo
+        Función constructora de la clase.
+
+        Keywords:
+            - verbose (bool) = Indica si se imprime el estado de ejecución o no en consola
+
+        :param directory: Ubicación del archivo de configuraciones
+        :type directory: str
+        :param conffile: Nombre del archivo de configuraciones
+        :type conffile: str
         :param kwargs: Parámetros adicionales
+        :type kwargs: list
+
         :return: void
         """
         # Se carga el archivo de configuraciones
+        filename = directory + conffile
         try:
             # noinspection PyShadowingBuiltins
-            filename = directory + conffile
             file = open(filename.replace("\\", "/"), "r")  # @ReservedAssignment
         except:
             errors.throw(errors.ERROR_NOCONFIGFILE, filename)
+
         # Variables
         self.config_single = []
         self.configs = {}
         self.filename = filename
         self.filename_title = conffile
         self.totalconfigs = 0
+
         # Se cargan las configuraciones
-        # noinspection PyUnboundLocalVariable
         for configline in file:
             if configline[0] != CONFIG_COMMENT and configline != "\n":
                 config = string2list(configline, CONFIG_SEPARATOR)
@@ -67,7 +84,7 @@ class configLoader:
                     self.configs[config[0]] = config[1]
                 else:
                     errors.throw(errors.ERROR_BADCONFIG, configline, filename)
-        if kwargs.get("verbose"):
+        if kwargIsTrueParam(kwargs, "verbose"):
             self.verbose = True
             if not (self.totalconfigs + len(self.config_single)):
                 errors.warning(errors.WARNING_NOCONFIGFOUND, filename)
@@ -79,10 +96,15 @@ class configLoader:
 
     def export(self, replace=True, name=None):
         """
-        Función que exporta las configuraciones a un directorio
+        Función que exporta las configuraciones a un directorio.
+
         :param replace: Reemplaza el archivo anterior
+        :type replace: bool
         :param name: Nombre del archivo nuevo
+        :rtype name: str
+
         :return: void
+        :rtype: None
         """
         try:
             if replace:
@@ -102,9 +124,13 @@ class configLoader:
 
     def isTrue(self, param):
         """
-        Función que retorna true si el parámetro del archivo es verdadero
+        Función que retorna true si el parámetro del archivo es verdadero.
+
         :param param: Parámetro a buscar
-        :return: booleano
+        :type param: str
+
+        :return: Booleano indicando pertenencia
+        :rtype: bool
         """
         if param in self.getParameters():
             if self.configs[param].upper() == TRUE or self.configs[param] == "1":
@@ -116,8 +142,10 @@ class configLoader:
 
     def getParameters(self):
         """
-        Retorna una lista con todos los parametros cargados
+        Retorna una lista con todos los parametros cargados.
+
         :return: Lista de parámetros
+        :rtype: list
         """
         allconfigs = []
         for i in self.config_single:
@@ -126,35 +154,64 @@ class configLoader:
             allconfigs.append(j)
         return allconfigs
 
-    def getValue(self, param):
+    def getValue(self, param, **kwargs):
         """
-        Retorna el valor del parametro param
-        :param param: Parámetro
-        :return: valor
+        Retorna el valor del parámetro param.
+
+        Keywords:
+            - autoNumberify (bool) = Activa la auto-conversión a números
+
+        :param param: Parámetro a obtener valor
+        :type param: object
+        :param kwargs: Keywords
+
+        :return: Valor del parámetro
+        :rtype: object
         """
         if str(param).isdigit():
             param = int(param)
             if 0 <= param < len(self.config_single):
-                return self.config_single[param]
+                paramValue = str(self.config_single[param])
+
+                # noinspection PyTypeChecker
+                if kwargIsTrueParam(kwargs, "autoNumberify"):  # Auto-conversión a números
+                    return convertToNumber(paramValue)
+                # El resultado se entrega sin convertir
+                else:
+                    return paramValue
+
             else:
                 errors.throw(errors.ERROR_BADINDEXCONFIG, str(param))
         else:
             if param in self.getParameters():
-                return self.configs[param]
+                paramValue = self.configs[param]
+
+                # noinspection PyTypeChecker
+                if kwargIsTrueParam(kwargs, "autoNumberify"):  # Auto-conversión a números
+                    return convertToNumber(paramValue)
+                # El resultado se entrega sin convertir
+                else:
+                    return paramValue
+
             else:
                 errors.warning(errors.ERROR_CONFIGNOTEXISTENT, param)
         return None
 
     def getValueListed(self, param, split=";"):
         """
-        Retorna una lista con los valores de una configuracion
+        Retorna una lista con los valores de una configuración.
+
         :param param: Parámetro
+        :type param: str
         :param split: String de separación
-        :return:
+        :type split: str
+
+        :return: Lista de valores
+        :rtype: list
         """
         value = self.getValue(param)
         if value is not None:
-            value = value.split(";")
+            value = str(value).split(split)
             valueNewList = []
             for d in value:
                 valueNewList.append(d.strip())
@@ -164,8 +221,10 @@ class configLoader:
 
     def printParameters(self):
         """
-        Imprime una lista con todos los parametros cargados
+        Imprime una lista con todos los parámetros cargados.
+
         :return: void
+        :rtype: None
         """
         if self.totalconfigs + len(self.config_single) > 0:
             print CONFIG_PRINTPARAMETER
@@ -183,9 +242,14 @@ class configLoader:
 
     def setParameter(self, paramName, paramValue):
         """
-        Define un parametro
+        Define un parámetro.
+
         :param paramName: Nombre del parámetro
+        :type paramName: str
         :param paramValue: Valor del parámetro
+        :type paramValue: object
+
         :return: void
+        :rtype: None
         """
         self.configs[str(paramName)] = str(paramValue)

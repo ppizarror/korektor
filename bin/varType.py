@@ -1,16 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+VARTYPE
+Maneja los tipos de variables.
+
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: AGOSTO 2016
+Licencia: GPLv2
+"""
 __author__ = "ppizarror"
 
-# VARTYPE
-# Maneja los tipos de variables.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: AGOSTO 2016
-# Licencia: GPLv2
-
 # Importación de librerías
-if __name__ == "__main__": from binpath import *  # @UnusedWildImport
+if __name__ == "__main__":
+    # noinspection PyUnresolvedReferences
+    from binpath import *  # @UnusedWildImport
+from errors import exceptionAsStringClass
 
 # Tipos de variables permitidos
 TYPE_BOOL = "Boolean"
@@ -23,11 +27,17 @@ TYPE_STR = "String"
 
 def checkVariableType(var, clss, otherClass=None):
     """
-    Chequea si una variable es de una determinada clase o no
+    Chequea si una variable es de una determinada clase o no.
+
     :param var: Variable a revisar
+    :type var: object
     :param clss: Clase a comprobar, String
+    :type clss: str
     :param otherClass: Clase requerida si es que la clase a comprobar es del tipo TYPE_OTHER
-    :return: void
+    :type otherClass: object
+
+    :return: Booleano resultante de la comparación
+    :rtype: bool
     """
     if clss == TYPE_FLOAT:
         return isinstance(var, float)
@@ -43,3 +53,26 @@ def checkVariableType(var, clss, otherClass=None):
         return isinstance(var, otherClass)
     else:
         return False
+
+
+class varTypedClass(exceptionAsStringClass):
+    """
+    Clase asociada al manejo de tipos de variable.
+    """
+
+    def _checkVariableType(self, var, typeVar, paramName, otherClass=None):
+        """
+        Chequea si una variable es de una determinada clase o no.
+
+        :param var: Variable a revisar
+        :type var: object
+        :param typeVar: Clase a comprobar, String
+        :type typeVar: str
+        :param otherClass: Clase requerida si es que la clase a comprobar es del tipo TYPE_OTHER
+        :type otherClass: object
+
+        :return: void
+        :rtype: None
+        """
+        if not checkVariableType(var, typeVar, otherClass):
+            self._throwException("ERROR_BADPARAMETERTYPE_MSG", paramName, typeVar)

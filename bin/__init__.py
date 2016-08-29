@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+BIN
+Posee módulos utilitarios y programas externos.
 
-# BIN
-# Posee módulos utilitarios y programas externos.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: OCTUBRE 2015 - 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: OCTUBRE 2015 - 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de librerías iniciales
 from binpath import DIR_BIN, sys
@@ -19,6 +20,7 @@ import errors
 # Configuración de entorno
 # noinspection PyProtectedMember
 __binconfig = configLoader(binpath._DIR_CONFIG, "bin.ini")
+# noinspection PyUnresolvedReferences
 sys.setdefaultencoding(__binconfig.getValue("SET_DEFAULT_ENCODING"))  # @UndefinedVariable
 if __binconfig.isTrue("DONT_WRITE_BYTECODE"):
     reload(sys)

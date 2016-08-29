@@ -1,16 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+bin/rarfile TEST
+Test que permite extraer y comprimir archivos rar.
+
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: AGOSTO 2016
+Licencia: GPLv2
+"""
 __author__ = "ppizarror"
 
-# bin/rarfile TEST
-# Test que permite extraer y comprimir archivos rar.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: AGOSTO 2016
-# Licencia: GPLv2
-
 # Importación de librerías
+# noinspection PyUnresolvedReferences
 from _testpath import *  # @UnusedWildImport
+# noinspection PyUnresolvedReferences
 from bin.rarfile import *  # @UnusedWildImport
 import unittest
 
@@ -29,9 +32,6 @@ if __name__ == '__main__':
 class testRarFile(unittest.TestCase):
     # Inicio de los test
     def setUp(self):
-        pass
-
-    def testA(self):
         pass
 
 

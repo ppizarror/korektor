@@ -1,18 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+TRANSFORMER
+Permite adaptar los archivos traducidos desde google a archivos válidos para hoa
 
-# TRANSFORMER
-# Permite adaptar los archivos traducidos desde google a archivos válidos para hoa
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: 2014-2015
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: 2014-2015
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de librerías
 import os
 import sys
+
 reload(sys)
+# noinspection PyUnresolvedReferences
 sys.setdefaultencoding('UTF8')  # @UndefinedVariable
 
 DL = "//"
@@ -25,7 +28,9 @@ except:
     print "El archivo no existe!"
     exit()
 
+# noinspection PyUnboundLocalVariable
 archivo2 = open(namearchive + "_transformed" + ".txt", "w")
+# noinspection PyUnboundLocalVariable
 for line in archivo:
     line = line.strip().replace(" ", "").replace("\xef\xbb\xbf", "").split(DL)
     digit = str(line[0])

@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+Adminsitra la direccion de directorios de la aplicación
+Se pueden incluir todos los directorios salvo bin/.
 
-# Adminsitra la direccion de directorios de la aplicación
-# Se pueden incluir todos los directorios salvo bin/.
-#
-# Autor: PABLO PIZARRO @ pgithub.com/ppizarror
-# Fecha: ABRIL 2015
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ pgithub.com/ppizarror
+Fecha: ABRIL 2015
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de librerías
 import os

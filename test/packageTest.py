@@ -1,20 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+lib/package TEST
+Test que prueba la creación de paquetes por el módulo Package, tanto como sus
+respectivas subclases.
 
-# lib/package TEST
-# Test que prueba la creación de paquetes por el módulo Package, tanto como sus
-# respectivas subclases.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: AGOSTO 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: AGOSTO 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de librerías
 from _testpath import *  # @UnusedWildImport
 from lib.package import *  # @UnusedWildImport
-from bin.utils import printBarsConsole
 from bin.errors import *  # @UnusedWildImport
+from bin.utils import printBarsConsole
 import unittest
 
 # Constantes test
@@ -39,7 +40,8 @@ class packageTest(unittest.TestCase):
         else:
             self.f.disable_verbose()
 
-    def testF3(self):
+    # Test pesado, habilitar solo para testeo en detalle
+    def _testF3(self):
         p = Package(self.f.inspectSingleFile("Folder 3"), True)
         if VERBOSE:
             printBarsConsole("Testeo Folder 3")
@@ -58,6 +60,7 @@ class packageTest(unittest.TestCase):
         assert p.getNumberOfElements() == 8, PACKAGE_TEST_ERROR_COUNT_FILES
         del p
 
+    # Testeo de una carpeta vacía
     def testFEmpty(self):
         p = Package(self.f.inspectSingleFile("Folder 0"), True)
         if VERBOSE:
@@ -76,6 +79,7 @@ class packageTest(unittest.TestCase):
         assert p.checkIfExist("") == False, PACKAGE_TEST_FOUND_INEXISTENT_FILE
         del p
 
+    # Testeo de una carpeta con múltiples archivos zip
     def testF4(self):
         p = Package(self.f.inspectSingleFile("Folder 4"), True)
         if VERBOSE:
@@ -88,6 +92,7 @@ class packageTest(unittest.TestCase):
         assert p.isFile("") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
         del p
 
+    # Testeo de una carpeta inexistente
     def testInexistente(self):
         p = Package(self.f.inspectSingleFile("Fake name"))
         p.generateHierachy()
@@ -105,6 +110,7 @@ class packageTest(unittest.TestCase):
         assert p.checkIfExist("") == False, PACKAGE_TEST_FOUND_INEXISTENT_FILE
         del p
 
+    # Testeo de una carpeta grande
     def testBig(self):
         p = Package(self.f.inspectSingleFile("Folder 5"), True)
         if VERBOSE:
@@ -160,6 +166,7 @@ class packageTest(unittest.TestCase):
         assert p.isFile("Content 1.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
         del p
 
+    # Testeo de varias carpetas concatenadas
     def testSeguidas(self):
         p = Package(self.f.inspectSingleFile("Folder 6"), True)
         if VERBOSE:
@@ -174,6 +181,7 @@ class packageTest(unittest.TestCase):
         assert p.isFolder("Subfolder 1") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
         del p
 
+    # Testeo de varias carpetas concatenadas sin archivos
     def testSeguidasEmpty(self):
         p = Package(self.f.inspectSingleFile("Folder 6-EMPTY"), True)
         if VERBOSE:
@@ -191,6 +199,7 @@ class packageTest(unittest.TestCase):
         assert p.checkIfExist("") == False, PACKAGE_TEST_FOUND_INEXISTENT_FILE
         del p
 
+    # Test sencillo
     def testSimple(self):
         p = Package(self.f.inspectSingleFile("Folder 1"), True)
         if VERBOSE:
@@ -204,6 +213,7 @@ class packageTest(unittest.TestCase):
         assert p.isFile("Content 1.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
         del p
 
+    # Testeo de package el cual utiliza un filemanager
     def testPackageWithFilemanager(self):
         p = PackageFileManager(self.f, "Folder 4", True)
         if VERBOSE:
@@ -216,7 +226,8 @@ class packageTest(unittest.TestCase):
         assert p.isFile("") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
         del p
 
-    def testPackageWithCompressedAlreadyExistsDisableExtract(self):
+    # Test pesado, habilitar solo para testeo en detalle
+    def _testPackageWithCompressedAlreadyExistsDisableExtract(self):
         self.f.disable_extractIfFolderAlreadyExists()
         p = PackageFileManager(self.f, "Folder 8-COMPSD", True)
         if VERBOSE:
@@ -241,6 +252,43 @@ class packageTest(unittest.TestCase):
         assert p.isFolder("Rar Folder") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
         assert p.isFolder("Zip Folder TARGET") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
         assert p.isFolder("Zip Folder TARGEt") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+
+    # Buscar ubicación de archivos
+    def testFindFile(self):
+        p = Package(self.f.inspectSingleFile("Folder 6"), True)
+        if VERBOSE:
+            printBarsConsole("Testeo folder 6 - Busqueda de ubicacion de archivos")
+            p.printHierachy()
+        t = "/Subfolder 1/Subfolder 2/Subfolder 3/Subfolder 4/Hello world.txt"
+        assert p.findFileLocation("Hello world.txt") == t, PACKAGE_TEST_BAD_SEARCH_LOCATION
+        assert p.findFileLocation("main.java") == PACKAGE_FILE_NOT_FOUND, PACKAGE_TEST_BAD_SEARCH_LOCATION
+        t = "/Subfolder 1/Subfolder 2/Subfolder 3/Subfolder 4/"
+        assert p.findFileLocation("Subfolder 4") == t, PACKAGE_TEST_BAD_SEARCH_LOCATION
+        t = "/Subfolder 1/Subfolder 2/Subfolder 3/"
+        assert p.findFileLocation("Subfolder 3") == t, PACKAGE_TEST_BAD_SEARCH_LOCATION
+        t = "/Subfolder 1/"
+        assert p.findFileLocation("Subfolder 1") == t, PACKAGE_TEST_BAD_SEARCH_LOCATION
+        assert p.findFileLocation("Subfolder 5") == PACKAGE_FILE_NOT_FOUND, PACKAGE_TEST_BAD_SEARCH_LOCATION
+        del t
+
+    # Buscar la profundidad de un archivo
+    def testDepthFile(self):
+        p = Package(self.f.inspectSingleFile("Folder 9-SIM3ZIP"), True)
+        if VERBOSE:
+            printBarsConsole("Testeo folder 9 similar a 3 con archivos zip - Busqueda de profundidad de archivos")
+            p.printHierachy()
+        assert p.getFileDepth("Zip Folder 2") == 1, PACKAGE_TEST_BAD_SEARCH_DEPTH
+        assert p.getFileDepth("Zip Folder") == 0, PACKAGE_TEST_BAD_SEARCH_DEPTH
+        assert p.getFileDepth("Zip Folder 3") == PACKAGE_FILE_INVALID_DEPTH, PACKAGE_TEST_BAD_SEARCH_DEPTH
+        assert p.getFileDepth("Content A.txt") == 0, PACKAGE_TEST_BAD_SEARCH_DEPTH
+        assert p.getFileDepth("Content C.txt") == 1, PACKAGE_TEST_BAD_SEARCH_DEPTH
+        assert p.getFileDepth("Content E.txt") == 2, PACKAGE_TEST_BAD_SEARCH_DEPTH
+        assert p.getFileDepth("Content Z.txt") == PACKAGE_FILE_INVALID_DEPTH, PACKAGE_TEST_BAD_SEARCH_DEPTH
+
+    # Comprueba el tratamiento de errores
+    def testErrorAssertionPackage(self):
+        p = Package(self.f.inspectSingleFile("Folder 9-SIM3ZIP"), False, True)
+        assert p.printHierachy() == "PACKAGE_ERROR_NOT_HIERACHY_CREATED", PACKAGE_TEST_BAD_EXCEPTION_TREATMENT
 
 
 # Main test

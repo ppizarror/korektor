@@ -1,17 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+NOSTDOUT
+Desactiva el standard output de python.
+
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: OCTUBRE 2015
+Licencia: GPLv2
+"""
 __author__ = "ppizarror"
 
 
-# NOSTDOUT
-# Desactiva el standard output de python.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: OCTUBRE 2015
-# Licencia: GPLv2
-
+# noinspection PyMissingOrEmptyDocstring
 class noStdOut:
-    """Desactiva print"""
+    """
+    Desactiva el print
+    """
 
     def __init__(self): pass
 

@@ -1,16 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+bin/verticalScrolledFrame TEST
+
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: AGOSTO 2016
+Licencia: GPLv2
+"""
 __author__ = "ppizarror"
 
-# bin/verticalScrolledFrame TEST
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: AGOSTO 2016
-# Licencia: GPLv2
-
 # Importación de librerías
+# noinspection PyUnresolvedReferences
 from _testpath import *  # @UnusedWildImport
-from bin.errors import throw, ERROR_TKINTER_NOT_INSTALLED  # @UnusedImport
+from bin.errors import ERROR_TKINTER_NOT_INSTALLED  # @UnusedImport
 import unittest
 
 
@@ -27,6 +29,7 @@ class testColors(unittest.TestCase):
             sucess = False
         assert sucess == True, ERROR_TKINTER_NOT_INSTALLED
 
+    # Testeo de la importación de la librería python-tk (Tkinter)
     def testImportTkinter(self):
         sucess = False
         try:

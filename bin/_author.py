@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+AUTHOR
+Autor del programa, correo y otras informaciones.
 
-# AUTHOR
-# Autor del programa, correo y otras informaciones.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: AGOSTO 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: AGOSTO 2016
+Licencia: GPLv2
+"""
 
 __author__ = "Pablo Pizarro [@ppizarror]"
 __credits__ = ["Pablo pizarro [@ppizarror]", "Marko Kreen", "John J. Lee", "@ponty"]

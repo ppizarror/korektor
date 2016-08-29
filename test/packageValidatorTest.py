@@ -1,20 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+lib/packageValidator TEST
+Testeo del módulo packageValidator el cual tiene por función validar que los
+paquetes entregados cumplan con una determinada estructura para luego ser
+compilados y ejecutados.
 
-# lib/packageValidator TEST
-# Testeo del módulo packageValidator el cual tiene por función validar que los
-# paquetes entregados cumplan con una determinada estructura para luego ser
-# compilados y ejecutados.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: AGOSTO 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: AGOSTO 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de librerías
 from _testpath import *  # @UnusedWildImport
-from lib.packageValidator import *  # @UnusedWildImport
+# noinspection PyUnresolvedReferences
 from bin.utils import printBarsConsole  # @UnusedImport
+from data import DIR_STRUCTURE
+from lib.packageValidator import *  # @UnusedWildImport
 import unittest
 
 # Constantes de los test
@@ -32,9 +35,25 @@ if __name__ == '__main__':
 class testPackageValidator(unittest.TestCase):
     # Inicio de los test
     def setUp(self):
-        pass
+        self.validator = PackageValidator(False)
+        self.validator.setStructureDirectory(DIR_DATA_TEST_STRUCTURE_FOLDER)
+        self.validator.loadStructure()
 
+    # Testeo de la estructura como un paquete
     def testA(self):
+        if VERBOSE:
+            self.validator._printStructureHierachy()
+
+        # Se cambia la estructura
+        self.validator.setStructureDirectory(DIR_STRUCTURE)
+        self.validator.loadStructure()
+
+        # Se retorna a la estructura anterior
+        self.validator.setStructureDirectory(DIR_DATA_TEST_STRUCTURE_FOLDER)
+        self.validator.loadStructure()
+
+    # Testeo de un paquete que es válido
+    def testValidPackage(self):
         pass
 
 

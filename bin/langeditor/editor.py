@@ -1,18 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+EDITOR
+Editor de idiomas
 
-# EDITOR
-# Editor de idiomas
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: 2013-2015
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: 2013-2015
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de librerias
 from Tkinter import *  # @UnusedWildImport
 import os
 import sys  # @UnusedImport @Reimport
+
 # Configuración de librerías
 reload(sys)
 # noinspection PyUnresolvedReferences
@@ -21,6 +23,7 @@ from tkFileDialog import *  # @UnusedWildImport
 import tkFont
 import ttk
 import datetime
+
 try:
     # noinspection PyUnresolvedReferences
     import winsound
@@ -46,11 +49,15 @@ ALERTICON = DATAICONS + "alert.ico"
 TITLE = "Langs"
 VERSION = 1.9
 LANGEND = ".lng"
-ml_columns = ("ID", \
-              "                                                              String            " + \
-              "                                                  ")
+
+# Set de las columnas
+_mult_id = 1
+_mult_strings = 40
+ml_columns = ("{0}ID{0}".format(" " * _mult_id), "{0}String{0}".format(" " * _mult_strings))
+print ml_columns
 
 
+# noinspection PyPep8Naming,PyShadowingNames,PyShadowingNames
 def loadFromArchive(archive):
     """
     Genera una matriz dado un archivo
@@ -65,6 +72,7 @@ def loadFromArchive(archive):
     return l
 
 
+# noinspection PyShadowingNames
 def save_from_list(archive, lista):
     """
     Genera un archivo dado una matriz
@@ -138,6 +146,7 @@ def isWindows():
     return False
 
 
+# noinspection PyShadowingNames
 def sortby(tree, col, descending):
     """
     Función que ordena las columnas segun orden
@@ -153,6 +162,7 @@ def sortby(tree, col, descending):
 
 
 try:
+    # noinspection PyTypeChecker
     LANGLIST = loadFromArchive(LANGFILE)
 except:
     archive = open(LANGFILE, "w")
@@ -161,6 +171,7 @@ except:
 
 
 # Clase pop
+# noinspection PyShadowingNames,PyUnusedLocal,PyMissingOrEmptyDocstring
 class pop:
     def __init__(self, properties):
         """
@@ -463,12 +474,18 @@ archive.close()
 DATADELIMITER = DATADELIMITER.replace("*", " ")
 
 
+# noinspection PyTypeChecker,PyUnusedLocal,PyShadowingNames,PyMethodMayBeStatic,PyMissingOrEmptyDocstring,PyTupleAssignmentBalance
 class langs:
+    """
+    Clase de manejo de idiomas.
+    """
+
     def __init__(self, lang=False):
         """
         Función constructora
-        :param lang:
-        :return:
+        :param lang: Idiomas
+        :return: void
+        :rtype: None
         """
         self.root = Tk()
         self.root.title(TITLE)
@@ -986,4 +1003,5 @@ class langs:
             self.changes = False
 
 
+# noinspection PyTypeChecker
 langs(str(C_DATA[2]))

@@ -1,29 +1,29 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+UTILS
+Este archivo provee de funciones básicas que son globalmente usadas.
 
-# UTILS
-# Este archivo provee de funciones básicas que son globalmente usadas.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: SEPTIEMBRE-OCTUBRE 2015 - 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: SEPTIEMBRE-OCTUBRE 2015 - 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de librerías de entorno
 # noinspection PyUnresolvedReferences
-from accents import delAccent, delAccentByOS  # @UnusedImport
 from binpath import *  # @UnusedWildImport
-import errors
 from browser import Browser
+from kwargsUtils import kwargIsTrueParam
+import errors
 
 # Importación de librerías de sistema
-_IMPORTED = [1, 1]
+_IMPORTED = [1]
 try:
     from datetime import date
     from random import choice
     from urllib import urlencode
     from urllib2 import urlopen, Request
-    import ctypes
     import os  # @Reimport
     import signal
     import string
@@ -34,42 +34,27 @@ except:
 
 # Importación de librerías externas
 try:
-    # noinspection PyUnresolvedReferences
-    import WConio  # @UnresolvedImport
-except:
-    _IMPORTED[0] = 0
-try:
     import mechanize  # @UnusedImport @UnresolvedImport
 except:
-    _IMPORTED[1] = 0
+    _IMPORTED[0] = 0
 
 # Constantes
-_CMD_COLORS = {"blue": 0x10,
-               "gray": 0x80,
-               "green": 0x20,
-               "lblue": 0x90,
-               "lgray": 0x70,
-               "lgreen": 0xA0,
-               "lred": 0xC0,
-               "purple": 0x50,
-               "white": 0xF0,
-               "yellow": 0x60,
-               "lpurple": 0xD0,
-               "lyellow": 0xE0,
-               "red": 0x40
-               }
 _CONSOLE_WRAP = -25
 _MSG_LOADINGFILE = "Cargando archivo '{0}' ..."
 _MSG_OK = "[OK]"
-LINK_PROJECT = "https://github.com/ppizarror/korektor/"
 
 
 def appendListToList(origin, l):
     """
-    Añade los elementos de la lista l a la lista origin
+    Añade los elementos de la lista l a la lista origin.
+
     :param origin: Lista a añadir elementos
+    :type origin: list
     :param l: Lista con elementos a ser agregados
+    :type l: list
+
     :return: void
+    :type: None
     """
     for i in l:
         origin.append(i)
@@ -77,10 +62,15 @@ def appendListToList(origin, l):
 
 def compareVersion(ver1, ver2):
     """
-    Se compara entre dos versiones y se retorna el ganador
+    Se compara entre dos versiones y se retorna el ganador.
+
     :param ver1: Versión actual
+    :type ver1: str
     :param ver2: Versión de sistema
+    :type ver2: str
+
     :return: ver1 or ver2
+    :rtype: int
     """
     ver1 = ver1.split(".")
     ver2 = ver2.split(".")
@@ -92,35 +82,42 @@ def compareVersion(ver1, ver2):
     return 0
 
 
-def colorcmd(cmd, color):
+def convertToNumber(s):
     """
-    Función que imprime un mensaje con un color
-    :param cmd: command
-    :param color: Color
-    :return: void
+    Función que convierte un objeto a diversos tipos de números.
+
+    :param s: String a convertir
+    :type s: object
+
+    :return: Número convertido
+    :rtype: object
     """
-    if color in _CMD_COLORS and _IMPORTED[0]:
-        color = _CMD_COLORS[color]
-        try:
-            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11),
-                                                           color)  # @UndefinedVariable
-        except:
-            pass
-        print cmd,
-        try:
-            ctypes.windll.kernel32.SetConsoleTextAttribute(ctypes.windll.kernel32.GetStdHandle(-11),
-                                                           0x07)  # @UndefinedVariable
-        except:
-            pass
+    try:
+        s = str(s)
+    except:
+        return s
+    if s.isdigit():  # Es un entero
+        return int(s)
     else:
-        print cmd,
+        if "." in s and s.replace(".", "").isdigit():  # Es un flotante
+            return float(s)
+        else:
+            try:  # Es un hexadecimal
+                return int(s, 16)
+            except ValueError:
+                pass
+    return s
 
 
 def delMatrix(matrix):
     """
-    Borrar una matriz
+    Borrar una matriz.
+
     :param matrix: Matriz
+    :type matrix: list
+
     :return: void
+    :rtype: None
     """
     a = len(matrix)
     if a > 0:
@@ -128,22 +125,13 @@ def delMatrix(matrix):
             matrix.pop(0)
 
 
-def clrscr():
-    """
-    Limpia la pantalla
-    :return: void
-    """
-    if _IMPORTED[0]:
-        try:
-            WConio.clrscr()  # @UndefinedVariable
-        except:
-            pass
-
-
+# noinspection PyUnresolvedReferences
 def destroyProcess():
     """
-    Destruye el proceso del programa
+    Destruye el proceso del programa.
+
     :return: void
+    :rtype: None
     """
     if os.name == "nt":
         os.system("taskkill /PID " + str(os.getpid()) + " /F")
@@ -153,10 +141,15 @@ def destroyProcess():
 
 def equalLists(list1, list2):
     """
-    Comprueba si dos listas son idénticas en elementos
+    Comprueba si dos listas son idénticas en elementos.
+
     :param list1: Lista 1
+    :type list1: list
     :param list2: Lista 2
-    :return: Boolean
+    :type list2: list
+
+    :return: Booleano indicando comparación
+    :rtype: bool
     """
     if len(list1) != len(list2):
         return False
@@ -170,8 +163,10 @@ def equalLists(list1, list2):
 # noinspection PyUnusedLocal
 def generateRandom6():
     """
-    Genera un string de 6 carácteres aleatorios
+    Genera un string de 6 carácteres aleatorios.
+
     :return: String
+    :rtype: str
     """
     return ''.join(choice(string.ascii_uppercase) for i in range(6))  # @UnusedVariable
 
@@ -179,19 +174,27 @@ def generateRandom6():
 # noinspection PyUnusedLocal
 def generateRandom12():
     """
-    Genera un string de 12 carácteres aleatorios
+    Genera un string de 12 carácteres aleatorios.
+
     :return: String
+    :rtype: str
     """
     return ''.join(choice(string.ascii_uppercase) for i in range(12))  # @UnusedVariable
 
 
 def getBetweenTags(html, tagi, tagf):
     """
-    Función que retorna un valor entre dos tagss
+    Función que retorna un valor entre dos tags.
+
     :param html: Contenido html
+    :type html: str
     :param tagi: Tag inicial
+    :type tagi: str
     :param tagf: Tag final
-    :return: String
+    :type tagf: str
+
+    :return: String entre dos tags
+    :rtype: str
     """
     tagi = tagi.strip()
     tagf = tagf.strip()
@@ -217,16 +220,20 @@ def getBetweenTags(html, tagi, tagf):
 
 def getHour():
     """
-    Función que retorna la hora de sistema
-    :return: String
+    Función que retorna la hora de sistema.
+
+    :return: String con la hora del sistema
+    :rtype: str
     """
     return time.ctime(time.time())[11:16]
 
 
 def getDate():
     """
-    Obtiene la fecha del dia actual
+    Obtiene la fecha del dia actual.
+
     :return: String dd/mm/aaaa
+    :rtype: str
     """
     fecha = date.today()
     return str(fecha.day) + "/" + str(fecha.month) + "/" + str(fecha.year)
@@ -234,14 +241,24 @@ def getDate():
 
 def getTerminalSize():
     """
-    Devuelve el tamaño de la consola
+    Devuelve el tamaño de la consola.
+
     :return: tupla
+    :rtype: tuple
     """
     env = os.environ
 
-    # noinspection PyShadowingNames
+    # noinspection PyShadowingNames,PyUnresolvedReferences
 
     def ioctl_GWINSZ(fd):
+        """
+        Entrega el tamaño de la consola
+        :param fd: Numero de STD
+        :type fd: int
+
+        :return: buffer
+        :rtype: object
+        """
         try:
             import fcntl  # @UnresolvedImport
             import termios  # @UnresolvedImport
@@ -268,12 +285,17 @@ def getTerminalSize():
 # noinspection PyUnresolvedReferences,PyIncorrectDocstring
 def getVersion(label, headers, linkUpdates):
     """
-    Obtener la versión del programa de forma local
+    Obtener la versión del programa de forma local.
+
     :param label: Label del programa
+    :type label: str
     :param headers: Web headers
-    :return:
+    :type headers: str
+
+    :return: String con la versión del programa según la web
+    :rtype: str
     """
-    if _IMPORTED[1]:
+    if _IMPORTED[0]:
         browser = Browser()  # @UndefinedVariable
         browser.addHeaders(headers)
         browser.abrirLink(linkUpdates)
@@ -291,13 +313,21 @@ def getVersion(label, headers, linkUpdates):
 # noinspection PyUnresolvedReferences
 def googleTranslate(text, translate_lang, header, web, source_lang=None):
     """
-    Traduce una linea usando el motor de traducciones de google
+    Traduce una linea usando el motor de traducciones de google.
+
     :param text: Texto a traducir
+    :type text: str
     :param translate_lang: Idioma destino
+    :type translate_lang: str
     :param header: Header web
+    :type header: str
     :param web: Web de traduccion
+    :type web: str
     :param source_lang: Idioma origen
+    :type source_lang: str
+
     :return: String traducido
+    :rtype: str
     """
     if source_lang is None:
         source_lang = 'auto'
@@ -312,25 +342,34 @@ def googleTranslate(text, translate_lang, header, web, source_lang=None):
 
 def isFolder(path, filename):
     """
-    Función que retorna true en el caso de que el archivo sea una carpeta, False si no
-    :param path: Directorio del archivo
-    :param filename: Archivo
-    :return: Boolean
-    """
-    _abspath = (path + "/" + filename).replace("//", "/")
+    Función que retorna true en el caso de que el archivo sea una carpeta, False si no.
 
+    :param path: Directorio del archivo
+    :type path: str
+    :param filename: Archivo
+    :type filename: str
+
+    :return: Booleano indicando pertenencia
+    :rtype: bool
+    """
     try:
+        _abspath = (path + "/" + filename).replace("//", "/").replace("//", "/")
         os.listdir(_abspath)
         return True
     except:
         return False
 
 
+# noinspection PyTypeChecker,PyUnresolvedReferences
 def isHiddenFile(filename):
     """
-    Función que retorna True en el caso de que el archivo empieza por .
+    Función que retorna True en el caso de que el archivo empieza por un punto.
+
     :param filename: Nombre del archivo
-    :return: Boolean
+    :type filename: object
+
+    :return: Booleano indicando pertenencia
+    :rtype: bool
     """
     if isinstance(filename, types.StringType):
         if len(filename) > 0:
@@ -341,10 +380,15 @@ def isHiddenFile(filename):
 
 def isIn(termino, matriz):
     """
-    Función que comprueba si un elemento esta en una matriz (no completamente)
+    Función que comprueba si un elemento esta en una matriz (no completamente).
+
     :param termino: Elemento
+    :type termino: object
     :param matriz: Matriz
-    :return: booleano
+    :type matriz: list
+
+    :return: Booleano indicando pertenencia
+    :rtype: bool
     """
     if termino is not None:
         for elem in matriz:
@@ -355,9 +399,13 @@ def isIn(termino, matriz):
 
 def isTrue(a):
     """
-    Función que devuelve True/False si a es "True" o a es igual a "False"
+    Función que devuelve True/False si a es "True" o a es igual a "False".
+
     :param a: String
-    :return: Boolean
+    :type a: str
+
+    :return: Booleano indicando igualdad
+    :rtype: bool
     """
     if a == "True":
         return True
@@ -367,8 +415,10 @@ def isTrue(a):
 
 def isWindows():
     """
-    Función que retorna True/False si el sistema operativo cliente es Windows o no
-    :return: Boolean
+    Función que retorna True/False si el sistema operativo cliente es Windows o no.
+
+    :return: Booleano indicando pertenencia
+    :rtype: bool
     """
     if os.name == "nt":
         return True
@@ -377,9 +427,13 @@ def isWindows():
 
 def makeCallable(function):
     """
-    Función que crea una función llamable
+    Función que crea una función llamable.
+
     :param function: Puntero a función
-    :return: Función
+    :type function: object
+
+    :return: Función misma con un nombre callable
+    :rtype: object
     """
     try:
         function.__name__ = generateRandom6()
@@ -390,13 +444,23 @@ def makeCallable(function):
 
 def loadFile(archive, lang=_MSG_LOADINGFILE, **kwargs):
     """
-    Carga un archivo y retorna una matriz
+    Carga un archivo y retorna una lista con las líneas del archivo.
+
+    Keywords:
+        - show_state (bool) = Muestra el estado de ejecución en la pantalla
+
     :param archive: Archivo
+    :type archive: str
     :param lang: Idioma
+    :type lang: str
     :param kwargs: Parámetros adicionales
-    :return: Lista
+    :type kwargs: list
+
+    :return: Lista con las líneas del archivo
+    :rtype: list
     """
-    if kwargs.get("show_state"):
+    show_state = kwargIsTrueParam(kwargs, "show_state")
+    if show_state:
         print lang.format("(...)" + archive[_CONSOLE_WRAP:].replace("//", "/")).replace("\"", ""),
     try:
         l = list()
@@ -404,10 +468,10 @@ def loadFile(archive, lang=_MSG_LOADINGFILE, **kwargs):
         for i in archive:
             l.append(i.decode('utf-8').strip())
         archive.close()
-        if kwargs.get("show_state"):
+        if show_state:
             print _MSG_OK
     except:
-        if kwargs.get("show_state"):
+        if show_state:
             print "error"
         l = []
     return l
@@ -415,8 +479,10 @@ def loadFile(archive, lang=_MSG_LOADINGFILE, **kwargs):
 
 def obtenerFecha():
     """
-    Obtiene la fecha del dia actual
-    :return: String
+    Obtiene la fecha del dia actual.
+
+    :return: Fecha en formato dd/mm/aa
+    :rtype: str
     """
     fecha = date.today()
     return str(fecha.day) + "/" + str(fecha.month) + "/" + str(fecha.year)
@@ -424,9 +490,13 @@ def obtenerFecha():
 
 def printBarsConsole(s):
     """
-    Función que imprime unas barras en un mensaje
+    Función que imprime unas barras en un mensaje.
+
     :param s: String a imprimir
+    :type s: str
+
     :return: void
+    :rtype: None
     """
     l = len(s)
     u = ""
@@ -439,9 +509,13 @@ def printBarsConsole(s):
 
 def printMatrix(matrix):
     """
-    Función que imprime una matriz en pantalla
+    Función que imprime una matriz en pantalla.
+
     :param matrix: Matriz
+    :type matrix: list
+
     :return: void
+    :rtype: None
     """
     for j in matrix:
         for k in j:
@@ -453,9 +527,14 @@ def printHierachyList(lst, level=0):
     """
     Función que imprime una lista de jerarquía.
     Obtenida desde: http://stackoverflow.com/questions/30521991/
-    :param lst: Lista
+
+    :param lst: Lista de jerarquía
+    :type lst: list
     :param level: Nivel de profunididad
+    :type level: int
+
     :return: void
+    :rtype: None
     """
     print('    ' * (level - 1) + '+---' * (level > 0) + lst[0])
     for l in lst[1:]:
@@ -468,10 +547,17 @@ def printHierachyList(lst, level=0):
 # noinspection PyIncorrectDocstring
 def regexCompare(regString, currString, validRegexChars=None):
     """
-    Compara dos strings el cual regString posee regex
+    Compara dos strings el cual regString posee regex.
+
     :param regString: String regex
+    :type regString: str
     :param currString: String a comparar
-    :return: Boolean
+    :type currString: str
+    :param validRegexChars: Lista de carácteres válidos
+    :type validRegexChars: list
+
+    :return: Booleano indicando resultado de la comparación
+    :rtype: bool
     """
 
     # noinspection PyShadowingNames
@@ -479,6 +565,13 @@ def regexCompare(regString, currString, validRegexChars=None):
         """
         Compara los carácteres de regString y currString en las posiciones
         i y j respectivamente
+        :param i: Carácter de regString
+        :type i: int
+        :param j: Carácter de curString
+        :type j: int
+
+        :return: Booleano indicando resultado de la comparación
+        :rtype: bool
         """
         return regString[i] == currString[j]
 
@@ -523,9 +616,13 @@ def regexCompare(regString, currString, validRegexChars=None):
 # noinspection PyShadowingBuiltins
 def sortAndUniq(input):  # @ReservedAssignment
     """
-    Función que elimina datos repetidos
+    Función que elimina datos repetidos.
+
     :param input: Lista
+    :type input: list
+
     :return: Lista modificada
+    :rtype: list
     """
     output = []
     for x in input:
@@ -538,21 +635,30 @@ def sortAndUniq(input):  # @ReservedAssignment
 # noinspection PyShadowingNames
 def string2list(string, separator):
     """
-    Función que divide un string en una lista usando un separador
+    Función que divide un string en una lista usando un separador.
+
     :param string: String inicial
+    :type string: str
     :param separator: Separador
-    :return: String
+    :type separator: str
+
+    :return: Lista proveniente de la separación del string
+    :rtype: list
     """
     return string.strip().split(separator)
 
 
 def sumMatrix(matrix):
     """
-    Función que suma lista de listas
+    Función que suma lista de listas.
+
     :param matrix: Matrices
-    :return: Double
+    :type matrix: list
+
+    :return: Valor de la suma
+    :rtype: float
     """
-    suma = 0
+    suma = 0.0
     try:
         for j in matrix:
             for k in j:
@@ -560,3 +666,19 @@ def sumMatrix(matrix):
         return suma
     except:
         return -1
+
+
+def wipeFile(filename):
+    """
+    Elimina todo el contenido del archivo pasado por argumento.
+
+    :param filename: Ubicación del archivo
+    :type filename: str
+
+    :return: void
+    :rtype: None
+    """
+    try:
+        open(filename, 'w').close()
+    except:
+        pass

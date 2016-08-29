@@ -1,17 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+bin/update TEST
+Test visual que permite manejar la versión de la aplicación.
 
-# bin/update TEST
-# Test visual que permite manejar la versión de la aplicación.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: AGOSTO 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: AGOSTO 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Main test
 if __name__ == '__main__':
     # Importación de librerías
+    # noinspection PyUnresolvedReferences
     from _testpath import *  # @UnusedWildImport
     from bin.configLoader import configLoader
     from bin.utils import compareVersion, getVersion, printBarsConsole
@@ -24,9 +26,9 @@ if __name__ == '__main__':
     # Se cargan las configuraciones del update
     printBarsConsole("Cargando configuraciones")
     updateConfig = configLoader(DIR_CONFIG, "updates.ini")
-    label = updateConfig.getValue("LABEL")
+    label = str(updateConfig.getValue("LABEL"))
     web = updateConfig.getValue("WEB")
-    header = updateConfig.getValue("HEADER")
+    header = str(updateConfig.getValue("HEADER"))
     print "Label a usar:", label
     print "Web cargada:", web
     print "Headers cargados:", header

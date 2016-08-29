@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+bin/dumprar TEST
+Test interno de rarfile.
 
-# bin/dumprar TEST
-# Test interno de rarfile.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: AGOSTO 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: AGOSTO 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Main test
 if __name__ == '__main__':

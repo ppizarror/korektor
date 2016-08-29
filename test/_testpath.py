@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+Adminsitra la direccion de directorios de la aplicación, se pueden incluir todos los
+directorios salvo bin/.
 
-# Adminsitra la direccion de directorios de la aplicación, se pueden incluir todos los
-# directorios salvo bin/.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: AGOSTO 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: AGOSTO 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de librerías
 import os
@@ -18,6 +19,7 @@ __actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace("\\", "/"
 DIR_BIN = __actualpath.replace("/test/", "/") + "bin/"
 DIR_DATA_TEST = __actualpath + ".data_tests/"
 DIR_DATA_TEST_PRIVATE = __actualpath + ".data_tests_private/"
+DIR_DATA_TEST_STRUCTURE_FOLDER = __actualpath + ".data_tests/STRUCTURE/"
 DIR_TESTS = __actualpath
 DIR_TEST_RESULTS = __actualpath + ".results/"
 DIR_TEST_RESULTS_LOGGING = __actualpath + ".results/log/"

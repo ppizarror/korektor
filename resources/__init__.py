@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+RESOURCES
+Posee todos los recursos binarios utilizados por la aplicación, como imágenes, iconos
+etc.
 
-# RESOURCES
-# Posee todos los recursos binarios utilizados por la aplicación, como imágenes, iconos
-# etc.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: OCTUBRE 2015 - 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: OCTUBRE 2015 - 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de librerías
 import os

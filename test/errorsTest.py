@@ -1,15 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+bin/errors TEST
+Test del manejo de errores de la aplicación.
+
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: AGOSTO 2016
+Licencia: GPLv2
+"""
 __author__ = "ppizarror"
 
-# bin/errors TEST
-# Test del manejo de errores de la aplicación.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: AGOSTO 2016
-# Licencia: GPLv2
-
 # Importación de librerías
+# noinspection PyUnresolvedReferences
 from _testpath import *  # @UnusedWildImport
 from bin.errors import *  # @UnusedWildImport
 import unittest
@@ -31,8 +33,10 @@ class testErrors(unittest.TestCase):
     def setUp(self):
         pass
 
+    # Se cargan errores
     def testA(self):
         if VERBOSE:
+            print ""
             st_error("Este es un error grave", False)
             st_info("Esta es una información")
             st_warning("Esta es una advertencia")

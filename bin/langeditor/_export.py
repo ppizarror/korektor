@@ -1,18 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+EXPORT
+Permite adaptar un archivo a un texto normal para ser traducido correctamente en google
 
-# EXPORT
-# Permite adaptar un archivo a un texto normal para ser traducido correctamente en google
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: 2014-2015
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: 2014-2015
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de librerías
 import os
 import sys
+
 reload(sys)
+# noinspection PyUnresolvedReferences
 sys.setdefaultencoding('UTF8')  # @UndefinedVariable
 
 DL = " // "
@@ -24,7 +27,9 @@ except:
     print "El archivo no existe!"
     exit()
 
+# noinspection PyUnboundLocalVariable
 archivo2 = open(namearchive + "_exported" + ".txt", "w")
+# noinspection PyUnboundLocalVariable
 for linea in archivo:
     linea = linea.strip().split(DL)
     nwlinea = linea[1].replace("|", " ") + "\n"

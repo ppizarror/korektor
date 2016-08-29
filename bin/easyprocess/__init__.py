@@ -1,4 +1,8 @@
-"""Easy to use python subprocess interface."""
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Easy to use python subprocess interface.
+"""
 
 from easyprocess.unicodeutil import split_command, unidecode, uniencode  # @UnresolvedImport
 import logging
@@ -21,6 +25,7 @@ POLL_TIME = 0.1
 USE_POLL = 0
 
 
+# noinspection PyMissingOrEmptyDocstring
 class EasyProcessError(Exception):
 
     def __init__(self, easy_process, msg=''):
@@ -57,6 +62,7 @@ class EasyProcessCheckInstalledError(Exception):
         return msg
 
 
+# noinspection PySingleQuotedDocstring,PyMissingOrEmptyDocstring,PyUnresolvedReferences,PyUnusedLocal
 class EasyProcess(object):
 
     '''
@@ -163,6 +169,7 @@ class EasyProcess(object):
                 self, 'check error, return code is not zero!')
         return self
 
+    # noinspection PyIncorrectDocstring
     def check_installed(self):
         """Used for testing if program is installed.
 

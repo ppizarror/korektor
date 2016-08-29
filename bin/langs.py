@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+LANGS
+Maneja los idiomas.
 
-# LANGS
-# Maneja los idiomas.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: ABRIL 2015 - 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: ABRIL 2015 - 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de librerías y obtención de directorios
 import math
@@ -36,25 +37,36 @@ NULL_LANG = NULL_IDENTIFIER + "{0}>"
 # Definicion de funciones
 def _totalspaces(index):
     """
-    Retorna la cantidad de espacios
+    Retorna la cantidad de espacios.
+
     :param index: Indice
-    :return: Integer
+    :type index: int
+
+    :return: Cantidad de espacios
+    :rtype: int
     """
     return int(round(math.log(index, 10), 2) + 1) * " "
 
 
 class langLoader:
-    """Carga un archivo de idioma y maneja sus elementos, adicionalmente traduce lineas"""
+    """
+    Carga un archivo de idioma y maneja sus elementos, adicionalmente traduce líneas.
+    """
 
     def __init__(self, language, **kwargs):
         """
-        Función constructora
+        Constructor de la clase.
+
         :param language: Idioma a cargar (path)
+        :type language: str
         :param kwargs: Parámetros adicionales
+        :type kwargs: list
+
         :return: void
+        :rtype: None
         """
         language = str(language).upper()
-        if language + langconfig.getValue(0) in langavaiable.getParameters():
+        if language + str(langconfig.getValue(0)) in langavaiable.getParameters():
             try:
                 # noinspection PyShadowingBuiltins
                 file = open(_LANG_DIRLANGS + language + langconfig.getValue(0), "r")  # @ReservedAssignment
@@ -78,11 +90,17 @@ class langLoader:
 
     def get(self, index, *args, **kwargs):
         """
-        Retorna un string asociado al indice -index- en el archivo de idiomas cargado
+        Retorna un string asociado al indice -index- en el archivo de idiomas cargado.
+
         :param index: Indice del string
+        :type index: int, string
         :param args: Argumentos
+        :type args: list
         :param kwargs: Parámetros
-        :return: String
+        :type kwargs: list
+
+        :return: String asociado al índice
+        :rtype: str
         """
         if str(index).isdigit():
             try:  # Si existe el lang en la matriz de datos
@@ -99,8 +117,10 @@ class langLoader:
 
     def printAll(self):
         """
-        Imprime todos los elementos del idioma
+        Imprime todos los elementos del idioma.
+
         :return: void
+        :rtype: None
         """
         print LANG_PRINT_TITLE
         for key in self.lang.keys():
@@ -108,10 +128,15 @@ class langLoader:
 
     def translate(self, index, to):
         """
-        Función que traduce un texto usando el servicio de google traductor
+        Función que traduce un texto usando el servicio de google traductor.
+
         :param index: Indice del string
+        :type index: int
         :param to: Idioma destino
-        :return: String
+        :type to: str
+
+        :return: String con la entrada traducida
+        :rtype: str
         """
         text = self.get(index)
         if langselfconfig.isTrue("TRANSLATIONS"):  # Si el servicio de traducciones esta activado

@@ -1,151 +1,195 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+PACKAGE VALIDATOR
+Testea que los paquetes entregados por los alumnos tengan una estructura correcta
+Además testea de que las estructuras de archivos tengan también una estructura correcta.
 
-# PACKAGE VALIDATOR
-# Testea que los paquetes entregados por los alumnos tengan una estructura correcta
-# Además testea de que las estructuras de archivos tengan también una estructura correcta.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: OCTUBRE 2015 - 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: OCTUBRE 2015 - 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de librerías
 if __name__ == '__main__':
     from libpath import *  # @UnusedWildImport
 from bin.configLoader import configLoader  # @UnresolvedImport
-import bin.errors as err  # @UnresolvedImport @UnusedImport
-from lib.fileManager import FileManager  # @UnusedImport @UnresolvedImport
+from bin.utils import isFolder  # @UnusedImport
 from config import DIR_CONFIG  # @UnresolvedImport
-from data import DIR_UPLOADS, DIR_STRUCTURE, DIR_DATA  # @UnusedImport
-from bin.utils import regexCompare, appendListToList, isFolder
-
-# Constantes
-PACKAGE_TESTER_ERROR_NO_FOUND = "El archivo consultado no existe"
-PACKAGE_VALIDATE_FAIL = "FOLDER-PACKAGE-FAIL"
-PACKAGE_VALIDATE_OK = "FOLDER-PACKAGE-OK"
-ZIP_VALIDATE_FAIL = "ZIP-PACKAGE-FAIL"
-ZIP_VALIDATE_OK = "ZIP-PACKAGE-OK"
+# noinspection PyUnresolvedReferences
+from data import DIR_DATA, DIR_STRUCTURE_FOLDERNAME  # @UnusedImport
+from lib.package import *  # @UnusedWildImport
 
 
 # noinspection PyUnresolvedReferences
-class PackageValidator:
+class PackageValidator(varTypedClass, exceptionAsStringClass):
     """
-    package: Paquetes de usuario el cual provee funciones para acceder a los contenidos
-    de cada paquete, como tambien la estructura básica pedida
+    Clase que permite validar que los paquetes tengan una estructura adecuada, para ello se instancia
+    un paquete con la estructura pedida (en regex) y la función validatePackage comprueba que un
+    paquete pasado por argumento.
     """
 
-    def __init__(self):
+    def __init__(self, exceptionAsString=False):
         """
-        Constructor
+        Constructor de la clase.
+
+        :param exceptionAsString: Booleano indicando si las excepciones se retornan como String
+        :type exceptionAsString: bool
+
         :return: void
+        :rtype: None
         """
+
+        # Se instancia la clase de tratamiento de errores
+        exceptionAsStringClass.__init__(self, exceptionAsString)
+
         # Carga de configuraciones
-        config = configLoader(DIR_CONFIG, "packages.ini")
-        folderConfig = configLoader(DIR_CONFIG, "folder.ini")
         coreConfig = configLoader(DIR_CONFIG, "core.ini")
-        self.ignoredFiles = folderConfig.getValueListed("IGNORE")
-        self.packageStructedFiles = []  # Lista con archivos requeridos para cada package
-        self.validChars = config.getValue("VALID_CHARACTERS")  # Caracteres válidos de los archivos del paquete
-        self.validRegexChars = config.getValue("VALID_REGEX_CHARACTERS")  # Caracteres válidos para los regex
         self._verbose = coreConfig.isTrue("VERBOSE")
 
-        # Carpeta de los paquetes a analizar
-        self._defaultsourceroot = DIR_UPLOADS
-        self._sourceroot = DIR_UPLOADS
-        self._structureroot = DIR_STRUCTURE
+        # Variables de estado
+        self._isStructGenerated = False
+        self._isValidStructureDirectories = True
 
-        # Instancia un filemanager
+        # Variables de la estructura
+        self._structureDirectoryName = DIR_STRUCTURE_FOLDERNAME
+        self._structureDirectoryRoot = DIR_DATA
+        self._structurePackage = None
+
+        # Instancia un filemanager para generar la estructura
         self._fm = FileManager()
-        self._fm.setDefaultWorkingDirectory(self._defaultsourceroot)
+        self._fm.setDefaultWorkingDirectory(self._structureDirectoryRoot)
         self._fm.restoreWD()
-
-        # Genera la estructura
-        self._structFiles = []
-        self._loadStructure()
+        self._fm.enable_autoExtract()
+        self._fm.enable_doRemoveExtractedFolders()
+        self._fm.disable_removeOnExtract()
+        if self._verbose:
+            self._fm.enable_verbose()
+        else:
+            self._fm.disable_verbose()
 
     def disable_verbose(self):
         """
-        Desactiva el printing de errores y estados de sistema
+        Desactiva el printing de errores y estados de sistema.
+
         :return: void
+        :rtype: None
         """
         self._verbose = False
+        self._fm.enable_verbose()
 
     def enable_verbose(self):
         """
-        Desactiva el printing de errores y estados de sistema
+        Desactiva el printing de errores y estados de sistema.
+
         :return: void
+        :rtype: None
         """
         self._verbose = True
+        self._fm.enable_verbose()
 
-    def _getStructure(self):
+    def _getStructureFilelist(self):
         """
-        Retorna la estructura de un paquete en forma de string
-        :return: String
-        """
-        return "\n".join(self._structFiles)
+        Retorna la lista de archivos de la estructura del paquete.
 
-    def _loadStructure(self):
+        :return: Lista de archivos
+        :rtype: list
         """
-        Carga la configuración de la estructura requerida para cada tarea
-        :return: None
-        """
-        self._fm.setWorkingDirectory(DIR_STRUCTURE)
-        for f in os.listdir(DIR_STRUCTURE):  # @ReservedAssignment
-            appendListToList(self._structFiles, self._fm.inspectSingleFile(f))
-        self._fm.restoreWD()
-
-    def restoreSourceFolder(self):
-        """
-        Reestablece el source root
-        :return: void
-        """
-        self._sourceroot = self._defaultsourceroot
-        self._fm.setDefaultWorkingDirectory(self._defaultsourceroot)
-        self._fm.restoreWD()
-
-    def setDefaultSourceFolder(self, foldername):
-        """
-        Establece la carpeta por defecto de los elementos a analizar (fuente)
-        :param foldername: Carpeta de fuente
-        :return: void
-        """
-        if isFolder(foldername, "") and len(foldername) > 0:
-            foldername = foldername.replace("\\", "/")
-            if foldername[len(foldername) - 1] != "/":
-                foldername += "/"
-            self._defaultsourceroot = foldername
+        if self._isStructGenerated:
+            return self._structurePackage.getFileList()
         else:
-            err.throw(err.ERROR_BADSOURCEFOLDER)
+            return self._throwException("VALIDATOR_ERROR_STRUCTURE_NOT_CREATED")
 
-    def setSourceFolder(self, foldername):
+    def _getStructurePackage(self):
         """
-        Establece la carpeta de los elementos a analizar (fuente)
-        :param foldername: Carpeta de fuente
-        :return: void
+        Retorna la estructura válida como un paquete.
+
+        :return: Paquete de la estructura
+        :rtype: Package
         """
-        if isFolder(foldername, "") and len(foldername) > 0:
-            foldername = foldername.replace("\\", "/")
-            if foldername[len(foldername) - 1] != "/":
-                foldername += "/"
-            self._sourceroot = foldername
-            self._fm.setWorkingDirectory(foldername)
+        if self._isStructGenerated:
+            return self._structurePackage
         else:
-            err.throw(err.ERROR_BADSOURCEFOLDER)
+            return self._throwException("VALIDATOR_ERROR_STRUCTURE_NOT_CREATED")
 
-    def _validateStructureFile(self, filename):
+    def loadStructure(self):
         """
-        Función que valida si un archivo cumple con la estructura pedida
-        :param filename: Archivo a comprobar
-        :return:
+        Carga la configuración de la estructura requerida para cada tarea.
+
+        :return: void
+        :rtype: None
         """
-        folderfiles = self._fm.inspectSingleFile(filename)
-        for structfile in self._structFiles:
-            found = False
-            for datafile in folderfiles:
-                if regexCompare("#/" + structfile, datafile):
-                    found = True
-                    break
-            if not found:
-                return False
-        return True
+        if self._isValidStructureDirectories:
+            self._structurePackage = PackageFileManager(self._fm, self._structureDirectoryName, True,
+                                                        self._exceptionStrBehaviour)
+            self._isStructGenerated = True
+        else:
+            return self._throwException("VALIDATOR_ERROR_STRUCTURE_FOLDER_DONT_EXIST")
+
+    def _printStructureHierachy(self):
+        """
+        Imprime la lista de los archivos de la estructura válida en forma de jerarquía.
+
+        :return: void
+        :rtype: None
+        """
+        if self._isStructGenerated:
+            self._structurePackage.printHierachy()
+        else:
+            return self._throwException("VALIDATOR_ERROR_STRUCTURE_NOT_CREATED")
+
+    def setStructureDirectory(self, structureDir):
+        """
+        Define el directorio de la estructura.
+
+        :param structureDir: Nuevo directorio para cargar la estructura
+        :type structureDir: str
+
+        :return: void
+        :rtype: None
+        """
+        if isFolder(structureDir, ""):
+            structureDir = structureDir.strip().replace("\\", "/").replace("//", "/")
+            structureDirList = structureDir.split("/")
+            ln = len(structureDirList)
+            offset = -1
+            if structureDirList[ln - 1] == "":
+                offset = -2
+            self._structureDirectoryName = structureDirList[ln + offset]
+            self._structureDirectoryRoot = "/".join(structureDirList[0:ln + offset])
+            self._fm.setDefaultWorkingDirectory(self._structureDirectoryRoot)
+            self._fm.restoreWD()
+        else:
+            return self._throwException("VALIDATOR_ERROR_STRUCTURE_FOLDER_DONT_EXIST")
+
+    def validatePackage(self, package):
+        """
+        Valida un paquete, comprobando que todos los archivos del mismo cumplan con la estructura
+        cargada.
+
+        :param package: Paquete a comprobar
+        :type package: Package
+
+        :return: void
+        :rtype: None
+        """
+        self._checkVariableType(package, TYPE_OTHER, "package", Package)
+
+
+        #     def _validateStructureFile(self, filename):
+        #         """
+        #         Función que valida si un archivo cumple con la estructura pedida
+        #         :param filename: Archivo a comprobar
+        #         :return:
+        #         """
+        #         folderfiles = self._fm.inspectSingleFile(filename)
+        #         for structfile in self._structFiles:
+        #             found = False
+        #             for datafile in folderfiles:
+        #                 if regexCompare("#/" + structfile, datafile):
+        #                     found = True
+        #                     break
+        #             if not found:
+        #                 return False
+        #         return True

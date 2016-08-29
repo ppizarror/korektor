@@ -1,15 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+bin/varType TEST
+Testeo de modulo que comprueba tipos de variable
+
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: AGOSTO 2016
+Licencia: GPLv2
+"""
 __author__ = "ppizarror"
 
-# bin/varType TEST
-# Testeo de modulo que comprueba tipos de variable
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: AGOSTO 2016
-# Licencia: GPLv2
-
 # Importación de librerías
+# noinspection PyUnresolvedReferences
 from _testpath import *  # @UnusedWildImport
 from bin.varType import *  # @UnusedWildImport
 from bin.errors import ERR_CHECKTYPE
@@ -27,6 +29,7 @@ if __name__ == '__main__':
 
 
 # Clase para testear
+# noinspection PyMissingOrEmptyDocstring
 class testDummyClass:
     def __init__(self):
         pass
@@ -38,6 +41,7 @@ class testTest(unittest.TestCase):
     def setUp(self):
         pass
 
+    # Comprobación de tipos de variables
     def testCheckVariableType(self):
         assert checkVariableType(1.0, TYPE_FLOAT) == True, ERR_CHECKTYPE
         assert checkVariableType(1, TYPE_FLOAT) == False, ERR_CHECKTYPE

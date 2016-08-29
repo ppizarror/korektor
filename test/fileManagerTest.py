@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+lib/fileManager TEST
+Test del fileManager, módulo relacionado con el manejo y escaneo de archivos en una carpeta.
 
-# lib/fileManager TEST
-# Test del fileManager, módulo relacionado con el manejo y escaneo de archivos en una carpeta.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: AGOSTO 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: AGOSTO 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de librerías
 from _testpath import *  # @UnusedWildImport
@@ -43,6 +44,7 @@ class testFileManager(unittest.TestCase):
         else:
             self.fm.disable_verbose()
 
+    # Cambia el working directory del fileManager
     def testCambioWD(self):
         if VERBOSE:
             printBarsConsole("Testeo del wd")
@@ -63,6 +65,7 @@ class testFileManager(unittest.TestCase):
         assert self.fm.getWorkingDirectory() == DIR_DATA_TEST, FILEMANAGER_ERROR_WD
         del b
 
+    # Tesdeo de una carpeta sencilla sin subcarpetas
     def testCarpetaUnica(self):
         self.fm.restoreWD()
         if VERBOSE:
@@ -80,6 +83,7 @@ class testFileManager(unittest.TestCase):
         assert equalLists(t, self.fm.inspectSingleFile("Folder 2")) == True, FILEMANAGER_ERROR_SCAN
         del t
 
+    # Testeo de un archivo zip
     def testZip(self):
         if VERBOSE:
             printBarsConsole("Testeo de archivo zip")
@@ -89,18 +93,21 @@ class testFileManager(unittest.TestCase):
         assert equalLists(t, self.fm.inspectSingleFile("Zip Folder.zip")) == True, FILEMANAGER_ERROR_SCAN
         del t
 
+    # Test de un archivo bloqueado por configuración
     def testProhibido(self):
         if VERBOSE:
             printBarsConsole("Testeo de archivos prohibidos")
             print self.fm.inspectSingleFile("__MACOSX")
         assert equalLists([], self.fm.inspectSingleFile("__MACOSX")) == True, FILEMANAGER_ERROR_SCAN
 
+    # Test de un archivo (no carpeta)
     def testArchivoSingle(self):
         if VERBOSE:
             printBarsConsole("Testeo de un archivo no carpeta")
             print self.fm.inspectSingleFile("ABOUT")
         assert equalLists([], self.fm.inspectSingleFile("ABOUT")) == True, FILEMANAGER_ERROR_SCAN
 
+    # Testeo de un archivo rar
     def testRar(self):
         if VERBOSE:
             printBarsConsole("Testeo de archivo rar")
@@ -109,12 +116,14 @@ class testFileManager(unittest.TestCase):
         assert equalLists(t, self.fm.inspectSingleFile("Rar Folder.rar")) == True, FILEMANAGER_ERROR_SCAN
         del t
 
+    # Test de un archivo inexistente
     def testArchivoInexistente(self):
         if VERBOSE:
             printBarsConsole("Testeo de un archivo inexistente")
             print self.fm.inspectSingleFile("Inexistente")
         assert equalLists([], self.fm.inspectSingleFile("Inexistente")) == True, FILEMANAGER_ERROR_SCAN
 
+    # Testeo de un archivo zip con una carpeta dentro
     def testZipConCarpeta(self):
         if VERBOSE:
             printBarsConsole("Testeo de una carpeta con un archivo zip dentro")
@@ -132,7 +141,8 @@ class testFileManager(unittest.TestCase):
         assert equalLists(t, self.fm.inspectSingleFile("Folder 4")) == True, FILEMANAGER_ERROR_SCAN
         del t
 
-    def testCarpetaConRar(self):
+    # Test pesado, habilitar solo para testeo en detalle
+    def _testCarpetaConRar(self):
         if VERBOSE:
             printBarsConsole("Testeo de una carpeta con un archivo rar dentro")
             print self.fm.inspectSingleFile("Folder 3")
@@ -147,6 +157,7 @@ class testFileManager(unittest.TestCase):
         assert equalLists(t, self.fm.inspectSingleFile("Folder 3")) == True, FILEMANAGER_ERROR_SCAN
         del t
 
+    # Testeo de una carpeta grande
     def testFolder5(self):
         if VERBOSE:
             printBarsConsole("Testeo Folder 5")
@@ -179,7 +190,8 @@ class testFileManager(unittest.TestCase):
         assert equalLists(t, self.fm.inspectSingleFile("Folder 5")) == True, FILEMANAGER_ERROR_SCAN
         del t
 
-    def testCompressedFileAlreadyExists(self):
+    # Test pesado, habilitar solo para testeo en detalle
+    def _testCompressedFileAlreadyExists(self):
         self.fm.disable_extractIfFolderAlreadyExists()
         if VERBOSE:
             printBarsConsole("Testeo carpeta con archivos comprimidos que ya existen como carpetas")

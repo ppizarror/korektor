@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+lib/libpath TEST
+Test que prueba el manejo de carpetas del paquete lib/.
 
-# lib/libpath TEST
-# Test que prueba el manejo de carpetas del paquete lib/.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: AGOSTO 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: AGOSTO 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Main test
 if __name__ == '__main__':

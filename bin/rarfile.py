@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # rarfile.py
 #
 # Copyright (c) 2005-2016  Marko Kreen <markokr@gmail.com>
@@ -95,10 +98,13 @@ from tempfile import mkstemp
 # only needed for encryped headers
 try:
     try:
+        # noinspection PyUnresolvedReferences
         from cryptography.hazmat.primitives.ciphers import algorithms, modes, Cipher
+        # noinspection PyUnresolvedReferences
         from cryptography.hazmat.backends import default_backend
 
 
+        # noinspection PyMissingOrEmptyDocstring
         class AES_CBC_Decrypt(object):
             block_size = 16
 
@@ -109,9 +115,11 @@ try:
             def decrypt(self, data):
                 return self.dec.update(data)
     except ImportError:
+        # noinspection PyUnresolvedReferences
         from Crypto.Cipher import AES
 
 
+        # noinspection PyMissingOrEmptyDocstring
         class AES_CBC_Decrypt(object):
             block_size = 16
 
@@ -488,11 +496,12 @@ class RarInfo(object):
             return (self.flags & RAR_FILE_DIRECTORY) == RAR_FILE_DIRECTORY
         return False
 
+    # noinspection PyMissingOrEmptyDocstring
     def needs_password(self):
         return (self.flags & RAR_FILE_PASSWORD) > 0
 
 
-# noinspection PySingleQuotedDocstring,PyMethodMayBeStatic,PyPropertyAccess,PyTypeChecker,PyUnusedLocal,PyShadowingBuiltins,PyChainedComparisons
+# noinspection PySingleQuotedDocstring,PyMethodMayBeStatic,PyPropertyAccess,PyTypeChecker,PyUnusedLocal,PyShadowingBuiltins,PyChainedComparisons,PyUnresolvedReferences
 class RarFile(object):
     '''Parse RAR structure, provide access to files in archive.
     '''
@@ -1304,7 +1313,7 @@ class RarFile(object):
 ## Utility classes
 ##
 
-# noinspection PyUnboundLocalVariable
+# noinspection PyUnboundLocalVariable,PyMissingOrEmptyDocstring
 class UnicodeFilename(object):
     """Handle unicode filename decompression"""
 
@@ -1764,6 +1773,7 @@ class DirectReader(RarExtFile):
         return got
 
 
+# noinspection PyMissingOrEmptyDocstring
 class HeaderDecrypt(object):
     """File-like object that decrypts from another file"""
 
@@ -1807,7 +1817,7 @@ class HeaderDecrypt(object):
 
 
 # handle (filename|filelike) object
-# noinspection PyUnusedLocal,PyArgumentList
+# noinspection PyUnusedLocal,PyArgumentList,PyMissingOrEmptyDocstring
 class XFile(object):
     __slots__ = ('_fd', '_need_close')
 
@@ -1847,6 +1857,7 @@ class XFile(object):
 ## Utility functions
 ##
 
+# noinspection PyMissingOrEmptyDocstring
 def is_filelike(obj):
     if isinstance(obj, str) or isinstance(obj, unicode):
         return False
@@ -1969,7 +1980,7 @@ def parse_dos_time(stamp):
 
     sec = stamp & 0x1F;
     stamp = stamp >> 5
-    min = stamp & 0x3F;
+    min = stamp & 0x3F;  # @ReservedAssignment
     stamp = stamp >> 6  # @ReservedAssignment
     hr = stamp & 0x1F;
     stamp = stamp >> 5
@@ -2054,6 +2065,7 @@ def check_returncode(p, out):
     raise exc(msg)
 
 
+# noinspection PyMissingOrEmptyDocstring
 def membuf_tempfile(memfile):
     memfile.seek(0, 0)
 

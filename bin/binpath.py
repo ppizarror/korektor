@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+BINPATH
+Adminsitra el path de /bin.
 
-# BINPATH
-# Adminsitra el path de /bin.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: OCTUBRE 2015 - 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: OCTUBRE 2015 - 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de librerías
 import os

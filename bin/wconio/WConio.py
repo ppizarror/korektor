@@ -126,12 +126,12 @@ def cputs(s):
         putch(c)  # @UndefinedVariable
 
 def getkey():
-    n, c = getch()
+    n, c = getch()  # @UndefinedVariable
     # 0340 is 'grey' keys.  change this if you don't like
     # it, but I don't care what color the key is.  IMHO it
     # just confuses the end-user if they need to know.
     if n == 0 or n == 0340:
-        n, c = getch()
+        n, c = getch()  # @UndefinedVariable
         if __keydict.has_key(n):
             return __keydict[n]
         return "key%x" % n
@@ -144,41 +144,41 @@ def cgets(l):
         if c == '\010':  # backspace
             if s:
                 s = s[:-1]
-                gotoxy(wherex() - 1, wherey())
-                putch(" ")
-                gotoxy(wherex() - 1, wherey())
+                gotoxy(wherex() - 1, wherey())  # @UndefinedVariable
+                putch(" ")  # @UndefinedVariable
+                gotoxy(wherex() - 1, wherey())  # @UndefinedVariable
         elif c >= " " and c <= "~":
             if len(s) < l:
                 s = s + c
-                putch(c)
+                putch(c)  # @UndefinedVariable
         c = getkey()
     return s
 
 def textmode():
-    textattr(LIGHTGRAY)
-    clrscr()
-    setcursortype(1)
+    textattr(LIGHTGRAY)  # @UndefinedVariable
+    clrscr()  # @UndefinedVariable
+    setcursortype(1)  # @UndefinedVariable
 
 def textcolor(c):
-    bgcolor = gettextinfo()[4] & 0x00F0
-    textattr(c | bgcolor)
+    bgcolor = gettextinfo()[4] & 0x00F0  # @UndefinedVariable
+    textattr(c | bgcolor)  # @UndefinedVariable
 
 def textbackground(c):
-    fgcolor = gettextinfo()[4] & 0x000F
-    textattr((c << 4) | fgcolor)
+    fgcolor = gettextinfo()[4] & 0x000F  # @UndefinedVariable
+    textattr((c << 4) | fgcolor)  # @UndefinedVariable
 
 def getche():
-    rc, s = getch()
+    rc, s = getch()  # @UndefinedVariable
     if s:
-        putch(s)
+        putch(s)  # @UndefinedVariable
     return (rc, s)
 
 def normvideo():
-    textattr(gettextinfo()[5])
+    textattr(gettextinfo()[5])  # @UndefinedVariable
 
 def movetext(left, top, right, bottom, destleft, desttop):
-    s = gettext(left, top, right, bottom)
-    puttext(destleft, desttop,
+    s = gettext(left, top, right, bottom)  # @UndefinedVariable
+    puttext(destleft, desttop,  # @UndefinedVariable
         right + (destleft - left),
         bottom + (desttop - top), s)
 
@@ -196,7 +196,7 @@ class WCFile:
         return 1
     def read(self, size=1):
         if size <= 1:
-            return getch()[1]
+            return getch()[1]  # @UndefinedVariable
         else:
             return cgets(size)
     def readline(self, size=0):

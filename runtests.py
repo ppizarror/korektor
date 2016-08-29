@@ -1,24 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+RUN TESTS
+Este módulo corre todos los tests de la aplicación almacenados en la carpeta /test que
+cumplan como la estructura *Test.py.
+Funciona para todos los sistemas operativos.
 
-# RUN TESTS
-# Este módulo corre todos los tests de la aplicación almacenados en la carpeta /test que
-# cumplan como la estructura *Test.py.
-# Funciona para todos los sistemas operativos.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: AGOSTO 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: AGOSTO 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de variables
 from test._testpath import DIR_TEST_RESULTS, DIR_TEST_RESULTS_LOGGING
 from bin.arguments import argumentParserFactory
+from bin.configLoader import configLoader
 from bin.errors import ERROR_MATPLOTLIB_NOT_INSTALLED, ERROR_RUNTESTS_CREATE_PLOT, \
     ERROR_RUNTESTS_SAVE_LOG, ERROR_RUNTESTS_SAVE_RESULTS, st_error
-from bin.configLoader import configLoader
+from bin.utils import wipeFile
 from config import DIR_CONFIG
 import datetime
+import math
 import platform
 import subprocess
 
@@ -32,10 +35,13 @@ parser.add_argument('--dont-save-log', dest='doSaveLogFile', action='store_false
                     help='Desactiva el guardado de resultados.')
 parser.add_argument('--dont-save-results', dest='doSaveResults', action='store_false', \
                     help='Desactiva el guardado de resultados.')
+parser.add_argument('--reset', dest='doReset', action='store_true', \
+                    help='Reinicia los resultados a cero.')
 args = parser.parse_args()
 
 # Se guardan las configuraciones locales
 doPlot = args.doPlot
+doReset = args.doReset
 doSaveLogFile = args.doSaveLogFile
 doSaveResults = args.doSaveResults
 verbose = args.verbose
@@ -45,6 +51,10 @@ COMMANDS = "python -m unittest discover test *Test.py"
 RESULT_FILE = "results.txt"
 RESULT_PLOT_CORRECT = "results-plot.png"
 RESULT_PLOT_TIME = "results-plot-time.png"
+
+# Se comprueban comandos críticos
+if doReset:
+    wipeFile(DIR_TEST_RESULTS + RESULT_FILE)
 
 # Se ejecuta el llamado al shell
 p = subprocess.Popen(COMMANDS, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
@@ -60,6 +70,8 @@ hr = str(datetime.datetime.now())[0:19]
 nr = "0"
 os = platform.system()
 sg = "0.0s"
+
+# Mensaje de los resultados
 msgg = hr + " " + os + " "
 
 try:  # Se genera el mensaje de resultados
@@ -80,6 +92,7 @@ except:
 # Se agrega el estado de ejecucion al archivo de resultados en RESULT_FILE
 if doSaveResults:
     try:
+        x = ""
         rsltFile = open(DIR_TEST_RESULTS + RESULT_FILE, "r")
         for line in rsltFile:
             x = line
@@ -108,6 +121,7 @@ if doPlot:  # Se crea un grafico de los resultados en función del tiempo
     _continue = False
     try:
         import matplotlib.pyplot as plt  # @UnresolvedImport @UnusedImport
+
         _continue = True
     except Exception, e:
         if verbose:
@@ -116,7 +130,8 @@ if doPlot:  # Se crea un grafico de los resultados en función del tiempo
         try:
             # Se obtienen las configuraciones
             plotConfig = configLoader(DIR_CONFIG, "plot.ini")
-            max_data = plotConfig.getValue("NUMBER_OF_X_DATA")
+            max_data = plotConfig.getValue("NUMBER_OF_X_DATA", autoNumberify=True)
+            max_range_var = plotConfig.getValue("MAX_RANGE_VAR", autoNumberify=True)
 
             # Se cargan los datos
             vec_time = []
@@ -138,10 +153,15 @@ if doPlot:  # Se crea un grafico de los resultados en función del tiempo
 
             # Se aplica la restricción de datos
             if counter > max_data:
+                # noinspection PyTypeChecker
                 vec_fail = vec_fail[counter - max_data:counter]
+                # noinspection PyTypeChecker
                 vec_ok = vec_ok[counter - max_data:counter]
+                # noinspection PyTypeChecker
                 vec_test = vec_test[counter - max_data:counter]
+                # noinspection PyTypeChecker
                 vec_time = vec_time[counter - max_data:counter]
+                # noinspection PyTypeChecker
                 vec_x = vec_x[counter - max_data:counter]
 
             # Se calcula el tiempo medio
@@ -149,17 +169,36 @@ if doPlot:  # Se crea un grafico de los resultados en función del tiempo
             nlen = len(vec_x)
             for i in range(0, nlen):
                 tme += vec_time[i]
-            tme = tme / nlen
+            tme /= nlen
+
+            # Se calcula la desviación típica
+            tdesv = 0.0
+            for i in range(0, nlen):
+                tdesv += pow((vec_time[i] - tme), 2)
+            tdesv = math.sqrt(tdesv / nlen)
+
+            # Se eliminan los valores alejados del promedio
+            tme_dsv = 0.0
+            ttl_dns = 0
+            for i in range(0, nlen):
+                tm_t = vec_time[i]
+                # noinspection PyTypeChecker
+                if tm_t < tme * (1 + max_range_var):
+                    tme_dsv += tm_t
+                    ttl_dns += 1
+            tme_dsv /= ttl_dns
 
             # Se genera el gráfico
             fig, ax = plt.subplots(nrows=1, ncols=1)
-            ax.plot(vec_x, vec_time)
-            ax.plot([vec_x[0], vec_x[nlen - 1]], [tme, tme], 'r--')
+            ax.plot(vec_x, vec_time, 'c', label='Tiempo de prueba')
+            ax.plot([vec_x[0], vec_x[nlen - 1]], [tme, tme], 'r--', label='Tiempo medio (tme)')
+            ax.plot([vec_x[0], vec_x[nlen - 1]], [tme_dsv, tme_dsv], 'b--', label='Tiempo normalizado (tmn)')
+            ax.legend()
 
             # Se crean los label
-            ax.set_xlabel("Numero de la prueba")
+            ax.set_xlabel("Número de la prueba")
             ax.set_ylabel("Tiempo medio en segundos")
-            ax.set_title("Tiempo de las pruebas (tme={0:.2f}s)".format(tme))
+            ax.set_title('Tiempo de las pruebas (tme={0:.3f}s, '.format(tme) + 'tmn=0.334s)')
 
             # Se guarda la figura al archivo
             fig.savefig(DIR_TEST_RESULTS + RESULT_PLOT_TIME)

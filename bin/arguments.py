@@ -1,16 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+ARGUMENTS
+Maneja los argumentos de las aplicaciones.
+
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: AGOSTO 2015 - 2016
+Licencia: GPLv2
+"""
 __author__ = "ppizarror"
 
-# ARGUMENTS
-# Maneja los argumentos de las aplicaciones.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: AGOSTO 2015 - 2016
-# Licencia: GPLv2
-
 # Importación de librerías
-import argparse
+from argparse import ArgumentParser, SUPPRESS
+from kwargsUtils import *  # @UnusedWildImport
 
 # Constantes del programa
 _TITLE_AUTHOR = "Autor del software o modulo."
@@ -21,79 +23,57 @@ _TITLE_VERBOSE = "Activa el verbose."
 _TITLE_VERSION = "Muestra la version del programa."
 
 
+# noinspection PyTypeChecker
 def argumentParserFactory(descripcion="", **kwargs):
     """
-    Crea un parser de argumentos
-    :param descripcion: Descripcion de la bateria de argumentos
-    :param kwargs: Parametros opcionales:
-        author = Autor del archivo
-        show_author = Activa mostrar el comando --author
-        title_author = Mensaje de ayuda al mostrar el autor del software
-        title_help = Mensaje del comando -h, -help
-        title_optionals = Titulo de los argumentos opcionales
-        title_positionals = Titulo de los argumentos posicionales
-        title_verbose = Mensaje de ayuda al activar o desactivar el verbose
-        title_version = Mensaje de ayuda al mostrar la versión del programa
-        verbose = Activa el verbose en la línea de comandos
-        version = Activa el version en la línea de comandos
-    :return: ArgumentParser
-    """
+    Crea un parser de argumentos para ser tratados en consola.
 
-    # Langs
-    title_author = _TITLE_AUTHOR
-    title_help = _TITLE_HELP
-    title_optionals = _TITLE_POSITIONALS
-    title_positionals = _TITLE_POSITIONALS
-    title_verbose = _TITLE_VERBOSE
-    title_version = _TITLE_VERSION
+    Keywords:
+        - author = Autor del archivo.
+        - show_author = Activa mostrar el comando --author.
+        - title_author = Mensaje de ayuda al mostrar el autor del software.
+        - title_help = Mensaje del comando -h, -help.
+        - title_optionals = Titulo de los argumentos opcionales.
+        - title_positionals = Titulo de los argumentos posicionales.
+        - title_verbose = Mensaje de ayuda al activar o desactivar el verbose.
+        - title_version = Mensaje de ayuda al mostrar la versión del programa.
+        - verbose = Activa el verbose en la línea de comandos.
+        - version = Activa el version en la línea de comandos.
+
+    :param descripcion: Descripcion de la bateria de argumentos
+    :type descripcion: str
+    :param kwargs: Keywords
+    :type kwargs: list
+    :return: Objeto ArgumentParser
+    :rtype: ArgumentParser
+    """
 
     # Estados internos
     from _author import __author__ as author
-    show_author = True
     show_author_software = True
-    verbose = False
-    version = True
 
     # Se revisan argumentos opcionales
-    if "title_positionals" in kwargs:  # Título de los argumentos posicionales
-        title_positionals = kwargs["title_positionals"]
-    if "title_optional" in kwargs:  # Título de los argumentos opcionales
-        title_optionals = kwargs["title_optionals"]
-    if "title_author" in kwargs:  # Título del argumento del autor del software/módulo
-        title_author = kwargs["title_author"]
-    if "title_help" in kwargs:  # Título del argumento de la ayuda
-        title_help = kwargs["title_help"]
-    if "title_verbose" in kwargs:  # Título del argumento del verbose
-        title_verbose = kwargs["title_verbose"]
-    if "title_version" in kwargs:  # Título del argumento del version
-        title_version = kwargs["title_version"]
-    if "version" in kwargs and kwargs["version"]:  # Mostrar comando version
-        if str(kwargs["version"]).lower() == "true":
-            version = True
-        else:
-            version = False
-    if "verbose" in kwargs:  # Mostrar comando verbose
-        if str(kwargs["verbose"]).lower() == "true":
-            verbose = True
-        else:
-            verbose = False
-    if "show_author" in kwargs:  # Mostrar el comando author
-        if str(kwargs["show_author"]).lower() == "true":
-            show_author = True
-        else:
-            show_author = False
+    title_positionals = kwargGetValue(kwargs, "title_positionals", _TITLE_POSITIONALS)
+    title_optionals = kwargGetValue(kwargs, "title_optionals", _TITLE_OPTIONALS)
+    title_author = kwargGetValue(kwargs, "title_author", _TITLE_AUTHOR)
+    title_help = kwargGetValue(kwargs, "title_help", _TITLE_HELP)
+    title_verbose = kwargGetValue(kwargs, "title_verbose", _TITLE_VERBOSE)
+    title_version = kwargGetValue(kwargs, "title_version", _TITLE_VERSION)
+    version = kwargIsTrueParam(kwargs, "version")  # Mostrar comando version
+    verbose = kwargIsTrueParam(kwargs, "verbose")  # Mostrar el comando verbose
+    show_author = kwargIsTrueParam(kwargs, "show_author")  # Mostrar el comando author
     if "author" in kwargs:  # Definir el autor del software
         author = kwargs["author"]
         show_author_software = False
 
     # Se crea el parser
     if descripcion != "":
-        parser = argparse.ArgumentParser(description=descripcion, add_help=False)
+        parser = ArgumentParser(description=descripcion, add_help=False)
     else:
-        parser = argparse.ArgumentParser(add_help=False)
+        parser = ArgumentParser(add_help=False)
     parser._positionals.title = title_positionals
     parser._optionals.title = title_optionals
-    parser.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS, help=title_help)
+    parser.add_argument('-h', '--help', action='help', default=SUPPRESS, help=title_help)
 
     # Se agrega el autor del software
     if show_author:

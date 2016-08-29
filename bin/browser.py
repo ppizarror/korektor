@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+BROWSER
+Sencillo navegador web.
 
-# BROWSER
-# Sencillo navegador web.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: ABRIL-OCTUBRE 2015 - 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: ABRIL-OCTUBRE 2015 - 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de librerías
 if __name__ == '__main__':
@@ -22,13 +23,26 @@ import mechanize
 # Funciones de clase
 def unescape(text):
     """
-    Reemplaza los caracteres html
+    Reemplaza los caracteres html.
+
     :param text: HTML
+    :type text: str
+
     :return: HTML sin caracteres
+    :rtype: str
     """
 
     # noinspection PyShadowingNames
     def fixup(m):
+        """
+        Elimina caracteres no unicode en un string.
+
+        :param m: String a tratar
+        :type m: str
+
+        :return: String con carácteres tratados
+        :rtype: str
+        """
         text = m.group(0)
         if text[:2] == "&#":
             try:
@@ -45,16 +59,20 @@ def unescape(text):
                 pass
         return text
 
-    return re.sub("&#?\w+;", fixup, text)
+    return re.sub('&#?\w+;', fixup, text)
 
 
 class Browser:
-    """Navegador web"""
+    """
+    Navegador web.
+    """
 
     def __init__(self):
         """
-        Función constuctora
+        Función constuctora.
+
         :return: void
+        :rtype: None
         """
         self.br = mechanize.Browser()  # navegador
         self.cookies = cookielib.LWPCookieJar()  # cookies
@@ -71,26 +89,15 @@ class Browser:
         # noinspection PyProtectedMember
         self.br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
 
-    def playBrowser(self):
-        """
-        Obtener el browser
-        :return: Browser
-        """
-        return self.br
-
-    def addHeaders(self, header):
-        """
-        Agregar headers al navegador
-        :param header: String de browser header
-        :return: void
-        """
-        self.br.addheaders = [('User-agent', header)]
-
     def abrirLink(self, web):
         """
-        Ingresar a una dirección web
+        Ingresar a una dirección web.
+
         :param web: Link a web
-        :return: Integer en caso de error
+        :type web: str
+
+        :return: void
+        :rtype: None
         """
         try:  # Intento cargar la web
             self.br.open(web)
@@ -99,10 +106,33 @@ class Browser:
         except:
             return errors.BR_ERRORxNO_ACCESS_WEB
 
+    def addHeaders(self, header):
+        """
+        Agregar headers al navegador.
+
+        :param header: String de browser header
+        :type header: str
+
+        :return: void
+        :rtype: None
+        """
+        self.br.addheaders = [('User-agent', header)]
+
+    def clearCookies(self):
+        """
+        Elimina las cookies.
+
+        :return: void
+        :rtype: None
+        """
+        self.cookies.clear_session_cookies()
+
     def getHtml(self):
         """
-        Obtener el código html
-        :return: String
+        Obtener el código HTML.
+
+        :return: String con el código HTML
+        :rtype: str
         """
         if self.opened:
             return self.br.response().read()
@@ -111,8 +141,10 @@ class Browser:
 
     def getTitle(self):
         """
-        Obtener el título
-        :return: String
+        Obtener el título.
+
+        :return: String con el título de la página web
+        :rtype: str
         """
         if self.opened:
             return self.br.title()
@@ -121,8 +153,10 @@ class Browser:
 
     def getHeaders(self):
         """
-        Obtener los headers
-        :return: String
+        Obtener los headers.
+
+        :return: String con los headers
+        :rtype: str
         """
         if self.opened:
             return self.br.response().info()
@@ -131,19 +165,34 @@ class Browser:
 
     def getForms(self):
         """
-        Obtener los forms
-        :return: String
+        Obtener una lista con los formulaios de la página web.
+
+        :return: Lista de nombres de formulario
+        :rtype: list
         """
         if self.opened:
             return self.br.forms()
         else:
             return errors.BR_ERRORxNO_OPENED
 
+    def playBrowser(self):
+        """
+        Obtener el browser.
+
+        :return: Browser instanciado
+        :rtype: Browser
+        """
+        return self.br
+
     def selectFormById(self, formid):
         """
-        Definir un formulario como activo mediante un id
-        :param formid: String
-        :return: Integer en caso de error
+        Definir un formulario como activo mediante un id.
+
+        :param formid: ID del formulario
+        :type formid: str
+
+        :return: void
+        :rtype: None
         """
         formid = str(formid)
         if formid != "":  # Si el id no está vacío
@@ -160,9 +209,11 @@ class Browser:
 
     def selectFormByName(self, formname):
         """
-        Definir un formulario como activo mediante un id
-        :param formname: Nombre del formulario
-        :return: Integer en caso de error
+        Definir un formulario como activo mediante un ID.
+        :param formname: ID del formulario.
+
+        :return: void
+        :rtype: None
         """
         if formname != "":  # Si el id no está vacío
             try:
@@ -175,10 +226,15 @@ class Browser:
 
     def submitForm(self, form, values):
         """
-        Enviar un formulario
+        Enviar un formulario.
+
         :param form: Formulario
+        :type form: list
         :param values: Valores
-        :return: Integer en caso de error
+        :type values: list
+
+        :return: void
+        :rtype: None
         """
         if self.selectedForm:
             if len(form) > 0 and len(values) > 0:
@@ -195,10 +251,3 @@ class Browser:
                 return errors.BR_ERRORxNO_VALID_SUBMIT_EMPTY
         else:
             return errors.BR_ERRORxNO_SELECTED_FORM
-
-    def clearCookies(self):
-        """
-        Elimina las cookies
-        :return: void
-        """
-        self.cookies.clear_session_cookies()

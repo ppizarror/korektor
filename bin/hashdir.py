@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+HASHDIR
+Maneja el checksum de los archivos.
 
-# HASHDIR
-# Maneja el checksum de los archivos.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: ABRIL 2015 - 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: ABRIL 2015 - 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de librerías
 import hashlib
@@ -23,9 +24,13 @@ _NONE_ = "462CAB92B7C70601299CD65B4FDC81E6"
 
 def count_depth(folder):
     """
-    Función que cuenta la profundidad de un directorio
-    :param folder: Carpeta
-    :return: Integer
+    Función que cuenta la profundidad de un directorio.
+
+    :param folder: Archivo a analizar
+    :type folder: str
+
+    :return: Profundidad del archivo
+    :rtype: int
     """
     depth = 0
     for ch in folder:
@@ -35,27 +40,39 @@ def count_depth(folder):
 
 def get_depth(folder):
     """
-    Función que retorna la profundidad de un directorio en forma de carácter
+    Función que retorna la profundidad de un directorio en forma de carácter.
+
     :param folder: Carpeta
-    :return: String
+    :type folder: str
+
+    :return: String con la profunidad del directorio
+    :rtype: str
     """
     return "\t" * count_depth(folder)
 
 
 def get_depth_subfolder(folder):
     """
-    Función que retorna la profundidad de un sub-directorio en forma de carácter
+    Función que retorna la profundidad de un sub-directorio en forma de carácter.
+
     :param folder: Carpeta
-    :return: String
+    :type folder: str
+
+    :return: Profundidad del sub-directorio
+    :rtype: str
     """
     return "\t" * (count_depth(folder) + 1)
 
 
 def get_filetype(filename):
     """
-    Función que retorna el tipo de archivo de un cierto elemento de un directorio
+    Función que retorna el tipo de archivo de un cierto elemento de un directorio.
+
     :param filename: Nombre de archivo
-    :return: String
+    :type filename: str
+
+    :return: Tipo de archivo
+    :rtype: str
     """
     filename = filename.strip().split(".")
     if len(filename) < 2:
@@ -66,11 +83,17 @@ def get_filetype(filename):
 
 def folder_checksum(folder, checksum, verbose):
     """
-    Función que genera el md5 de una carpeta
+    Función que genera el md5 de una carpeta.
+
     :param folder: Carpeta
+    :type folder: str
     :param checksum: Checksum parcial
+    :type checksum: list
     :param verbose: Indica si imprime
+    :type verbose: bool
+
     :return: void
+    :rtype: None
     """
     try:
         dir_files = os.listdir(folder)
@@ -79,7 +102,8 @@ def folder_checksum(folder, checksum, verbose):
             if filetype in _LOOKTYPES:
                 checksum.append(md5file(folder + _FOLDERSEP + filename, verbose))
             elif filetype is _FOLDERTYPE and not "~" in filename:
-                if verbose: print get_depth_subfolder(filename) + _MSG[0].format(filename)
+                if verbose:
+                    print get_depth_subfolder(filename) + _MSG[0].format(filename)
                 folder_checksum(folder + _FOLDERSEP + filename, checksum, verbose)
     except:
         checksum.append(_NONE_)
@@ -87,26 +111,34 @@ def folder_checksum(folder, checksum, verbose):
 
 def md5file(filepath, verbose=False):
     """
-    Función que crea el md5 de un archivo
+    Función que crea el md5 de un archivo.
+
     :param filepath: Archivo
+    :type filepath: str
     :param verbose: Indica si imprime
     :return: String md5
     """
-    if verbose: print get_depth(filepath) + _MSG[1].format(filepath)
+    if verbose:
+        print get_depth(filepath) + _MSG[1].format(filepath)
     with open(filepath, 'rb') as fh:
         m = hashlib.md5()
         while True:
             data = fh.read(8192)
-            if not data: break
+            if not data:
+                break
             m.update(data)
         return m.hexdigest()
 
 
 def md5str(string):
     """
-    Función que crea el md5 de un string
+    Función que crea el md5 de un string.
+
     :param string: String
+    :type string: str
+
     :return: md5
+    :rtype: str
     """
     string = str(string)
     return hashlib.md5(string).hexdigest().upper()
@@ -114,10 +146,15 @@ def md5str(string):
 
 def path_checksum(path, verbose=False):
     """
-    Genera el md5 de un directorio
+    Genera el md5 de un directorio.
+
     :param path: Directorio raiz
+    :type path: str
     :param verbose: Indica si imprime
+    :type verbose: bool
+
     :return: String md5
+    :rtype: str
     """
     if verbose: print _MSG[2].format(path)
     files_checksum = []

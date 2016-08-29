@@ -1,18 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = "ppizarror"
+"""
+PACKAGE
+Los paquetes corresponden a elementos lógicos que manejan los archivos que entregan los alumnos
+Contienen direcciones físicas en memoria, Archivos y Jerarquía.
 
-# PACKAGE
-# Los paquetes corresponden a elementos lógicos que manejan los archivos que entregan los alumnos
-# Contienen direcciones físicas en memoria, Archivos y Jerarquía.
-#
-# Autor: PABLO PIZARRO @ github.com/ppizarror
-# Fecha: AGOSTO 2016
-# Licencia: GPLv2
+Autor: PABLO PIZARRO @ github.com/ppizarror
+Fecha: AGOSTO 2016
+Licencia: GPLv2
+"""
+__author__ = "ppizarror"
 
 # Importación de variables
 if __name__ == '__main__':
     from libpath import *  # @UnusedWildImport
+# noinspection PyUnresolvedReferences
 from bin.errors import *  # @UnusedWildImport
 from bin.utils import printHierachyList
 from bin.varType import *  # @UnusedWildImport
@@ -21,25 +23,35 @@ from lib.fileManager import FileManager
 # Constantes del módulo
 PACKAGE_DO_NOT_EXIST = "PACKAGE_DO_NOT_EXIST"
 PACKAGE_EMPTY = "PACKAGE_EMPTY"
+PACKAGE_FILE_INVALID_DEPTH = -1
 PACKAGE_FILE_NOT_FOUND = "PACKAGE_FILE_NOT_FOUND"
 PACKAGE_NO_NAME = "PACKAGE_NO_NAME"
 
 
-# Clase principal
 # noinspection PyMethodMayBeStatic
-class Package:
+class Package(varTypedClass, exceptionAsStringClass):
     """
-    Clase paquete, necesita de una lista de archivos provista por un filemanager
+    Clase paquete, maneja funciones que permiten manejar listas con archivos del estilo z:/a/b/...
+    con funciones auxiliares que buscan archivos, direcciones, profunidad, etc.
     """
 
     def __init__(self, files, generateHierachy=False, exceptionAsString=False):
         """
-        Constructor
+        Constructor de la clase.
+
         :param files: Lista de archivos generada por un FileManager
+        :type files: list
         :param generateHierachy: Generar Jerarquía automáticamente
+        :type generateHierachy: bool
         :param exceptionAsString: Retorna las excepciones como un String
+        :type exceptionAsString: bool
+
         :return: void
+        :rtype: None
         """
+
+        # Se instancia la clase de tratamiento de errores
+        exceptionAsStringClass.__init__(self, exceptionAsString)
 
         # Se chequean los tipos de variable
         self._checkVariableType(files, TYPE_LIST, "files")
@@ -53,10 +65,10 @@ class Package:
         self._rawfiles = files
 
         # Variables de estado
-        self._exceptionStrBehaviour = exceptionAsString
         self._isGeneratedName = False
         self._isgeneratedHierachyFiles = False
         self._isGeneratedPackageFiles = False
+        self._validated = False
 
         # Se crea el paquete
         self._generatePackageName(files)
@@ -66,140 +78,78 @@ class Package:
 
     def checkIfExist(self, f):
         """
-        Comprueba si un archivo existe en el paquete
-        :param f: Nombre del archivo
-        :return: Boolean
+        Comprueba si un archivo o carpeta existe en el paquete.
+
+        :param f: Nombre del elemento a buscar
+        :type f: str
+
+        :return: Booleano indicando pertenencia o no
+        :rtype: bool
         """
         return self.isFile(f) or self.isFolder(f)
 
-    def _checkVariableType(self, var, clss, paramName, otherClass=None):
-        """
-        Chequea si una variable es de una determinada clase o no
-        :param var: Variable a revisar
-        :param clss: Clase a comprobar, String
-        :param paramName: Nombre del parámetro
-        :param otherClass: Clase requerida si es que la clase a comprobar es del tipo TYPE_OTHER
-        :return: void
-        """
-        if not checkVariableType(var, clss, otherClass):
-            throw(ERROR_BADPARAMETERTYPE_MSG.format(paramName, clss))
-
     def disable_exceptionAsString(self):
         """
-        Desactiva el retornar los errores como String
+        Desactiva el retornar los errores como String.
+
         :return: void
+        :rtype: None
         """
         self._exceptionStrBehaviour = True
 
     def enable_exceptionAsString(self):
         """
-        Activa el retornar los errores como String
+        Activa el retornar los errores como String.
+
         :return: void
+        :rtype: None
         """
         self._exceptionStrBehaviour = False
 
-    def _isFile(self, fl):
+    def findFileLocation(self, f):
         """
-        Retorna un vector de valores indicando si el nombre mencionado corresponde o no a un archivo
-        :param fl: String
-        :return: List
+        Busca la ubicación de un archivo o carpeta en el paquete.
+
+        :param f: Nombre del archivo o carpeta a buscar
+        :type f: str
+
+        :return: Ubicación del archivo o carpeta si es que se encuentra
+        :rtype: str
         """
-
-        def _recursiveSearchFile(l, f, d, s):
-            """
-            Función auxiliar que busca un fichero f en una lista cualquiera l de forma recursiva
-            :param l: Lista
-            :param f: Archivo
-            :return: Boolean
-            """
-            for i in l:
-                if isinstance(i, list):
-                    r = len(i)
-                    if r > 1:
-                        k = _recursiveSearchFile(i[1:r], f, d + 1, s + "/" + i[0])
-                        if k is not None and k[0]:
-                            return k
-                else:
-                    if str(i) == f:  # Comprobación final
-                        return [True, s + "/" + i, d]
-            return [False, PACKAGE_FILE_NOT_FOUND, 0]
-
-        if self._isgeneratedHierachyFiles:
-            return _recursiveSearchFile(self._hierachyFiles, fl, 0, "")
+        fileResults = self._isFile(f)
+        if fileResults[0]:
+            return fileResults[1]
         else:
-            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+            folderResults = self._isFolder(f)
+            if folderResults[0]:
+                return folderResults[1]
+        return PACKAGE_FILE_NOT_FOUND
 
-    def isFile(self, f):
+    def getFileDepth(self, f):
         """
-        Retorna un booleano indicando si el nombre mencionado corresponde o no a un archivo
-        :param f: String
-        :return: Boolean
+        Obtiene la profundidad de un archivo o carpeta en el paquete.
+
+        :param f: Nombre del archivo o carpeta a buscar
+        :type f: str
+
+        :return: Profundidad del archivo o carpeta, si es que se encuentra
+        :rtype: int
         """
-        if self._isgeneratedHierachyFiles:
-            self._checkVariableType(f, TYPE_STR, "f")
-            if len(f) > 0:
-                return self._isFile(f)[0]
-            else:
-                return False
+        fileResults = self._isFile(f)
+        if fileResults[0]:
+            return fileResults[2]
         else:
-            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
-
-    def _isFolder(self, fl):
-        """
-        Retorna un vector de valores indicando si el nombre mencionado corresponde o no a una carpeta
-        :param fl: String
-        :return: List
-        """
-
-        def _recursiveSearchFolder(l, f, d, s):
-            """
-            Función auxiliar que busca una carpeta f en una lista cualquiera l de forma recursiva
-            :param l: Lista
-            :param f: Nombre de la carpeta
-            :return: Boolean
-            """
-            j = 0
-            for i in l:
-                if isinstance(i, list):
-                    r = len(i)
-                    if r >= 1:
-                        if i[0] == f:  # Comprobación final
-                            return [True, s + "/" + i[0] + "/", d]
-                        else:
-                            k = _recursiveSearchFolder(i, f, d + 1, s + "/" + i[0])
-                            if k is not None and k[0]:
-                                return k
-                else:
-                    if i == f and j == 0:  # Comprobación final
-                        return [True, s + "/" + i + "/", d]
-                j += 1
-            if d == 0:
-                return [False, PACKAGE_FILE_NOT_FOUND, 0]
-
-        if self._isgeneratedHierachyFiles:
-            return _recursiveSearchFolder(self._hierachyFiles, fl, 0, "")
-        else:
-            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
-
-    def isFolder(self, f):
-        """
-        Retorna un booleano indicando si el nombre mencionado corresponde o no a una carpeta
-        :param f: String
-        :return: Boolean
-        """
-        if self._isgeneratedHierachyFiles:
-            self._checkVariableType(f, TYPE_STR, "f")
-            if len(f) > 0:
-                return self._isFolder(f)[0]
-            else:
-                return False
-        else:
-            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+            folderResults = self._isFolder(f)
+            if folderResults[0]:
+                return folderResults[2]
+        return PACKAGE_FILE_INVALID_DEPTH
 
     def generateHierachy(self):
         """
-        Crea una lista de jerarquía de archivos
+        Crea una lista de jerarquía de archivos.
+
         :return: void
+        :rtype: None
         """
         if self._isGeneratedPackageFiles:
             self._hierachyFiles.append(self._packageName)
@@ -230,8 +180,13 @@ class Package:
 
     def _generatePackageFiles(self, filelist):
         """
-        Almacena el nombre de los archivos que contiene el paquete
+        Almacena el nombre de los archivos que contiene el paquete.
+
+        :param filelist: Lista de archivos para generar el paquete
+        :type filelist: list
+
         :return: void
+        :rtype: None
         """
         if self._isGeneratedName:
             for i in filelist:
@@ -249,9 +204,13 @@ class Package:
 
     def _generatePackageName(self, filelist):
         """
-        Crea el nombre del paquete
+        Se crea el nombre del paquete
+
         :param filelist: Lista de archivos raw
-        :return: String
+        :type filelist: list
+
+        :return: void
+        :rtype: None
         """
         if len(filelist) > 0:
             self._packageName = filelist[0].split("/")[0]
@@ -261,8 +220,10 @@ class Package:
 
     def getFileList(self):
         """
-        Retorna una lista con los nombres de los archivos
-        :return: list
+        Retorna una lista con los nombres de los archivos.
+
+        :return: Lista de archivos
+        :rtype: list
         """
         if self._isGeneratedPackageFiles:
             return self._packageFiles
@@ -271,8 +232,10 @@ class Package:
 
     def getNumberOfElements(self):
         """
-        Retorna el número de archivos que contiene el paquete
-        :return: int
+        Retorna el número de archivos que contiene el paquete.
+
+        :return: Número de archivos
+        :rtype: int
         """
         if self._isGeneratedPackageFiles:
             if len(self._packageFiles) == 1 and self._packageFiles[0] == "":
@@ -284,15 +247,21 @@ class Package:
 
     def getNumberOfSubfolders(self):
         """
-        Retorna el número sub-carpetas que tiene un paquete
-        :return: int
+        Retorna el número sub-carpetas que tiene un paquete.
+
+        :return: Número de sub-carpetas
+        :rtype: int
         """
 
         def _numberLists(l):
             """
-            Retorna el numero de sublistas que contiene una lista
-            :param list: Lista a calcular
-            :return: int
+            Retorna el numero de sublistas que contiene una lista.
+
+            :param l: Lista a calcular
+            :type l: list
+
+            :return: Número de sublistas
+            :rtype: int
             """
             count = 0
             for i in l:
@@ -307,8 +276,10 @@ class Package:
 
     def getPackageName(self):
         """
-        Retorna el nombre del paquete
-        :return: String
+        Retorna el nombre del paquete.
+
+        :return: Nombre del paquete
+        :rtype: str
         """
         if self._isGeneratedName:
             return self._packageName
@@ -317,18 +288,168 @@ class Package:
 
     def printFileList(self):
         """
-        Imprime en consola la lista de archivos del paquete
+        Imprime en consola la lista de archivos del paquete.
+
         :return: void
+        :rtype: None
         """
         if self._isGeneratedPackageFiles:
             print self._packageFiles
         else:
             return self._throwException("PACKAGE_ERROR_NOT_INDEXED_FILES_YET")
 
+    def _isFile(self, fl):
+        """
+        Retorna un vector de valores indicando si el nombre mencionado corresponde o no a un archivo.
+
+        :param fl: Nombre del archivo
+        :type fl: str
+
+        :return: Lista de valores indicando si existe, la ubicación y la profundidad
+        :rtype: list
+        """
+
+        def _recursiveSearchFile(l, f, d, s):
+            """
+            Función auxiliar que busca un fichero f en una lista cualquiera l de forma recursiva.
+
+            :param l: Lista a buscar
+            :type l: list
+            :param f: Archivo a buscar
+            :type f: str
+            :param d: Profundidad actual de búsqueda
+            :type d: int
+
+            :return: Retorna un vector de valores
+            :rtype: list
+            """
+            for i in l:
+                if isinstance(i, list):
+                    r = len(i)
+                    if r > 1:
+                        k = _recursiveSearchFile(i[1:r], f, d + 1, s + "/" + i[0])
+                        if k is not None and k[0]:
+                            return k
+                else:
+                    if str(i) == f:  # Comprobación final
+                        return [True, s + "/" + i, d]
+            return [False, PACKAGE_FILE_NOT_FOUND, PACKAGE_FILE_INVALID_DEPTH]
+
+        if self._isgeneratedHierachyFiles:
+            return _recursiveSearchFile(self._hierachyFiles, fl, 0, "")
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+
+    def isFile(self, f):
+        """
+        Retorna un booleano indicando si el nombre mencionado corresponde o no a un archivo.
+
+        :param f: Nombre del archivo
+        :type f: str
+
+        :return: Booleano indicando pertenencia
+        :rtype: bool
+        """
+        if self._isgeneratedHierachyFiles:
+            self._checkVariableType(f, TYPE_STR, "f")
+            if len(f) > 0:
+                return self._isFile(f)[0]
+            else:
+                return False
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+
+    def _isFolder(self, fl):
+        """
+        Retorna un vector de valores indicando si el nombre mencionado corresponde o no a una carpeta.
+
+        :param fl: Nombre del archivo a buscar
+        :type fl: str
+
+        :return: Lista de valores indicando si existe, la ubicación y la profundidad
+        :rtype: list
+        """
+
+        def _recursiveSearchFolder(l, f, d, s):
+            """
+            Función auxiliar que busca una carpeta f en una lista cualquiera l de forma recursiva.
+
+            :param l: Lista a buscar
+            :type l: list
+            :param f: Archivo a buscar
+            :type f: str
+            :param d: Profundidad actual de búsqueda
+            :type d: int
+
+            :return: Retorna un vector de valores
+            :rtype: list
+            """
+            j = 0
+            for i in l:
+                if isinstance(i, list):
+                    r = len(i)
+                    if r >= 1:
+                        if i[0] == f:  # Comprobación final
+                            return [True, s + "/" + i[0] + "/", d]
+                        else:
+                            k = _recursiveSearchFolder(i, f, d + 1, s + "/" + i[0])
+                            if k is not None and k[0]:
+                                return k
+                else:
+                    if i == f and j == 0:  # Comprobación final
+                        return [True, s + "/" + i + "/", d]
+                j += 1
+            if d == 0:
+                return [False, PACKAGE_FILE_NOT_FOUND, PACKAGE_FILE_INVALID_DEPTH]
+
+        if self._isgeneratedHierachyFiles:
+            return _recursiveSearchFolder(self._hierachyFiles, fl, 0, "")
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+
+    def isFolder(self, f):
+        """
+        Retorna un booleano indicando si el nombre mencionado corresponde o no a una carpeta.
+
+        :param f: Nombre del archivo a buscar
+        :type f: str
+
+        :return: Booleano indicando pertenencia
+        :rtype: bool
+        """
+        if self._isgeneratedHierachyFiles:
+            self._checkVariableType(f, TYPE_STR, "f")
+            if len(f) > 0:
+                return self._isFolder(f)[0]
+            else:
+                return False
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+
+    def isValidated(self):
+        """
+        Retorna true/false indicando si el paquete está validado o no.
+
+        :return: Booleano indicando si el paquete actual está validado o no
+        :rtype: bool
+        """
+        return self._validated
+
+    def markAsValidated(self):
+        """
+        Define el paquete como validado.
+
+        :return: void
+        :rtype: None
+        """
+        self._validated = True
+
     def printHierachy(self):
         """
-        Imprime la lista de archivos en forma de jerarquía
+        Imprime la lista de archivos en forma de jerarquía.
+
         :return: void
+        :rtype: None
         """
         if self._isgeneratedHierachyFiles:
             if len(self._packageFiles) == 0:
@@ -342,25 +463,12 @@ class Package:
 
     def printRawFiles(self):
         """
-        Imprime en consola la lista de archivos sin tratar del paquete
+        Imprime en consola la lista de archivos sin tratar del paquete.
+
         :return: void
+        :rtype: None
         """
         print self._rawfiles
-
-    def _throwException(self, e):
-        """
-        Función que lanza una excepción según comportamiento
-        :param e: Error string
-        :return: String o void
-        """
-        if self._exceptionStrBehaviour:
-            return e
-        else:
-            try:
-                err = eval(e)
-            except:
-                err = PACKAGE_ERROR_NAME_NOT_FOUND
-            throw(err)
 
 
 # Clase paquete que utiliza un filemanager
@@ -372,12 +480,19 @@ class PackageFileManager(Package):
 
     def __init__(self, fileManager, packageName, generateHierachy=False, exceptionAsString=False):
         """
-        Constructor
+        Constructor de la clase.
+
         :param fileManager: Filemanager a utilizar
+        :type fileManager: FileManager
         :param packageName: Nombre del paquete a analizar
+        :type packageName: str
         :param generateHierachy: Generar Jerarquía automáticamente
+        :type generateHierachy: bool
         :param exceptionAsString: Retorna las excepciones como un String
+        :type exceptionAsString: bool
+
         :return: void
+        :rtype: None
         """
 
         # Comprobacion de tipos

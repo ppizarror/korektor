@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Unicode Util
+"""
 import logging
 import shlex
 import sys
@@ -13,10 +18,12 @@ else:
     string_types = basestring,
 
 
+# noinspection PyMissingOrEmptyDocstring
 class EasyProcessUnicodeError(Exception):
     pass
 
 
+# noinspection PySingleQuotedDocstring
 def split_command(cmd):
     '''
      - cmd is string list -> nothing to do
@@ -45,6 +52,7 @@ def split_command(cmd):
     return cmd
 
 
+# noinspection PyMissingOrEmptyDocstring
 def uniencode(s):
     if PY3:
         pass
@@ -55,6 +63,7 @@ def uniencode(s):
     return s
 
 
+# noinspection PyMissingOrEmptyDocstring
 def unidecode(s):
     if PY3:
         s = s.decode()
