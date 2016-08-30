@@ -619,3 +619,104 @@
 	 re.
 	+Nuevas entradas de errores asociados a runtests.py en
 	 bin/errors.py.
+
+[0.2.5]
+	+Se agrega documentacion a todos los modulos, clases y
+	 funciones del programa. Indicando comentarios, variabl-
+	 es de cada una de las funciones, tipos, returns, etc.
+	+Correccion PEP-8 en algunos modulos de la aplicacion.
+	+Optimizacion en la importacion de librerias de varios
+	 modulos de la aplicacion.
+	+Se crea el modulo kwargsUtils el cual provee de funcio-
+	 nes para cargar de forma rapida la informacion que se
+	 pasa por parametro adicional a cada funcion.
+	+Los parametros del argumentParser se analizan utiliza-
+	 ndo las funciones del kwargsUtils, reduciendo la cant-
+	 idad de codigo del modulo.
+	+Correccion ortografica en varios textos de los modulos.
+	+La libreria colors.py se actualiza incluyendo las ent-
+	 radas de utils.py. Ahora maneja colores en consola de
+	 windows, asi como funciones para borrar el contenido
+	 de la pantalla (Wconio, ctypes).
+	+Modificaciones a la calse configLoader, se agrega la
+	 opcion autoNumberify a getValue(..) para convertir de
+	 forma automatica todos los strings a numeros. Ademas
+	 los argumentos como verbose se analizan con kwargs-
+	 Utils.
+	+Formateo y optimizacion del codigo en las librerias
+	 easyprocess, Wconio, pyunpack y mechanize.
+	+Se agregan entradas de errores de utilsTest, kwarsUt-
+	 ils, runtests, rarfile, verticalScrolledFrameTest y
+	 packageTest a errors.py.
+	+Nueva clase: exceptionAsStringClass. Esta clase perm-
+	 ite tratar las excepciones como strings, permitiendo
+	 asi tratarlas de una manera sencilla en aplicaciones
+	 graficas. Esta clase provee la funcion _throwExcepti-
+	 on la cual lanza una excepcion segun la configuracion
+	 de cada clase.
+	+Reformateo, optimizacion del codigo y librerias, y a-
+	 ctualizacion de la documentacion del subprograma lan-
+	 geditor.
+	+Se corrige error en el ancho de las columnas del ID y
+	 el String en editor.py del langeditor.
+	+Correcion de error al obtener las configuraciones de
+	 los idiomas en el langLoader.
+	+Se crea la funcion converToNumber en utils.py, el cu-
+	 al convierte string a diversos tipos de numeros (ent-
+	 ero, flotante o hexadecimal) segun corresponda.
+	+Se agrega la funcion wipeFile en utils.py, esta func-
+	 ion tiene por objetivo eliminar todo el contenido de
+	 un determinado archivo pasado por argumento.
+	+Nueva clase: varTypedClass, esta clase esta asociada
+	 al manejo de tipos de variable, provee la funcion
+	 _checkVariableType la cual chequea si una variable es
+	 de una determinada clase.
+	+Se agrega la opcion MAX_RANGE_VAR a config/plot.ini,
+	 esta entrada esta relacionada al maximo de rango que
+	 un resultado puede tolerarse para calcular el promed-
+	 io normalizado de la muestra de resultados totales.
+	+Se agregan la constante DIR_STRUCTURE_FOLDERNAME al
+	 path del paquete data. Esta contiene el nombre de la
+	 carpeta contenedora de los archivos de la estructura.
+	+Se renombran variables en el fileManager con el fin
+	 de evitar pertida de informacion en la ejecucion del
+	 programa.
+	+Se agregan las funciones isValidated y markAsValida-
+	 ted en la clase Package. Estas tienen por utilidad
+	 configurar los estado de validez de un paquete.
+	+Se agregan las funciones getFileDepth y findFileLoc-
+	 ation a la clase Package. Estas funciones tienen por
+	 objetivo retornar la profundad de una determinada
+	 carpeta o archivo en un paquete, y la otra funcion
+	 retorna un string con la ubicacion del archivo o ca-
+	 rpeta determinado dentro del paquete.
+	+Se eliminan constantes innecesarias en el packageVa-
+	 lidator.
+	+Package y PackageValidator heredan desde varTyped-
+	 Class y exceptionAsStringClass.
+	+Se agregan las funciones _getStructureFilelist y ge-
+	 tStructurePackage al packageValidator. Estas tienen
+	 por objetivo retornar la informacion de la estructu-
+	 ra cargada.
+	+Se agregan las funciones loadStructure, printStruct-
+	 ureHierachy, setStructureDirectory y validatePackage
+	 a la clase packageValidator.
+	+Se agrega la opcion --reset al modulo runtests.py,
+	 esta opcion por consola permite reiniciar el archivo
+	 que almacena los resultados de los test.
+	+El modulo runtests agrega la linea del tiempo medio
+	 y tiempo normalizado al grafico de los resultados.
+	 Ademas se incluye una leyenda.
+	+Se agregan entradas de testeo de conversion de nume-
+	 ros en el configLoaderTest.py.
+	+Se agregan las entradas de testeo testFindFile, tes-
+	 tDepthFile y testErrorAssertionPackage en el packag-
+	 eTest.py las cuales tienen por objetivo ubicar la
+	 profundidad de un archivo, o su ubicacion en forma
+	 de string, o la retornacion de errores como un stri-
+	 ing.
+	+Se agregan entradas de testeo testKwargs y testNum-
+	 berConverter en utilsTest.py, estas entradas tienen
+	 el proposito de testear las funciones auxiliares para
+	 el tratamiento de los **kwargs, y ademas tienen por
+	 objetivo el testear la conversion de numeros.
