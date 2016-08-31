@@ -18,24 +18,38 @@ from bin.errors import ERROR_TEST_CONFIGLOADER_BAD_GET_VALUE
 import unittest
 
 # Constantes de los test
+DISABLE_HEAVY_TESTS = True
+DISABLE_HEAVY_TESTS_MSG = "Se desactivaron los tests pesados"
 VERBOSE = False
 
 # Se cargan argumentos desde la consola
 if __name__ == '__main__':
     from bin.arguments import argumentParserFactory
 
-    argparser = argumentParserFactory("ConfigLoader Test", verbose=True, version=True).parse_args()
+    argparser = argumentParserFactory("ConfigLoader Test", verbose=True, version=True,
+                                      enable_skipped_test=True).parse_args()
+    DISABLE_HEAVY_TESTS = argparser.enableHeavyTest
     VERBOSE = argparser.verbose
 
 
 # Clase UnitTest
-class testConfigLoader(unittest.TestCase):
-    # Inicio de los test
+class ConfigLoaderTest(unittest.TestCase):
     def setUp(self):
+        """
+        Inicio de los test.
+
+        :return: void
+        :rtype: None
+        """
         self.binconfig = configLoader(DIR_BIN + ".config/", "bin.ini", verbose=VERBOSE)
 
-    # Test principal, en el cual se cargan todas las funciones del configLoader
     def testMain(self):
+        """
+        Test principal, en el cual se cargan la mayoría de las funciones del configLoader.
+
+        :return: void
+        :rtype: None
+        """
         if VERBOSE:
             print "Parametros:", self.binconfig.getParameters()
             self.binconfig.printParameters()
@@ -54,7 +68,13 @@ class testConfigLoader(unittest.TestCase):
         assert self.binconfig.getValue("PARAM1") == "11", "Valor parametro incorrecto"
         assert self.binconfig.getValue("SET_DEFAULT_ENCODING") == "W-850", "Parametro SET_DEFAULT_ENCODING erroneo"
 
-        # Números y autoconversión
+    def testNumberify(self):
+        """
+        Testeo de números y autoconversión.
+
+        :return: void
+        :rtype: None
+        """
         self.binconfig.setParameter("INT_NUMBER", 4)
         self.binconfig.setParameter("FLOAT_NUMBER", 2.3)
         self.binconfig.setParameter("FAKE_N", "fake")
@@ -69,4 +89,6 @@ class testConfigLoader(unittest.TestCase):
 
 # Main test
 if __name__ == '__main__':
-    unittest.main()
+    runner = unittest.TextTestRunner()
+    itersuite = unittest.TestLoader().loadTestsFromTestCase(ConfigLoaderTest)
+    runner.run(itersuite)

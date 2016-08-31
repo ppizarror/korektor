@@ -20,6 +20,7 @@ import zipfile
 from bin.configLoader import configLoader  # @UnresolvedImport
 import bin.errors as err  # @UnresolvedImport @UnusedImport
 from bin.utils import isHiddenFile, isFolder, isWindows, appendListToList
+from bin.varType import varTypedClass
 from config import DIR_CONFIG  # @UnresolvedImport
 from data import DIR_UPLOADS  # @UnusedImport
 
@@ -39,12 +40,14 @@ else:  # Si no es windows se utiliza la librería patool
     #    err.st_error(err.ERROR_RARNOTINSTALLED_NOTWIN, True, "pyunpack", e)
 
 # Constantes
+_DEFAULT_FILE_ENCODING = "utf-8"
+_DEFAULT_RAR_EXTRACT_ENCODING = "utf8"
 _FILEMANAGER_Y_EXTRACT_COMPRSD_FILE = "_inspectFiles extrayo el archivo '{0}' a pesar de que ya existe como carpeta."
 _FILEMANAGER_NO_EXTRACT_COMPRSD_FILE = "_inspectFiles no extrayo el archivo '{0}' dado que este ya existe."
 
 
-# noinspection PyUnresolvedReferences,PyShadowingNames,PyMethodMayBeStatic
-class FileManager:
+# noinspection PyShadowingNames,PyMethodMayBeStatic
+class FileManager(varTypedClass, err.exceptionBehaviour):
     """
     Administra archivos, carga archivos, etc.
     """
@@ -60,20 +63,42 @@ class FileManager:
         :rtype: None
         """
 
+        # Se instancian los super
+        err.exceptionBehaviour.__init__(self)
+        varTypedClass.__init__(self)
+
         # Carga de configuraciones
         config = configLoader(DIR_CONFIG, "filemanager.ini")
         coreConfig = configLoader(DIR_CONFIG, "core.ini")
         folderConfig = configLoader(DIR_CONFIG, "folder.ini")
         packageConfig = configLoader(DIR_CONFIG, "packages.ini")
+
+        # Parámetros de extracción
         self._autoExtract = config.isTrue("AUTOEXTRACT")  # Auto extraer un archivo comprimido
-        self._doCharactersRestricted = packageConfig.isTrue("CHARACTERS_DO_RESTRICT")
         self._doRemoveExtractedFolders = config.isTrue("DO_REMOVE_EXTRACTED_FOLDERS")
         self._extractIfFolderAlreadyExists = config.isTrue("REPLACE_IF_FOLDER_ALREADY_EXISTS")
+        if config.paramExists("RAR_EXTRACT_ENCODING"):
+            self._rarFileEncoding = config.getValue("RAR_EXTRACT_ENCODING")
+        else:
+            self._rarFileEncoding = _DEFAULT_RAR_EXTRACT_ENCODING
+
+        # Parámetros de exclusión
         self._ignoredFiles = folderConfig.getValueListed("IGNORE")
-        self._needDotOnFile = packageConfig.isTrue("NEED_DOT_ON_FILE")
         self._removeOnExtract = config.isTrue("REMOVE_ON_EXTRACT")
+
+        # Parámetros de carácteres
+        self._doCharactersRestricted = config.isTrue("CHARACTERS_DO_RESTRICT")
+        self._needDotOnFile = packageConfig.isTrue("NEED_DOT_ON_FILE")
         self._validChars = packageConfig.getValue("VALID_CHARACTERS")
+        self._validChars_rec = self._validChars
+        self._validStructureChars = packageConfig.getValue("VALID_STRUCTURE_CHARACTERS")
         self._validRegexChars = packageConfig.getValue("VALID_REGEX_CHARACTERS")
+
+        # Otros parámetros
+        if packageConfig.paramExists("ENCODE"):
+            self._fileEncoding = packageConfig.getValue("ENCODE")
+        else:
+            self._fileEncoding = _DEFAULT_FILE_ENCODING
         self._verbose = coreConfig.isTrue("VERBOSE")
 
         # Variables del FD
@@ -128,6 +153,25 @@ class FileManager:
         """
         self._removeOnExtract = False
 
+    def disable_restrictCharacters(self):
+        """
+        Desactiva el restringir los carácteres inválidos definidos en el parámetro de configuración VALID_CHARACTERS
+        dentro de config/packages.ini.
+
+        :return: void
+        :rtype: None
+        """
+        self._doCharactersRestricted = False
+
+    def disable_structureCharacters(self):
+        """
+        Desactiva los carácteres de la estructura como válidos, VALID_STRUCTURE_CHARACTERS reemplaza a VALID_CHARACTERS.
+
+        :return: void
+        :rtype: None
+        """
+        self._validChars = self._validChars_rec
+
     def disable_verbose(self):
         """
         Desactiva el printing de errores y estados de sistema.
@@ -172,6 +216,25 @@ class FileManager:
         :rtype: None
         """
         self._removeOnExtract = True
+
+    def enable_restrictCharacters(self):
+        """
+        Activa el restringir los carácteres inválidos definidos en el parámetro de configuración VALID_CHARACTERS dentro
+        de config/packages.ini.
+
+        :return: void
+        :rtype: None
+        """
+        self._doCharactersRestricted = True
+
+    def enable_structureCharacters(self):
+        """
+        Activa los carácteres de la estructura como válidos, VALID_STRUCTURE_CHARACTERS reemplaza a VALID_CHARACTERS.
+
+        :return: void
+        :rtype: None
+        """
+        self._validChars = self._validStructureChars
 
     def enable_verbose(self):
         """
@@ -223,9 +286,27 @@ class FileManager:
                     return False
             return not isHiddenFile(str(filnm))
 
+        def _isValidFolderName(filnm):
+            """
+            Verifica si un nombre de una carpeta es válido (carácteres).
+
+            :param filnm: String del nombre de la carpeta
+            :type filnm: str
+
+            :return: Booleano indicando validez
+            :rtype: bool
+            """
+            # Si los carácteres son restrictivos
+            if self._doCharactersRestricted:
+                for c in filnm:
+                    if c not in self._validChars:
+                        print "fake", c
+                        return False
+            return True
+
         def _isValidFileName(filnm):
             """
-            Verifica si un nombre de un archivo es valido (carácteres).
+            Verifica si un nombre de un archivo es válido (carácteres).
 
             :param filnm: String del nombre del archivo
             :type filnm: str
@@ -250,7 +331,7 @@ class FileManager:
             :param rootpath: Carpeta contenedora
             :type rootpath: str
             :param filename: Nombre del archivo a analizar
-            :type filename: str
+            :type filename: str, unicode
             :param filelist: Lista de archivos actuales a agregar
             :type filelist: list
             :param extractedFolders: Lista de carpetas extraídas durante el proceso
@@ -265,8 +346,9 @@ class FileManager:
             if not _isValidFile(filename):  # Si el archivo no es válido
                 return
 
-            if self._isFolder(rootpath, filename):  # Si el archivo es una carpeta
-                for filef in os.listdir(rootpath + filename):
+            if self._isFolder(rootpath, filename) and _isValidFolderName(filename):  # Si el archivo es una carpeta
+                pathToInspect = rootpath + filename
+                for filef in os.listdir(pathToInspect.decode(self._fileEncoding)):
                     _inspect(rootpath + filename + "/", filef, filelist, extractedFolders, depth + 1)
 
             elif self._isZip(rootpath, filename) and self._autoExtract:  # Si el archivo es paquete zip
@@ -274,7 +356,7 @@ class FileManager:
                 fileAlreadyExists = False
                 doExtract = True
                 try:
-                    fileAlreadyExists = newfilename in os.listdir(rootpath)
+                    fileAlreadyExists = newfilename in os.listdir(rootpath.decode(self._fileEncoding))
                 except:
                     pass
                 if fileAlreadyExists:
@@ -289,14 +371,15 @@ class FileManager:
                     if self._removeOnExtract:
                         os.remove(rootpath + filename)
                     extractedFolders.append(rootpath + newfilename + "/")
-                    _inspect(rootpath, newfilename, filelist, extractedFolders, depth + 1)
+                    if _isValidFolderName(newfilename):
+                        _inspect(rootpath, newfilename, filelist, extractedFolders, depth + 1)
 
             elif self._isRar(rootpath, filename) and self._autoExtract:  # Si el archivo es paquete rar
                 newfilename = filename.replace(".rar", "").replace(".RAR", "")
                 fileAlreadyExists = False
                 doExtract = True
                 try:
-                    fileAlreadyExists = newfilename in os.listdir(rootpath)
+                    fileAlreadyExists = newfilename in os.listdir(rootpath.decode(self._fileEncoding))
                 except:
                     pass
                 if fileAlreadyExists:
@@ -331,11 +414,12 @@ class FileManager:
                     if self._removeOnExtract:
                         os.remove(rootpath + filename)
                     extractedFolders.append(rootpath + newfilename + "/")
-                    _inspect(rootpath, newfilename, filelist, extractedFolders, depth + 1)
+                    if _isValidFolderName(newfilename):
+                        _inspect(rootpath, newfilename, filelist, extractedFolders, depth + 1)
 
             else:  # Si es cualquier otro archivo entonces se añade
                 if _isValidFileName(filename):
-                    if filename in os.listdir(rootpath):
+                    if filename in os.listdir(rootpath.decode(self._fileEncoding)):
                         newfilename = rootpath + filename
                         if newfilename not in filelist:  # Evitar archivos duplicados
                             filelist.append(newfilename)
@@ -367,7 +451,7 @@ class FileManager:
             :rtype: None
             """
             if len(l) == 0:
-                if f in os.listdir(r) and _isValidFile(f):
+                if f in os.listdir(r.decode(self._fileEncoding)) and _isValidFile(f):
                     l.append(f)
 
         if filelist is not None:
@@ -390,7 +474,7 @@ class FileManager:
         Inspecciona los elementos de un solo archivo o carpeta.
 
         :param filename: Nombre del archivo a inspeccionar
-        :type filename: str
+        :type filename: str, unicode
 
         :return: Lista de archivos que contiene la carpeta
         :rtype: list
@@ -477,7 +561,7 @@ class FileManager:
         Imprime los archivos dentro de una sola carpeta.
 
         :param filename: Nombre del archivo a analizar
-        :type filename: str
+        :type filename: str, unicode
 
         :return: void
         :rtype: None
@@ -491,7 +575,7 @@ class FileManager:
         :return: void
         :rtype: None
         """
-        for f in os.listdir(self._wd):  # @ReservedAssignment
+        for f in os.listdir(self._wd.decode(self._fileEncoding)):  # @ReservedAssignment
             if f is not None:
                 self.printSingleFile(f)
 
@@ -522,6 +606,18 @@ class FileManager:
         else:
             err.throw(err.ERROR_BADWD)
 
+    def _setFileEncoding(self, enc):
+        """
+        Establece la codificación de los nombres de los archivos.
+
+        :param enc: Codificación de cada uno de los nombres de los archivos
+        :type enc: str, unicode
+
+        :return: void
+        :rtype: None
+        """
+        self._fileEncoding = enc
+
     def setWorkingDirectory(self, new_wd):
         """
         Establece el directorio root del working directory.
@@ -548,7 +644,7 @@ class FileManager:
         :rtype: list
         """
         treelist = []
-        for f in os.listdir(self._wd):  # @ReservedAssignment
+        for f in os.listdir(self._wd.decode(self._fileEncoding)):  # @ReservedAssignment
             if f is not None:
                 treelist.append(self.inspectSingleFile(f))
         return treelist

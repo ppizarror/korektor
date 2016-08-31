@@ -19,20 +19,28 @@ from bin.utils import printBarsConsole
 import unittest
 
 # Constantes test
+DISABLE_HEAVY_TESTS = True
+DISABLE_HEAVY_TESTS_MSG = "Se desactivaron los tests pesados"
 VERBOSE = False
 
 # Se cargan argumentos desde la consola
 if __name__ == '__main__':
     from bin.arguments import argumentParserFactory
 
-    argparser = argumentParserFactory("Package Test", verbose=True, version=True).parse_args()
+    argparser = argumentParserFactory("Package Test", verbose=True, version=True, enable_skipped_test=True).parse_args()
+    DISABLE_HEAVY_TESTS = argparser.enableHeavyTest
     VERBOSE = argparser.verbose
 
 
 # Clase test
-class packageTest(unittest.TestCase):
-    # Inicio de los test
+class PackageTest(unittest.TestCase):
     def setUp(self):
+        """
+        Inicio de los test.
+
+        :return: void
+        :rtype: None
+        """
         self.f = FileManager()
         self.f.setWorkingDirectory(DIR_DATA_TEST)
         if VERBOSE:
@@ -40,8 +48,14 @@ class packageTest(unittest.TestCase):
         else:
             self.f.disable_verbose()
 
-    # Test pesado, habilitar solo para testeo en detalle
-    def _testF3(self):
+    @unittest.skipIf(DISABLE_HEAVY_TESTS, DISABLE_HEAVY_TESTS_MSG)
+    def testF3(self):
+        """
+        Testeo de una carpeta con archivos rar.
+
+        :return: void
+        :rtype: None
+        """
         p = Package(self.f.inspectSingleFile("Folder 3"), True)
         if VERBOSE:
             printBarsConsole("Testeo Folder 3")
@@ -60,8 +74,13 @@ class packageTest(unittest.TestCase):
         assert p.getNumberOfElements() == 8, PACKAGE_TEST_ERROR_COUNT_FILES
         del p
 
-    # Testeo de una carpeta vacía
     def testFEmpty(self):
+        """
+        Testeo de una carpeta vacía.
+
+        :return: void
+        :rtype: None
+        """
         p = Package(self.f.inspectSingleFile("Folder 0"), True)
         if VERBOSE:
             printBarsConsole("Testeo folder sin contenido")
@@ -79,8 +98,13 @@ class packageTest(unittest.TestCase):
         assert p.checkIfExist("") == False, PACKAGE_TEST_FOUND_INEXISTENT_FILE
         del p
 
-    # Testeo de una carpeta con múltiples archivos zip
     def testF4(self):
+        """
+        Testeo de una carpeta con múltiples archivos zip.
+
+        :return: void
+        :rtype: None
+        """
         p = Package(self.f.inspectSingleFile("Folder 4"), True)
         if VERBOSE:
             printBarsConsole("Testeo folder 4")
@@ -92,8 +116,13 @@ class packageTest(unittest.TestCase):
         assert p.isFile("") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
         del p
 
-    # Testeo de una carpeta inexistente
     def testInexistente(self):
+        """
+        Testeo de una carpeta inexistente.
+
+        :return: void
+        :rtype: None
+        """
         p = Package(self.f.inspectSingleFile("Fake name"))
         p.generateHierachy()
         if VERBOSE:
@@ -110,8 +139,14 @@ class packageTest(unittest.TestCase):
         assert p.checkIfExist("") == False, PACKAGE_TEST_FOUND_INEXISTENT_FILE
         del p
 
-    # Testeo de una carpeta grande
+    @unittest.skipIf(DISABLE_HEAVY_TESTS, DISABLE_HEAVY_TESTS_MSG)
     def testBig(self):
+        """
+        Testeo de un paquete grande.
+
+        :return: void
+        :rtype: None
+        """
         p = Package(self.f.inspectSingleFile("Folder 5"), True)
         if VERBOSE:
             p.printHierachy()
@@ -166,8 +201,13 @@ class packageTest(unittest.TestCase):
         assert p.isFile("Content 1.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
         del p
 
-    # Testeo de varias carpetas concatenadas
     def testSeguidas(self):
+        """
+        Testeo de varias carpetas concantenadas.
+
+        :return: void
+        :rtype: None
+        """
         p = Package(self.f.inspectSingleFile("Folder 6"), True)
         if VERBOSE:
             p.printHierachy()
@@ -181,8 +221,13 @@ class packageTest(unittest.TestCase):
         assert p.isFolder("Subfolder 1") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
         del p
 
-    # Testeo de varias carpetas concatenadas sin archivos
     def testSeguidasEmpty(self):
+        """
+        Testeo de varias carpetas concatenadas sin archivos.
+
+        :return: void
+        :rtype: None
+        """
         p = Package(self.f.inspectSingleFile("Folder 6-EMPTY"), True)
         if VERBOSE:
             p.printHierachy()
@@ -199,8 +244,13 @@ class packageTest(unittest.TestCase):
         assert p.checkIfExist("") == False, PACKAGE_TEST_FOUND_INEXISTENT_FILE
         del p
 
-    # Test sencillo
     def testSimple(self):
+        """
+        Test sencillo.
+
+        :return: void
+        :rtype: None
+        """
         p = Package(self.f.inspectSingleFile("Folder 1"), True)
         if VERBOSE:
             printBarsConsole("Testeo folder 1")
@@ -213,8 +263,13 @@ class packageTest(unittest.TestCase):
         assert p.isFile("Content 1.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
         del p
 
-    # Testeo de package el cual utiliza un filemanager
     def testPackageWithFilemanager(self):
+        """
+        Testeo del package el cual utiliza un filemanager.
+
+        :return: void
+        :rtype: None
+        """
         p = PackageFileManager(self.f, "Folder 4", True)
         if VERBOSE:
             printBarsConsole("Testeo folder 4")
@@ -226,8 +281,14 @@ class packageTest(unittest.TestCase):
         assert p.isFile("") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
         del p
 
-    # Test pesado, habilitar solo para testeo en detalle
-    def _testPackageWithCompressedAlreadyExistsDisableExtract(self):
+    @unittest.skipIf(DISABLE_HEAVY_TESTS, DISABLE_HEAVY_TESTS_MSG)
+    def testPackageWithCompressedAlreadyExistsDisableExtract(self):
+        """
+        Testeo de una carpeta con archivos comprimidos de igual nombre que las carpetas internas.
+
+        :return: void
+        :rtype: None
+        """
         self.f.disable_extractIfFolderAlreadyExists()
         p = PackageFileManager(self.f, "Folder 8-COMPSD", True)
         if VERBOSE:
@@ -253,8 +314,13 @@ class packageTest(unittest.TestCase):
         assert p.isFolder("Zip Folder TARGET") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
         assert p.isFolder("Zip Folder TARGEt") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
 
-    # Buscar ubicación de archivos
     def testFindFile(self):
+        """
+        Testea la búsqueda de archivos.
+
+        :return: void
+        :rtype: None
+        """
         p = Package(self.f.inspectSingleFile("Folder 6"), True)
         if VERBOSE:
             printBarsConsole("Testeo folder 6 - Busqueda de ubicacion de archivos")
@@ -271,8 +337,13 @@ class packageTest(unittest.TestCase):
         assert p.findFileLocation("Subfolder 5") == PACKAGE_FILE_NOT_FOUND, PACKAGE_TEST_BAD_SEARCH_LOCATION
         del t
 
-    # Buscar la profundidad de un archivo
     def testDepthFile(self):
+        """
+        Testea la búsqueda de profunidad de un archivo.
+
+        :return: void
+        :rtype: None
+        """
         p = Package(self.f.inspectSingleFile("Folder 9-SIM3ZIP"), True)
         if VERBOSE:
             printBarsConsole("Testeo folder 9 similar a 3 con archivos zip - Busqueda de profundidad de archivos")
@@ -285,12 +356,20 @@ class packageTest(unittest.TestCase):
         assert p.getFileDepth("Content E.txt") == 2, PACKAGE_TEST_BAD_SEARCH_DEPTH
         assert p.getFileDepth("Content Z.txt") == PACKAGE_FILE_INVALID_DEPTH, PACKAGE_TEST_BAD_SEARCH_DEPTH
 
-    # Comprueba el tratamiento de errores
     def testErrorAssertionPackage(self):
-        p = Package(self.f.inspectSingleFile("Folder 9-SIM3ZIP"), False, True)
+        """
+        Comprueba el tratamiento de errores.
+
+        :return: void
+        :rtype: None
+        """
+        p = Package(self.f.inspectSingleFile("Folder 9-SIM3ZIP"), False)
+        p.enable_exceptionAsString()
         assert p.printHierachy() == "PACKAGE_ERROR_NOT_HIERACHY_CREATED", PACKAGE_TEST_BAD_EXCEPTION_TREATMENT
 
 
 # Main test
 if __name__ == '__main__':
-    unittest.main()
+    runner = unittest.TextTestRunner()
+    itersuite = unittest.TestLoader().loadTestsFromTestCase(PackageTest)
+    runner.run(itersuite)

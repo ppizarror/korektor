@@ -29,13 +29,13 @@ PACKAGE_NO_NAME = "PACKAGE_NO_NAME"
 
 
 # noinspection PyMethodMayBeStatic
-class Package(varTypedClass, exceptionAsStringClass):
+class Package(varTypedClass, exceptionBehaviour):
     """
     Clase paquete, maneja funciones que permiten manejar listas con archivos del estilo z:/a/b/...
     con funciones auxiliares que buscan archivos, direcciones, profunidad, etc.
     """
 
-    def __init__(self, files, generateHierachy=False, exceptionAsString=False):
+    def __init__(self, files, generateHierachy=False):
         """
         Constructor de la clase.
 
@@ -43,20 +43,18 @@ class Package(varTypedClass, exceptionAsStringClass):
         :type files: list
         :param generateHierachy: Generar Jerarquía automáticamente
         :type generateHierachy: bool
-        :param exceptionAsString: Retorna las excepciones como un String
-        :type exceptionAsString: bool
 
         :return: void
         :rtype: None
         """
 
-        # Se instancia la clase de tratamiento de errores
-        exceptionAsStringClass.__init__(self, exceptionAsString)
+        # Se instancian los super
+        exceptionBehaviour.__init__(self)
+        varTypedClass.__init__(self)
 
         # Se chequean los tipos de variable
         self._checkVariableType(files, TYPE_LIST, "files")
         self._checkVariableType(generateHierachy, TYPE_BOOL, "generateHierachy")
-        self._checkVariableType(exceptionAsString, TYPE_BOOL, "exceptionAsString")
 
         # Variables de clase
         self._hierachyFiles = []
@@ -87,24 +85,6 @@ class Package(varTypedClass, exceptionAsStringClass):
         :rtype: bool
         """
         return self.isFile(f) or self.isFolder(f)
-
-    def disable_exceptionAsString(self):
-        """
-        Desactiva el retornar los errores como String.
-
-        :return: void
-        :rtype: None
-        """
-        self._exceptionStrBehaviour = True
-
-    def enable_exceptionAsString(self):
-        """
-        Activa el retornar los errores como String.
-
-        :return: void
-        :rtype: None
-        """
-        self._exceptionStrBehaviour = False
 
     def findFileLocation(self, f):
         """
@@ -229,6 +209,18 @@ class Package(varTypedClass, exceptionAsStringClass):
             return self._packageFiles
         else:
             return self._throwException("PACKAGE_ERROR_NOT_INDEXED_FILES_YET")
+
+    def getHierachyFiles(self):
+        """
+        Retorna la lista de jerarquía del paquete
+
+        :return: Lista de jerarquía de archivos
+        :rtype: list
+        """
+        if self._isgeneratedHierachyFiles:
+            return self._hierachyFiles
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
 
     def getNumberOfElements(self):
         """
@@ -478,7 +470,7 @@ class PackageFileManager(Package):
     y un string indicando el nombre del archivo a analizar
     """
 
-    def __init__(self, fileManager, packageName, generateHierachy=False, exceptionAsString=False):
+    def __init__(self, fileManager, packageName, generateHierachy=False):
         """
         Constructor de la clase.
 
@@ -488,8 +480,6 @@ class PackageFileManager(Package):
         :type packageName: str
         :param generateHierachy: Generar Jerarquía automáticamente
         :type generateHierachy: bool
-        :param exceptionAsString: Retorna las excepciones como un String
-        :type exceptionAsString: bool
 
         :return: void
         :rtype: None
@@ -499,5 +489,17 @@ class PackageFileManager(Package):
         self._checkVariableType(fileManager, TYPE_OTHER, "fileManager", FileManager)
         self._checkVariableType(packageName, TYPE_STR, "packageName")
 
+        # Se guarda el FileManager
+        self._filemanager = fileManager
+
         # Se crea un paquete normal
-        Package.__init__(self, fileManager.inspectSingleFile(packageName), generateHierachy, exceptionAsString)
+        Package.__init__(self, fileManager.inspectSingleFile(packageName), generateHierachy)
+
+    def _deleteLastExtractedFiles(self):
+        """
+        Se eliminan los archivos resultantes de la última extracción por el fileManager.
+
+        :return: void
+        :rtype: None
+        """
+        self._filemanager.deleteLastExtractedFiles()

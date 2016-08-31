@@ -15,12 +15,30 @@ from _testpath import *  # @UnusedWildImport
 from bin.errors import ERROR_TKINTER_NOT_INSTALLED  # @UnusedImport
 import unittest
 
+# Constantes de los test
+DISABLE_HEAVY_TESTS = True
+DISABLE_HEAVY_TESTS_MSG = "Se desactivaron los tests pesados"
+
+# Se cargan argumentos desde la consola
+if __name__ == '__main__':
+    from bin.arguments import argumentParserFactory
+
+    argparser = argumentParserFactory("VerticalScrolledFrame Test", verbose=True, version=True,
+                                      enable_skipped_test=True).parse_args()
+    DISABLE_HEAVY_TESTS = argparser.enableHeavyTest
+    VERBOSE = argparser.verbose
+
 
 # Clase UnitTest
 # noinspection PyUnusedLocal
-class testColors(unittest.TestCase):
-    # Inicio de los test
+class VerticalScrolledFrameTest(unittest.TestCase):
     def setUp(self):
+        """
+        Inicio de los test.
+
+        :return: void
+        :rtype: None
+        """
         sucess = False
         try:
             from bin.verticalScrolledFrame import VerticalScrolledFrame  # @UnusedWildImport @UnusedImport
@@ -29,8 +47,14 @@ class testColors(unittest.TestCase):
             sucess = False
         assert sucess == True, ERROR_TKINTER_NOT_INSTALLED
 
-    # Testeo de la importación de la librería python-tk (Tkinter)
-    def testImportTkinter(self):
+    @staticmethod
+    def testImportTkinter():
+        """
+        Testeo de la importación de la librería python-tk (Tkinter).
+
+        :return: void
+        :rtype: None
+        """
         sucess = False
         try:
             import Tkinter  # @UnusedImport
@@ -42,4 +66,6 @@ class testColors(unittest.TestCase):
 
 # Test
 if __name__ == '__main__':
-    unittest.main()
+    runner = unittest.TextTestRunner()
+    itersuite = unittest.TestLoader().loadTestsFromTestCase(VerticalScrolledFrameTest)
+    runner.run(itersuite)

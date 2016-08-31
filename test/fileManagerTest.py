@@ -18,21 +18,30 @@ from bin.errors import FILEMANAGER_ERROR_RESTORE_WD, FILEMANAGER_ERROR_SCAN, FIL
 import unittest
 
 # Constantes de los test
+DISABLE_HEAVY_TESTS = True
+DISABLE_HEAVY_TESTS_MSG = "Se desactivaron los tests pesados"
 VERBOSE = False
 
 # Se cargan argumentos desde la consola
 if __name__ == '__main__':
     from bin.arguments import argumentParserFactory
 
-    argparser = argumentParserFactory("FileManager Test", verbose=True, version=True).parse_args()
+    argparser = argumentParserFactory("FileManager Test", verbose=True, version=True,
+                                      enable_skipped_test=True).parse_args()
+    DISABLE_HEAVY_TESTS = argparser.enableHeavyTest
     VERBOSE = argparser.verbose
 
 
 # Clase UnitTest
 # noinspection PyUnnecessaryBackslash
-class testFileManager(unittest.TestCase):
-    # Inicio de los test
+class FileManagerTest(unittest.TestCase):
     def setUp(self):
+        """
+        Inicio de los test.
+
+        :return: void
+        :rtype: None
+        """
         self.fm = FileManager()
         self.fm.enable_autoExtract()
         self.fm.enable_doRemoveExtractedFolders()
@@ -44,8 +53,13 @@ class testFileManager(unittest.TestCase):
         else:
             self.fm.disable_verbose()
 
-    # Cambia el working directory del fileManager
     def testCambioWD(self):
+        """
+        Testeo del cambio del working directory.
+
+        :return: void
+        :rtype: None
+        """
         if VERBOSE:
             printBarsConsole("Testeo del wd")
             print "Wd actual: ", self.fm.getWorkingDirectory()
@@ -65,8 +79,13 @@ class testFileManager(unittest.TestCase):
         assert self.fm.getWorkingDirectory() == DIR_DATA_TEST, FILEMANAGER_ERROR_WD
         del b
 
-    # Tesdeo de una carpeta sencilla sin subcarpetas
     def testCarpetaUnica(self):
+        """
+        Testeo de una carpeta sencilla sin subcarpetas.
+
+        :return: void
+        :rtype: None
+        """
         self.fm.restoreWD()
         if VERBOSE:
             printBarsConsole("Testeo de carpetas unicas")
@@ -83,8 +102,13 @@ class testFileManager(unittest.TestCase):
         assert equalLists(t, self.fm.inspectSingleFile("Folder 2")) == True, FILEMANAGER_ERROR_SCAN
         del t
 
-    # Testeo de un archivo zip
     def testZip(self):
+        """
+        Testeo de un archivo zip.
+
+        :return: void
+        :rtype: None
+        """
         if VERBOSE:
             printBarsConsole("Testeo de archivo zip")
             print self.fm.inspectSingleFile("Zip Folder.zip")
@@ -93,22 +117,38 @@ class testFileManager(unittest.TestCase):
         assert equalLists(t, self.fm.inspectSingleFile("Zip Folder.zip")) == True, FILEMANAGER_ERROR_SCAN
         del t
 
-    # Test de un archivo bloqueado por configuración
     def testProhibido(self):
+        """
+        Test de un archivo bloqueado por configuración.
+
+        :return: void
+        :rtype: None
+        """
         if VERBOSE:
             printBarsConsole("Testeo de archivos prohibidos")
             print self.fm.inspectSingleFile("__MACOSX")
         assert equalLists([], self.fm.inspectSingleFile("__MACOSX")) == True, FILEMANAGER_ERROR_SCAN
 
-    # Test de un archivo (no carpeta)
     def testArchivoSingle(self):
+        """
+        Test de un archivo no carpeta.
+
+        :return: void
+        :rtype: None
+        """
         if VERBOSE:
             printBarsConsole("Testeo de un archivo no carpeta")
             print self.fm.inspectSingleFile("ABOUT")
         assert equalLists([], self.fm.inspectSingleFile("ABOUT")) == True, FILEMANAGER_ERROR_SCAN
 
-    # Testeo de un archivo rar
+    @unittest.skipIf(DISABLE_HEAVY_TESTS, DISABLE_HEAVY_TESTS_MSG)
     def testRar(self):
+        """
+        Testeo de un archivo rar.
+
+        :return: void
+        :rtype: None
+        """
         if VERBOSE:
             printBarsConsole("Testeo de archivo rar")
             print self.fm.inspectSingleFile("Rar Folder.rar")
@@ -116,15 +156,25 @@ class testFileManager(unittest.TestCase):
         assert equalLists(t, self.fm.inspectSingleFile("Rar Folder.rar")) == True, FILEMANAGER_ERROR_SCAN
         del t
 
-    # Test de un archivo inexistente
     def testArchivoInexistente(self):
+        """
+        Testeo de un archivo inexistente.
+
+        :return: void
+        :rtype: None
+        """
         if VERBOSE:
             printBarsConsole("Testeo de un archivo inexistente")
             print self.fm.inspectSingleFile("Inexistente")
         assert equalLists([], self.fm.inspectSingleFile("Inexistente")) == True, FILEMANAGER_ERROR_SCAN
 
-    # Testeo de un archivo zip con una carpeta dentro
     def testZipConCarpeta(self):
+        """
+        Testeo de un archivo zip con una carpeta dentro.
+
+        :return: void
+        :rtype: None
+        """
         if VERBOSE:
             printBarsConsole("Testeo de una carpeta con un archivo zip dentro")
             print self.fm.inspectSingleFile("Folder 4")
@@ -141,8 +191,14 @@ class testFileManager(unittest.TestCase):
         assert equalLists(t, self.fm.inspectSingleFile("Folder 4")) == True, FILEMANAGER_ERROR_SCAN
         del t
 
-    # Test pesado, habilitar solo para testeo en detalle
-    def _testCarpetaConRar(self):
+    @unittest.skipIf(DISABLE_HEAVY_TESTS, DISABLE_HEAVY_TESTS_MSG)
+    def testCarpetaConRar(self):
+        """
+        Testeo de una carpeta con un archivo rar dentro.
+
+        :return: void
+        :rtype: None
+        """
         if VERBOSE:
             printBarsConsole("Testeo de una carpeta con un archivo rar dentro")
             print self.fm.inspectSingleFile("Folder 3")
@@ -158,7 +214,14 @@ class testFileManager(unittest.TestCase):
         del t
 
     # Testeo de una carpeta grande
+    @unittest.skipIf(DISABLE_HEAVY_TESTS, DISABLE_HEAVY_TESTS_MSG)
     def testFolder5(self):
+        """
+        Testeo de una carpeta grande.
+
+        :return: void
+        :rtype: None
+        """
         if VERBOSE:
             printBarsConsole("Testeo Folder 5")
             print self.fm.inspectSingleFile("Folder 5")
@@ -190,8 +253,14 @@ class testFileManager(unittest.TestCase):
         assert equalLists(t, self.fm.inspectSingleFile("Folder 5")) == True, FILEMANAGER_ERROR_SCAN
         del t
 
-    # Test pesado, habilitar solo para testeo en detalle
-    def _testCompressedFileAlreadyExists(self):
+    @unittest.skipIf(DISABLE_HEAVY_TESTS, DISABLE_HEAVY_TESTS_MSG)
+    def testCompressedFileAlreadyExists(self):
+        """
+        Testeo de una carpeta con archivos comprimidos que tienen el mismo nombre que una carpeta.
+
+        :return: void
+        :rtype: None
+        """
         self.fm.disable_extractIfFolderAlreadyExists()
         if VERBOSE:
             printBarsConsole("Testeo carpeta con archivos comprimidos que ya existen como carpetas")
@@ -217,4 +286,6 @@ class testFileManager(unittest.TestCase):
 
 # Main test
 if __name__ == '__main__':
-    unittest.main()
+    runner = unittest.TextTestRunner()
+    itersuite = unittest.TestLoader().loadTestsFromTestCase(FileManagerTest)
+    runner.run(itersuite)

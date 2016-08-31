@@ -18,19 +18,22 @@ from bin.utils import *  # @UnusedWildImport
 import unittest
 
 # Constantes de los test
+DISABLE_HEAVY_TESTS = True
+DISABLE_HEAVY_TESTS_MSG = "Se desactivaron los tests pesados"
 VERBOSE = False
 
 # Se cargan argumentos desde la consola
 if __name__ == '__main__':
     from bin.arguments import argumentParserFactory
 
-    argparser = argumentParserFactory("Utils Test", verbose=True, version=True).parse_args()
+    argparser = argumentParserFactory("Utils Test", verbose=True, version=True, enable_skipped_test=True).parse_args()
+    DISABLE_HEAVY_TESTS = argparser.enableHeavyTest
     VERBOSE = argparser.verbose
 
 
 # Clase UnitTest
 # noinspection PyMethodMayBeStatic
-class testUtils(unittest.TestCase):
+class UtilsTest(unittest.TestCase):
     # Inicio de los test
     def setUp(self):
         pass
@@ -76,20 +79,19 @@ class testUtils(unittest.TestCase):
 
     # Testeo de kwargs
     def testKwargs(self):
-        self._testKwargsDef(trueVariable=True, trueVariable_str="TRUE", trueVariable_int="1", falseVariable=False,
-                            falseVariable_int=0, intVariable=4, strValue="TEST")
+        def _testKwargsDef(**kwargs):
+            assert kwargIsTrueParam(kwargs, "trueVariable") == True, ERR_KWARGS_BAD_TRUE
+            assert kwargIsTrueParam(kwargs, "trueVariable_str") == True, ERR_KWARGS_BAD_TRUE
+            assert kwargIsTrueParam(kwargs, "trueVariable_int") == True, ERR_KWARGS_BAD_TRUE
+            assert kwargIsFalseParam(kwargs, "falseVariable") == True, ERR_KWARGS_BAD_FALSE
+            assert kwargIsFalseParam(kwargs, "falseVariable_int") == True, ERR_KWARGS_BAD_FALSE
+            assert kwargGetValue(kwargs, "intVariable") == 4, ERR_KWARGS_INVALID_VALUE
+            assert kwargGetValue(kwargs, "strValue") == "TEST", ERR_KWARGS_INVALID_VALUE
+            assert kwargExistsKey(kwargs, "strValue") == True, ERR_KWARGS_FOUND_INVALID_KEY
+            assert kwargExistsKey(kwargs, "fakeVariable") == False, ERR_KWARGS_FOUND_INVALID_KEY
 
-    # Función auxiliar para los kwargs
-    def _testKwargsDef(self, **kwargs):
-        assert kwargIsTrueParam(kwargs, "trueVariable") == True, ERR_KWARGS_BAD_TRUE
-        assert kwargIsTrueParam(kwargs, "trueVariable_str") == True, ERR_KWARGS_BAD_TRUE
-        assert kwargIsTrueParam(kwargs, "trueVariable_int") == True, ERR_KWARGS_BAD_TRUE
-        assert kwargIsFalseParam(kwargs, "falseVariable") == True, ERR_KWARGS_BAD_FALSE
-        assert kwargIsFalseParam(kwargs, "falseVariable_int") == True, ERR_KWARGS_BAD_FALSE
-        assert kwargGetValue(kwargs, "intVariable") == 4, ERR_KWARGS_INVALID_VALUE
-        assert kwargGetValue(kwargs, "strValue") == "TEST", ERR_KWARGS_INVALID_VALUE
-        assert kwargExistsKey(kwargs, "strValue") == True, ERR_KWARGS_FOUND_INVALID_KEY
-        assert kwargExistsKey(kwargs, "fakeVariable") == False, ERR_KWARGS_FOUND_INVALID_KEY
+        _testKwargsDef(trueVariable=True, trueVariable_str="TRUE", trueVariable_int="1", falseVariable=False,
+                       falseVariable_int=0, intVariable=4, strValue="TEST")
 
     # Testea la conversión de números
     def testNumberConverter(self):
@@ -101,4 +103,6 @@ class testUtils(unittest.TestCase):
 
 # Main test
 if __name__ == '__main__':
-    unittest.main()
+    runner = unittest.TextTestRunner()
+    itersuite = unittest.TestLoader().loadTestsFromTestCase(UtilsTest)
+    runner.run(itersuite)

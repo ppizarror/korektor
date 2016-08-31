@@ -14,7 +14,7 @@ __author__ = "ppizarror"
 if __name__ == "__main__":
     # noinspection PyUnresolvedReferences
     from binpath import *  # @UnusedWildImport
-from errors import exceptionAsStringClass
+from errors import exceptionBehaviour
 
 # Tipos de variables permitidos
 TYPE_BOOL = "Boolean"
@@ -55,10 +55,20 @@ def checkVariableType(var, clss, otherClass=None):
         return False
 
 
-class varTypedClass(exceptionAsStringClass):
+# noinspection PyMissingConstructor
+class varTypedClass(exceptionBehaviour):
     """
     Clase asociada al manejo de tipos de variable.
     """
+
+    def __init__(self):
+        """
+        Constructor de la clase
+
+        :return: void
+        :rtype: None
+        """
+        pass
 
     def _checkVariableType(self, var, typeVar, paramName, otherClass=None):
         """

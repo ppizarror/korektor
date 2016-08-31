@@ -19,7 +19,6 @@ __actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace("\\", "/"
 DIR_BIN = __actualpath.replace("/test/", "/") + "bin/"
 DIR_DATA_TEST = __actualpath + ".data_tests/"
 DIR_DATA_TEST_PRIVATE = __actualpath + ".data_tests_private/"
-DIR_DATA_TEST_STRUCTURE_FOLDER = __actualpath + ".data_tests/STRUCTURE/"
 DIR_TESTS = __actualpath
 DIR_TEST_RESULTS = __actualpath + ".results/"
 DIR_TEST_RESULTS_LOGGING = __actualpath + ".results/log/"

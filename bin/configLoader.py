@@ -219,6 +219,18 @@ class configLoader:
         else:
             return []
 
+    def paramExists(self, param):
+        """
+        Retorna true/false si es que el parametro <param> existe.
+
+        :param param: Parámetro a buscar
+        :type param: str, unicode
+
+        :return: Booleano indicando pertenencia
+        :rtype: bool
+        """
+        return param in self.getParameters()
+
     def printParameters(self):
         """
         Imprime una lista con todos los parámetros cargados.

@@ -15,7 +15,7 @@ __author__ = "ppizarror"
 if __name__ == '__main__':
     from libpath import *  # @UnusedWildImport
 from bin.configLoader import configLoader  # @UnresolvedImport
-from bin.utils import isFolder  # @UnusedImport
+from bin.utils import isFolder, printHierachyBoolList  # @UnusedImport
 from config import DIR_CONFIG  # @UnresolvedImport
 # noinspection PyUnresolvedReferences
 from data import DIR_DATA, DIR_STRUCTURE_FOLDERNAME  # @UnusedImport
@@ -23,26 +23,24 @@ from lib.package import *  # @UnusedWildImport
 
 
 # noinspection PyUnresolvedReferences
-class PackageValidator(varTypedClass, exceptionAsStringClass):
+class PackageValidator(varTypedClass, exceptionBehaviour):
     """
     Clase que permite validar que los paquetes tengan una estructura adecuada, para ello se instancia
     un paquete con la estructura pedida (en regex) y la función validatePackage comprueba que un
     paquete pasado por argumento.
     """
 
-    def __init__(self, exceptionAsString=False):
+    def __init__(self):
         """
         Constructor de la clase.
-
-        :param exceptionAsString: Booleano indicando si las excepciones se retornan como String
-        :type exceptionAsString: bool
 
         :return: void
         :rtype: None
         """
 
-        # Se instancia la clase de tratamiento de errores
-        exceptionAsStringClass.__init__(self, exceptionAsString)
+        # Se instancian los super
+        exceptionBehaviour.__init__(self)
+        varTypedClass.__init__(self)
 
         # Carga de configuraciones
         coreConfig = configLoader(DIR_CONFIG, "core.ini")
@@ -53,9 +51,10 @@ class PackageValidator(varTypedClass, exceptionAsStringClass):
         self._isValidStructureDirectories = True
 
         # Variables de la estructura
+        self._structureBoolHierachy = [False]
         self._structureDirectoryName = DIR_STRUCTURE_FOLDERNAME
         self._structureDirectoryRoot = DIR_DATA
-        self._structurePackage = None
+        self._structurePackage = Package([])
 
         # Instancia un filemanager para generar la estructura
         self._fm = FileManager()
@@ -64,10 +63,87 @@ class PackageValidator(varTypedClass, exceptionAsStringClass):
         self._fm.enable_autoExtract()
         self._fm.enable_doRemoveExtractedFolders()
         self._fm.disable_removeOnExtract()
+        self._fm.enable_restrictCharacters()
+        self._fm.enable_structureCharacters()
         if self._verbose:
             self._fm.enable_verbose()
         else:
             self._fm.disable_verbose()
+
+    @staticmethod
+    def _checkHierachyTree(boolList):
+        """
+        Chequea el estado de la lista de booleanos para la jerarquía de la estructura, completa con valores true si es
+        que se cumplen condiciones.
+
+        :param boolList: Lista de booleanos a analizar y modificar
+        :type boolList: list
+
+        :return: Booleano indicando si la jerarquía es válida o no.
+        :rtype: bool
+        """
+
+        def _checkSubElementBoolHierachy(l):
+            """
+            Chequea los subelementos en la lista de booleanos de forma recursiva.
+
+            :param l: Sub-lista recursiva
+            :type l: list
+
+            :return: Booleano indicando si toda la sub-lista es True
+            :rtype: bool
+            """
+            for k in range(1, len(l)):
+                if isinstance(l[k], list) and not _checkSubElementBoolHierachy(l[k]):
+                    l[0] = False
+                    return False
+                else:
+                    if not l[k]:
+                        l[0] = False
+                        return False
+            l[0] = True
+            return True
+
+        _checkSubElementBoolHierachy(boolList)
+        return boolList[0]
+
+    def _createBoolHierachyTree(self):
+        """
+        Función auxiliar que retorna una lista de booleanos para el hiearchy de la estructura.
+
+        :return: Lista de booleanos en false para cada archivo
+        :rtype: list
+        """
+
+        def _recursiveBoolHierachy(l, h):
+            """
+            Función recursiva que comprueba el estado de lista y agrega un booleano False.
+
+            :param l: Sección de la jerarquia de estructura a analizar
+            :type l: list
+            :param h: Sección de la lista de jerarquía a ser agregada
+            :rtype h: list
+
+            :return: void
+            :rtype: None
+            """
+            k = 0
+            for element in l:
+                if isinstance(element, list):
+                    s = []
+                    _recursiveBoolHierachy(l[k], s)
+                    h.append(s)
+                else:
+                    h.append(False)
+                k += 1
+
+        # Si fue generada la estructura
+        if self._isStructGenerated:
+            boolHierachy = []  # Lista a crear
+            _recursiveBoolHierachy(self._getStructurePackage().getHierachyFiles(), boolHierachy)
+            return boolHierachy
+        else:
+            return self._throwException("VALIDATOR_ERROR_STRUCTURE_NOT_CREATED")
 
     def disable_verbose(self):
         """
@@ -115,17 +191,32 @@ class PackageValidator(varTypedClass, exceptionAsStringClass):
 
     def loadStructure(self):
         """
-        Carga la configuración de la estructura requerida para cada tarea.
+        Carga la configuración de la estructura requerida para cada tarea a partir del directorio de la estructura
+        especificado, para cambiarlo utilice setStructureDirectory(path_to_directory).
 
         :return: void
         :rtype: None
         """
         if self._isValidStructureDirectories:
-            self._structurePackage = PackageFileManager(self._fm, self._structureDirectoryName, True,
-                                                        self._exceptionStrBehaviour)
+            self._structurePackage = PackageFileManager(self._fm, self._structureDirectoryName, True)
             self._isStructGenerated = True
+            self._structureBoolHierachy = self._createBoolHierachyTree()
         else:
             return self._throwException("VALIDATOR_ERROR_STRUCTURE_FOLDER_DONT_EXIST")
+
+    def _printBooleanHierachy(self, boolHierachy):
+        """
+        Imprime la lista de jerarquía booleana pasada por argumento en forma de jerarquía.
+
+        :param boolHierachy: list
+        :type boolHierachy: list
+
+        :return: void
+        :rtype: None
+        """
+
+        self._checkVariableType(boolHierachy, TYPE_LIST, "boolHierachy")
+        printHierachyBoolList(boolHierachy, 0)
 
     def _printStructureHierachy(self):
         """
@@ -174,6 +265,8 @@ class PackageValidator(varTypedClass, exceptionAsStringClass):
         :return: void
         :rtype: None
         """
+
+        # Se chequea el tipo de variable
         self._checkVariableType(package, TYPE_OTHER, "package", Package)
 
 

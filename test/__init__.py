@@ -18,6 +18,4 @@ __author__ = "ppizarror"
 # Importación de librerías
 from _testpath import *
 # noinspection PyUnresolvedReferences
-from bin import *
-# noinspection PyUnresolvedReferences
 from bin import __version__

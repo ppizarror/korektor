@@ -38,4 +38,4 @@ if __name__ == '__main__':
     version = getVersion(label, header, web)
     print "Version local:", __version__
     print "Version web:", version
-    print "Comparacion version (1) Local <-> (2) Web: (1)", versionDict[compareVersion(__version__, version)], "(2)"
+    print "Comparacion version (1) Local, (2) Web ===> (1)", versionDict[compareVersion(__version__, version)], "(2)"

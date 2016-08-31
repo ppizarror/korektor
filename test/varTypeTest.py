@@ -18,13 +18,16 @@ from bin.errors import ERR_CHECKTYPE
 import unittest
 
 # Constantes de los test
+DISABLE_HEAVY_TESTS = True
+DISABLE_HEAVY_TESTS_MSG = "Se desactivaron los tests pesados"
 VERBOSE = False
 
 # Se cargan argumentos desde la consola
 if __name__ == '__main__':
     from bin.arguments import argumentParserFactory
 
-    argparser = argumentParserFactory("VarType Test", verbose=True, version=True).parse_args()
+    argparser = argumentParserFactory("VarType Test", verbose=True, version=True, enable_skipped_test=True).parse_args()
+    DISABLE_HEAVY_TESTS = argparser.enableHeavyTest
     VERBOSE = argparser.verbose
 
 
@@ -36,13 +39,24 @@ class testDummyClass:
 
 
 # Clase UnitTest
-class testTest(unittest.TestCase):
-    # Inicio de los test
+class VarTypeTest(unittest.TestCase):
     def setUp(self):
+        """
+        Inicio de los test.
+
+        :return: void
+        :rtype: None
+        """
         pass
 
-    # Comprobación de tipos de variables
-    def testCheckVariableType(self):
+    @staticmethod
+    def testCheckVariableType():
+        """
+        Comprobación de los tipos de variables.
+
+        :return: void
+        :rtype: None
+        """
         assert checkVariableType(1.0, TYPE_FLOAT) == True, ERR_CHECKTYPE
         assert checkVariableType(1, TYPE_FLOAT) == False, ERR_CHECKTYPE
         assert checkVariableType(1, TYPE_INT) == True, ERR_CHECKTYPE
@@ -58,4 +72,6 @@ class testTest(unittest.TestCase):
 
 # Main test
 if __name__ == '__main__':
-    unittest.main()
+    runner = unittest.TextTestRunner()
+    itersuite = unittest.TestLoader().loadTestsFromTestCase(VarTypeTest)
+    runner.run(itersuite)

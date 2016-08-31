@@ -523,6 +523,27 @@ def printMatrix(matrix):
         print "\n"
 
 
+def printHierachyBoolList(lst, level=0):
+    """
+    Función que imprime una lista booleana de jerarquía.
+    Obtenida desde: http://stackoverflow.com/questions/30521991/
+
+    :param lst: Lista de jerarquía booleana de jerarquía
+    :type lst: list
+    :param level: Nivel de profunididad
+    :type level: int
+
+    :return: void
+    :rtype: None
+    """
+    print('  ' * (level - 1) + '+-' * (level > 0) + str(lst[0]))
+    for l in lst[1:]:
+        if type(l) is list:
+            printHierachyBoolList(l, level + 1)
+        else:
+            print('  ' * level + '+-' + str(l))
+
+
 def printHierachyList(lst, level=0):
     """
     Función que imprime una lista de jerarquía.

@@ -97,6 +97,7 @@ ST_WARNING = "[WRN]"
 ST_WARNING_ID = "[ERR][{0}]"
 VALIDATOR_ERROR_STRUCTURE_FOLDER_DONT_EXIST = "El directorio definido para cargar la estructura valida no existe"
 VALIDATOR_ERROR_STRUCTURE_NOT_CREATED = "La estructura aun no se ha creado"
+VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE = "Error al chequear el hierachy tree"
 WARNING_HEADER = Color.BLUE + "[WARNING] " + Color.END
 WARNING_NOCONFIGFOUND = "No se han encontrado configuraciones en el archivo '{0}'"
 WRAP_ERROR_MSG = 70
@@ -254,25 +255,62 @@ def parseLangError(msg):
     return Color.RED + ST_WARNING_ID.format(code) + Color.END + " " + msg
 
 
-class exceptionAsStringClass:
+class exceptionBehaviour:
     """
     Clase que permite manejar clases de error
     """
 
-    def __init__(self, exceptionAsString):
+    def __init__(self):
         """
         Constructor de la clase.
-
-        :param exceptionAsString: Booleano, indica si las excepciones se retornan como un String (true)
-        :type exceptionAsString: bool
 
         :return: void
         :rtype: None
         """
-        if isinstance(exceptionAsString, bool):
-            self._exceptionStrBehaviour = exceptionAsString
-        else:
-            self._exceptionStrBehaviour = False
+
+        # Variables de clase
+        self._exceptionStrBehaviour = False
+        self._isEnabledExceptionThrowable = False
+
+    def disable_exceptionAsString(self):
+        """
+        Desactiva el retornar los errores como String.
+
+        :return: void
+        :rtype: None
+        """
+        self._exceptionStrBehaviour = False
+
+    def disable_exceptionThrow(self):
+        """
+        Desactiva el lanzamiento de excepciones en python en vez de la funcion thow que imprime un mensaje
+        de error.
+
+        :return: void
+        :rtype: None
+        """
+        self._isEnabledExceptionThrowable = False
+
+    def enable_exceptionAsString(self):
+        """
+        Activa el retornar los errores como String.
+
+        :return: void
+        :rtype: None
+        """
+        self._exceptionStrBehaviour = True
+        self.disable_exceptionThrow()
+
+    def enable_exceptionThrow(self):
+        """
+        Activa el lanzamiento de excepciones en python en vez de la funcion thow que imprime un mensaje
+        de error.
+
+        :return: void
+        :rtype: None
+        """
+        self._isEnabledExceptionThrowable = True
+        self.disable_exceptionAsString()
 
     def _throwException(self, e, *formatArgs):
         """
@@ -292,4 +330,8 @@ class exceptionAsStringClass:
                 err = str(err).format(*formatArgs)
             except:
                 err = BAD_ERROR_CODE
-            throw(err)
+            if self._isEnabledExceptionThrowable:
+                err_no_accents = delAccentByOS(err)
+                raise Exception(err_no_accents)
+            else:
+                throw(err)
