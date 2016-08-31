@@ -720,3 +720,64 @@
 	 el proposito de testear las funciones auxiliares para
 	 el tratamiento de los **kwargs, y ademas tienen por
 	 objetivo el testear la conversion de numeros.
+
+[0.2.6]
+	+Se agrega la opcion de saltar ciertos tests, estos
+	 pueden ser ejecutados de todas maneras utilizando el
+	 comando --enable-skipped o -skp.
+	+Se agrega la funcion paramExists en el configLoader,
+	 esta funcion comprueba si un parametro existe, reto-
+	 rnando true o false en cada caso.
+	+Se cambia el nombre de la clase exceptionAsString-
+	 Class a exceptionBehaviour.
+	+Se agrega la opcion de lanzar las excepciones como
+	 tipo Exception(...).
+	+Se agregan las funciones enable_ y disable_ para las
+	 variables de estado exceptionThrow y exceptionAs-
+	 String en errors.py. Estas activan el lanzar excepci-
+	 ones como Exception(..) o lanzarlas como un String.
+	+Se agrega la funcion printHierachyBoolList en Utils.
+	 Esta funcion permite imprimir la lista de jerarquia
+	 booleana de un paquete estructural.
+	+Se agregan las opciones de configuracion CHARACTERS_
+	 DO_RESTRICT y RAR_EXTRACT_ENCODING en filemanager.ini
+	 estos parametros controlan si el tipo de caracteres
+	 restringe a los archivos o no. Y el otro parametro
+	 controla la codificacion de salida del nombre de los 
+	 archivos .rar extraidos.
+	+Se agrega la opcion ENDCODE al archivo de configurac-
+	 iones packags.ini. Esta opcion controla la codificac-
+	 ion de los archivos dentro de cada paquete.
+	+Se agrega la opcion DPI y Y_RANGE_COEF_FROM_MAX_VALUE
+	 en el archivo de configuraciones plot.ini, estas opc-
+	 iones estan relacionadas con el ploteo de resultados
+	 por el run_tests.py. DPI controla la calidad de sali-
+	 da de los graficos, y Y_RANGE_COEF_FROM_MAX_VALUE co-
+	 ntrola el limite superior de los graficos en el eje
+	 de las ordenadas.
+	+Se agregan disable_ y enable_ para el comportamiento
+	 de extraccion y analisis de archivos en el fileManag-
+	 er.
+	+Corregido error al no comprobar la validez del nombre
+	 de las carpetas en el fileManager.
+	+Corregido error al no decodificar los nombres de los
+	 archivos escaneados en el fileManager.
+	+Se agregan las funciones getHierachyFiles a la clase
+	 Package.
+	+Se agrega la creacion de un hierachyBool para el paq-
+	 ete de la estructura en el packageValidator. Esta li-
+	 sta tiene por objetivo observar cual de los archivos
+	 de la estructura esta cumplida por un determinado pa-
+	 quete en el validator.
+	+Se agrega la opcion de imprimir los test fallidos y 
+	 aprobados en el archivo run_tests.py en un grafico de
+	 lineas.
+	+Se corrige error al crear un grafico con entradas
+	 ERROR en el archivo de resultados.
+	+Se agrega documentacion a todas las funciones de los
+	 tests.
+	+Se modifica el inicio de los test de unittest.main()
+	 a una estructura mas compleja con TestLoader() para
+	 aceptar argumentos por consola.
+	+Se agregan tests en packageValidatorTest para compro-
+	 bar las boolHierachyLists.
