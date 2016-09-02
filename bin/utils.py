@@ -42,6 +42,7 @@ except:
 _CONSOLE_WRAP = -25
 _MSG_LOADINGFILE = "Cargando archivo '{0}' ..."
 _MSG_OK = "[OK]"
+_REGEX_CHARS_LIST = ["*", "#"]
 
 
 def appendListToList(origin, l):
@@ -442,6 +443,23 @@ def makeCallable(function):
     return function
 
 
+def numberOfSublists(l):
+    """
+    Retorna el numero de sublistas que contiene una lista.
+
+    :param l: Lista a calcular
+    :type l: list
+
+    :return: Número de sublistas
+    :rtype: int
+    """
+    count = 0
+    for i in l:
+        if isinstance(i, list):
+            count = count + 1 + numberOfSublists(i)
+    return count
+
+
 def loadFile(archive, lang=_MSG_LOADINGFILE, **kwargs):
     """
     Carga un archivo y retorna una lista con las líneas del archivo.
@@ -544,7 +562,7 @@ def printHierachyBoolList(lst, level=0):
             print('  ' * level + '+-' + str(l))
 
 
-def printHierachyList(lst, level=0):
+def printHierachyList(lst, level, tabsLeft):
     """
     Función que imprime una lista de jerarquía.
     Obtenida desde: http://stackoverflow.com/questions/30521991/
@@ -553,83 +571,192 @@ def printHierachyList(lst, level=0):
     :type lst: list
     :param level: Nivel de profunididad
     :type level: int
+    :param tabsLeft: Número de tabs a la izquierda
+    :type tabsLeft: int
 
     :return: void
     :rtype: None
     """
-    print('    ' * (level - 1) + '+---' * (level > 0) + lst[0])
+    print('\t' * tabsLeft + '    ' * (level - 1) + '+---' * (level > 0) + lst[0])
     for l in lst[1:]:
         if type(l) is list:
-            printHierachyList(l, level + 1)
+            printHierachyList(l, level + 1, tabsLeft)
         else:
-            print('    ' * level + '+---' + l)
+            print('\t' * tabsLeft + '    ' * level + '+---' + l)
 
 
-# noinspection PyIncorrectDocstring
-def regexCompare(regString, currString, validRegexChars=None):
+def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_CHARS_LIST, **kwargs):
     """
     Compara dos strings el cual regString posee regex.
 
+    Keywords:
+        - case_insensitive (bool) = Si este parámetro es True la comparación se hace ignorando el tipo de letra.
+
     :param regString: String regex
-    :type regString: str
+    :type regString: str, unicode
     :param currString: String a comparar
-    :type currString: str
-    :param validRegexChars: Lista de carácteres válidos
-    :type validRegexChars: list
+    :type currString: str, unicode
+    :param validRegexChars: String de carácteres válidos
+    :type validRegexChars: str, unicode
+    :param regexChars: Lista de carácteres inválidos
+    :type regexChars: list
+    :param kwargs: Keywords
+    :type kwargs: dict
 
     :return: Booleano indicando resultado de la comparación
     :rtype: bool
     """
 
-    # noinspection PyShadowingNames
-    def _comp(i, j):
+    def _charListNotIn(charList, word):
         """
-        Compara los carácteres de regString y currString en las posiciones
-        i y j respectivamente
-        :param i: Carácter de regString
-        :type i: int
-        :param j: Carácter de curString
-        :type j: int
+        Comprueba que una lista de carácteres no esté en una palabra <word>.
 
-        :return: Booleano indicando resultado de la comparación
+        :param charList: Lista de carácteres
+        :type charList: list
+        :param word: Palabra a analizar
+        :type word: str, unicode
+
+        :return: Booleano indicando pertenencia
         :rtype: bool
         """
-        return regString[i] == currString[j]
+        for cha in charList:
+            if cha in word:
+                return False
+        return True
 
+    # Se tratan los strigs
+    regString = str(regString)
+    currString = str(currString)
+
+    # Se obtienen parámetros de ejecución
+    if kwargIsTrueParam(kwargs, "case_insensitive"):
+        regString = regString.lower()
+        currString = currString.lower()
+
+    if validRegexChars is not None:
+        try:
+            validRegexChars = str(validRegexChars)
+        except:
+            print validRegexChars
+
+        # Se comprueba que todos los carácteres de currString sean válidos
+        for ch in list(currString):
+            if ch not in validRegexChars:
+                return False
+
+    # Se eliminan # o * seguidos
+    regStringBuilder = ""
+    for regxlc in regString:
+        if regxlc in regexChars:
+            if not regStringBuilder[-1:] in regexChars:
+                regStringBuilder += regxlc
+        else:
+            regStringBuilder += regxlc
+    regString = regStringBuilder
+
+    # Largos de los strings
     lr = len(regString)
     lc = len(currString)
+
+    # Si ambos strings existen
     if lr > 0 and lc > 0:
-        if "*" not in regString and "#" not in regString:
+
+        # Si no hay elementos regex entonces se comparan como si fuesen simples strings
+        if _charListNotIn(regexChars, regString):
             return regString == currString
+
+        # Si hay regex
         else:
+
+            # Se inicializan los punteros walk al principio de cada string
             i = 0
             j = 0
+
+            # Se recorren ambos indices comprobando uno a uno (i con j), si hay un regex j salta hasta que se iguale con
+            # i.
             while i < lr and j < lc:
-                if regString[i] is not "*" and regString[i] is not "#":
-                    if not _comp(i, j):
+
+                # Si el carácter en regString no es un carácter regex
+                if regString[i] not in regexChars:
+
+                    # Si difieren i y j entonces los carácteres son falsos
+                    if not regString[i] == currString[j]:
                         return False
+
+                    # Si no difieren ambos avanzan en 1 posición
                     i += 1
                     j += 1
+
+                # Si el carácter es un regex
                 else:
+
+                    # Lista de carácteres que continúan
+                    nextl = []
+                    ni = i + 1
+
+                    # Si es el carácter final entonces retorna True
                     if i == lr - 1:
-                        break
+                        return True
+
+                    # Si no es un carácter final entonces se agregan los carácteres de regString que continúan a nextl
                     else:
-                        i += 1
-                        nextc = regString[i]
-                    for k in range(0, lc):
-                        try:
-                            if currString[j + k] == nextc:
-                                j += k
-                                break
+                        for p in regString[i + 1:lr]:
+                            if p not in regexChars:
+                                nextl.append(p)
                             else:
-                                if validRegexChars is not None:
-                                    if currString[j + k] not in validRegexChars:
-                                        return False
-                        except:
-                            return False
-                        if j + k >= lc:
-                            return False
+                                break
+                        lnextl = len(nextl)
+
+                    # Si lo que queda de currString no alcanza para hacer el match con la lista de carácteres entonces
+                    # los strings son diferentes y la función retorna False.
+                    if (lc - j) < lnextl:
+                        return False
+
+                    # Se recorre cada caracter de currString hasta que se completa toda la lista de nextl, si se pasa
+                    # entonces las listas difieren y la función retorna False.
+                    while True:
+
+                        # Se recorre cada carácter de nextl y se comprueba igualdad, si se cumplen todas entonces el
+                        # puntero j se actualiza y se sigue con la comprobación
+                        areEquals = True
+                        for m in range(0, lnextl):
+
+                            # Si los carácteres difieren entonces no son iguales
+                            if currString[j + m] != nextl[m]:
+                                j += m
+                                i += m
+                                areEquals = False
+                                break
+
+                        # Si eran iguales
+                        if areEquals:
+                            if j + m == lc - 1 and ni + m == lr - 1:
+                                return True
+                            else:
+                                j += 1
+                                i += 2
+                                break
+
+                        # Si no eran iguales se comprueba que no se haya pasado el límite del string
+                        else:
+
+                            # Si no se avanzó en la búsqueda de lnextl entonces se avanza en 1 el puntero j
+                            if m == 0:
+                                j += 1
+
+                            # Si se salió del string o el resto de currString no alcanza para comprobar igualdad retorna
+                            # False.
+                            if j + lnextl > lc or j >= lc:
+                                return False
+
+            # Si pasó el while de i-j entonces los strings son idénticos
             return True
+
+    # Si son strings vacíos
+    elif lr == lc == 0:
+        return True
+
+    # Los strings son distintos por lo que retorna False
     else:
         return False
 

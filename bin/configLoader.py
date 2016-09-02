@@ -122,6 +122,24 @@ class configLoader:
         except:
             if self.verbose: errors.throw(errors.ERROR_CONFIGBADEXPORT)
 
+    def isFalse(self, param):
+        """
+        Función que retorna true si el parámetro del archivo es falso.
+
+        :param param: Parámetro a buscar
+        :type param: str
+
+        :return: Booleano indicando pertenencia
+        :rtype: bool
+        """
+        if param in self.getParameters():
+            if self.configs[param].upper() == FALSE or self.configs[param] == "0":
+                return True
+            else:
+                return False
+        else:
+            errors.warning(errors.ERROR_CONFIGNOTEXISTENT, param)
+
     def isTrue(self, param):
         """
         Función que retorna true si el parámetro del archivo es verdadero.

@@ -80,8 +80,9 @@ FILEMANAGER_ERROR_WD = "WD erroneo"
 NO_ERROR = "OK"
 PACKAGE_ERROR_NAME_NOT_FOUND = "El código de error no existe"
 PACKAGE_ERROR_NO_NAME = "El nombre del paquete aún no ha sido definido"
-PACKAGE_ERROR_NOT_HIERACHY_CREATED = "La jerarquía de archivos aún no ha sido construida"
-PACKAGE_ERROR_NOT_INDEXED_FILES_YET = "Los archivos del paquete aún no han sido indexados"
+PACKAGE_ERROR_NOT_HIERACHY_CREATED = "La jerarquía de archivos aun no ha sido construida"
+PACKAGE_ERROR_NOT_INDEXED_FILES_YET = "Los archivos del paquete aun no han sido indexados"
+PACKAGE_ERROR_NOT_VALIDATED_YET = "El paquete aun no ha sido validado"
 PACKAGE_TEST_BAD_EXCEPTION_TREATMENT = "Excepcion mal creada"
 PACKAGE_TEST_BAD_SEARCH_DEPTH = "La profundidad del archivo ubicado no es correcta"
 PACKAGE_TEST_BAD_SEARCH_LOCATION = "La ubicacion del archivo ubicado no es la correcta"
@@ -95,9 +96,16 @@ ST_ERROR = "[ERR]"
 ST_INFO = "[INF]"
 ST_WARNING = "[WRN]"
 ST_WARNING_ID = "[ERR][{0}]"
+VALIDATOR_ERROR_ON_RETRIEVE_PACKAGES = "Error al obtener los paquetes al validar"
+VALIDATOR_ERROR_ON_VALIDATE_WALK = "Error al validar la estructura en forma recursiva"
+VALIDATOR_ERROR_ON_VALIDATE_WALK_EXCEPTION = "Ha ocurrido un error en el walk recursivo"
+VALIDATOR_ERROR_ON_VALIDATE_WALK_RECURSIVE = "Error al validar la estructura en el llamado recursivo del walk"
 VALIDATOR_ERROR_STRUCTURE_FOLDER_DONT_EXIST = "El directorio definido para cargar la estructura valida no existe"
 VALIDATOR_ERROR_STRUCTURE_NOT_CREATED = "La estructura aun no se ha creado"
 VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE = "Error al chequear el hierachy tree"
+VALIDATOR_TEST_ERROR_INVALIDATE_CORRECT = "Error al invalidar un paquete correcto"
+VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH = "Error al validar directorio y estructura vacios"
+VALIDATOR_TEST_ERROR_VALIDATE_INCORRECT = "Error al validar un paquete incorrecto"
 WARNING_HEADER = Color.BLUE + "[WARNING] " + Color.END
 WARNING_NOCONFIGFOUND = "No se han encontrado configuraciones en el archivo '{0}'"
 WRAP_ERROR_MSG = 70
@@ -269,6 +277,7 @@ class exceptionBehaviour:
         """
 
         # Variables de clase
+        self._exceptionsDisabled = False
         self._exceptionStrBehaviour = False
         self._isEnabledExceptionThrowable = False
 
@@ -280,6 +289,17 @@ class exceptionBehaviour:
         :rtype: None
         """
         self._exceptionStrBehaviour = False
+
+    def disable_exceptions(self):
+        """
+        Desactiva todas las excepciones.
+
+        :return: void
+        :rtype: None
+        """
+        self.disable_exceptionAsString()
+        self.disable_exceptionThrow()
+        self._exceptionsDisabled = True
 
     def disable_exceptionThrow(self):
         """
@@ -300,6 +320,16 @@ class exceptionBehaviour:
         """
         self._exceptionStrBehaviour = True
         self.disable_exceptionThrow()
+        self.enable_exceptions()
+
+    def enable_exceptions(self):
+        """
+        Activa las excepciones.
+
+        :return: void
+        :rtype: None
+        """
+        self._exceptionsDisabled = False
 
     def enable_exceptionThrow(self):
         """
@@ -311,6 +341,7 @@ class exceptionBehaviour:
         """
         self._isEnabledExceptionThrowable = True
         self.disable_exceptionAsString()
+        self.enable_exceptions()
 
     def _throwException(self, e, *formatArgs):
         """
@@ -322,16 +353,18 @@ class exceptionBehaviour:
         :return: String o void
         :rtype: object
         """
-        if self._exceptionStrBehaviour:
-            return e
-        else:
-            try:
-                err = eval(e)
-                err = str(err).format(*formatArgs)
-            except:
-                err = BAD_ERROR_CODE
-            if self._isEnabledExceptionThrowable:
-                err_no_accents = delAccentByOS(err)
-                raise Exception(err_no_accents)
+        if not self._exceptionsDisabled:
+            if self._exceptionStrBehaviour:
+                return e
             else:
-                throw(err)
+                try:
+                    err = eval(e)
+                    err = str(err).format(*formatArgs)
+                except:
+                    err = BAD_ERROR_CODE
+                if self._isEnabledExceptionThrowable:
+                    err_no_accents = delAccentByOS(err)
+                    raise Exception(err_no_accents)
+                else:
+                    throw(err)
+        return None

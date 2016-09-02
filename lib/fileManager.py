@@ -46,7 +46,6 @@ _FILEMANAGER_Y_EXTRACT_COMPRSD_FILE = "_inspectFiles extrayo el archivo '{0}' a 
 _FILEMANAGER_NO_EXTRACT_COMPRSD_FILE = "_inspectFiles no extrayo el archivo '{0}' dado que este ya existe."
 
 
-# noinspection PyShadowingNames,PyMethodMayBeStatic
 class FileManager(varTypedClass, err.exceptionBehaviour):
     """
     Administra archivos, carga archivos, etc.
@@ -245,6 +244,24 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
         """
         self._verbose = True
 
+    def getFilesInWD(self):
+        """
+        Retorna una lista con todos los archivos dentro del WD.
+
+        :return: Lista con nombres de archivos.
+        :rtype: list
+        """
+        return os.listdir(self._wd.decode(self._fileEncoding))
+
+    def _getValidRegexChars(self):
+        """
+        Retorna el string de los carácteres válidos para el regex.
+
+        :return: String con carácteres válidos
+        :rtype: str
+        """
+        return str(self._validRegexChars)
+
     def getWorkingDirectory(self):
         """
         Retorna el directorio root de los archivos.
@@ -254,16 +271,16 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
         """
         return self._wd
 
-    def _inspectFiles(self, rootpath, foldername, filelist=None):
+    def _inspectFiles(self, d_rootpath, foldername, l_filelist=None):
         """
         Retorna una lista con los nombres de los archivos que contiene una carpeta.
 
-        :param rootpath: Carpeta contenedora del archivo a analizar
-        :type rootpath: str
+        :param d_rootpath: Carpeta contenedora del archivo a analizar
+        :type d_rootpath: str
         :param foldername: Nombre de la carpeta a revisar
         :type foldername: str
-        :param filelist: Lista de archivos a agregar los nuevos encontrados
-        :type filelist: list
+        :param l_filelist: Lista de archivos a agregar los nuevos encontrados
+        :type l_filelist: list
 
         :return: Lista de archivos encontrados
         :rtype: list
@@ -300,7 +317,6 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
             if self._doCharactersRestricted:
                 for c in filnm:
                     if c not in self._validChars:
-                        print "fake", c
                         return False
             return True
 
@@ -394,9 +410,9 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
                     if isWindows():
                         try:
                             rarfile.RarFile(rootpath + filename, "r", 'utf8').extractall(rootpath + newfilename + "/")
-                        except Exception, e:
+                        except Exception, ex:
                             print ""
-                            err.st_error(err.ERROR_RARUNCOMPRESS, True, "rarfile", e)
+                            err.st_error(err.ERROR_RARUNCOMPRESS, True, "rarfile", ex)
                     # Para sistemas basados en POSIX - OSX
                     else:
                         # Para linux y con Archive/pyunpack
@@ -407,10 +423,10 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
                         try:
                             rarfile.RarFile(rootpath + filename, "r", 'utf8').extractall(rootpath + newfilename + "/")
                             # Archive(rootpath + filename).extractall(rootpath + newfilename + "/") # Para linux con Archive/pyunpack
-                        except Exception, e:
+                        except Exception, ex:
                             print ""
                             # err.st_error(err.ERROR_RARUNCOMPRESS, True, "pyunpack", e) # Para linux con Archive/pyunpack
-                            err.st_error(err.ERROR_RARUNCOMPRESS_LINUX, True, "rarfile", e)
+                            err.st_error(err.ERROR_RARUNCOMPRESS_LINUX, True, "rarfile", ex)
                     if self._removeOnExtract:
                         os.remove(rootpath + filename)
                     extractedFolders.append(rootpath + newfilename + "/")
@@ -454,20 +470,20 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
                 if f in os.listdir(r.decode(self._fileEncoding)) and _isValidFile(f):
                     l.append(f)
 
-        if filelist is not None:
-            _inspect(rootpath, foldername, filelist, foldersExtractedOnProcess, 0)
-            for i in range(len(filelist)):
-                filelist[i] = filelist[i].replace("//", "/").replace(rootpath, "")
+        if l_filelist is not None:
+            _inspect(d_rootpath, foldername, l_filelist, foldersExtractedOnProcess, 0)
+            for i in range(len(l_filelist)):
+                l_filelist[i] = l_filelist[i].replace("//", "/").replace(d_rootpath, "")
             _removeExtractedFolders()
-            _appendIfEmpty(filelist, foldername, rootpath)
+            _appendIfEmpty(l_filelist, foldername, d_rootpath)
         else:
-            filelist = []
-            _inspect(rootpath, foldername, filelist, foldersExtractedOnProcess, 0)
-            for i in range(len(filelist)):
-                filelist[i] = filelist[i].replace("//", "/").replace(rootpath, "")
+            l_filelist = []
+            _inspect(d_rootpath, foldername, l_filelist, foldersExtractedOnProcess, 0)
+            for i in range(len(l_filelist)):
+                l_filelist[i] = l_filelist[i].replace("//", "/").replace(d_rootpath, "")
             _removeExtractedFolders()
-            _appendIfEmpty(filelist, foldername, rootpath)
-            return filelist
+            _appendIfEmpty(l_filelist, foldername, d_rootpath)
+            return l_filelist
 
     def inspectSingleFile(self, filename):
         """
@@ -481,6 +497,7 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
         """
         return self._inspectFiles(self._wd, filename)
 
+    # noinspection PyMethodMayBeStatic
     def _isFolder(self, rootpath, filename):
         """
         Comprueba si un nombre de carpeta es un directorio en el sistema huésped.
@@ -495,6 +512,7 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
         """
         return isFolder(rootpath, filename)
 
+    # noinspection PyMethodMayBeStatic
     def _isRar(self, rootpath, filename):
         """
         Comprueba si el paquete es un archivo rar.
@@ -516,6 +534,7 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
                 return False
         return False
 
+    # noinspection PyMethodMayBeStatic
     def _isZip(self, rootpath, filename):
         """
         Comprueba si un paquete es un zip.
@@ -555,6 +574,16 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
                     print "\t", fl[i]
             else:
                 print "\t", err.ERROR_NOFILES
+
+    def _printFilesInWD(self):
+        """
+        Imprime los archivos que están dentro del working directory.
+
+        :return: void
+        :rtype: None
+        """
+        for f in os.listdir(self._wd.decode(self._fileEncoding)):  # @ReservedAssignment
+            print f
 
     def printSingleFile(self, filename):
         """

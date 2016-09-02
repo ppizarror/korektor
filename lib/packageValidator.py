@@ -15,14 +15,22 @@ __author__ = "ppizarror"
 if __name__ == '__main__':
     from libpath import *  # @UnusedWildImport
 from bin.configLoader import configLoader  # @UnresolvedImport
-from bin.utils import isFolder, printHierachyBoolList  # @UnusedImport
+from bin.utils import isFolder, printHierachyBoolList, regexCompare  # @UnusedImport
 from config import DIR_CONFIG  # @UnresolvedImport
 # noinspection PyUnresolvedReferences
 from data import DIR_DATA, DIR_STRUCTURE_FOLDERNAME  # @UnusedImport
 from lib.package import *  # @UnusedWildImport
+import copy
+
+# Constantes
+_VL_CHECK = 0  # No cambiar
+_VL_INDEX = 1  # No cambiar
+_VL_IS_SUBFOLDER = 2  # No cambiar
+_VL_NOT = 10
+_VL_TRUE = 11
+_VL_TRUE_CHECKED = 12
 
 
-# noinspection PyUnresolvedReferences
 class PackageValidator(varTypedClass, exceptionBehaviour):
     """
     Clase que permite validar que los paquetes tengan una estructura adecuada, para ello se instancia
@@ -44,6 +52,9 @@ class PackageValidator(varTypedClass, exceptionBehaviour):
 
         # Carga de configuraciones
         coreConfig = configLoader(DIR_CONFIG, "core.ini")
+        validatorConfig = configLoader(DIR_CONFIG, "validator.ini")
+        self._doCheckStructureInSubfolder = validatorConfig.isFalse("STRICT_MODE_PACKAGES")
+        self._doRegexCaseInsensitive = validatorConfig.isTrue("CASE_INSENSITIVE")
         self._verbose = coreConfig.isTrue("VERBOSE")
 
         # Variables de estado
@@ -52,6 +63,7 @@ class PackageValidator(varTypedClass, exceptionBehaviour):
 
         # Variables de la estructura
         self._structureBoolHierachy = [False]
+        self._structureBoolHierachy2 = [False]
         self._structureDirectoryName = DIR_STRUCTURE_FOLDERNAME
         self._structureDirectoryRoot = DIR_DATA
         self._structurePackage = Package([])
@@ -69,6 +81,9 @@ class PackageValidator(varTypedClass, exceptionBehaviour):
             self._fm.enable_verbose()
         else:
             self._fm.disable_verbose()
+
+        # Variables de verificación
+        self._validRegexChars = self._fm._getValidRegexChars()
 
     @staticmethod
     def _checkHierachyTree(boolList):
@@ -145,6 +160,24 @@ class PackageValidator(varTypedClass, exceptionBehaviour):
         else:
             return self._throwException("VALIDATOR_ERROR_STRUCTURE_NOT_CREATED")
 
+    def disable_case_sensitive(self):
+        """
+        Desactiva el comparar los nombres de los archivos sin importar el tipo de letra (mayúscula, minúscula).
+
+        :return: void
+        :rtype: None
+        """
+        self._doRegexCaseInsensitive = False
+
+    def disable_check_structure_on_subfolder(self):
+        """
+        Desactiva el buscar la estructura en cada subcarpeta si estas no pertenecen a la estructura en primera instancia.
+
+        :return: void
+        :rtype: None
+        """
+        self._doCheckStructureInSubfolder = False
+
     def disable_verbose(self):
         """
         Desactiva el printing de errores y estados de sistema.
@@ -154,6 +187,24 @@ class PackageValidator(varTypedClass, exceptionBehaviour):
         """
         self._verbose = False
         self._fm.enable_verbose()
+
+    def enablease_sensitive(self):
+        """
+        Activa el comparar los nombres de los archivos sin importar el tipo de letra (mayúscula, minúscula).
+
+        :return: void
+        :rtype: None
+        """
+        self._doRegexCaseInsensitive = True
+
+    def enable_check_structure_on_subfolder(self):
+        """
+        Activa el buscar la estructura en cada subcarpeta si estas no pertenecen a la estructura en primera instancia.
+
+        :return: void
+        :rtype: None
+        """
+        self._doCheckStructureInSubfolder = True
 
     def enable_verbose(self):
         """
@@ -201,6 +252,7 @@ class PackageValidator(varTypedClass, exceptionBehaviour):
             self._structurePackage = PackageFileManager(self._fm, self._structureDirectoryName, True)
             self._isStructGenerated = True
             self._structureBoolHierachy = self._createBoolHierachyTree()
+            self._structureBoolHierachy2 = self._createBoolHierachyTree()
         else:
             return self._throwException("VALIDATOR_ERROR_STRUCTURE_FOLDER_DONT_EXIST")
 
@@ -215,7 +267,7 @@ class PackageValidator(varTypedClass, exceptionBehaviour):
         :rtype: None
         """
 
-        self._checkVariableType(boolHierachy, TYPE_LIST, "boolHierachy")
+        self._checkVariableType(boolHierachy, TYPE_LIST, "PackageValidator._printBooleanHierachy.boolHierachy")
         printHierachyBoolList(boolHierachy, 0)
 
     def _printStructureHierachy(self):
@@ -230,12 +282,14 @@ class PackageValidator(varTypedClass, exceptionBehaviour):
         else:
             return self._throwException("VALIDATOR_ERROR_STRUCTURE_NOT_CREATED")
 
-    def setStructureDirectory(self, structureDir):
+    def setStructureDirectory(self, structureDir, doLoad=True):
         """
         Define el directorio de la estructura.
 
         :param structureDir: Nuevo directorio para cargar la estructura
         :type structureDir: str
+        :param doLoad: Carga inmediatamente la estructura
+        :type doLoad: bool
 
         :return: void
         :rtype: None
@@ -251,6 +305,8 @@ class PackageValidator(varTypedClass, exceptionBehaviour):
             self._structureDirectoryRoot = "/".join(structureDirList[0:ln + offset])
             self._fm.setDefaultWorkingDirectory(self._structureDirectoryRoot)
             self._fm.restoreWD()
+            if doLoad:
+                self.loadStructure()
         else:
             return self._throwException("VALIDATOR_ERROR_STRUCTURE_FOLDER_DONT_EXIST")
 
@@ -266,23 +322,248 @@ class PackageValidator(varTypedClass, exceptionBehaviour):
         :rtype: None
         """
 
-        # Se chequea el tipo de variable
-        self._checkVariableType(package, TYPE_OTHER, "package", Package)
+        _validatedFilesPackage = []
 
+        def _checkF(h, hi, s, ls, boolList, lboolList):
+            """
+            Chequea si un nombre de archivo dentro de h[hi] pertenece a la estructura en s[si] a la misma profundidad,
+            si existe entonces lo marca en la jerarquia booleana b[bi].
 
-        #     def _validateStructureFile(self, filename):
-        #         """
-        #         Función que valida si un archivo cumple con la estructura pedida
-        #         :param filename: Archivo a comprobar
-        #         :return:
-        #         """
-        #         folderfiles = self._fm.inspectSingleFile(filename)
-        #         for structfile in self._structFiles:
-        #             found = False
-        #             for datafile in folderfiles:
-        #                 if regexCompare("#/" + structfile, datafile):
-        #                     found = True
-        #                     break
-        #             if not found:
-        #                 return False
-        #         return True
+            Esta función retorna lo siguiente: [TYPE, POSITION, NO_SUBFOLDER]
+
+            - TYPE: Indica tipo de inclusión, _VL_NOT, _VL_TRUE y _VL_TRUE_CHECKED.
+            - POSITION: Retorna la posición del elemento en el paquete estructural en donde se encontro el archivo.
+            - SUBFOLDER: Retorna true/false si el elemento de la estructura en b[bi] contiene subcarpetas o no.
+
+            :param h: Sublista de jerarquía del paquete a analizar.
+            :type h: list
+            :param hi: Índice del elemento de la jerarquía del paquete a analizar.
+            :type hi: int
+            :param s: Sublista de la estructura a analizar.
+            :type s: list
+            :param ls: Largo de la sublista de la estructura
+            :type ls: int
+            :param boolList: Sublista de la jerarquía estructural booleana a analizar.
+            :type boolList: list
+            :param lboolList: Largo de la sublista de la jerarquía booleana
+            :type lboolList: int
+
+            :return: Lista de varlores denotando tipo de pertenencia
+            :rtype: list
+            """
+
+            # Se obtiene el key a buscar y su tipo
+            element_ToCheck = h[hi]
+            element_IsList = isinstance(element_ToCheck, list)
+            # print "\n{0}>> Elemento a buscar".format("\t" * checkFdepth), element_ToCheck, "Es lista:", element_IsList
+
+            # Lista a retornar, 0: Tipo de busqueda, 1: Índice del elemento encontrado, 2: Si es una carpeta
+            reslt = [_VL_NOT, -1, False]
+
+            # Se recorre cada elemento de hs_r
+            for hsk in range(0, ls):
+                element_inStructure = s[hsk]  # Elemento en la estructura
+
+                # Si el elemento es una lista y el key es una lista
+                # print "{0}> Elemento en la subcarpeta de la estructura '".format("\t" * (checkFdepth + 1)), element_inStructure, "' comparar con '", element_ToCheck, "'"
+
+                # Si el elemento en el paquete y en la estructura son listas
+                if isinstance(element_inStructure, list) and element_IsList:
+
+                    # Si los nombres de las carpetas son iguales
+                    if regexCompare(element_inStructure[0], element_ToCheck[0], self._validRegexChars, case_insensitive=self._doRegexCaseInsensitive):
+
+                        # Si el elemento ya fue chequeado entonces se ignora
+                        if hsk < lboolList and boolList[hsk]:
+                            # print "{0}t >! El elemento era una carpeta y ya existe (comprobado).".format("\t" * (checkFdepth + 1))
+                            reslt[_VL_CHECK] = _VL_TRUE_CHECKED
+
+                        # Si no fue chequeado entonces retorna true y menciona que es subcarpeta
+                        else:
+                            # print "{0}\t >! El elemento existe!, Era una carpeta aun no ha sido comprobada".format("\t" * (checkFdepth + 1))
+                            reslt[_VL_CHECK] = _VL_TRUE
+                            reslt[_VL_IS_SUBFOLDER] = True
+
+                        # Se retorna el resultado
+                        reslt[_VL_INDEX] = hsk
+                        return reslt
+
+                # Si el elemento en el paquete y en la estructura son strings
+                if not isinstance(element_inStructure, list) and not element_IsList:
+
+                    # Si los nombres de los archivos son iguales
+                    if regexCompare(element_inStructure, element_ToCheck, self._validRegexChars, case_insensitive=self._doRegexCaseInsensitive):
+
+                        # Si el elemento ya fue chequeado
+                        if hsk < lboolList and boolList[hsk + 1]:
+                            # print "{0}\t >! El elemento era un archivo y ya existe (comprobado).".format("\t" * (checkFdepth + 1))
+                            reslt[_VL_CHECK] = _VL_TRUE_CHECKED
+
+                        # El elemento no ha sido chequeado
+                        else:
+                            # print "{0}\t >! El elemento existe!, Era un archivo y aun no ha sido comprobado.".format("\t" * (checkFdepth + 1))
+                            reslt[_VL_CHECK] = _VL_TRUE
+
+                        # Se retorna el resultado
+                        reslt[_VL_INDEX] = hsk + 1
+                        return reslt
+
+            # Si no se encontró en el for entonces el elemento no existe y se retorna reslt
+            # print "{0}\t >x El elemento no existe".format("\t" * (checkFdepth + 1))
+            return reslt
+
+        def _verifyInclusionRecursive(hp_r, hs_r, hs_nr, b_r, b_r_i, b_nr, rootpathi, depth, typeCheck):
+            """
+            Función auxiliar principal que recorre cada uno de los archivos de un paquete (hp_r) verificando que se
+            cumpla la estructura pedida (hs_r), si se cumple entonces se marca la lista de jerarquía booleana y retorna
+            true cuando _checkHierachyTree retorna True.
+
+            :param hp_r: Lista de jerarquía del paquete recursiva.
+            :type hp_r: list
+            :param hs_r: Lista de jerarquía de la estructura recursiva.
+            :type hs_r: list
+            :param b_r: Lista de jerarquía booleana recursiva.
+            :type b_r: list
+            :param b_r_i: Índice de búsqueda de la jerarquía booleana
+            :type b_r_i: int
+            :param b_nr: Lista de jerarquía booleana no recursiva.
+            :type b_nr: list
+            :param rootpathi: Indica la posición de un archivo absoluta.
+            :type rootpathi: str, unicode
+            :param depth: Profundidad de búsqueda
+            :type depth: int
+            :param typeCheck: Tipo de búsqueda de archivos, 0 si es clean, 1 si es continuado
+            :type typeCheck: int
+
+            :return: Booleano indicando si se debe seguir con la búsqueda o no.
+            :rtype: bool
+            """
+
+            # Se obtiene la sub lista recursiva de la jerarquía booleana
+            if b_r_i > 0:
+                # print "{0}==> Se cargo el indice".format("\t" * depth), b_r_i, "de la estructura jerarquica booleana"
+                b_r = b_r[b_r_i]
+
+            # Se obtienen los largos de las listas
+            lhp = len(hp_r)
+            lhs = len(hs_r)
+            lbr = len(b_r)
+
+            # Se recorre cada archivo de la lista recursiva del paquete
+            for packageFileIndex in range(0, lhp):
+
+                # Se obtiene la información del check
+                c = _checkF(hp_r, packageFileIndex, hs_r, lhs, b_r, lbr)
+
+                # print "{0}< Resultados del analisis".format("\t" * (depth + 1)), c
+
+                # Si el archivo no existe
+                if c[_VL_CHECK] == _VL_NOT:
+
+                    if isinstance(hp_r[packageFileIndex], list) and self._doCheckStructureInSubfolder:
+
+                        # print "{0}<< Se buscara el structure en las subcarpetas de la carpeta fallida".format("\t" * (depth + 1)), c
+
+                        if typeCheck == 0:
+                            nhpr = hp_r[packageFileIndex][1:len(hp_r[packageFileIndex])]
+                            nrootpathname = rootpathi + hp_r[packageFileIndex][0] + "/"
+                        else:
+                            nhpr = hp_r
+                            nrootpathname = rootpathi + nhpr[0][0] + "/"
+
+                        if numberOfSublists(nhpr) >= numberOfSublists(hs_nr):
+                            if _verifyInclusionRecursive(nhpr, hs_nr[1:len(hs_nr)],
+                                                         hs_nr, b_nr, 0, b_nr, nrootpathname, depth + 1, typeCheck):
+                                return False
+                    else:
+                        pass
+
+                # Si el archivo existe pero no ha sido chequeado aún
+                elif c[_VL_CHECK] == _VL_TRUE:
+
+                    # Si el archivo es una carpeta entonces se comprueba de forma recursiva
+                    if c[_VL_IS_SUBFOLDER]:
+
+                        # Se establece la información para crear un walk recursivo
+                        vIndex = c[_VL_INDEX]
+                        lpfi = len(hp_r[packageFileIndex])
+                        lshr = len(hs_r[vIndex])
+                        rootpath_in = rootpathi + str(hp_r[packageFileIndex][0]) + "/"
+
+                        # Se llama de forma recursiva a dicha carpeta
+                        try:
+                            # print "{0}\t > Se buscara la carpeta '".format("\t" * (depth + 1)), hp_r[packageFileIndex][1], "'"
+                            if not _verifyInclusionRecursive(hp_r[packageFileIndex][1:lpfi], hs_r[vIndex][1:lshr],
+                                                             hs_nr, b_r, vIndex + 1, b_nr, rootpath_in, depth + 1, 1):
+                                return False
+                        except:
+                            return self._throwException("VALIDATOR_ERROR_ON_VALIDATE_WALK_RECURSIVE")
+
+                    # Si no entonces se marca el archivo en la lista boolena y se comprueba que
+                    else:
+                        # print "{0}\t > El archivo '".format("\t" * (depth + 1)), hp_r[packageFileIndex], "' se marco como valido"
+
+                        # Se comprueba que el indice sea menor que el largo del bool, si lo es se activa
+                        if c[_VL_INDEX] < lbr:
+                            b_r[c[_VL_INDEX]] = True
+                            _validatedFilesPackage.append(rootpathi + hp_r[packageFileIndex])
+                            # print "{0}\t > El indice <".format("\t" * (depth + 1)), c[_VL_INDEX], "> de la sub_estructura jerarquica se volvio True"
+
+                        # Si el puntero a la estructura jerarquica no es valido
+                        else:
+                            # print "ERROR GRAVE!"
+                            return False
+
+                        # Se comprueba la validez booleana
+                        self._checkHierachyTree(b_nr)
+
+                        # Si la sub carpeta esta validada se retorna
+                        if b_nr[0]:
+                            return False
+
+                # El archivo fue chequeado
+                elif c[_VL_CHECK] == _VL_TRUE_CHECKED:
+                    pass
+
+                # Si no corresponde a las alternativas restantes termina la ejecucion
+                else:
+                    return False
+
+            return True
+
+        self._checkVariableType(package, TYPE_OTHER, "package", Package)  # Se chequea el tipo de variable
+
+        # Se chequea si se ha generado la estructura o no
+        if not self._isStructGenerated:
+            return self._throwException("VALIDATOR_ERROR_STRUCTURE_NOT_CREATED")
+
+        b = copy.deepcopy(self._structureBoolHierachy)
+
+        # Se obtienen las listas de jerarquía
+        hp = package.getHierachyFiles()
+        hs = self._structurePackage.getHierachyFiles()
+
+        # Se marca el paquete ha sido validado
+        package._markAsValidated()
+
+        # Si la lista de jerarquía del paquete está vacia o no existe
+        if len(hp) <= 2 and not (len(hp) == 2 and isinstance(hp[1], list)):
+            if len(hp) == 2 and regexCompare(hs[1], hp[1], self._validRegexChars):
+                package._markAsValid()
+            return
+
+        # Se llama a la función recursiva
+        try:
+            _verifyInclusionRecursive(hp[1:len(hp)], hs[1:len(hs)], hs, b, 0, b, "", 0, 0)
+        except:
+            return self._throwException("VALIDATOR_ERROR_ON_VALIDATE_WALK")
+
+        # Se comprueba que el paquete sea valido
+        self._checkHierachyTree(b)
+        if b[0]:
+            package._markAsValid()
+
+        # Se guardan en el paquete los archivos válidos
+        package._setValidatedFiles(_validatedFilesPackage[:])
+
+        del b

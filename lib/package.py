@@ -16,7 +16,7 @@ if __name__ == '__main__':
     from libpath import *  # @UnusedWildImport
 # noinspection PyUnresolvedReferences
 from bin.errors import *  # @UnusedWildImport
-from bin.utils import printHierachyList
+from bin.utils import printHierachyList, numberOfSublists
 from bin.varType import *  # @UnusedWildImport
 from lib.fileManager import FileManager
 
@@ -28,7 +28,6 @@ PACKAGE_FILE_NOT_FOUND = "PACKAGE_FILE_NOT_FOUND"
 PACKAGE_NO_NAME = "PACKAGE_NO_NAME"
 
 
-# noinspection PyMethodMayBeStatic
 class Package(varTypedClass, exceptionBehaviour):
     """
     Clase paquete, maneja funciones que permiten manejar listas con archivos del estilo z:/a/b/...
@@ -53,8 +52,8 @@ class Package(varTypedClass, exceptionBehaviour):
         varTypedClass.__init__(self)
 
         # Se chequean los tipos de variable
-        self._checkVariableType(files, TYPE_LIST, "files")
-        self._checkVariableType(generateHierachy, TYPE_BOOL, "generateHierachy")
+        self._checkVariableType(files, TYPE_LIST, "Package.__init()__.files")
+        self._checkVariableType(generateHierachy, TYPE_BOOL, "Package.__init()__.generateHierachy")
 
         # Variables de clase
         self._hierachyFiles = []
@@ -66,7 +65,9 @@ class Package(varTypedClass, exceptionBehaviour):
         self._isGeneratedName = False
         self._isgeneratedHierachyFiles = False
         self._isGeneratedPackageFiles = False
+        self._isValid = False
         self._validated = False
+        self._validatedFiles = []
 
         # Se crea el paquete
         self._generatePackageName(files)
@@ -245,24 +246,8 @@ class Package(varTypedClass, exceptionBehaviour):
         :rtype: int
         """
 
-        def _numberLists(l):
-            """
-            Retorna el numero de sublistas que contiene una lista.
-
-            :param l: Lista a calcular
-            :type l: list
-
-            :return: Número de sublistas
-            :rtype: int
-            """
-            count = 0
-            for i in l:
-                if isinstance(i, list):
-                    count = count + 1 + _numberLists(i)
-            return count
-
         if self._isgeneratedHierachyFiles:
-            return _numberLists(self._hierachyFiles)
+            return numberOfSublists(self._hierachyFiles)
         else:
             return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
 
@@ -278,6 +263,18 @@ class Package(varTypedClass, exceptionBehaviour):
         else:
             return self._throwException("PACKAGE_ERROR_NO_NAME")
 
+    def _getValidatedFiles(self):
+        """
+        Retorna la lista de los archivos validados.
+
+        :return: Lista de archivos
+        :rtype: list
+        """
+        if self._validated:
+            return self._validatedFiles
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_VALIDATED_YET")
+
     def printFileList(self):
         """
         Imprime en consola la lista de archivos del paquete.
@@ -286,9 +283,23 @@ class Package(varTypedClass, exceptionBehaviour):
         :rtype: None
         """
         if self._isGeneratedPackageFiles:
-            print self._packageFiles
+            for pfle in self._packageFiles:
+                print pfle
         else:
             return self._throwException("PACKAGE_ERROR_NOT_INDEXED_FILES_YET")
+
+    def _printValidatedFiles(self):
+        """
+        Imprime en consola la lista de archivos validados del paquete.
+
+        :return: void
+        :rtype: None
+        """
+        if self._validated:
+            for vpfle in self._validatedFiles:
+                print vpfle
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_VALIDATED_YET")
 
     def _isFile(self, fl):
         """
@@ -418,6 +429,15 @@ class Package(varTypedClass, exceptionBehaviour):
         else:
             return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
 
+    def isValid(self):
+        """
+        Retorna true/false indicando si el paquete es válido o no.
+
+        :return: Booleano indicando validación.
+        :rtype: bool
+        """
+        return self._isValid
+
     def isValidated(self):
         """
         Retorna true/false indicando si el paquete está validado o no.
@@ -427,18 +447,30 @@ class Package(varTypedClass, exceptionBehaviour):
         """
         return self._validated
 
-    def markAsValidated(self):
+    def _markAsValid(self):
         """
-        Define el paquete como validado.
+        Indica que la estructura del paquete es válida.
+
+        :return: void
+        :rtype: None
+        """
+        self._isValid = True
+
+    def _markAsValidated(self):
+        """
+        Indica que el paquete ya ha sido revisado por el validador.
 
         :return: void
         :rtype: None
         """
         self._validated = True
 
-    def printHierachy(self):
+    def printHierachy(self, tabsLeft=0):
         """
         Imprime la lista de archivos en forma de jerarquía.
+
+        :param tabsLeft: Número de tabs a la izquierda de los mensajes
+        :type tabsLeft: int
 
         :return: void
         :rtype: None
@@ -449,7 +481,7 @@ class Package(varTypedClass, exceptionBehaviour):
             elif self.getNumberOfElements() == 0:
                 print PACKAGE_EMPTY
             else:
-                printHierachyList(self._hierachyFiles)
+                printHierachyList(self._hierachyFiles, 0, tabsLeft)
         else:
             return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
 
@@ -461,6 +493,19 @@ class Package(varTypedClass, exceptionBehaviour):
         :rtype: None
         """
         print self._rawfiles
+
+    def _setValidatedFiles(self, vfiles):
+        """
+        Define los archivos válidos.
+
+        :param vfiles: Lista con archivos válidos.
+        :type vfiles: list
+
+        :return: void
+        :rtype: None
+        """
+        self._checkVariableType(vfiles, TYPE_LIST, "Package._setValidatedFiles.vfiles")
+        self._validatedFiles = vfiles
 
 
 # Clase paquete que utiliza un filemanager
@@ -486,8 +531,8 @@ class PackageFileManager(Package):
         """
 
         # Comprobacion de tipos
-        self._checkVariableType(fileManager, TYPE_OTHER, "fileManager", FileManager)
-        self._checkVariableType(packageName, TYPE_STR, "packageName")
+        self._checkVariableType(fileManager, TYPE_OTHER, "PackageFileManager.__init()__.fileManager", FileManager)
+        self._checkVariableType(packageName, TYPE_STR, "PackageFileManager.__init()__.packageName")
 
         # Se guarda el FileManager
         self._filemanager = fileManager

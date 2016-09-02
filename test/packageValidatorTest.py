@@ -16,14 +16,13 @@ __author__ = "ppizarror"
 from _testpath import *  # @UnusedWildImport
 # noinspection PyUnresolvedReferences
 from bin.errors import *
-from bin.utils import printBarsConsole  # @UnusedImport
-from data import DIR_STRUCTURE
 from lib.packageValidator import *  # @UnusedWildImport
 import unittest
 
 # Constantes de los test
 DISABLE_HEAVY_TESTS = True
 DISABLE_HEAVY_TESTS_MSG = "Se desactivaron los tests pesados"
+_DISABLE_HEAVY_TEST_TEMPORALY = "Los test se desactivaron temporalmente"
 VERBOSE = False
 
 # Se cargan argumentos desde la consola
@@ -38,70 +37,256 @@ if __name__ == '__main__':
 
 # Clase UnitTest
 class PackageValidatorTest(unittest.TestCase):
-    def setUp(self):
-        """
-        Inicio de los test.
 
-        :return: void
-        :rtype: None
-        """
-        self.validator = PackageValidator()
-        if VERBOSE:
-            self.validator.enable_verbose()
-        else:
-            self.validator.disable_verbose()
-        self.validator.setStructureDirectory(DIR_DATA_TEST + "STRUCTURE")
-        self.validator.loadStructure()
-        if VERBOSE:
-            printBarsConsole("Jerarquia de archivos de la estructura valida")
-            print "Nombre del paquete:", self.validator._getStructurePackage().getPackageName()
-            self.validator._getStructurePackage().printHierachy()
-            print self.validator._getStructureFilelist()
-            print self.validator._getStructurePackage().getHierachyFiles()
-            print self.validator._createBoolHierachyTree()
-
-    def testA(self):
-        """
-        Testeo de la estructura como un paquete.
-
-        :return: void
-        :rtype: None
-        """
-
-        # Se cambia la estructura
-        self.validator.setStructureDirectory(DIR_STRUCTURE)
-        self.validator.loadStructure()
-
-        # Se retorna a la estructura anterior
-        self.validator.setStructureDirectory(DIR_DATA_TEST + "STRUCTURE")
-        self.validator.loadStructure()
-
-    def testValidPackage(self):
+    @staticmethod
+    def testValidPackage():
         """
         Testeo del hierachy tree boollist.
 
         :return: void
         :rtype: None
         """
+        # Se crea un validador
+        validator = PackageValidator()
+        validator.setStructureDirectory(DIR_DATA_TEST + "STRUCTURE")
+        validator.loadStructure()
+
         l = [False, False, False]
-        assert self.validator._checkHierachyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierachyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         l = [False, True, True]
-        assert self.validator._checkHierachyTree(l) == True, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierachyTree(l) == True, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         l = [False, True, False]
-        assert self.validator._checkHierachyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierachyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         l = [True, True, True]
-        assert self.validator._checkHierachyTree(l) == True, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierachyTree(l) == True, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         l = [True, [False, True], True]
-        assert self.validator._checkHierachyTree(l) == True, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierachyTree(l) == True, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         l = [True, [True, False], True]
-        assert self.validator._checkHierachyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierachyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         l = [True, [True, [True, [True, False, False, True], True], True], True]
-        assert self.validator._checkHierachyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierachyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         l = [True, [False, [False, True], [False, True, True, True]], False]
-        assert self.validator._checkHierachyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierachyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         l = [True, [False, [False, [False, [False, [False, [True], True], True]]]]]
-        assert self.validator._checkHierachyTree(l) == True, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierachyTree(l) == True, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         del l
+
+    @staticmethod
+    def testValidationEmpty():
+        """
+        Test de validación simple.
+
+        :return: void
+        :rtype: None
+        """
+        f = FileManager(DIR_DATA_TEST)
+        f.disable_removeOnExtract()
+        f.enable_structureCharacters()
+        v = PackageValidator()
+        v.enable_exceptionThrow()
+        v.setStructureDirectory(DIR_DATA_TEST + "STRUCTURE EMPTY")
+        v.loadStructure()
+
+        # Carpeta vacia y structure vacia
+        p = PackageFileManager(f, "Folder 0", True)
+        p.enable_exceptionThrow()
+        # self.validator.validatePackage(p)
+        v.validatePackage(p)
+        assert p.isValidated() == True, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
+        assert p.isValid() == True, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
+
+        # Paquete no existente y structure por defecto
+        p = PackageFileManager(f, "Folder fake", True)
+        p.enable_exceptionThrow()
+        v.validatePackage(p)
+        assert p.isValidated() == True, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
+        assert p.isValid() == False, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
+
+    @staticmethod
+    def testValidationSimple():
+        """
+        Test de validación simple.
+
+        :return: void
+        :rtype: None
+        """
+        f = FileManager(DIR_DATA_TEST)
+        f.disable_removeOnExtract()
+        f.enable_structureCharacters()
+        v = PackageValidator()
+        v.enable_exceptionAsString()
+
+        # Carpeta con 1 sólo archivo
+        p = PackageFileManager(f, "Folder 10", True)
+        p.enable_exceptionThrow()
+        v.setStructureDirectory(DIR_DATA_TEST + "STRUCTURE SINGLE FILE")
+
+        # Prints estructuras a verificar
+        if VERBOSE:
+            p.printHierachy()
+            print ""
+            v._printStructureHierachy()
+
+        v.validatePackage(p)
+        assert p.isValid() == True, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
+
+    # noinspection PyMethodMayBeStatic
+    def testValidationNoSubfolder(self):
+        """
+        Test de validación sin subcarpetas.
+
+        :return: void
+        :rtype: None
+        """
+        f = FileManager(DIR_DATA_TEST)
+        f.disable_removeOnExtract()
+        f.enable_structureCharacters()
+        v = PackageValidator()
+        v.enable_exceptionAsString()
+        p = PackageFileManager(f, "Folder 11", True)
+        p.enable_exceptionThrow()
+        v.setStructureDirectory(DIR_DATA_TEST + "STRUCTURE SIMPLE")
+
+        # Prints estructuras a verificar
+        if VERBOSE:
+            p.printHierachy()
+            print ""
+            v._printStructureHierachy()
+
+        v.validatePackage(p)
+        assert p.isValid() == True, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
+
+    # noinspection PyMethodMayBeStatic
+    def testValidationSubfoldered(self):
+        """
+        Test de validación con subcarpetas.
+
+        :return: void
+        :rtype: None
+        """
+        f = FileManager(DIR_DATA_TEST)
+        f.disable_removeOnExtract()
+        f.enable_structureCharacters()
+        v = PackageValidator()
+        v.enable_exceptions()
+        p = PackageFileManager(f, "Package-validation 1", True)
+        p.enable_exceptionThrow()
+        v.setStructureDirectory(DIR_DATA_TEST + "STRUCTURE")
+
+        # Prints estructuras a verificar
+        if VERBOSE:
+            p.printHierachy()
+            print ""
+            v._printStructureHierachy()
+
+        v.validatePackage(p)
+        assert p.isValid() == True, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
+
+    # noinspection PyMethodMayBeStatic
+    def testValidationSubfoldered2(self):
+        """
+        Test de validación con subcarpetas en donde la estructura se repite en una carpeta interna.
+
+        :return: void
+        :rtype: None
+        """
+        f = FileManager(DIR_DATA_TEST)
+        f.disable_removeOnExtract()
+        f.enable_structureCharacters()
+        v = PackageValidator()
+        v.enable_exceptions()
+        p = PackageFileManager(f, "Package-validation 2", True)
+        p.enable_exceptionThrow()
+        v.setStructureDirectory(DIR_DATA_TEST + "STRUCTURE")
+
+        # Prints estructuras a verificar
+        if VERBOSE:
+            p.printHierachy()
+            print ""
+            v._printStructureHierachy()
+
+        v.validatePackage(p)
+        assert p.isValid() == True, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
+
+    # noinspection PyMethodMayBeStatic
+    def testValidationSubfoldered3(self):
+        """
+        Test de validación con subcarpetas en donde la estructura se repite en una carpeta interna pero falla por regex.
+
+        :return: void
+        :rtype: None
+        """
+        f = FileManager(DIR_DATA_TEST)
+        f.disable_removeOnExtract()
+        f.enable_structureCharacters()
+        v = PackageValidator()
+        v.enable_exceptions()
+        p = PackageFileManager(f, "Package-validation 3", True)
+        p.enable_exceptionThrow()
+        v.setStructureDirectory(DIR_DATA_TEST + "STRUCTURE")
+
+        # Prints estructuras a verificar
+        if VERBOSE:
+            p.printHierachy()
+            print ""
+            v._printStructureHierachy()
+
+        v.validatePackage(p)
+
+        # Falla por regex en name_surname
+        assert p.isValid() == False, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
+
+    # noinspection PyMethodMayBeStatic
+    def testValidationSubfoldered4(self):
+        """
+        Test de validación con subcarpetas en donde la estructura se repite en una carpeta interna.
+
+        :return: void
+        :rtype: None
+        """
+        f = FileManager(DIR_DATA_TEST)
+        f.disable_removeOnExtract()
+        f.enable_structureCharacters()
+        v = PackageValidator()
+        v.enable_exceptions()
+        p = PackageFileManager(f, "Package-validation 4", True)
+        p.enable_exceptionThrow()
+        v.setStructureDirectory(DIR_DATA_TEST + "STRUCTURE 2")
+
+        # Prints estructuras a verificar
+        if VERBOSE:
+            p.printHierachy()
+            print ""
+            v._printStructureHierachy()
+
+        v.validatePackage(p)
+        assert p.isValid() == True, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
+
+    # noinspection PyMethodMayBeStatic
+    def testValidationSubfoldered5(self):
+        """
+        Test de validación con subcarpetas en donde la estructura se repite en una carpeta interna.
+
+        :return: void
+        :rtype: None
+        """
+        f = FileManager(DIR_DATA_TEST)
+        f.disable_removeOnExtract()
+        f.enable_structureCharacters()
+        v = PackageValidator()
+        v.enable_exceptions()
+        p = PackageFileManager(f, "Package-validation 5", True)
+        p.enable_exceptionThrow()
+        v.setStructureDirectory(DIR_DATA_TEST + "STRUCTURE 2")
+
+        # Prints estructuras a verificar
+        if VERBOSE:
+            p.printHierachy()
+            print ""
+            v._printStructureHierachy()
+
+        v.validatePackage(p)
+        assert p.isValid() == True, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
 
 
 # Main test
