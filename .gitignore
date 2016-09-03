@@ -1,43 +1,47 @@
-# OSX
+# OSX.
 .DS_Store
 
-# Pycharm
+# Pycharm.
 .idea/
 
-# Pydev
+# Pydev.
 .project
 .pydevproject
 
-# Eclipse
+# Eclipse.
 .settings/
 
-# Archivos compilados de python
+# Archivos compilados de python.
 *.pyc
 
-# Windows thumbs
+# Windows thumbs.
 Thumbs.db
 
-# Hashing
+# Hashing.
 .hash
 
-# Archivos de results y uploads
+# Archivos de results y uploads.
 data/results/
 data/structure/
 data/uploads/
 
-# Archivos de tests
+# Archivos de tests.
 test/.data_tests_private/
 
-# Archivos de tests privados
+# Archivos de tests privados.
 test/*_private.py
 
-# Archivos de resultados de tests
+# Archivos de resultados de tests.
 test/.results/results.txt
 test/.results/log/*
 test/.results/*.png
 
-# Archivos residuales de VIM
+# Archivos residuales de VIM.
 *.swp
 
-# Archivos de recuperación de idiomas guardados
+# Archivos de recuperación de idiomas guardados.
 resources/langs/.recover/*
+
+# Evita el archivo actualizador del changelog, y el changelog original.
+_changelog.py
+_CHANGELOG

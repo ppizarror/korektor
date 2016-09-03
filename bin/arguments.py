@@ -94,7 +94,8 @@ def argumentParserFactory(descripcion="", **kwargs):
 
     # Se agrega el skipped
     if skipped:
-        parser.add_argument('-skp', '--enable-skipped', dest='enableHeavyTest', action='store_false', help=title_skipped)
+        parser.add_argument('-skp', '--enable-skipped', dest='enableHeavyTest', action='store_false',
+                            help=title_skipped)
 
     # Se agrega el verbose
     if verbose:

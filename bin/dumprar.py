@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 """Dump archive contents, test extraction."""
 
+# noinspection PyUnresolvedReferences
 from binascii import crc32, hexlify  # @UnusedImport
 from datetime import datetime
 import sys
@@ -12,7 +13,7 @@ except NameError:
     import array
 
 
-# noinspection PyShadowingBuiltins
+# noinspection PyShadowingBuiltins,PyMissingOrEmptyDocstring
 def bytearray(v):  # @ReservedAssignment
     return array.array('B', v)
 
@@ -40,7 +41,7 @@ block_strs = ['MARK', 'MAIN', 'FILE', 'OLD_COMMENT', 'OLD_EXTRA',
               'OLD_SUB', 'OLD_RECOVERY', 'OLD_AUTH', 'SUB', 'ENDARC']
 
 
-# noinspection PyShadowingBuiltins
+# noinspection PyShadowingBuiltins,PyMissingOrEmptyDocstring
 def rarType(type):  # @ReservedAssignment
     if type < rf.RAR_BLOCK_MARK or type > rf.RAR_BLOCK_ENDARC:
         return "*UNKNOWN*"
@@ -95,6 +96,7 @@ file_parms = ("D64", "D128", "D256", "D512",
               "D1024", "D2048", "D4096", "DIR")
 
 
+# noinspection PyMissingOrEmptyDocstring
 def xprint(m, *args):
     if sys.hexversion < 0x3000000:
         m = m.decode('utf8')
@@ -106,7 +108,7 @@ def xprint(m, *args):
     sys.stdout.write('\n')
 
 
-# noinspection PyAugmentAssignment
+# noinspection PyAugmentAssignment,PyMissingOrEmptyDocstring
 def render_flags(flags, bit_list):
     res = []
     known = 0
@@ -125,6 +127,7 @@ def render_flags(flags, bit_list):
     return ",".join(res)
 
 
+# noinspection PyMissingOrEmptyDocstring
 def get_file_flags(flags):
     res = render_flags(flags & ~rf.RAR_FILE_DICTMASK, file_bits)
 
@@ -133,24 +136,29 @@ def get_file_flags(flags):
     return res
 
 
+# noinspection PyMissingOrEmptyDocstring
 def get_main_flags(flags):
     return render_flags(flags, main_bits)
 
 
+# noinspection PyMissingOrEmptyDocstring
 def get_endarc_flags(flags):
     return render_flags(flags, endarc_bits)
 
 
+# noinspection PyMissingOrEmptyDocstring
 def get_generic_flags(flags):
     return render_flags(flags, generic_bits)
 
 
+# noinspection PyMissingOrEmptyDocstring
 def fmt_time(t):
     if isinstance(t, datetime):
         return t.isoformat(' ')
     return "%04d-%02d-%02d %02d:%02d:%02d" % t
 
 
+# noinspection PyMissingOrEmptyDocstring
 def show_item(h):
     st = rarType(h.type)
     unknown = h.header_size - h.header_base
@@ -209,6 +217,7 @@ cf_test_read = 0
 cf_test_unrar = 0
 
 
+# noinspection PyMissingOrEmptyDocstring
 def check_crc(f, inf):
     ucrc = f.CRC
     if ucrc < 0:
@@ -217,6 +226,7 @@ def check_crc(f, inf):
         print ('crc error')
 
 
+# noinspection PyMissingOrEmptyDocstring
 def test_read_long(r, inf):
     f = r.open(inf.filename)
     total = 0
@@ -251,10 +261,12 @@ def test_read_long(r, inf):
     f.close()
 
 
+# noinspection PyMissingOrEmptyDocstring
 def test_read(r, inf):
     test_read_long(r, inf)
 
 
+# noinspection PyMissingOrEmptyDocstring
 def test_real(fn, psw):
     xprint("Archive: %s", fn)
 
@@ -306,6 +318,7 @@ def test_real(fn, psw):
         r.testrar()
 
 
+# noinspection PyMissingOrEmptyDocstring
 def test(fn, psw):
     try:
         test_real(fn, psw)
@@ -321,6 +334,7 @@ def test(fn, psw):
         del tb
 
 
+# noinspection PyMissingOrEmptyDocstring
 def main():
     global cf_verbose, cf_show_comment, cf_charset
     global cf_extract, cf_test_read, cf_test_unrar

@@ -11,11 +11,11 @@ Licencia: GPLv2
 __author__ = "ppizarror"
 
 # Importación de librerías y obtención de directorios
-import math
 from binpath import _LANG_DIRCONFIG, _LANG_DIRLANGS, _DIR_CONFIG
 from configLoader import configLoader
-import errors
 from utils import googleTranslate
+import errors
+import math
 
 # noinspection PyProtectedMember
 # Se cargan las configuraciones
@@ -26,7 +26,7 @@ langtranslateconfig = configLoader(_DIR_CONFIG, "langstransl.ini")
 
 # Constantes del programa
 _SPACE = "|"
-_SPLITTER = langconfig.getValue(1).replace("*", " ")
+_SPLITTER = str(langconfig.getValue(1)).replace("*", " ")
 LANG_LOADED = "El archivo de idiomas '{0}' ha sido cargado correctamente"
 LANG_PRINT_ELEMENT = "\t{0}{1}=> {2}"
 LANG_PRINT_TITLE = "Entradas:\n\tID     STRING"
@@ -82,6 +82,7 @@ class langLoader:
                     line[0] = "10"
                 self.lang[int(line[0].replace("\ufeff", ""))] = line[1].replace(_SPACE, " ")
             file.close()
+            # noinspection PyUnresolvedReferences
             if kwargs.get("verbose"):
                 print LANG_LOADED.format(language)
             self.langname = language
@@ -104,6 +105,7 @@ class langLoader:
         """
         if str(index).isdigit():
             try:  # Si existe el lang en la matriz de datos
+                # noinspection PyUnresolvedReferences
                 if kwargs.get("noformat") or len(args) == 0:
                     return self.lang[index]
                 else:
@@ -142,8 +144,8 @@ class langLoader:
         if langselfconfig.isTrue("TRANSLATIONS"):  # Si el servicio de traducciones esta activado
             if not NULL_IDENTIFIER in text:
                 try:  # Se consulta por la traducción al servicio de google
-                    return googleTranslate(text, to, langtranslateconfig.getValue("WEB_HEADER"),
-                                           langtranslateconfig.getValue("WEB_GOOGLETRANSLATE"))
+                    return googleTranslate(text, to, str(langtranslateconfig.getValue("WEB_HEADER")),
+                                           str(langtranslateconfig.getValue("WEB_GOOGLETRANSLATE")))
                 except:  # Si ocurre algún error en la traducción
                     return text
             else:

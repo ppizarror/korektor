@@ -11,7 +11,7 @@ Licencia: GPLv2
 """
 __author__ = "ppizarror"
 
-# Importación de variables
+# Importación de librerías
 if __name__ == '__main__':
     from libpath import *  # @UnusedWildImport
 # noinspection PyUnresolvedReferences

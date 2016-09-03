@@ -37,7 +37,6 @@ if __name__ == '__main__':
 
 # Clase UnitTest
 class PackageValidatorTest(unittest.TestCase):
-
     @staticmethod
     def testValidPackage():
         """

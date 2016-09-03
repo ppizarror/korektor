@@ -12,6 +12,7 @@ __author__ = "ppizarror"
 
 # Importación de librerías
 if __name__ == '__main__':
+    # noinspection PyUnresolvedReferences
     from binpath import *  # @UnusedWildImport
 import cookielib
 import htmlentitydefs

@@ -15,12 +15,11 @@ __author__ = "ppizarror"
 # Importación de librerías
 import os
 
-__actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace("\\", "/") + "/"
-
 # Constantes
 DIR_STRUCTURE_FOLDERNAME = "structure/"
 
 # Definición de directorios
+__actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace("\\", "/") + "/"
 DIR_DATA = __actualpath
 DIR_RESULTS = __actualpath + "results/"
 DIR_STRUCTURE = __actualpath + DIR_STRUCTURE_FOLDERNAME

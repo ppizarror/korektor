@@ -188,7 +188,7 @@ class PackageValidator(varTypedClass, exceptionBehaviour):
         self._verbose = False
         self._fm.enable_verbose()
 
-    def enablease_sensitive(self):
+    def enable_case_sensitive(self):
         """
         Activa el comparar los nombres de los archivos sin importar el tipo de letra (mayúscula, minúscula).
 
@@ -371,7 +371,8 @@ class PackageValidator(varTypedClass, exceptionBehaviour):
                 if isinstance(element_inStructure, list) and element_IsList:
 
                     # Si los nombres de las carpetas son iguales
-                    if regexCompare(element_inStructure[0], element_ToCheck[0], self._validRegexChars, case_insensitive=self._doRegexCaseInsensitive):
+                    if regexCompare(element_inStructure[0], element_ToCheck[0], self._validRegexChars,
+                                    case_insensitive=self._doRegexCaseInsensitive):
 
                         # Si el elemento ya fue chequeado entonces se ignora
                         if hsk < lboolList and boolList[hsk]:
@@ -392,7 +393,8 @@ class PackageValidator(varTypedClass, exceptionBehaviour):
                 if not isinstance(element_inStructure, list) and not element_IsList:
 
                     # Si los nombres de los archivos son iguales
-                    if regexCompare(element_inStructure, element_ToCheck, self._validRegexChars, case_insensitive=self._doRegexCaseInsensitive):
+                    if regexCompare(element_inStructure, element_ToCheck, self._validRegexChars,
+                                    case_insensitive=self._doRegexCaseInsensitive):
 
                         # Si el elemento ya fue chequeado
                         if hsk < lboolList and boolList[hsk + 1]:

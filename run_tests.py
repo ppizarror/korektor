@@ -12,7 +12,7 @@ Licencia: GPLv2
 """
 __author__ = "ppizarror"
 
-# Importación de variables
+# Importación de librerías
 from test._testpath import DIR_TEST_RESULTS, DIR_TEST_RESULTS_LOGGING
 from bin.arguments import argumentParserFactory
 from bin.configLoader import configLoader
