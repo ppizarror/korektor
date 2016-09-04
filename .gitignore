@@ -21,7 +21,8 @@ Thumbs.db
 .hash
 
 # Archivos de results y uploads.
-data/results/
+data/results/graphs/
+data/results/logs/
 data/structure/
 data/uploads/
 
