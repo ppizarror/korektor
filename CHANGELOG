@@ -1,5 +1,5 @@
                                  CHANGELOG                                 
-                     Version 0.2.7-1, Septiembre 2016
+                     Version 0.2.8-1, Septiembre 2016
                      
 [0.0.1]
 	+Creada la estructura del programa, creados bin y lib. >Bin: Sirve para
@@ -564,8 +564,8 @@
 	 a diversos tipos de números (entero, flotante o hexadecimal) según
 	 corresponda.
 	+Se agrega la función wipeFile en utils.py, esta función tiene por
-	 objetivo eliminar todo el contenido de un determinado archivo pasado por
-	 argumento.
+	 objetivo eliminar por completo el contenido de un determinado archivo
+	 pasado por argumento.
 	+Nueva clase: varTypedClass, esta clase está asociada al manejo de tipos
 	 de variable, provee la función _checkVariableType la cual chequea si una
 	 variable es de una determinada clase.
@@ -692,3 +692,42 @@
 	+Se añaden múltiples test a PackageValidatorTest en test/.
 	+Se añaden múltiples test de regexCompare a UtilsTest en test/.
 	+Se añaden múltiples carpetas de testeo en .data_tests/.
+
+[0.2.8]
+	+Se corrigen errores al cargar configuraciones que no existen en langs.py.
+	+Se renombran múltiples archivos adoptando la convención PEP-8.
+	+Corrección ortográfica de múltiples comentarios y documentación en
+	 todos los módulos y librerías del programa.
+	+Nuevo módulo: ospath.py, este módulo permitirá manejar el tipo de
+	 sistema operativo del huésped del código, comprobando si es Windows,
+	 Java, Linux, Cygwin, etc.
+	-Se eliminan las funciones isWindows() de color, utils y accents.
+	+Se agrega la opción de añadir acentos a las entradas de los argumentos
+	 y opciones por consola.
+	+El comando --verbose ahora se puede invocar con -v.
+	+Se añade la opción de poder retornar las excepciones como un código de
+	 error (por ejemplo MODULE_ERROR).
+	-Eliminadas algunas importaciones de librerías no utilizadas en varios
+	 módulos del programa.
+	+Se agrega la opción de añadir espacios tabulados a la función
+	 printBarsOnConsole en utils.py.
+	+Se añaden las carpetas GRAPHS y LOGS en DATA/RESULTS, estos directorios
+	 almacenarán tanto los resultados de la ejecución de las tareas como los
+	 gráficos de las mismas.
+	+La función de generar la jerarquía del Package ahora puede generar
+	 jerarquías para listas de archivos que no sean internas, esto se hizo
+	 para poder generar jerarquías a las listas de archivos válidas e
+	 inválidas tras la validación del paquete.
+	+Se almacenan la ubicación y nombres de los archivos válidos e
+	 inválidos en cada paquete, se añaden las funciones
+	 _printNotValidHierarchyList y _printValidHierarchyList para imprimir las
+	 jerarquías de ambas listas de archivos.
+	+Se corrige error al validar paquetes que tengan su estructura en un
+	 subpaquete, permitiendo obtener tanto su dirección física como
+	 dirección lógica en comparación con la estructura analizada.
+	+Se añaden múltiples entradas para imprimir en consola las listas de
+	 archivos válidas e inválidas de cada paquete por medio del comando
+	--verbose en el test del PackageValidator.
+	+Se añade un test para probar paquetes que tengan más de una carpeta.
+	+Se optimiza una subfunción del regexCompare para incrementar la
+	 velocidad de comparación.
