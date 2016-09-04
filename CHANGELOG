@@ -28,17 +28,17 @@
 	 paquetes de usuarios. >libpath.py: Administra las carpetas dentro de
 	 /lib.
 	+Se agregan los módulos binpath.py, browser.py, colors.py,
-	 configLoader.py, errors.py, hashdir.py, langs.py, noStdOut.py y utils.py
+	 ConfigLoader.py, errors.py, hashdir.py, Langs.py, NoStdOut.py y utils.py
 	 al paquete /bin. >binpath.py: Administra las carpetas dentro de /bin.
 	 >browser.py: Clase para manejar una página web de manera
 	 sencilla.>colors.py: Administra colores para ser usados en la ter minal.
-	 >configLoader.py: Maneja las configuraciones del programa. >errors.py:
+	 >ConfigLoader.py: Maneja las configuraciones del programa. >errors.py:
 	 Administra los errores de la aplicación. >hashdir.py: Crea un checksum
-	 de archivos. >langs.py: Maneja los idiomas de la aplicación.
-	 >noStdOut.py: Modulo que permite deshabilitar el printing en la consola.
+	 de archivos. >Langs.py: Maneja los idiomas de la aplicación.
+	 >NoStdOut.py: Modulo que permite deshabilitar el printing en la consola.
 	 >utils.py: Maneja archivos utilitarios.
 	+Se agregan test a cada uno de los módulos.
-	+Se agrega una carpeta langs a recursos.
+	+Se agrega una carpeta Langs a recursos.
 	+Se añade un idioma de prueba.
 	+Modificado el .gitignore para evitar archivos *.pyc.
 	+Se agrega un archivo de configuraciones para las traducciones, los
@@ -56,7 +56,7 @@
 	 >/data/uploads/: Almacena las subidas de las tareas de los alumnos.
 	+Se configura el .gitignore para evitar elementos dentro de las carpetas
 	 uploads y results.
-	+Se agregan funciones auxiliares a utils: regexCompare y manejo de tags
+	+Se agregan funciones auxiliares a utils: regex_compare y manejo de tags
 	 html.
 	+Se agrega un .config/ al módulo /lib.
 	+Se agrega un .config/ al módulo /bin.
@@ -70,9 +70,9 @@
 	 deben cumplir las tareas para poder ser evaluadas y testeadas.
 	+Se corrige el .gitignore para evitar los elementos dentro de la carpeta
 	 /structure.
-	+Modificaciones al módulo bin/configLoader.py, agregando la función
-	 getValueListed con lista de valores por para metro de configuración.
-	+Se agrega la función isFolder y isHiddenFile al módulo utils.py. Ambas
+	+Modificaciones al módulo bin/ConfigLoader.py, agregando la función
+	 get_value_listed con lista de valores por para metro de configuración.
+	+Se agrega la función is_folder_utils y is_hidden_file_utils al módulo utils.py. Ambas
 	 funciones están relacionadas con el manejo de archivos.
 
 [0.0.5]
@@ -82,7 +82,7 @@
 	 formato .zip y comprueba que tengan un formato especifico determinado por
 	 la disposición de los archivos en /structure.
 	+Se agregan varias instrucciones de error en errors.py.
-	+Se actualiza la función regexCompare en utils.py, la cual debe comparar
+	+Se actualiza la función regex_compare en utils.py, la cual debe comparar
 	 strings que tengan regex (#, *) que pueden tomar cualquier valor.
 	+Se agregan multitud de tests al módulo utils.py.
 	+Se agregan varias constantes de estado para package.py, en concreto se
@@ -102,7 +102,7 @@
 
 [0.0.7]
 	+Se agregan las funciones getters y setters en packageTester.
-	+Se agregan funciones isFolder, isZip y validate en package tester, las
+	+Se agregan funciones is_folder_utils, isZip y validate en package tester, las
 	 cuales están destinadas a manejar archivos en el filesystem del sistema
 	 operativo huésped. Ambas usan extensivamente la librería OS.
 	+Se agrega __autor__ a todos los módulos de la aplicación.
@@ -110,7 +110,7 @@
 	-Se renombra la clase packageTester a Package.
 	+Se corrigen errores en la inspección de archivos en Package, agregando
 	 nuevas funcionalidades en el walk interno.
-	+Se corrigen las funciones isZip y isFolder.
+	+Se corrigen las funciones isZip y is_folder_utils.
 
 [0.0.8]
 	+Refactorización de la función validate, la cual se renombró a
@@ -123,7 +123,7 @@
 [0.0.9]
 	+Se agregan los módulos rarfile.py, dumprar.py al paquete /bin.
 	+Se modifica el modulo utisl.py, corrigiendo errores en la función
-	 isFolder.
+	 is_folder_utils.
 	+Se da soporte a WINDOWS.
 	+Se agrega la carpeta __MACOSX/ a los elementos ignorados a la hora de
 	 hacer walk por el directorio de archivos.
@@ -153,7 +153,7 @@
 	+Se corrigen errores en las funciones de identificación de paquetes .zip
 	 y .rar en Package.
 	+Refactorización de los __init__.py en /plugins y /resources.
-	+Modificación del módulo configLoader, se repara un error a la hora de
+	+Modificación del módulo ConfigLoader, se repara un error a la hora de
 	 cargar configuraciones booleanas, acentando tantos los valores, 1, TRUE y
 	 true como válidas (mismo caso para el false).
 	+Refactorización de la librería langeditor.
@@ -172,7 +172,7 @@
 	+Se agregan nuevas entradas de error asociadas a la tarea de
 	 descompresión de archivos, búsqueda de archivos, y manejo de archivos
 	 en general.
-	+Se corrige el archivo langs.py, solucionado error al importar las
+	+Se corrige el archivo Langs.py, solucionado error al importar las
 	 configuraciones específicas de los idiomas.
 	+Refactorización del módulo mechanize
 	+Se agrega una nueva librería: pyunpack. Asociada a la descompresión de
@@ -193,7 +193,7 @@
 	 se basa en una pequeña state-machine. Posee múltiples configuraciones
 	 para activar o desactivar comportamientos a la hora de comprimir,
 	 analizar, escanear o eliminar archivos. >Se movió la función
-	 _inspectFiles de packages a filemanager. La cual fue refactorizada para
+	 _inspect_files de packages a filemanager. La cual fue refactorizada para
 	 eliminar múltiples errores a la hora de hacer walk por los distintos
 	 directorios. >Contiene además las funciones auxiliares de isZip y isRar,
 	 originales del módulo package.
@@ -216,12 +216,12 @@
 	+Refactorización del módulo VerticalScrolledFrame.py.
 	+Refactorización menor del módulo binpath.py.
 	+Refactorización menor del módulo browser.py.
-	+Refactorización menor del módulo configLoader.py.
+	+Refactorización menor del módulo ConfigLoader.py.
 	+Refactorización del módulo dumprar.py.
 	+Se agregan errores asociados al filemanager en errors.py.
 	+Refactorización menor del módulo hashdir.py.
-	+Refactorización menor del módulo langs.py.
-	+Se agrega la función appendListToList a utils.py, la cual permite clonar
+	+Refactorización menor del módulo Langs.py.
+	+Se agrega la función append_list_to_list a utils.py, la cual permite clonar
 	 los contenidos de una lista a otra, similar a un merge.
 	+Se agregan tests asociados al regex en utils.py.
 	+Refactorización menor de __init__.py en config/.
@@ -248,13 +248,13 @@
 	-Se eliminan los test unitarios de cada uno de los módulos del programa
 	 (aquellos que residían en las sentencias __name__ == "__main__").
 	 Concretamente se eliminan los test de: >bin/ __init__.py binpath.py
-	 configLoader.py dumprar.py errors.py langs.py utils.py >data/ __init__.py
+	 ConfigLoader.py dumprar.py errors.py Langs.py utils.py >data/ __init__.py
 	 >lib/ filemanager.py libpath.py packages.py >plugins/ __init__.py
 	+Se corrigen errores asociados al manejo de acentos dentro de la
 	 aplicación. Concretamente se reparan errores asociados a la
 	 configuración UTF-8 de bin/accents.py.
 	+Se agrega el carácter / a la lista de elementos válidos en el
-	 regexCompare.
+	 regex_compare.
 	+Se corrigen errores a la hora de descomprimir archivos .rar en Windows o
 	 Linux. Para ello se importan distintas librerías en cada uno de los
 	 sistemas operativos huéspedes.
@@ -403,7 +403,7 @@
 	 comprimido si es que ya existe una carpeta con el mismo nombre dentro de
 	 la carpeta padre.
 	+Se agregan chequeos de tipos de variable en el constructor y funciones
-	 isFile y isFolder de lib/package.py.
+	 is_file y is_folder_utils de lib/package.py.
 	+Se agrega una nueva clase 'PackageFileManager' dentro de lib/package.py.
 	 Esta clase funciona exactamente igual que la clase Package salvo que toma
 	 como argumento una instancia de fileManager y un string indicando el
@@ -479,7 +479,7 @@
 	+Corrección ortográfica y gramática en todos los headers de los
 	 módulos y librerías del programa.
 	+Se crea el módulo arguments dentro de bin/. Este módulo provee de la
-	 función argumentParserFactory la cual crea y establece los diversos
+	 función argument_parser_factory la cual crea y establece los diversos
 	 argumentos que pueden ser usa dos por el software. Por defecto se pueden
 	 agregar los comandos --author, --verbose, --versión y --help.
 	+Se mueven las entradas de los errores de los archivos de testeo a
@@ -490,7 +490,7 @@
 	+Se agrega el parámetro de configuración AUTOSAVE en
 	 bin/langeditor/config/config.ini. Este parámetro indica si realizar una
 	 copia de seguridad del archivo de idioma guardado en la carpeta
-	 resources/langs/.recover/.
+	 resources/Langs/.recover/.
 	+Se habilita el guardado automático en el editor del programa langeditor.
 	+Se eliminan líneas invalidas en los archivos de configuración dentro de
 	 config/.
@@ -541,8 +541,8 @@
 	+La librería colors.py se actualiza incluyendo las entradas de utils.py.
 	 Ahora maneja colores en consola de Windows, así como funciones para
 	 borrar el contenido de la pantalla (Wconio, ctypes).
-	+Modificaciones a la clase configLoader, se agrega la opción
-	 autoNumberify a getValue(..) para convertir de forma automática todos
+	+Modificaciones a la clase ConfigLoader, se agrega la opción
+	 autoNumberify a get_value(..) para convertir de forma automática todos
 	 los strings a números. Además los argumentos como verbose se analizan
 	 con kwargs Utils.
 	+Formateo y optimización del código en las librerías easyprocess,
@@ -552,22 +552,22 @@
 	+Nueva clase: exceptionAsStringClass. Esta clase permite tratar las
 	 excepciones como strings, permitiendo así tratarlas de una manera
 	 sencilla en aplicaciones gráficas. Esta clase provee la función
-	 _throwException la cual lanza una excepción según la configuración de
+	 _throw_exception la cual lanza una excepción según la configuración de
 	 cada clase.
 	+Reformateo, optimización del código y librerías, y actualización de
 	 la documentación del subprograma langeditor.
 	+Se corrige error en el ancho de las columnas del ID y el String en
 	 editor.py del langeditor.
 	+Corrección de error al obtener las configuraciones de los idiomas en el
-	 langLoader.
+	 LangLoader.
 	+Se crea la función converToNumber en utils.py, el cual convierte string
 	 a diversos tipos de números (entero, flotante o hexadecimal) según
 	 corresponda.
-	+Se agrega la función wipeFile en utils.py, esta función tiene por
+	+Se agrega la función wipe_file en utils.py, esta función tiene por
 	 objetivo eliminar por completo el contenido de un determinado archivo
 	 pasado por argumento.
-	+Nueva clase: varTypedClass, esta clase está asociada al manejo de tipos
-	 de variable, provee la función _checkVariableType la cual chequea si una
+	+Nueva clase: VarTypedClass, esta clase está asociada al manejo de tipos
+	 de variable, provee la función _check_variable_type la cual chequea si una
 	 variable es de una determinada clase.
 	+Se agrega la opción MAX_RANGE_VAR a config/plot.ini, esta entrada esta
 	 relacionada al máximo de rango que un resultado puede tolerarse para
@@ -577,22 +577,22 @@
 	 de la estructura.
 	+Se renombran variables en el fileManager con el fin de evitar perdida de
 	 información en la ejecución del programa.
-	+Se agregan las funciones isValidated y markAsValidated en la clase
+	+Se agregan las funciones is_validated y markAsValidated en la clase
 	 Package. Estas tienen por utilidad configurar los estados de validez de
 	 un paquete.
-	+Se agregan las funciones getFileDepth y findFileLocation a la clase
+	+Se agregan las funciones get_file_depth y find_file_location a la clase
 	 Package. Estas funciones tienen por objetivo retornar la profundad de una
 	 determinada carpeta o archivo en un paquete, y la otra función retorna
 	 un string con la ubicación del archivo o carpeta determinado dentro del
 	 paquete.
 	+Se eliminan constantes innecesarias en el packageValidator.
-	+Package y PackageValidator heredan desde varTypedClass y
+	+Package y PackageValidator heredan desde VarTypedClass y
 	 exceptionAsStringClass.
-	+Se agregan las funciones _getStructureFilelist y ge tStructurePackage al
+	+Se agregan las funciones _get_structure_filelist y ge tStructurePackage al
 	 packageValidator. Estas tienen por objetivo retornar la información de
 	 la estructura cargada.
-	+Se agregan las funciones loadStructure, printStruct ureHierachy,
-	 setStructureDirectory y validatePackage a la clase packageValidator.
+	+Se agregan las funciones load_structure, printStruct ureHierachy,
+	 set_structure_directory y validate_package a la clase packageValidator.
 	+Se agrega la opción --reset al módulo runtests.py, esta opción por
 	 consola permite reiniciar el archivo que almacena los resultados de los
 	 test.
@@ -613,15 +613,15 @@
 	 tienen por objetivo el testear la conversión de números.
 	+Se agrega la opción de saltar ciertos tests, estos pueden ser ejecutados
 	 de todas maneras utilizando el comando --enable-skipped o -skp.
-	+Se agrega la función paramExists en el configLoader, esta función
+	+Se agrega la función param_exists en el ConfigLoader, esta función
 	 comprueba si un parámetro existe, retornando true o false en cada caso.
 	+Se cambia el nombre de la clase exceptionAsStringClass a
-	 exceptionBehaviour.
+	 ExceptionBehaviour.
 	+Se agrega la opción de lanzar las excepciones como tipo Exception(...).
 	+Se agregan las funciones enable_ y disable_ para las variables de estado
 	 exceptionThrow y exceptionAsString en errors.py. Estas activan el lanzar
 	 excepciones como Exception(..) o lanzarlas como un String.
-	+Se agrega la función printHierachyBoolList en Utils. Esta función
+	+Se agrega la función print_hierachy_bool_list en Utils. Esta función
 	 permite imprimir la lista de jerarquía booleana de un paquete
 	 estructural.
 	+Se agregan las opciones de configuración CHARACTERS_ DO_RESTRICT y
@@ -663,45 +663,45 @@
 	 boolHierachyLists.
 	+Se agrega la opción de activar o desactivar el lanzamiento de
 	 excepciones en errors.py.
-	+Se añade la función numberOfSublists a utils, esta función retorna el
+	+Se añade la función number_of_sublists a utils, esta función retorna el
 	 número de sublistas de contiene una lista.
-	+Se agrega argumento extra a printHierachyList en utils, este argumento
+	+Se agrega argumento extra a print_hierachy_list en utils, este argumento
 	 permite añadir una serie de tabs a la izquierda de cada print.
-	+La función regexCompare fué reescrita a la totalidad, ahora se cumplen
+	+La función regex_compare fué reescrita a la totalidad, ahora se cumplen
 	 todos los tests, corrigiendo multitud de errores tanto de ejecución como
 	 de comprobación.
 	+Se añade el archivo de configuración validator.ini, estos parámetros
 	 permiten modificar el comportamiento del validador con respecto al
-	 regexCompare y a la búsqueda recursiva.
+	 regex_compare y a la búsqueda recursiva.
 	+Se añaden funciones al FileManager para retornar los archivos que
 	 contiene el working directory y para retornar los carácteres válidos
-	 que utiliza el regexCompare.
+	 que utiliza el regex_compare.
 	+Se añaden funciones al Package para retornar la lista de archivos
-	 validados (_getValidatedFiles), imprimir los archivos validados en
+	 validados (_get_validated_files), imprimir los archivos validados en
 	 consola (_printValidatedFiles), retornar si el paquete es válido o no
-	 (isValid) definir los archivos válidos (_setValidatedFiles).
+	 (is_valid) definir los archivos válidos (_set_validated_files).
 	+Se añaden las funciones disable_ y enable_ para activar o desactivar el
 	 comparar los nombres de los archivos sin importar el tipo de letra
 	 (mayúscula o minúscula) en el PackageValidator.
 	+Se añaden las funciones disable_ y enable_ para activar o desactivar el
 	 buscar la estructura en cada una de las sub-carpetas del paquete si es
 	 que aún no se encuentran todos los archivos.
-	+Se añade la función validatePackage al PackageValidator, esta función
+	+Se añade la función validate_package al PackageValidator, esta función
 	 valida a un paquete, comprobando recursivamente que todos los archivos de
 	 la estructura requerida se encuentren disponibles en el paquete.
 	+Se añaden múltiples test a PackageValidatorTest en test/.
-	+Se añaden múltiples test de regexCompare a UtilsTest en test/.
+	+Se añaden múltiples test de regex_compare a UtilsTest en test/.
 	+Se añaden múltiples carpetas de testeo en .data_tests/.
 
 [0.2.8]
-	+Se corrigen errores al cargar configuraciones que no existen en langs.py.
+	+Se corrigen errores al cargar configuraciones que no existen en Langs.py.
 	+Se renombran múltiples archivos adoptando la convención PEP-8.
 	+Corrección ortográfica de múltiples comentarios y documentación en
 	 todos los módulos y librerías del programa.
 	+Nuevo módulo: ospath.py, este módulo permitirá manejar el tipo de
 	 sistema operativo del huésped del código, comprobando si es Windows,
 	 Java, Linux, Cygwin, etc.
-	-Se eliminan las funciones isWindows() de color, utils y accents.
+	-Se eliminan las funciones is_windows() de color, utils y accents.
 	+Se agrega la opción de añadir acentos a las entradas de los argumentos
 	 y opciones por consola.
 	+El comando --verbose ahora se puede invocar con -v.
@@ -729,5 +729,5 @@
 	 archivos válidas e inválidas de cada paquete por medio del comando
 	--verbose en el test del PackageValidator.
 	+Se añade un test para probar paquetes que tengan más de una carpeta.
-	+Se optimiza una subfunción del regexCompare para incrementar la
+	+Se optimiza una subfunción del regex_compare para incrementar la
 	 velocidad de comparación.

@@ -40,6 +40,7 @@ TIME_DELAY = 5  # tiempo de espera para max_query
 TIME_QUERY = 0.5  # tiempo de espera entre consultas
 
 try:  # Se cargan los idiomas disponibles
+    # noinspection PyArgumentEqualDefault
     langs = open(ARCHIVE_LANGS, "r")
     for i in langs:
         LANGS.append(i[0:5].replace(" ", ""))
@@ -51,7 +52,7 @@ except:  # Error al cargar
 
 # Función adquirida desde
 # http://www.3engine.net/wp/2013/12/python-como-traducir-textos-usando-google-translate/
-# noinspection PyMissingOrEmptyDocstring
+# noinspection PyMissingOrEmptyDocstring,PyArgumentEqualDefault
 def get_google_translate(text, translate_lang, source_lang=None):  # Traduce una linea
     if source_lang is None:
         source_lang = 'auto'
@@ -71,10 +72,13 @@ def get_google_translate(text, translate_lang, source_lang=None):  # Traduce una
 try:  # Comienza la ejecución
     # Obtengo el nombre del archivo a traducir
     namearchive = raw_input("Ingrese el nombre del archivo que desea traducir: ").replace(".txt", "")
+    # noinspection PyArgumentEqualDefault
     archivo = open(namearchive + ".txt", "r")
     cant = 0
-    for i in archivo: cant += 1
+    for i in archivo:
+        cant += 1
     archivo.close()
+    # noinspection PyArgumentEqualDefault
     archivo = open(namearchive + ".txt", "r")
 except:  # Si el archivo a traducir no existe
     print "Error :: El archivo no existe!"
@@ -102,7 +106,8 @@ if tolang in LANGS:  # Si el idioma existe
             newarchive.write(linea[0] + DL + get_google_translate(nwlinea, tolang).replace(" ", "|") + "\n")
             time.sleep(TIME_QUERY)
             count += 1
-            if count == MAX_QUERY: time.sleep(TIME_DELAY)
+            if count == MAX_QUERY:
+                time.sleep(TIME_DELAY)
         print "El archivo se ha traducido correctamente"
         newarchive.close()
     else:

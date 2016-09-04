@@ -12,23 +12,23 @@ __author__ = "ppizarror"
 
 # Importación de librerías y obtención de directorios
 from binpath import _LANG_DIRCONFIG, _LANG_DIRLANGS, _DIR_CONFIG
-from configloader import configLoader
-from utils import googleTranslate
+from configloader import ConfigLoader
+from utils import google_translate
 import errors
 import math
 
 # noinspection PyProtectedMember
 # Se cargan las configuraciones
-langselfconfig = configLoader(_DIR_CONFIG, "langs.ini")
+langselfconfig = ConfigLoader(_DIR_CONFIG, "Langs.ini")
 # noinspection SpellCheckingInspection
-langconfig = configLoader(_LANG_DIRCONFIG, "const.ini")
-langavaiable = configLoader(_LANG_DIRCONFIG, "langs.txt")
+langconfig = ConfigLoader(_LANG_DIRCONFIG, "const.ini")
+langavaiable = ConfigLoader(_LANG_DIRCONFIG, "Langs.txt")
 # noinspection SpellCheckingInspection
-langtranslateconfig = configLoader(_DIR_CONFIG, "langstransl.ini")
+langtranslateconfig = ConfigLoader(_DIR_CONFIG, "langstransl.ini")
 
 # Constantes del programa
 _SPACE = "|"
-_SPLITTER = str(langconfig.getValue(1)).replace("*", " ")
+_SPLITTER = str(langconfig.get_value(1)).replace("*", " ")
 LANG_LOADED = "El archivo de idiomas '{0}' ha sido cargado correctamente"
 LANG_PRINT_ELEMENT = "\t{0}{1}=> {2}"
 LANG_PRINT_TITLE = "Entradas:\n\tID     STRING"
@@ -50,7 +50,8 @@ def _totalspaces(index):
     return int(round(math.log(index, 10), 2) + 1) * " "
 
 
-class langLoader:
+# noinspection PyArgumentEqualDefault
+class LangLoader:
     """
     Carga un archivo de idioma y maneja sus elementos, adicionalmente traduce líneas.
     """
@@ -68,10 +69,10 @@ class langLoader:
         :rtype: None
         """
         language = str(language).upper()
-        if language + str(langconfig.getValue(0)) in langavaiable.getParameters():
+        if language + str(langconfig.get_value(0)) in langavaiable.get_parameters():
             try:
                 # noinspection PyShadowingBuiltins
-                file = open(_LANG_DIRLANGS + language + langconfig.getValue(0), "r")  # @ReservedAssignment
+                file = open(_LANG_DIRLANGS + language + langconfig.get_value(0), "r")  # @ReservedAssignment
             except:
                 errors.throw(errors.ERROR_NOLANGFILE, language)
             self.lang = {}
@@ -119,7 +120,7 @@ class langLoader:
             errors.warning(errors.ERROR_LANGBADINDEX, str(index))
             return NULL_LANG.format(str(index))
 
-    def printAll(self):
+    def print_all(self):
         """
         Imprime todos los elementos del idioma.
 
@@ -143,12 +144,12 @@ class langLoader:
         :rtype: str
         """
         text = self.get(index)
-        if langselfconfig.isTrue("TRANSLATIONS"):  # Si el servicio de traducciones esta activado
-            if not NULL_IDENTIFIER in text:
+        if langselfconfig.is_true("TRANSLATIONS"):  # Si el servicio de traducciones esta activado
+            if NULL_IDENTIFIER not in text:
                 try:  # Se consulta por la traducción al servicio de google
                     # noinspection SpellCheckingInspection
-                    return googleTranslate(text, to, str(langtranslateconfig.getValue("WEB_HEADER")),
-                                           str(langtranslateconfig.getValue("WEB_GOOGLETRANSLATE")))
+                    return google_translate(text, to, str(langtranslateconfig.get_value("WEB_HEADER")),
+                                            str(langtranslateconfig.get_value("WEB_GOOGLETRANSLATE")))
                 except:  # Si ocurre algún error en la traducción
                     return text
             else:

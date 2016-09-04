@@ -91,7 +91,7 @@ class Browser:
         # noinspection PyProtectedMember
         self.br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
 
-    def abrirLink(self, web):
+    def abrir_link(self, web):
         """
         Ingresar a una dirección web.
 
@@ -108,7 +108,7 @@ class Browser:
         except:
             return errors.BR_ERRORxNO_ACCESS_WEB
 
-    def addHeaders(self, header):
+    def add_headers(self, header):
         """
         Agregar headers al navegador.
 
@@ -120,7 +120,7 @@ class Browser:
         """
         self.br.addheaders = [('User-agent', header)]
 
-    def clearCookies(self):
+    def clear_cookies(self):
         """
         Elimina las cookies.
 
@@ -129,7 +129,7 @@ class Browser:
         """
         self.cookies.clear_session_cookies()
 
-    def getHtml(self):
+    def get_html(self):
         """
         Obtener el código HTML.
 
@@ -141,7 +141,7 @@ class Browser:
         else:
             return errors.BR_ERRORxNO_OPENED
 
-    def getTitle(self):
+    def get_title(self):
         """
         Obtener el título.
 
@@ -153,7 +153,7 @@ class Browser:
         else:
             return errors.BR_ERRORxNO_OPENED
 
-    def getHeaders(self):
+    def get_headers(self):
         """
         Obtener los headers.
 
@@ -165,7 +165,7 @@ class Browser:
         else:
             return errors.BR_ERRORxNO_OPENED
 
-    def getForms(self):
+    def get_forms(self):
         """
         Obtener una lista con los formularios de la página web.
 
@@ -177,7 +177,7 @@ class Browser:
         else:
             return errors.BR_ERRORxNO_OPENED
 
-    def playBrowser(self):
+    def play_browser(self):
         """
         Obtener el browser.
 
@@ -187,7 +187,7 @@ class Browser:
         return self.br
 
     # noinspection SpellCheckingInspection
-    def selectFormById(self, formid):
+    def select_form_by_id(self, formid):
         """
         Definir un formulario como activo mediante un id.
 
@@ -211,7 +211,7 @@ class Browser:
             return errors.BR_ERRORxNO_FORMID
 
     # noinspection SpellCheckingInspection
-    def selectFormByName(self, formname):
+    def select_form_by_name(self, formname):
         """
         Definir un formulario como activo mediante un ID.
         :param formname: ID del formulario.
@@ -228,7 +228,7 @@ class Browser:
         else:
             return errors.BR_ERRORxNO_FORMID
 
-    def submitForm(self, form, values):
+    def submit_form(self, form, values):
         """
         Enviar un formulario.
 

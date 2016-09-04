@@ -17,3 +17,6 @@ if __name__ == '__main__':
     from _testpath import *  # @UnusedWildImport
     # noinspection PyUnresolvedReferences
     from bin.colors import *  # @UnusedWildImport
+
+    # Borrar pantalla
+    clrscr()

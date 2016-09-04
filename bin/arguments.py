@@ -12,7 +12,7 @@ __author__ = "ppizarror"
 
 # Importación de librerías
 from argparse import ArgumentParser, SUPPRESS
-from accents import delAccentByOS
+from accents import del_accent_by_os
 from kwargsutils import *  # @UnusedWildImport
 
 # Constantes del programa
@@ -26,7 +26,7 @@ _TITLE_VERSION = "Muestra la versión del programa."
 
 
 # noinspection PyTypeChecker
-def argumentParserFactory(descripcion="", **kwargs):
+def argument_parser_factory(descripcion="", **kwargs):
     # noinspection SpellCheckingInspection
     """
     Crea un parser de argumentos para ser tratados en consola.
@@ -60,28 +60,28 @@ def argumentParserFactory(descripcion="", **kwargs):
     show_author_software = True
 
     # Se revisan argumentos opcionales, str
-    title_positionals = delAccentByOS(kwargGetValue(kwargs, "title_positionals", _TITLE_POSITIONALS))
-    title_optionals = delAccentByOS(kwargGetValue(kwargs, "title_optionals", _TITLE_OPTIONALS))
-    title_author = delAccentByOS(kwargGetValue(kwargs, "title_author", _TITLE_AUTHOR))
-    title_help = delAccentByOS(kwargGetValue(kwargs, "title_help", _TITLE_HELP))
-    title_skipped = delAccentByOS(kwargGetValue(kwargs, "title_skipped", _TITLE_SKIPPED))
-    title_verbose = delAccentByOS(kwargGetValue(kwargs, "title_verbose", _TITLE_VERBOSE))
-    title_version = delAccentByOS(kwargGetValue(kwargs, "title_version", _TITLE_VERSION))
+    title_positionals = del_accent_by_os(kwarg_get_value(kwargs, "title_positionals", _TITLE_POSITIONALS))
+    title_optionals = del_accent_by_os(kwarg_get_value(kwargs, "title_optionals", _TITLE_OPTIONALS))
+    title_author = del_accent_by_os(kwarg_get_value(kwargs, "title_author", _TITLE_AUTHOR))
+    title_help = del_accent_by_os(kwarg_get_value(kwargs, "title_help", _TITLE_HELP))
+    title_skipped = del_accent_by_os(kwarg_get_value(kwargs, "title_skipped", _TITLE_SKIPPED))
+    title_verbose = del_accent_by_os(kwarg_get_value(kwargs, "title_verbose", _TITLE_VERBOSE))
+    title_version = del_accent_by_os(kwarg_get_value(kwargs, "title_version", _TITLE_VERSION))
 
     # Argumentos booleanos
-    skipped = kwargIsTrueParam(kwargs, "enable_skipped_test")  # Mostrar el comando enable-skipped
-    version = kwargIsTrueParam(kwargs, "version")  # Mostrar comando version
-    verbose = kwargIsTrueParam(kwargs, "verbose")  # Mostrar el comando verbose
-    show_author = kwargIsTrueParam(kwargs, "show_author")  # Mostrar el comando author
+    skipped = kwarg_is_true_param(kwargs, "enable_skipped_test")  # Mostrar el comando enable-skipped
+    version = kwarg_is_true_param(kwargs, "version")  # Mostrar comando version
+    verbose = kwarg_is_true_param(kwargs, "verbose")  # Mostrar el comando verbose
+    show_author = kwarg_is_true_param(kwargs, "show_author")  # Mostrar el comando author
 
     # Definir el autor del software
     if "author" in kwargs:
-        author = delAccentByOS(kwargs["author"])
+        author = del_accent_by_os(kwargs["author"])
         show_author_software = False
 
     # Se crea el parser
     if descripcion != "":
-        parser = ArgumentParser(description=delAccentByOS(descripcion), add_help=False)
+        parser = ArgumentParser(description=del_accent_by_os(descripcion), add_help=False)
     else:
         parser = ArgumentParser(add_help=False)
     parser._positionals.title = title_positionals
@@ -91,12 +91,12 @@ def argumentParserFactory(descripcion="", **kwargs):
     # Se agrega el autor del software
     if show_author:
         if show_author_software:
-            from _author import __author__ as softwareAuthor
+            from _author import __author__ as software_author
             from _author import __email__
-            author = softwareAuthor + " | " + __email__
+            author = software_author + " | " + __email__
         else:
             author = "%(prog)s " + author
-        parser.add_argument('--author', dest='version', action='version', version=delAccentByOS(author),
+        parser.add_argument('--author', dest='version', action='version', version=del_accent_by_os(author),
                             help=title_author)
 
     # Se agrega el skipped

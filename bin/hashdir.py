@@ -35,7 +35,8 @@ def count_depth(folder):
     """
     depth = 0
     for ch in folder:
-        if ch is _FOLDERSEP: depth += 1
+        if ch is _FOLDERSEP:
+            depth += 1
     return depth
 
 
@@ -102,7 +103,7 @@ def folder_checksum(folder, checksum, verbose):
             filetype = get_filetype(filename)
             if filetype in _LOOKTYPES:
                 checksum.append(md5file(folder + _FOLDERSEP + filename, verbose))
-            elif filetype is _FOLDERTYPE and not "~" in filename:
+            elif filetype is _FOLDERTYPE and "~" not in filename:
                 if verbose:
                     print get_depth_subfolder(filename) + _MSG[0].format(filename)
                 folder_checksum(folder + _FOLDERSEP + filename, checksum, verbose)
@@ -157,9 +158,11 @@ def path_checksum(path, verbose=False):
     :return: String md5
     :rtype: str
     """
-    if verbose: print _MSG[2].format(path)
+    if verbose:
+        print _MSG[2].format(path)
     files_checksum = []
     folder_checksum(path, files_checksum, verbose)
     checksum = hashlib.md5()
-    for f in files_checksum: checksum.update(f)
+    for f in files_checksum:
+        checksum.update(f)
     return checksum.hexdigest().upper()

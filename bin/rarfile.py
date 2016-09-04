@@ -87,13 +87,16 @@ __all__ = ['is_rarfile', 'RarInfo', 'RarFile', 'RarExtFile']
 # Imports and compat - support both Python 2.x and 3.x
 #
 
+import errno
+import os
+import struct
+import sys
 from binascii import crc32
 from datetime import datetime
 from hashlib import sha1
 from io import RawIOBase
 from struct import pack, unpack, Struct
 from subprocess import Popen, PIPE, STDOUT
-import sys, os, struct, errno
 from tempfile import mkstemp
 
 # only needed for encrypted headers
@@ -105,7 +108,7 @@ try:
         from cryptography.hazmat.backends import default_backend
 
 
-        # noinspection PyMissingOrEmptyDocstring
+        # noinspection PyMissingOrEmptyDocstring,PyPep8Naming
         class AES_CBC_Decrypt(object):
             block_size = 16
 
@@ -120,7 +123,7 @@ try:
         from Crypto.Cipher import AES
 
 
-        # noinspection PyMissingOrEmptyDocstring
+        # noinspection PyMissingOrEmptyDocstring,PyPep8Naming
         class AES_CBC_Decrypt(object):
             block_size = 16
 
@@ -508,7 +511,7 @@ class RarInfo(object):
         return (self.flags & RAR_FILE_PASSWORD) > 0
 
 
-# noinspection PySingleQuotedDocstring,PyMethodMayBeStatic,PyPropertyAccess,PyTypeChecker,PyUnusedLocal,PyShadowingBuiltins,PyChainedComparisons,PyUnresolvedReferences,SpellCheckingInspection
+# noinspection PySingleQuotedDocstring,PyMethodMayBeStatic,PyPropertyAccess,PyTypeChecker,PyUnusedLocal,PyShadowingBuiltins,PyChainedComparisons,PyUnresolvedReferences,SpellCheckingInspection,PyArgumentEqualDefault,PyPep8Naming
 class RarFile(object):
     '''Parse RAR structure, provide access to files in archive.
     '''
@@ -1661,7 +1664,7 @@ class PipeReader(RarExtFile):
         return got
 
 
-# noinspection PyArgumentList,SpellCheckingInspection
+# noinspection PyArgumentList,SpellCheckingInspection,PyArgumentEqualDefault
 class DirectReader(RarExtFile):
     """Read uncompressed data directly from archive."""
 
@@ -1780,7 +1783,7 @@ class DirectReader(RarExtFile):
         return got
 
 
-# noinspection PyMissingOrEmptyDocstring
+# noinspection PyMissingOrEmptyDocstring,PyPep8Naming
 class HeaderDecrypt(object):
     """File-like object that decrypts from another file"""
 
@@ -1948,6 +1951,7 @@ def rar_decompress(vers, meth, data, declen=0, flags=0, crc=0, psw=None, salt=No
         os.unlink(tmpname)
 
 
+# noinspection PyPep8Naming
 def to_datetime(t):
     """Convert 6-part time tuple into datetime object."""
 
@@ -1967,13 +1971,20 @@ def to_datetime(t):
 
     # sanitize invalid values
     MDAY = (0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
-    if mon < 1:  mon = 1
-    if mon > 12: mon = 12
-    if day < 1:  day = 1
-    if day > MDAY[mon]: day = MDAY[mon]
-    if h > 23:   h = 23
-    if m > 59:   m = 59
-    if s > 59:   s = 59
+    if mon < 1:
+        mon = 1
+    if mon > 12:
+        mon = 12
+    if day < 1:
+        day = 1
+    if day > MDAY[mon]:
+        day = MDAY[mon]
+    if h > 23:
+        h = 23
+    if m > 59:
+        m = 59
+    if s > 59:
+        s = 59
     if mon == 2 and day == 29:
         try:
             return datetime(year, mon, day, h, m, s, us)
@@ -1986,20 +1997,21 @@ def to_datetime(t):
 def parse_dos_time(stamp):
     """Parse standard 32-bit DOS timestamp."""
 
-    sec = stamp & 0x1F;
+    sec = stamp & 0x1F
     stamp = stamp >> 5
-    min = stamp & 0x3F;  # @ReservedAssignment
+    min = stamp & 0x3F  # @ReservedAssignment
     stamp = stamp >> 6  # @ReservedAssignment
-    hr = stamp & 0x1F;
+    hr = stamp & 0x1F
     stamp = stamp >> 5
-    day = stamp & 0x1F;
+    day = stamp & 0x1F
     stamp = stamp >> 5
-    mon = stamp & 0x0F;
+    mon = stamp & 0x0F
     stamp = stamp >> 4
     yr = (stamp & 0x7F) + 1980
     return (yr, mon, day, hr, min, sec * 2)
 
 
+# noinspection PyArgumentEqualDefault
 def custom_popen(cmd):
     """Disconnect cmd from parent fds, read only from stdout."""
 
@@ -2073,7 +2085,7 @@ def check_returncode(p, out):
     raise exc(msg)
 
 
-# noinspection PyMissingOrEmptyDocstring
+# noinspection PyMissingOrEmptyDocstring,PyPep8Naming
 def membuf_tempfile(memfile):
     memfile.seek(0, 0)
 

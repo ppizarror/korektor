@@ -24,16 +24,16 @@ VERBOSE = False
 
 # Se cargan argumentos desde la consola
 if __name__ == '__main__':
-    from bin.arguments import argumentParserFactory
+    from bin.arguments import argument_parser_factory
 
-    argparser = argumentParserFactory("VarType Test", verbose=True, version=True, enable_skipped_test=True).parse_args()
+    argparser = argument_parser_factory("VarType Test", verbose=True, version=True, enable_skipped_test=True).parse_args()
     DISABLE_HEAVY_TESTS = argparser.enableHeavyTest
     VERBOSE = argparser.verbose
 
 
 # Clase para testear
 # noinspection PyMissingOrEmptyDocstring
-class testDummyClass:
+class TestDummyClass:
     def __init__(self):
         pass
 
@@ -57,17 +57,17 @@ class VarTypeTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        assert checkVariableType(1.0, TYPE_FLOAT) == True, ERR_CHECKTYPE
-        assert checkVariableType(1, TYPE_FLOAT) == False, ERR_CHECKTYPE
-        assert checkVariableType(1, TYPE_INT) == True, ERR_CHECKTYPE
-        assert checkVariableType("Test", TYPE_STR) == True, ERR_CHECKTYPE
-        assert checkVariableType([1, 2, "a"], TYPE_LIST) == True, ERR_CHECKTYPE
-        assert checkVariableType([1, 2, "a"], TYPE_INT) == False, ERR_CHECKTYPE
-        r = testDummyClass()
-        assert checkVariableType(r, TYPE_OTHER, testDummyClass) == True, ERR_CHECKTYPE
-        assert checkVariableType(r, TYPE_INT) == False, ERR_CHECKTYPE
+        assert check_variable_type(1.0, TYPE_FLOAT) is True, ERR_CHECKTYPE
+        assert check_variable_type(1, TYPE_FLOAT) is False, ERR_CHECKTYPE
+        assert check_variable_type(1, TYPE_INT) is True, ERR_CHECKTYPE
+        assert check_variable_type("Test", TYPE_STR) is True, ERR_CHECKTYPE
+        assert check_variable_type([1, 2, "a"], TYPE_LIST) is True, ERR_CHECKTYPE
+        assert check_variable_type([1, 2, "a"], TYPE_INT) is False, ERR_CHECKTYPE
+        r = TestDummyClass()
+        assert check_variable_type(r, TYPE_OTHER, TestDummyClass) is True, ERR_CHECKTYPE
+        assert check_variable_type(r, TYPE_INT) is False, ERR_CHECKTYPE
         del r
-        assert checkVariableType(True, TYPE_BOOL) == True, ERR_CHECKTYPE
+        assert check_variable_type(True, TYPE_BOOL) is True, ERR_CHECKTYPE
 
 
 # Main test

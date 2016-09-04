@@ -15,7 +15,7 @@ from _testpath import *  # @UnusedWildImport
 from lib.filemanager import *  # @UnusedWildImport
 from bin.errors import FILEMANAGER_ERROR_RESTORE_WD, FILEMANAGER_ERROR_SCAN, FILEMANAGER_ERROR_WD
 from bin.ostype import is_windows
-from bin.utils import printBarsConsole, equalLists
+from bin.utils import print_bars_console, equal_lists
 import unittest
 
 # Constantes de los test
@@ -25,10 +25,10 @@ VERBOSE = False
 
 # Se cargan argumentos desde la consola
 if __name__ == '__main__':
-    from bin.arguments import argumentParserFactory
+    from bin.arguments import argument_parser_factory
 
-    argparser = argumentParserFactory("FileManager Test", verbose=True, version=True,
-                                      enable_skipped_test=True).parse_args()
+    argparser = argument_parser_factory("FileManager Test", verbose=True, version=True,
+                                        enable_skipped_test=True).parse_args()
     DISABLE_HEAVY_TESTS = argparser.enableHeavyTest
     VERBOSE = argparser.verbose
 
@@ -44,11 +44,11 @@ class FileManagerTest(unittest.TestCase):
         :rtype: None
         """
         self.fm = FileManager()
-        self.fm.enable_autoExtract()
-        self.fm.enable_doRemoveExtractedFolders()
-        self.fm.disable_removeOnExtract()
-        self.fm.setDefaultWorkingDirectory(DIR_DATA_TEST)
-        self.fm.restoreWD()
+        self.fm.enable_auto_extract()
+        self.fm.enable_do_remove_extracted_folders()
+        self.fm.disable_remove_on_extract()
+        self.fm.set_default_working_directory(DIR_DATA_TEST)
+        self.fm.restore_wd()
         if VERBOSE:
             self.fm.enable_verbose()
         else:
@@ -62,22 +62,22 @@ class FileManagerTest(unittest.TestCase):
         :rtype: None
         """
         if VERBOSE:
-            printBarsConsole("Testeo del wd")
-            print "Wd actual: ", self.fm.getWorkingDirectory()
-        b = self.fm.getWorkingDirectory()
+            print_bars_console("Testeo del wd")
+            print "Wd actual: ", self.fm.get_working_directory()
+        b = self.fm.get_working_directory()
         if is_windows():
-            self.fm.setWorkingDirectory("C:/")
+            self.fm.set_working_directory("C:/")
             if VERBOSE:
-                print "Wd actual: ", self.fm.getWorkingDirectory()
-            assert self.fm.getWorkingDirectory() == "C:/", FILEMANAGER_ERROR_WD
-        self.fm.restoreWD()
+                print "Wd actual: ", self.fm.get_working_directory()
+            assert self.fm.get_working_directory() == "C:/", FILEMANAGER_ERROR_WD
+        self.fm.restore_wd()
         if VERBOSE:
-            print "Wd actual: ", self.fm.getWorkingDirectory()
-        assert self.fm.getWorkingDirectory() == b, FILEMANAGER_ERROR_RESTORE_WD
-        self.fm.setWorkingDirectory(DIR_DATA_TEST)
+            print "Wd actual: ", self.fm.get_working_directory()
+        assert self.fm.get_working_directory() == b, FILEMANAGER_ERROR_RESTORE_WD
+        self.fm.set_working_directory(DIR_DATA_TEST)
         if VERBOSE:
-            print "Wd actual: ", self.fm.getWorkingDirectory()
-        assert self.fm.getWorkingDirectory() == DIR_DATA_TEST, FILEMANAGER_ERROR_WD
+            print "Wd actual: ", self.fm.get_working_directory()
+        assert self.fm.get_working_directory() == DIR_DATA_TEST, FILEMANAGER_ERROR_WD
         del b
 
     def testCarpetaUnica(self):
@@ -87,20 +87,20 @@ class FileManagerTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        self.fm.restoreWD()
+        self.fm.restore_wd()
         if VERBOSE:
-            printBarsConsole("Testeo de carpetas únicas")
-            print self.fm.inspectSingleFile("Folder 1")
+            print_bars_console("Testeo de carpetas únicas")
+            print self.fm.inspect_single_file("Folder 1")
         t = ['Folder 1/Content 1.txt', \
              'Folder 1/Content 2.txt']
-        assert equalLists(t, self.fm.inspectSingleFile("Folder 1")) == True, FILEMANAGER_ERROR_SCAN
+        assert equal_lists(t, self.fm.inspect_single_file("Folder 1")) is True, FILEMANAGER_ERROR_SCAN
         if VERBOSE:
-            print self.fm.inspectSingleFile("Folder 2")
+            print self.fm.inspect_single_file("Folder 2")
         t = ['Folder 2/Content 1.txt', \
              'Folder 2/Content 2.txt', \
              'Folder 2/Subfolder/Content 1.txt', \
              'Folder 2/Subfolder/Content 2.txt']
-        assert equalLists(t, self.fm.inspectSingleFile("Folder 2")) == True, FILEMANAGER_ERROR_SCAN
+        assert equal_lists(t, self.fm.inspect_single_file("Folder 2")) is True, FILEMANAGER_ERROR_SCAN
         del t
 
     def testZip(self):
@@ -111,11 +111,11 @@ class FileManagerTest(unittest.TestCase):
         :rtype: None
         """
         if VERBOSE:
-            printBarsConsole("Testeo de archivo zip")
-            print self.fm.inspectSingleFile("Zip Folder.zip")
+            print_bars_console("Testeo de archivo zip")
+            print self.fm.inspect_single_file("Zip Folder.zip")
         t = ['Zip Folder/Content 1 inside zip.txt', \
              'Zip Folder/Content 2 inside zip.txt']
-        assert equalLists(t, self.fm.inspectSingleFile("Zip Folder.zip")) == True, FILEMANAGER_ERROR_SCAN
+        assert equal_lists(t, self.fm.inspect_single_file("Zip Folder.zip")) is True, FILEMANAGER_ERROR_SCAN
         del t
 
     def testProhibido(self):
@@ -126,9 +126,9 @@ class FileManagerTest(unittest.TestCase):
         :rtype: None
         """
         if VERBOSE:
-            printBarsConsole("Testeo de archivos prohibidos")
-            print self.fm.inspectSingleFile("__MACOSX")
-        assert equalLists([], self.fm.inspectSingleFile("__MACOSX")) == True, FILEMANAGER_ERROR_SCAN
+            print_bars_console("Testeo de archivos prohibidos")
+            print self.fm.inspect_single_file("__MACOSX")
+        assert equal_lists([], self.fm.inspect_single_file("__MACOSX")) is True, FILEMANAGER_ERROR_SCAN
 
     def testArchivoSingle(self):
         """
@@ -138,9 +138,9 @@ class FileManagerTest(unittest.TestCase):
         :rtype: None
         """
         if VERBOSE:
-            printBarsConsole("Testeo de un archivo no carpeta")
-            print self.fm.inspectSingleFile("ABOUT")
-        assert equalLists([], self.fm.inspectSingleFile("ABOUT")) == True, FILEMANAGER_ERROR_SCAN
+            print_bars_console("Testeo de un archivo no carpeta")
+            print self.fm.inspect_single_file("ABOUT")
+        assert equal_lists([], self.fm.inspect_single_file("ABOUT")), FILEMANAGER_ERROR_SCAN
 
     @unittest.skipIf(DISABLE_HEAVY_TESTS, DISABLE_HEAVY_TESTS_MSG)
     def testRar(self):
@@ -151,10 +151,10 @@ class FileManagerTest(unittest.TestCase):
         :rtype: None
         """
         if VERBOSE:
-            printBarsConsole("Testeo de archivo rar")
-            print self.fm.inspectSingleFile("Rar Folder.rar")
+            print_bars_console("Testeo de archivo rar")
+            print self.fm.inspect_single_file("Rar Folder.rar")
         t = ['Rar Folder/Content 1 inside rar.txt', 'Rar Folder/Content 2 inside rar.txt']
-        assert equalLists(t, self.fm.inspectSingleFile("Rar Folder.rar")) == True, FILEMANAGER_ERROR_SCAN
+        assert equal_lists(t, self.fm.inspect_single_file("Rar Folder.rar")) is True, FILEMANAGER_ERROR_SCAN
         del t
 
     def testArchivoInexistente(self):
@@ -165,9 +165,9 @@ class FileManagerTest(unittest.TestCase):
         :rtype: None
         """
         if VERBOSE:
-            printBarsConsole("Testeo de un archivo inexistente")
-            print self.fm.inspectSingleFile("Inexistente")
-        assert equalLists([], self.fm.inspectSingleFile("Inexistente")) == True, FILEMANAGER_ERROR_SCAN
+            print_bars_console("Testeo de un archivo inexistente")
+            print self.fm.inspect_single_file("Inexistente")
+        assert equal_lists([], self.fm.inspect_single_file("Inexistente")) is True, FILEMANAGER_ERROR_SCAN
 
     def testZipConCarpeta(self):
         """
@@ -177,8 +177,8 @@ class FileManagerTest(unittest.TestCase):
         :rtype: None
         """
         if VERBOSE:
-            printBarsConsole("Testeo de una carpeta con un archivo zip dentro")
-            print self.fm.inspectSingleFile("Folder 4")
+            print_bars_console("Testeo de una carpeta con un archivo zip dentro")
+            print self.fm.inspect_single_file("Folder 4")
         t = ['Folder 4/Content 1.txt', \
              'Folder 4/Content 2.txt', \
              'Folder 4/Subfolder 1/Content 1.txt', \
@@ -189,7 +189,7 @@ class FileManagerTest(unittest.TestCase):
              'Folder 4/Subfolder with zip/Zip Folder/Content 2 inside zip.txt', \
              'Folder 4/Zip Folder/Content 1 inside zip.txt', \
              'Folder 4/Zip Folder/Content 2 inside zip.txt']
-        assert equalLists(t, self.fm.inspectSingleFile("Folder 4")) == True, FILEMANAGER_ERROR_SCAN
+        assert equal_lists(t, self.fm.inspect_single_file("Folder 4")) is True, FILEMANAGER_ERROR_SCAN
         del t
 
     @unittest.skipIf(DISABLE_HEAVY_TESTS, DISABLE_HEAVY_TESTS_MSG)
@@ -201,8 +201,8 @@ class FileManagerTest(unittest.TestCase):
         :rtype: None
         """
         if VERBOSE:
-            printBarsConsole("Testeo de una carpeta con un archivo rar dentro")
-            print self.fm.inspectSingleFile("Folder 3")
+            print_bars_console("Testeo de una carpeta con un archivo rar dentro")
+            print self.fm.inspect_single_file("Folder 3")
         t = ['Folder 3/Content 1.txt', \
              'Folder 3/Content 2.txt', \
              'Folder 3/Rar Folder/Content 1 inside rar.txt', \
@@ -211,7 +211,7 @@ class FileManagerTest(unittest.TestCase):
              'Folder 3/Subfolder with rar/Content 2.txt', \
              'Folder 3/Subfolder with rar/Rar Folder/Content 1 inside rar.txt', \
              'Folder 3/Subfolder with rar/Rar Folder/Content 2 inside rar.txt']
-        assert equalLists(t, self.fm.inspectSingleFile("Folder 3")) == True, FILEMANAGER_ERROR_SCAN
+        assert equal_lists(t, self.fm.inspect_single_file("Folder 3")) is True, FILEMANAGER_ERROR_SCAN
         del t
 
     # Testeo de una carpeta grande
@@ -224,8 +224,8 @@ class FileManagerTest(unittest.TestCase):
         :rtype: None
         """
         if VERBOSE:
-            printBarsConsole("Testeo Folder 5")
-            print self.fm.inspectSingleFile("Folder 5")
+            print_bars_console("Testeo Folder 5")
+            print self.fm.inspect_single_file("Folder 5")
         t = ['Folder 5/Content 1.txt', \
              'Folder 5/Content 2.txt', \
              'Folder 5/Subfolder 1/Content 3.txt', \
@@ -251,7 +251,7 @@ class FileManagerTest(unittest.TestCase):
              'Folder 5/Zip Folder/Content B.jar', \
              'Folder 5/Zip Folder/Rar Folder inside Zip Folder/Content 1 inside rar.txt', \
              'Folder 5/Zip Folder/Rar Folder inside Zip Folder/Content 2 inside rar.txt']
-        assert equalLists(t, self.fm.inspectSingleFile("Folder 5")) == True, FILEMANAGER_ERROR_SCAN
+        assert equal_lists(t, self.fm.inspect_single_file("Folder 5")) is True, FILEMANAGER_ERROR_SCAN
         del t
 
     # noinspection SpellCheckingInspection
@@ -263,10 +263,10 @@ class FileManagerTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        self.fm.disable_extractIfFolderAlreadyExists()
+        self.fm.disable_extract_if_folder_already_exists()
         if VERBOSE:
-            printBarsConsole("Testeo carpeta con archivos comprimidos que ya existen como carpetas")
-            print self.fm.inspectSingleFile("Folder 8-COMPSD")
+            print_bars_console("Testeo carpeta con archivos comprimidos que ya existen como carpetas")
+            print self.fm.inspect_single_file("Folder 8-COMPSD")
         t = ['Folder 8-COMPSD/Subfolder 1/Content 1.txt', \
              'Folder 8-COMPSD/Subfolder 1/Content 2.txt', \
              'Folder 8-COMPSD/Subfolder 1/Subfolder inside subfolder 1/Content 1.txt', \
@@ -282,7 +282,7 @@ class FileManagerTest(unittest.TestCase):
              'Folder 8-COMPSD/Zip Folder/Rar Folder/Subfolder with rar/Content 2.txt', \
              'Folder 8-COMPSD/Zip Folder/Rar Folder/Subfolder with rar/Rar Folder/Content 1 inside rar.txt', \
              'Folder 8-COMPSD/Zip Folder/Rar Folder/Subfolder with rar/Rar Folder/Content 2 inside rar.txt']
-        assert equalLists(t, self.fm.inspectSingleFile("Folder 8-COMPSD")) == True, FILEMANAGER_ERROR_SCAN
+        assert equal_lists(t, self.fm.inspect_single_file("Folder 8-COMPSD")) is True, FILEMANAGER_ERROR_SCAN
         del t
 
 

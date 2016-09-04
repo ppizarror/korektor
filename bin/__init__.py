@@ -12,18 +12,18 @@ __author__ = "ppizarror"
 
 # Importación de librerías iniciales
 from binpath import DIR_BIN, sys
-from configloader import configLoader
+from configloader import ConfigLoader
 from _version import __version__
 import binpath
 import errors
 
 # Configuración de entorno
 # noinspection PyProtectedMember
-__binconfig = configLoader(binpath._DIR_CONFIG, "bin.ini")
+__binconfig = ConfigLoader(binpath._DIR_CONFIG, "bin.ini")
 # noinspection PyUnresolvedReferences
-sys.setdefaultencoding(__binconfig.getValue("SET_DEFAULT_ENCODING"))  # @UndefinedVariable
+sys.setdefaultencoding(__binconfig.get_value("SET_DEFAULT_ENCODING"))  # @UndefinedVariable
 # noinspection SpellCheckingInspection
-if __binconfig.isTrue("DONT_WRITE_BYTECODE"):
+if __binconfig.is_true("DONT_WRITE_BYTECODE"):
     reload(sys)
     sys.dont_write_bytecode = True
 
@@ -35,7 +35,7 @@ if __name__ == '__main__':
         errors.throw(errors.ERROR_IMPORTERRORMECHANIZE)
     try:
         from hashdir import md5file, path_checksum
-        from nostdout import noStdOut
+        from nostdout import NoStdOut
         import langs
         import utils
     except:
@@ -43,6 +43,6 @@ if __name__ == '__main__':
     from colors import clrscr
 
     clrscr()
-    __binconfig.printParameters()
+    __binconfig.print_parameters()
     print DIR_BIN
     print __version__

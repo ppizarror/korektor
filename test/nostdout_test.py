@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-bin/noStdOut TEST
+bin/NoStdOut TEST
 Test que maneja la desactivación del STDOUT de Python.
 
 Autor: PABLO PIZARRO @ github.com/ppizarror

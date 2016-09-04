@@ -769,21 +769,21 @@ class BeautifulStoneSoup(Tag, SGMLParser):
 
     def _smartPop(self, name):
 
-        """We need to pop up to the previous tag of this type, unless
+        """We need to Pop up to the previous tag of this type, unless
         one of this tag's nesting reset triggers comes between this
         tag and the previous tag of this type, OR unless this tag is a
         generic nesting trigger and another generic nesting trigger
         comes between this tag and the previous tag of this type.
 
         Examples:
-         <p>Foo<b>Bar<p> should pop to 'p', not 'b'.
-         <p>Foo<table>Bar<p> should pop to 'table', not 'p'.
-         <p>Foo<table><tr>Bar<p> should pop to 'tr', not 'p'.
-         <p>Foo<b>Bar<p> should pop to 'p', not 'b'.
+         <p>Foo<b>Bar<p> should Pop to 'p', not 'b'.
+         <p>Foo<table>Bar<p> should Pop to 'table', not 'p'.
+         <p>Foo<table><tr>Bar<p> should Pop to 'tr', not 'p'.
+         <p>Foo<b>Bar<p> should Pop to 'p', not 'b'.
 
-         <li><ul><li> *<li>* should pop to 'ul', not the first 'li'.
-         <tr><table><tr> *<tr>* should pop to 'table', not the first 'tr'
-         <td><tr><td> *<td>* should pop to 'tr', not the first 'td'
+         <li><ul><li> *<li>* should Pop to 'ul', not the first 'li'.
+         <tr><table><tr> *<tr>* should Pop to 'table', not the first 'tr'
+         <td><tr><td> *<td>* should Pop to 'tr', not the first 'td'
         """
 
         nestingResetTriggers = self.NESTABLE_TAGS.get(name)
@@ -805,7 +805,7 @@ class BeautifulStoneSoup(Tag, SGMLParser):
 
                 # If we encounter one of the nesting reset triggers
                 # peculiar to this tag, or we encounter another tag
-                # that causes nesting to reset, pop up to but not
+                # that causes nesting to reset, Pop up to but not
                 # including that tag.
 
                 popTo = p.name

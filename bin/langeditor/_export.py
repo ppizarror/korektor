@@ -22,6 +22,7 @@ DL = " // "
 
 try:
     namearchive = raw_input("Ingrese el nombre del archivo que desea transformar: ").replace(".txt", "")
+    # noinspection PyArgumentEqualDefault
     archivo = open(namearchive + ".txt", "r")
 except:
     print "El archivo no existe!"

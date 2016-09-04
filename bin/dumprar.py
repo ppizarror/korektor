@@ -45,7 +45,7 @@ block_strs = ['MARK', 'MAIN', 'FILE', 'OLD_COMMENT', 'OLD_EXTRA',
               'OLD_SUB', 'OLD_RECOVERY', 'OLD_AUTH', 'SUB', 'ENDARC']
 
 
-# noinspection PyShadowingBuiltins,PyMissingOrEmptyDocstring
+# noinspection PyShadowingBuiltins,PyMissingOrEmptyDocstring,PyPep8Naming
 def rarType(type):  # @ReservedAssignment
     if type < rf.RAR_BLOCK_MARK or type > rf.RAR_BLOCK_ENDARC:
         return "*UNKNOWN*"
@@ -341,7 +341,7 @@ def test(fn, psw):
         del tb
 
 
-# noinspection PyMissingOrEmptyDocstring
+# noinspection PyMissingOrEmptyDocstring,PyArgumentEqualDefault
 def main():
     global cf_verbose, cf_show_comment, cf_charset
     global cf_extract, cf_test_read, cf_test_unrar

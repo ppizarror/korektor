@@ -12,61 +12,61 @@ Licencia: GPLv2
 __author__ = "ppizarror"
 
 
-def kwargExistsKey(kwargs, keyParam):
+def kwarg_exists_key(kwargs, key_param):
     """
     Retorna true/false indicando si una llave existe en el kwargs.
 
     :param kwargs: Keywords list
     :type kwargs: list, dict
-    :param keyParam: Nombre del parámetro
-    :type keyParam: str
+    :param key_param: Nombre del parámetro
+    :type key_param: str
 
     :return: Booleano indicando pertenencia
     :rtype: bool
     """
 
     try:
-        return keyParam in kwargs
+        return key_param in kwargs
     except:
         return False
 
 
-def kwargGetValue(kwargs, keyParam, valueIfNotFound=None):
+def kwarg_get_value(kwargs, key_param, value_if_not_found=None):
     """
     Retorna el valor de un parámetro.
 
     :param kwargs: Keywords list
     :type kwargs: list, dict
-    :param keyParam: Nombre del parámetro
-    :type keyParam: str
-    :param valueIfNotFound: Valor si es que no se encuentra la llave
-    :type valueIfNotFound: object
+    :param key_param: Nombre del parámetro
+    :type key_param: str
+    :param value_if_not_found: Valor si es que no se encuentra la llave
+    :type value_if_not_found: object
 
     :return: Objeto almacenado con la llave
     :rtype: object
     """
 
-    if kwargExistsKey(kwargs, keyParam):
-        return kwargs[keyParam]
-    return valueIfNotFound
+    if kwarg_exists_key(kwargs, key_param):
+        return kwargs[key_param]
+    return value_if_not_found
 
 
 # noinspection PyTypeChecker
-def kwargIsFalseParam(kwargs, keyParam):
+def kwarg_is_false_param(kwargs, key_param):
     """
     Comprueba si una llave en kwargs es True.
 
     :param kwargs: Keywords list
     :type kwargs: list, dict
-    :param keyParam: Nombre del parámetro
-    :type keyParam: str
+    :param key_param: Nombre del parámetro
+    :type key_param: str
 
     :return: Booleano indicando pertenencia
     :rtype: bool
     """
 
-    if kwargExistsKey(kwargs, keyParam):
-        val = kwargs[keyParam]
+    if kwarg_exists_key(kwargs, key_param):
+        val = kwargs[key_param]
         if isinstance(val, bool):
             return not val
         else:
@@ -77,21 +77,21 @@ def kwargIsFalseParam(kwargs, keyParam):
 
 
 # noinspection PyTypeChecker
-def kwargIsTrueParam(kwargs, keyParam):
+def kwarg_is_true_param(kwargs, key_param):
     """
     Comprueba si una llave en kwargs es True.
 
     :param kwargs: Keywords list
     :type kwargs: list, dict
-    :param keyParam: Nombre del parámetro
-    :type keyParam: str
+    :param key_param: Nombre del parámetro
+    :type key_param: str
 
     :return: Booleano indicando pertenencia
     :rtype: bool
     """
 
-    if kwargExistsKey(kwargs, keyParam):
-        val = kwargs[keyParam]
+    if kwarg_exists_key(kwargs, key_param):
+        val = kwargs[key_param]
         if isinstance(val, bool):
             return val
         else:

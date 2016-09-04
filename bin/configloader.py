@@ -16,8 +16,8 @@ Licencia: GPLv2
 __author__ = "ppizarror"
 
 # Importación de librerías
-from kwargsutils import kwargIsTrueParam
-from utils import convertToNumber, string2list
+from kwargsutils import kwarg_is_true_param
+from utils import convert_to_number, string2list
 import errors
 
 # Definición de constantes
@@ -34,7 +34,8 @@ FALSE = "FALSE"
 TRUE = "TRUE"
 
 
-class configLoader:
+# noinspection PyArgumentEqualDefault
+class ConfigLoader:
     """
     Carga configuraciones y retorna sus elementos.
     """
@@ -82,7 +83,7 @@ class configLoader:
                     self.configs[config[0]] = config[1]
                 else:
                     errors.throw(errors.ERROR_BADCONFIG, configline, filename)
-        if kwargIsTrueParam(kwargs, "verbose"):
+        if kwarg_is_true_param(kwargs, "verbose"):
             self.verbose = True
             if not (self.totalconfigs + len(self.config_single)):
                 errors.warning(errors.WARNING_NOCONFIGFOUND, filename)
@@ -116,11 +117,13 @@ class configLoader:
                 f.write(str(key) + CONFIG_SEPARATOR + self.configs[key] + "\n")
             # Se cierra el archivo
             f.close()
-            if self.verbose: print CONFIG_SAVED.format(name)
+            if self.verbose:
+                print CONFIG_SAVED.format(name)
         except:
-            if self.verbose: errors.throw(errors.ERROR_CONFIGBADEXPORT)
+            if self.verbose:
+                errors.throw(errors.ERROR_CONFIGBADEXPORT)
 
-    def isFalse(self, param):
+    def is_false(self, param):
         """
         Función que retorna true si el parámetro del archivo es falso.
 
@@ -130,7 +133,7 @@ class configLoader:
         :return: Booleano indicando pertenencia
         :rtype: bool
         """
-        if param in self.getParameters():
+        if param in self.get_parameters():
             if self.configs[param].upper() == FALSE or self.configs[param] == "0":
                 return True
             else:
@@ -138,7 +141,7 @@ class configLoader:
         else:
             errors.warning(errors.ERROR_CONFIGNOTEXISTENT, param)
 
-    def isTrue(self, param):
+    def is_true(self, param):
         """
         Función que retorna true si el parámetro del archivo es verdadero.
 
@@ -148,7 +151,7 @@ class configLoader:
         :return: Booleano indicando pertenencia
         :rtype: bool
         """
-        if param in self.getParameters():
+        if param in self.get_parameters():
             if self.configs[param].upper() == TRUE or self.configs[param] == "1":
                 return True
             else:
@@ -156,7 +159,7 @@ class configLoader:
         else:
             errors.warning(errors.ERROR_CONFIGNOTEXISTENT, param)
 
-    def getParameters(self):
+    def get_parameters(self):
         """
         Retorna una lista con todos los parámetros cargados.
 
@@ -171,7 +174,7 @@ class configLoader:
         return allconfigs
 
     # noinspection SpellCheckingInspection
-    def getValue(self, param, **kwargs):
+    def get_value(self, param, **kwargs):
         """
         Retorna el valor del parámetro param.
 
@@ -188,33 +191,33 @@ class configLoader:
         if str(param).isdigit():
             param = int(param)
             if 0 <= param < len(self.config_single):
-                paramValue = str(self.config_single[param])
+                param_value = str(self.config_single[param])
 
                 # noinspection PyTypeChecker
-                if kwargIsTrueParam(kwargs, "autoNumberify"):  # Auto-conversión a números
-                    return convertToNumber(paramValue)
+                if kwarg_is_true_param(kwargs, "autoNumberify"):  # Auto-conversión a números
+                    return convert_to_number(param_value)
                 # El resultado se entrega sin convertir
                 else:
-                    return paramValue
+                    return param_value
 
             else:
                 errors.throw(errors.ERROR_BADINDEXCONFIG, str(param))
         else:
-            if param in self.getParameters():
-                paramValue = self.configs[param]
+            if param in self.get_parameters():
+                param_value = self.configs[param]
 
                 # noinspection PyTypeChecker
-                if kwargIsTrueParam(kwargs, "autoNumberify"):  # Auto-conversión a números
-                    return convertToNumber(paramValue)
+                if kwarg_is_true_param(kwargs, "autoNumberify"):  # Auto-conversión a números
+                    return convert_to_number(param_value)
                 # El resultado se entrega sin convertir
                 else:
-                    return paramValue
+                    return param_value
 
             else:
                 errors.warning(errors.ERROR_CONFIGNOTEXISTENT, param)
         return None
 
-    def getValueListed(self, param, split=";"):
+    def get_value_listed(self, param, split=";"):
         """
         Retorna una lista con los valores de una configuración.
 
@@ -226,17 +229,17 @@ class configLoader:
         :return: Lista de valores
         :rtype: list
         """
-        value = self.getValue(param)
+        value = self.get_value(param)
         if value is not None:
             value = str(value).split(split)
-            valueNewList = []
+            value_new_list = []
             for d in value:
-                valueNewList.append(d.strip())
-            return valueNewList
+                value_new_list.append(d.strip())
+            return value_new_list
         else:
             return []
 
-    def paramExists(self, param):
+    def param_exists(self, param):
         """
         Retorna true/false si es que el parámetro <param> existe.
 
@@ -246,9 +249,9 @@ class configLoader:
         :return: Booleano indicando pertenencia
         :rtype: bool
         """
-        return param in self.getParameters()
+        return param in self.get_parameters()
 
-    def printParameters(self):
+    def print_parameters(self):
         """
         Imprime una lista con todos los parámetros cargados.
 
@@ -258,7 +261,7 @@ class configLoader:
         if self.totalconfigs + len(self.config_single) > 0:
             print CONFIG_PRINTPARAMETER
             if self.totalconfigs > 0:
-                for parameter in self.getParameters():
+                for parameter in self.get_parameters():
                     try:
                         print CONFIG_PRINTPARAM.format(parameter, self.configs[parameter])
                     except:
@@ -269,16 +272,16 @@ class configLoader:
             print CONFIG_PRINTNOCONFIG
         return
 
-    def setParameter(self, paramName, paramValue):
+    def set_parameter(self, param_name, param_value):
         """
         Define un parámetro.
 
-        :param paramName: Nombre del parámetro
-        :type paramName: str
-        :param paramValue: Valor del parámetro
-        :type paramValue: object
+        :param param_name: Nombre del parámetro
+        :type param_name: str
+        :param param_value: Valor del parámetro
+        :type param_value: object
 
         :return: void
         :rtype: None
         """
-        self.configs[str(paramName)] = str(paramValue)
+        self.configs[str(param_name)] = str(param_value)

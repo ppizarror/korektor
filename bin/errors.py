@@ -11,8 +11,11 @@ Licencia: GPLv2
 __author__ = "ppizarror"
 
 # Importación de librerías
-from accents import delAccentByOS
-from colors import Color
+from accents import del_accent_by_os
+from colors import Colors
+
+# Constantes
+COLOR = Colors()
 
 # Códigos de errores
 BAD_ERROR_CODE = "BAD_ERROR_CODE"
@@ -27,14 +30,14 @@ BR_ERRORxNO_VALID_SUBMIT_EMPTY = 6
 BR_ERRORxNO_VALID_SUBMIT_NOT_EQUAL = 7
 BR_ERRORxNO_VALIDID = 4
 ERR_CHECKTYPE = "Error al chequear un tipo de variable"
-ERR_GBT = "Error al ejecutar getBetweenTags"
-ERR_HDNFL = "Error al ejecutar isHiddenFile"
+ERR_GBT = "Error al ejecutar get_between_tags"
+ERR_HDNFL = "Error al ejecutar is_hidden_file_utils"
 ERR_KWARGS_BAD_FALSE = "Kwargs encontró un parámetro booleano incorrecto (false)"
 ERR_KWARGS_BAD_TRUE = "Kwargs encontró un parámetro booleano incorrecto (true)"
 ERR_KWARGS_FOUND_INVALID_KEY = "Kwargs encontró un parámetro que no existe"
 ERR_KWARGS_INVALID_VALUE = "Kwargs retorno un valor incorrecto del parámetro deseado"
 ERR_NUMBER_CONVERTION = "Error al convertir el número"
-ERR_REGX = "Error al ejecutar regexCompare"
+ERR_REGX = "Error al ejecutar regex_compare"
 ERROR_BADCONFIG = "La linea '{0}' del archivo de configuraciones '{1}' no es valida"
 ERROR_BADINDEXCONFIG = "El índice seleccionado <{0}> no pertenece a las configuraciones cargadas"
 ERROR_BADLAUNCHBIN = "La clase debe ser importada desde bin"
@@ -48,7 +51,7 @@ ERROR_CONFIGCORRUPT = "El archivo de configuraciones '{0}' está corrupto"
 ERROR_CONFIGNOTEXISTENT = "El parámetro <{0}> no existe en las configuraciones"
 ERROR_CREATE_MENU = "No se puede crear el menu inicial, posible error en archivo de configuraciones"
 ERROR_GETTING_OS = "Ocurrió un error al obtener el tipo de sistema operativo"
-ERROR_HEADER = Color.RED + "[ERROR] " + Color.END
+ERROR_HEADER = COLOR.red() + "[ERROR] " + COLOR.end()
 ERROR_IMPORTERROREXTERNAL = "Ha ocurrido un error al importar las librerías de sistema externas"
 ERROR_IMPORTERRORINTERNAL = "Ha ocurrido un error al importar las librerías internas de la aplicación"
 ERROR_IMPORTERRORMECHANIZE = "Ha ocurrido un error al importar la librería mechanize"
@@ -109,12 +112,12 @@ VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE = "Error al chequear el hierarchy tree"
 VALIDATOR_TEST_ERROR_INVALIDATE_CORRECT = "Error al invalidar un paquete correcto"
 VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH = "Error al validar directorio y estructura vacíos"
 VALIDATOR_TEST_ERROR_VALIDATE_INCORRECT = "Error al validar un paquete incorrecto"
-WARNING_HEADER = Color.BLUE + "[WARNING] " + Color.END
+WARNING_HEADER = COLOR.blue() + "[WARNING] " + COLOR.end()
 WARNING_NOCONFIGFOUND = "No se han encontrado configuraciones en el archivo '{0}'"
 WRAP_ERROR_MSG = 70
 
 
-def createMSG(message, *args):
+def create_msg(message, *args):
     """
     Función que crea un mensaje de error dado argumentos iniciales.
 
@@ -129,14 +132,14 @@ def createMSG(message, *args):
     return message.format(*args)
 
 
-def st_error(msg, callExit=False, module=None, errname=None):
+def st_error(msg, call_exit=False, module=None, errname=None):
     """
     Muestra un mensaje de error en pantalla.
 
     :param msg: String del mensaje
     :type msg: str
-    :param callExit: Booleano, indica si el programa debe cerrarse o no
-    :type callExit: bool
+    :param call_exit: Booleano, indica si el programa debe cerrarse o no
+    :type call_exit: bool
     :param module: String indicando el nombre del modulo que produjo el error
     :type module: str
     :param errname: Excepción
@@ -146,30 +149,31 @@ def st_error(msg, callExit=False, module=None, errname=None):
     :type: None
     """
     if module is None:
-        print delAccentByOS(Color.RED + ST_ERROR + Color.END + " {0}".format(msg))
+        print del_accent_by_os(COLOR.red() + ST_ERROR + COLOR.end() + " {0}".format(msg))
     else:
-        print delAccentByOS(Color.RED + ST_ERROR + Color.END + " {0} ".format(msg) + \
-                            "[" + Color.UNDERLINE + module + Color.END + "]")
+        print del_accent_by_os(
+            COLOR.red() + ST_ERROR + COLOR.end() + " {0} ".format(
+                msg) + "[" + COLOR.underline() + module + COLOR.end() + "]")
     if errname is not None:
-        print delAccentByOS("      {0}".format(str(errname)))
-    if callExit:
+        print del_accent_by_os("      {0}".format(str(errname)))
+    if call_exit:
         exit()
 
 
-def st_info(msg, callExit=False):
+def st_info(msg, call_exit=False):
     """
     Muestra un mensaje de información en pantalla.
 
     :param msg: String del mensaje
     :type msg: str
-    :param callExit: Booleano, indica si el programa debe cerrarse o no
-    :type callExit: bool
+    :param call_exit: Booleano, indica si el programa debe cerrarse o no
+    :type call_exit: bool
 
     :return: void
     :rtype: None
     """
-    print delAccentByOS(Color.DARKCYAN + ST_INFO + Color.END + " {0}".format(msg))
-    if callExit:
+    print del_accent_by_os(COLOR.dark_cyan() + ST_INFO + COLOR.end() + " {0}".format(msg))
+    if call_exit:
         exit()
 
 
@@ -185,17 +189,17 @@ def throw(errcode, *args):
     :return: void
     :rtype: None
     """
-    st_error(createMSG(errcode, *args), True)
+    st_error(create_msg(errcode, *args), True)
 
 
-def st_warning(msg, callExit=False, module=None, errname=None):
+def st_warning(msg, call_exit=False, module=None, errname=None):
     """
     Muestra un mensaje de precaución en pantalla.
 
     :param msg: String del mensaje
     :type msg: str
-    :param callExit: Booleano, indica si el programa debe cerrarse o no
-    :type callExit: bool
+    :param call_exit: Booleano, indica si el programa debe cerrarse o no
+    :type call_exit: bool
     :param module: String indicando el nombre del modulo que produjo el error
     :type module: str
     :param errname: Excepción
@@ -205,13 +209,14 @@ def st_warning(msg, callExit=False, module=None, errname=None):
     :rtype: None
     """
     if module is None:
-        print delAccentByOS(Color.BLUE + ST_WARNING + Color.END + " {0}".format(msg))
+        print del_accent_by_os(COLOR.blue() + ST_WARNING + COLOR.end() + " {0}".format(msg))
     else:
-        print delAccentByOS(Color.BLUE + ST_ERROR + Color.END + " {0} ".format(msg) + \
-                            "[" + Color.UNDERLINE + module + Color.END + "]")
+        print del_accent_by_os(
+            COLOR.blue() + ST_ERROR + COLOR.end() + " {0} ".format(
+                msg) + "[" + COLOR.underline() + module + COLOR.end() + "]")
     if errname is not None:
-        print delAccentByOS("      {0}".format(str(errname)))
-    if callExit:
+        print del_accent_by_os("      {0}".format(str(errname)))
+    if call_exit:
         exit()
 
 
@@ -227,11 +232,11 @@ def warning(warcode, *args):
     :return: void
     :rtype: None
     """
-    warcode = createMSG(warcode, args)
-    st_warning(warcode, False)
+    warcode = create_msg(warcode, args)
+    st_warning(warcode)
 
 
-def parseLangError(msg):
+def parse_lang_error(msg):
     """
     Formatea un código de error.
 
@@ -242,7 +247,7 @@ def parseLangError(msg):
     :rtype: str
     """
 
-    def insertEach(string, each, every):
+    def insert_each(string, each, every):
         """
         Inserta el string -each- cada -every- caracteres en el string -string-.
 
@@ -262,11 +267,11 @@ def parseLangError(msg):
     code = data[0].strip().split("[")[1]
     code = code.replace("]", "")
     msg = data[1].strip()
-    msg = insertEach(msg, "-\n\t    ", WRAP_ERROR_MSG)
-    return Color.RED + ST_WARNING_ID.format(code) + Color.END + " " + msg
+    msg = insert_each(msg, "-\n\t    ", WRAP_ERROR_MSG)
+    return COLOR.red() + ST_WARNING_ID.format(code) + COLOR.end() + " " + msg
 
 
-class exceptionBehaviour:
+class ExceptionBehaviour:
     """
     Clase que permite manejar clases de error
     """
@@ -285,7 +290,7 @@ class exceptionBehaviour:
         self._exceptionStrBehaviour = False
         self._isEnabledExceptionThrowable = False
 
-    def disable_exceptionAsString(self):
+    def disable_exception_as_string(self):
         """
         Desactiva el retornar los errores como String.
 
@@ -294,7 +299,7 @@ class exceptionBehaviour:
         """
         self._exceptionStrBehaviour = False
 
-    def disable_exceptionCode(self):
+    def disable_exception_code(self):
         """
         Desactiva el retornar el mensaje de cada excepción como un código de error.
 
@@ -310,11 +315,11 @@ class exceptionBehaviour:
         :return: void
         :rtype: None
         """
-        self.disable_exceptionAsString()
-        self.disable_exceptionThrow()
+        self.disable_exception_as_string()
+        self.disable_exception_throw()
         self._exceptionsDisabled = True
 
-    def disable_exceptionThrow(self):
+    def disable_exception_throw(self):
         """
         Desactiva el lanzamiento de excepciones en python en vez de la función throw que imprime un mensaje
         de error.
@@ -324,7 +329,7 @@ class exceptionBehaviour:
         """
         self._isEnabledExceptionThrowable = False
 
-    def enable_exceptionAsString(self):
+    def enable_exception_as_string(self):
         """
         Activa el retornar los errores como String.
 
@@ -332,10 +337,10 @@ class exceptionBehaviour:
         :rtype: None
         """
         self._exceptionStrBehaviour = True
-        self.disable_exceptionThrow()
+        self.disable_exception_throw()
         self.enable_exceptions()
 
-    def enable_exceptionCode(self):
+    def enable_exception_code(self):
         """
         Activa el retornar el mensaje de cada excepción como un código de error.
 
@@ -353,7 +358,7 @@ class exceptionBehaviour:
         """
         self._exceptionsDisabled = False
 
-    def enable_exceptionThrow(self):
+    def enable_exception_throw(self):
         """
         Activa el lanzamiento de excepciones en python en vez de la función throw que imprime un mensaje
         de error.
@@ -362,18 +367,18 @@ class exceptionBehaviour:
         :rtype: None
         """
         self._isEnabledExceptionThrowable = True
-        self.disable_exceptionAsString()
+        self.disable_exception_as_string()
         self.enable_exceptions()
 
     # noinspection PyUnusedLocal
-    def _throwException(self, e, *formatArgs):
+    def _throw_exception(self, e, *format_args):
         """
         Función que lanza una excepción según comportamiento.
 
         :param e: Error string
         :type e: str
-        :param formatArgs: Argumentos opcionales de los errores
-        :type formatArgs: list
+        :param format_args: Argumentos opcionales de los errores
+        :type format_args: list
 
         :return: String o void
         :rtype: object
@@ -391,7 +396,7 @@ class exceptionBehaviour:
                     err = "BAD_ERROR_CODE"
             else:  # Como string (mensaje)
                 try:  # Se comprueba que el código exista
-                    err = delAccentByOS(eval(e))
+                    err = del_accent_by_os(eval(e))
                 except:
                     err = BAD_ERROR_CODE
 

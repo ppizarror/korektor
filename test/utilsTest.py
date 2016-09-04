@@ -22,15 +22,15 @@ import os  # @Reimport
 # Constantes de los test
 DISABLE_HEAVY_TESTS = True
 DISABLE_HEAVY_TESTS_MSG = "Se desactivaron los tests pesados"
-# noinspection SpellCheckingInspection
+# noinspection SpellCheckingInspection,PyArgumentEqualDefault
 REGEX_VALID_CHARS = "ABCDEFGHIJKLMÑNOPQRSTUVWXYZÁÉÍÓÚ abcdefghijklmñnopqrstuvwxyzáéíóú0123456789_.-/".decode("utf-8")
 VERBOSE = False
 
 # Se cargan argumentos desde la consola
 if __name__ == '__main__':
-    from bin.arguments import argumentParserFactory
+    from bin.arguments import argument_parser_factory
 
-    argparser = argumentParserFactory("Utils Test", verbose=True, version=True, enable_skipped_test=True).parse_args()
+    argparser = argument_parser_factory("Utils Test", verbose=True, version=True, enable_skipped_test=True).parse_args()
     DISABLE_HEAVY_TESTS = argparser.enableHeavyTest
     VERBOSE = argparser.verbose
 
@@ -55,42 +55,42 @@ class UtilsTest(unittest.TestCase):
         :rtype: None
         """
         if VERBOSE:
-            printBarsConsole("Test funciones varias")
+            print_bars_console("Test funciones varias")
             print string2list("foo bar", " ")
-            print getDate()
-            print getHour()
-            print generateRandom6()
-            print getTerminalSize()
-        assert equalLists(loadFile("__init__.ini"), []) == True, "Error al cargar archivo vacío"
+            print get_date()
+            print get_hour()
+            print generate_random6()
+            print get_terminal_size()
+        assert equal_lists(load_file("__init__.ini"), []) is True, "Error al cargar archivo vacío"
         t = [1, 2, 3, 4, 5, 10]
-        r = sortAndUniq([1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 10, 5])
-        assert equalLists(t, r) == True, "Error al ordenar lista"
+        r = sort_and_uniq([1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 10, 5])
+        assert equal_lists(t, r) is True, "Error al ordenar lista"
         del t, r
 
     def testGetBetweenTags(self):
         """
-        Se testea la función getBetweenTags usadas para el análisis de código HTML.
+        Se testea la función get_between_tags usadas para el análisis de código HTML.
 
         :return: void
         :rtype: None
         """
-        assert getBetweenTags("<player>Username<title></title></player>", "<player>",
+        assert get_between_tags("<player>Username<title></title></player>", "<player>",
                               "</player>") == "Username<title></title>", ERR_GBT
-        assert getBetweenTags("<player>Username</player><title>Altername</title>", "<player>",
+        assert get_between_tags("<player>Username</player><title>Altername</title>", "<player>",
                               "</player>") == "Username", ERR_GBT
-        assert getBetweenTags("<player>Username</player><title>Altername</title>", "<title>",
+        assert get_between_tags("<player>Username</player><title>Altername</title>", "<title>",
                               "</title>") == "Altername", ERR_GBT
 
     def testIsHiddenFile(self):
         """
-        Testeo de la función isHiddenFile utilizada en el fileManager.
+        Testeo de la función is_hidden_file_utils utilizada en el fileManager.
 
         :return: void
         :rtype: None
         """
-        assert isHiddenFile(".file") == True, ERR_HDNFL
-        assert isHiddenFile("file") == False, ERR_HDNFL
-        assert isHiddenFile(1) == True, ERR_HDNFL
+        assert is_hidden_file_utils(".file") is True, ERR_HDNFL
+        assert is_hidden_file_utils("file") is False, ERR_HDNFL
+        assert is_hidden_file_utils(1) is True, ERR_HDNFL
 
     # noinspection SpellCheckingInspection
     def testRegexCompare(self):
@@ -100,39 +100,40 @@ class UtilsTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        assert regexCompare("korektor test", "korektor test") == True, ERR_REGX
-        assert regexCompare("korektor is nice", "korektor is not nice") == False, ERR_REGX
-        assert regexCompare("korektor is nice", "korektor is nice#", REGEX_VALID_CHARS) == False, ERR_REGX
-        assert regexCompare("*_*", "lorem.ipsum") == False, ERR_REGX
-        assert regexCompare("#.#", "lorem.ipsum") == True, ERR_REGX
-        assert regexCompare("*regex *", "regex are  korektor") == True, ERR_REGX
-        assert regexCompare("cc3001/tarea2/#_#/Parte1.java", "cc3001/tarea2/lorem_ipsum/Parte1.java") == True, ERR_REGX
-        assert regexCompare("#.txt", "file 1.txt") == True, ERR_REGX
-        assert regexCompare(u"#.txt", u"file 1.txt") == True, ERR_REGX
-        assert regexCompare("#_.txt", "file 1_.txt") == True, ERR_REGX
-        assert regexCompare("#_#_#.txt", "file_is_valid.txt") == True, ERR_REGX
-        assert regexCompare("#_#_#.txt", "file_is not__valid.txt", "abcdefghijklmnopqrstuvwxyz") == False, ERR_REGX
-        assert regexCompare("cc3001.#.name.txt", "cc3001.name.txt", REGEX_VALID_CHARS) == False, ERR_REGX
-        assert regexCompare("cc3001.#.name.txt", "cc3001.other.name.txt", REGEX_VALID_CHARS) == True, ERR_REGX
-        assert regexCompare("test#", "testabc/", "abc".decode("utf-8")) == False, ERR_REGX
-        assert regexCompare("test#", "test", REGEX_VALID_CHARS) == True, ERR_REGX
-        assert regexCompare("#main", "mmmmmmmain", REGEX_VALID_CHARS) == True, ERR_REGX
-        assert regexCompare("#mateh", "mamate", REGEX_VALID_CHARS) == False, ERR_REGX
-        assert regexCompare("#mateh", "mamateh", REGEX_VALID_CHARS) == True, ERR_REGX
-        assert regexCompare("cc3001.main.#_#.java", "cc3001.main.name_alt.java", REGEX_VALID_CHARS) == True, ERR_REGX
-        assert regexCompare("cc3001.main.#_#.java", "cc3001.main.name.alt.java", REGEX_VALID_CHARS) == False, ERR_REGX
-        assert regexCompare("cc3001.main.#_#.java", "cc3001.main.name_alt.ja", REGEX_VALID_CHARS) == False, ERR_REGX
-        assert regexCompare("cc3001.main.###.java", "cc3001.main.name.alt.java", REGEX_VALID_CHARS) == True, ERR_REGX
-        assert regexCompare("cc3001.main.###.java", "cc3001.main.name.alt.jav", REGEX_VALID_CHARS) == False, ERR_REGX
-        assert regexCompare("#.main.###.java", "cc3001.main.name.alt.java", REGEX_VALID_CHARS) == True, ERR_REGX
-        assert regexCompare("#_test.#", "cc3001_test.jar", REGEX_VALID_CHARS) == True, ERR_REGX
-        assert regexCompare("#_test.#", "cc3001.test.png", REGEX_VALID_CHARS) == False, ERR_REGX
-        assert regexCompare("#", "cc3001.test.png", REGEX_VALID_CHARS) == True, ERR_REGX
-        assert regexCompare("#_", "_", REGEX_VALID_CHARS) == True, ERR_REGX
-        assert regexCompare("", "", REGEX_VALID_CHARS) == True, ERR_REGX
-        assert regexCompare("mmmm#mmmm", "mmmmmmm", REGEX_VALID_CHARS) == False, ERR_REGX
-        assert regexCompare("mmmm#mmmm#", "mmmmmmmmk", REGEX_VALID_CHARS) == True, ERR_REGX
-        assert regexCompare("#test#", "testedsttes", REGEX_VALID_CHARS) == True, ERR_REGX
+        assert regex_compare("korektor test", "korektor test") is True, ERR_REGX
+        assert regex_compare("korektor is nice", "korektor is not nice") is False, ERR_REGX
+        assert regex_compare("korektor is nice", "korektor is nice#", REGEX_VALID_CHARS) is False, ERR_REGX
+        assert regex_compare("*_*", "lorem.ipsum") is False, ERR_REGX
+        assert regex_compare("#.#", "lorem.ipsum") is True, ERR_REGX
+        assert regex_compare("*regex *", "regex are  korektor") is True, ERR_REGX
+        assert regex_compare("cc3001/tarea2/#_#/Parte1.java", "cc3001/tarea2/lorem_ipsum/Parte1.java") is True, ERR_REGX
+        assert regex_compare("#.txt", "file 1.txt") is True, ERR_REGX
+        assert regex_compare(u"#.txt", u"file 1.txt") is True, ERR_REGX
+        assert regex_compare("#_.txt", "file 1_.txt") is True, ERR_REGX
+        assert regex_compare("#_#_#.txt", "file_is_valid.txt") is True, ERR_REGX
+        assert regex_compare("#_#_#.txt", "file_is not__valid.txt", "abcdefghijklmnopqrstuvwxyz") is False, ERR_REGX
+        assert regex_compare("cc3001.#.name.txt", "cc3001.name.txt", REGEX_VALID_CHARS) is False, ERR_REGX
+        assert regex_compare("cc3001.#.name.txt", "cc3001.other.name.txt", REGEX_VALID_CHARS) is True, ERR_REGX
+        # noinspection PyArgumentEqualDefault
+        assert regex_compare("test#", "testabc/", "abc".decode("utf-8")) is False, ERR_REGX
+        assert regex_compare("test#", "test", REGEX_VALID_CHARS) is True, ERR_REGX
+        assert regex_compare("#main", "mmmmmmmain", REGEX_VALID_CHARS) is True, ERR_REGX
+        assert regex_compare("#mateh", "mamate", REGEX_VALID_CHARS) is False, ERR_REGX
+        assert regex_compare("#mateh", "mamateh", REGEX_VALID_CHARS) is True, ERR_REGX
+        assert regex_compare("cc3001.main.#_#.java", "cc3001.main.name_alt.java", REGEX_VALID_CHARS) is True, ERR_REGX
+        assert regex_compare("cc3001.main.#_#.java", "cc3001.main.name.alt.java", REGEX_VALID_CHARS) is False, ERR_REGX
+        assert regex_compare("cc3001.main.#_#.java", "cc3001.main.name_alt.ja", REGEX_VALID_CHARS) is False, ERR_REGX
+        assert regex_compare("cc3001.main.###.java", "cc3001.main.name.alt.java", REGEX_VALID_CHARS) is True, ERR_REGX
+        assert regex_compare("cc3001.main.###.java", "cc3001.main.name.alt.jav", REGEX_VALID_CHARS) is False, ERR_REGX
+        assert regex_compare("#.main.###.java", "cc3001.main.name.alt.java", REGEX_VALID_CHARS) is True, ERR_REGX
+        assert regex_compare("#_test.#", "cc3001_test.jar", REGEX_VALID_CHARS) is True, ERR_REGX
+        assert regex_compare("#_test.#", "cc3001.test.png", REGEX_VALID_CHARS) is False, ERR_REGX
+        assert regex_compare("#", "cc3001.test.png", REGEX_VALID_CHARS) is True, ERR_REGX
+        assert regex_compare("#_", "_", REGEX_VALID_CHARS) is True, ERR_REGX
+        assert regex_compare("", "", REGEX_VALID_CHARS) is True, ERR_REGX
+        assert regex_compare("mmmm#mmmm", "mmmmmmm", REGEX_VALID_CHARS) is False, ERR_REGX
+        assert regex_compare("mmmm#mmmm#", "mmmmmmmmk", REGEX_VALID_CHARS) is True, ERR_REGX
+        assert regex_compare("#test#", "testedsttes", REGEX_VALID_CHARS) is True, ERR_REGX
 
     def testKwargs(self):
         """
@@ -142,7 +143,7 @@ class UtilsTest(unittest.TestCase):
         :rtype: None
         """
 
-        def _testKwargsDef(**kwargs):
+        def _test_kwargs_def(**kwargs):
             """
             Testea el paso de parámetros kwargs.
 
@@ -152,18 +153,18 @@ class UtilsTest(unittest.TestCase):
             :return: void
             :rtype: None
             """
-            assert kwargIsTrueParam(kwargs, "trueVariable") == True, ERR_KWARGS_BAD_TRUE
-            assert kwargIsTrueParam(kwargs, "trueVariable_str") == True, ERR_KWARGS_BAD_TRUE
-            assert kwargIsTrueParam(kwargs, "trueVariable_int") == True, ERR_KWARGS_BAD_TRUE
-            assert kwargIsFalseParam(kwargs, "falseVariable") == True, ERR_KWARGS_BAD_FALSE
-            assert kwargIsFalseParam(kwargs, "falseVariable_int") == True, ERR_KWARGS_BAD_FALSE
-            assert kwargGetValue(kwargs, "intVariable") == 4, ERR_KWARGS_INVALID_VALUE
-            assert kwargGetValue(kwargs, "strValue") == "TEST", ERR_KWARGS_INVALID_VALUE
-            assert kwargExistsKey(kwargs, "strValue") == True, ERR_KWARGS_FOUND_INVALID_KEY
-            assert kwargExistsKey(kwargs, "fakeVariable") == False, ERR_KWARGS_FOUND_INVALID_KEY
+            assert kwarg_is_true_param(kwargs, "trueVariable") is True, ERR_KWARGS_BAD_TRUE
+            assert kwarg_is_true_param(kwargs, "trueVariable_str") is True, ERR_KWARGS_BAD_TRUE
+            assert kwarg_is_true_param(kwargs, "trueVariable_int") is True, ERR_KWARGS_BAD_TRUE
+            assert kwarg_is_false_param(kwargs, "falseVariable") is True, ERR_KWARGS_BAD_FALSE
+            assert kwarg_is_false_param(kwargs, "falseVariable_int") is True, ERR_KWARGS_BAD_FALSE
+            assert kwarg_get_value(kwargs, "intVariable") == 4, ERR_KWARGS_INVALID_VALUE
+            assert kwarg_get_value(kwargs, "strValue") == "TEST", ERR_KWARGS_INVALID_VALUE
+            assert kwarg_exists_key(kwargs, "strValue") is True, ERR_KWARGS_FOUND_INVALID_KEY
+            assert kwarg_exists_key(kwargs, "fakeVariable") is False, ERR_KWARGS_FOUND_INVALID_KEY
 
-        _testKwargsDef(trueVariable=True, trueVariable_str="TRUE", trueVariable_int="1", falseVariable=False,
-                       falseVariable_int=0, intVariable=4, strValue="TEST")
+        _test_kwargs_def(trueVariable=True, trueVariable_str="TRUE", trueVariable_int="1", falseVariable=False,
+                         falseVariable_int=0, intVariable=4, strValue="TEST")
 
     def testNumberConverter(self):
         """
@@ -172,10 +173,10 @@ class UtilsTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        assert convertToNumber("5") == 5, ERR_NUMBER_CONVERTION  # Entero
-        assert convertToNumber("a") == 10, ERR_NUMBER_CONVERTION  # Hexadecimal
-        assert convertToNumber(5) == 5, ERR_NUMBER_CONVERTION  # No conversión
-        assert convertToNumber("1.4") == 1.4, ERR_NUMBER_CONVERTION  # Número flotante
+        assert convert_to_number("5") == 5, ERR_NUMBER_CONVERTION  # Entero
+        assert convert_to_number("a") == 10, ERR_NUMBER_CONVERTION  # Hexadecimal
+        assert convert_to_number(5) == 5, ERR_NUMBER_CONVERTION  # No conversión
+        assert convert_to_number("1.4") == 1.4, ERR_NUMBER_CONVERTION  # Número flotante
 
     def testOS(self):
         """
@@ -183,7 +184,7 @@ class UtilsTest(unittest.TestCase):
         :return:
         """
         if os.name == "nt":  # Se comprueba que el sistema sea Windows si es que os.name es NT
-            assert is_windows() == True, ERROR_GETTING_OS
+            assert is_windows() is True, ERROR_GETTING_OS
 
 
 # Main test

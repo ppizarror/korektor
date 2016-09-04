@@ -19,6 +19,7 @@ reload(sys)
 sys.setdefaultencoding('UTF8')  # @UndefinedVariable
 
 if len(sys.argv) > 1:  # si el argumento existe
+    # noinspection PyArgumentEqualDefault
     archive = open(sys.argv[1], "r")
     text = []
     for i in archive:

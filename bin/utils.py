@@ -14,9 +14,9 @@ __author__ = "ppizarror"
 # noinspection PyUnresolvedReferences
 from binpath import *  # @UnusedWildImport
 # noinspection PyUnresolvedReferences
-from accents import delAccentByOS  # @UnusedImport
+from accents import del_accent_by_os  # @UnusedImport
 from browser import Browser
-from kwargsutils import kwargIsTrueParam
+from kwargsutils import kwarg_is_true_param
 import errors
 
 # Importación de librerías de sistema
@@ -47,7 +47,7 @@ _MSG_OK = "[OK]"
 _REGEX_CHARS_LIST = ["*", "#"]
 
 
-def appendListToList(origin, l):
+def append_list_to_list(origin, l):
     """
     Añade los elementos de la lista l a la lista origin.
 
@@ -63,7 +63,7 @@ def appendListToList(origin, l):
         origin.append(i)
 
 
-def compareVersion(ver1, ver2):
+def compare_version(ver1, ver2):
     """
     Se compara entre dos versiones y se retorna el ganador.
 
@@ -85,7 +85,7 @@ def compareVersion(ver1, ver2):
     return 0
 
 
-def convertToNumber(s):
+def convert_to_number(s):
     """
     Función que convierte un objeto a diversos tipos de números.
 
@@ -112,7 +112,7 @@ def convertToNumber(s):
     return s
 
 
-def delMatrix(matrix):
+def del_matrix(matrix):
     """
     Borrar una matriz.
 
@@ -129,7 +129,7 @@ def delMatrix(matrix):
 
 
 # noinspection PyUnresolvedReferences
-def destroyProcess():
+def destroy_process():
     """
     Destruye el proceso del programa.
 
@@ -142,7 +142,7 @@ def destroyProcess():
         os.kill(os.getpid(), signal.SIGKILL)  # @UndefinedVariable
 
 
-def equalLists(list1, list2):
+def equal_lists(list1, list2):
     """
     Comprueba si dos listas son idénticas en elementos.
 
@@ -164,7 +164,7 @@ def equalLists(list1, list2):
 
 
 # noinspection PyUnusedLocal
-def generateRandom6():
+def generate_random6():
     """
     Genera un string de 6 caracteres aleatorios.
 
@@ -175,7 +175,7 @@ def generateRandom6():
 
 
 # noinspection PyUnusedLocal
-def generateRandom12():
+def generate_random12():
     """
     Genera un string de 12 caracteres aleatorios.
 
@@ -186,7 +186,7 @@ def generateRandom12():
 
 
 # noinspection SpellCheckingInspection
-def getBetweenTags(html, tagi, tagf):
+def get_between_tags(html, tagi, tagf):
     """
     Función que retorna un valor entre dos tags.
 
@@ -222,7 +222,7 @@ def getBetweenTags(html, tagi, tagf):
         return False
 
 
-def getHour():
+def get_hour():
     """
     Función que retorna la hora de sistema.
 
@@ -233,7 +233,7 @@ def getHour():
 
 
 # noinspection SpellCheckingInspection
-def getDate():
+def get_date():
     """
     Obtiene la fecha del dia actual.
 
@@ -244,7 +244,7 @@ def getDate():
     return str(fecha.day) + "/" + str(fecha.month) + "/" + str(fecha.year)
 
 
-def getTerminalSize():
+def get_terminal_size():
     """
     Devuelve el tamaño de la consola.
 
@@ -255,7 +255,7 @@ def getTerminalSize():
 
     # noinspection PyShadowingNames,PyUnresolvedReferences
 
-    def ioctl_GWINSZ(fd):
+    def ioctl_gwinsz(fd):
         """
         Entrega el tamaño de la consola
         :param fd: Numero de STD
@@ -274,11 +274,11 @@ def getTerminalSize():
             return
         return cr
 
-    cr = ioctl_GWINSZ(0) or ioctl_GWINSZ(1) or ioctl_GWINSZ(2)
+    cr = ioctl_gwinsz(0) or ioctl_gwinsz(1) or ioctl_gwinsz(2)
     if not cr:
         try:
             fd = os.open(os.ctermid(), os.O_RDONLY)  # @UndefinedVariable
-            cr = ioctl_GWINSZ(fd)
+            cr = ioctl_gwinsz(fd)
             os.close(fd)
         except:
             pass
@@ -287,8 +287,8 @@ def getTerminalSize():
     return int(cr[1]), int(cr[0])
 
 
-# noinspection PyUnresolvedReferences,PyIncorrectDocstring
-def getVersion(label, headers, linkUpdates):
+# noinspection PyUnresolvedReferences
+def get_version(label, headers, link_updates):
     """
     Obtener la versión del programa de forma local.
 
@@ -296,27 +296,30 @@ def getVersion(label, headers, linkUpdates):
     :type label: str
     :param headers: Web headers
     :type headers: str
+    :param link_updates: Enlace al link de actualizaciones
+    :type link_updates: str
 
     :return: String con la versión del programa según la web
     :rtype: str
     """
     if _IMPORTED[0]:
         browser = Browser()  # @UndefinedVariable
-        browser.addHeaders(headers)
-        browser.abrirLink(linkUpdates)
-        html = browser.getHtml()
+        browser.add_headers(headers)
+        browser.abrir_link(link_updates)
+        html = browser.get_html()
     else:
         http_headers = {"User-Agent": headers}
-        request_object = Request(linkUpdates, None, http_headers)
+        # noinspection PyArgumentEqualDefault
+        request_object = Request(link_updates, None, http_headers)
         response = urllib2.urlopen(request_object)  # @UndefinedVariable
         html = response.read()
-    html = getBetweenTags(getBetweenTags(
+    html = get_between_tags(get_between_tags(
         html, "<" + label + ">", "</" + label + ">"), "<version>", "</version>")
     return html.strip()
 
 
-# noinspection PyUnresolvedReferences
-def googleTranslate(text, translate_lang, header, web, source_lang=None):
+# noinspection PyUnresolvedReferences,PyArgumentEqualDefault
+def google_translate(text, translate_lang, header, web, source_lang=None):
     """
     Traduce una linea usando el motor de traducciones de google.
 
@@ -345,7 +348,7 @@ def googleTranslate(text, translate_lang, header, web, source_lang=None):
     return json.loads(re.sub(',,,|,,', ',"0",', response.read()))[0][0][0]  # @UndefinedVariable
 
 
-def isFolder(path, filename):
+def is_folder_utils(path, filename):
     """
     Función que retorna true en el caso de que el archivo sea una carpeta, False si no.
 
@@ -366,7 +369,7 @@ def isFolder(path, filename):
 
 
 # noinspection PyTypeChecker,PyUnresolvedReferences
-def isHiddenFile(filename):
+def is_hidden_file_utils(filename):
     """
     Función que retorna True en el caso de que el archivo empieza por un punto.
 
@@ -383,7 +386,7 @@ def isHiddenFile(filename):
     return True
 
 
-def isIn(termino, matriz):
+def is_in(termino, matriz):
     """
     Función que comprueba si un elemento esta en una matriz (no completamente).
 
@@ -402,7 +405,7 @@ def isIn(termino, matriz):
     return False
 
 
-def isTrue(a):
+def is_true(a):
     """
     Función que devuelve True/False si a es "True" o a es igual a "False".
 
@@ -418,7 +421,7 @@ def isTrue(a):
         return False
 
 
-def makeCallable(function):
+def make_callable(function):
     """
     Función que crea una función llamable.
 
@@ -429,13 +432,13 @@ def makeCallable(function):
     :rtype: object
     """
     try:
-        function.__name__ = generateRandom6()
+        function.__name__ = generate_random6()
     except:
         pass
     return function
 
 
-def numberOfSublists(l):
+def number_of_sublists(l):
     """
     Retorna el numero de sublistas que contiene una lista.
 
@@ -448,11 +451,12 @@ def numberOfSublists(l):
     count = 0
     for i in l:
         if isinstance(i, list):
-            count = count + 1 + numberOfSublists(i)
+            count = count + 1 + number_of_sublists(i)
     return count
 
 
-def loadFile(archive, lang=_MSG_LOADINGFILE, **kwargs):
+# noinspection PyArgumentEqualDefault
+def load_file(archive, lang=_MSG_LOADINGFILE, **kwargs):
     """
     Carga un archivo y retorna una lista con las líneas del archivo.
 
@@ -469,7 +473,7 @@ def loadFile(archive, lang=_MSG_LOADINGFILE, **kwargs):
     :return: Lista con las líneas del archivo
     :rtype: list
     """
-    show_state = kwargIsTrueParam(kwargs, "show_state")
+    show_state = kwarg_is_true_param(kwargs, "show_state")
     if show_state:
         print lang.format("(...)" + archive[_CONSOLE_WRAP:].replace("//", "/")).replace("\"", ""),
     try:
@@ -487,7 +491,7 @@ def loadFile(archive, lang=_MSG_LOADINGFILE, **kwargs):
     return l
 
 
-def obtenerFecha():
+def obtener_fecha():
     """
     Obtiene la fecha del dia actual.
 
@@ -498,7 +502,7 @@ def obtenerFecha():
     return str(fecha.day) + "/" + str(fecha.month) + "/" + str(fecha.year)
 
 
-def printBarsConsole(s, tabs=0):
+def print_bars_console(s, tabs=0):
     """
     Función que imprime unas barras en un mensaje.
 
@@ -515,11 +519,11 @@ def printBarsConsole(s, tabs=0):
     for i in range(l):  # @UnusedVariable
         u += "-"
     print u
-    print "{0} {1}".format("\t" * tabs, delAccentByOS(s))
+    print "{0} {1}".format("\t" * tabs, del_accent_by_os(s))
     print u
 
 
-def printMatrix(matrix):
+def print_matrix(matrix):
     """
     Función que imprime una matriz en pantalla.
 
@@ -535,7 +539,7 @@ def printMatrix(matrix):
         print "\n"
 
 
-def printHierachyBoolList(lst, level=0):
+def print_hierachy_bool_list(lst, level=0):
     """
     Función que imprime una lista booleana de jerarquía.
     Obtenida desde: http://stackoverflow.com/questions/30521991/
@@ -551,12 +555,12 @@ def printHierachyBoolList(lst, level=0):
     print('  ' * (level - 1) + '+-' * (level > 0) + str(lst[0]))
     for l in lst[1:]:
         if type(l) is list:
-            printHierachyBoolList(l, level + 1)
+            print_hierachy_bool_list(l, level + 1)
         else:
             print('  ' * level + '+-' + str(l))
 
 
-def printHierachyList(lst, level, tabsLeft):
+def print_hierachy_list(lst, level, tabs_left):
     """
     Función que imprime una lista de jerarquía.
     Obtenida desde: http://stackoverflow.com/questions/30521991/
@@ -565,36 +569,36 @@ def printHierachyList(lst, level, tabsLeft):
     :type lst: list
     :param level: Nivel de profundidad
     :type level: int
-    :param tabsLeft: Número de tabs a la izquierda
-    :type tabsLeft: int
+    :param tabs_left: Número de tabs a la izquierda
+    :type tabs_left: int
 
     :return: void
     :rtype: None
     """
-    print('\t' * tabsLeft + '    ' * (level - 1) + '+---' * (level > 0) + lst[0])
+    print('\t' * tabs_left + '    ' * (level - 1) + '+---' * (level > 0) + lst[0])
     for l in lst[1:]:
         if type(l) is list:
-            printHierachyList(l, level + 1, tabsLeft)
+            print_hierachy_list(l, level + 1, tabs_left)
         else:
-            print('\t' * tabsLeft + '    ' * level + '+---' + l)
+            print('\t' * tabs_left + '    ' * level + '+---' + l)
 
 
 # noinspection SpellCheckingInspection
-def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_CHARS_LIST, **kwargs):
+def regex_compare(reg_string, curr_string, valid_regex_chars=None, regex_chars=_REGEX_CHARS_LIST, **kwargs):
     """
-    Compara dos strings el cual regString posee regex.
+    Compara dos strings el cual reg_string posee regex.
 
     Keywords:
         - case_insensitive (bool) = Si este parámetro es True la comparación se hace ignorando el tipo de letra.
 
-    :param regString: String regex
-    :type regString: str, unicode
-    :param currString: String a comparar
-    :type currString: str, unicode
-    :param validRegexChars: String de caracteres válidos
-    :type validRegexChars: str, unicode
-    :param regexChars: Lista de caracteres inválidos
-    :type regexChars: list
+    :param reg_string: String regex
+    :type reg_string: str, unicode
+    :param curr_string: String a comparar
+    :type curr_string: str, unicode
+    :param valid_regex_chars: String de caracteres válidos
+    :type valid_regex_chars: str, unicode
+    :param regex_chars: Lista de caracteres inválidos
+    :type regex_chars: list
     :param kwargs: Keywords
     :type kwargs: dict
 
@@ -602,63 +606,63 @@ def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_
     :rtype: bool
     """
 
-    def _charListNotIn(charList, word):
+    def char_list_not_in(char_list, word):
         """
         Comprueba que una lista de caracteres no esté en una palabra <word>.
 
-        :param charList: Lista de caracteres
-        :type charList: list
+        :param char_list: Lista de caracteres
+        :type char_list: list
         :param word: Palabra a analizar
         :type word: str, unicode
 
         :return: Booleano indicando pertenencia
         :rtype: bool
         """
-        for cha in charList:
+        for cha in char_list:
             if cha in word:
                 return False
         return True
 
     # Se tratan los strings
-    regString = str(regString)
-    currString = str(currString)
+    reg_string = str(reg_string)
+    curr_string = str(curr_string)
 
     # Se obtienen parámetros de ejecución
-    if kwargIsTrueParam(kwargs, "case_insensitive"):
-        regString = regString.lower()
-        currString = currString.lower()
+    if kwarg_is_true_param(kwargs, "case_insensitive"):
+        reg_string = reg_string.lower()
+        curr_string = curr_string.lower()
 
-    if validRegexChars is not None:
+    if valid_regex_chars is not None:
         try:
-            validRegexChars = str(validRegexChars)
+            valid_regex_chars = str(valid_regex_chars)
         except:
-            print validRegexChars
+            print valid_regex_chars
 
-        # Se comprueba que todos los caracteres de currString sean válidos
-        for ch in list(currString):
-            if ch not in validRegexChars:
+        # Se comprueba que todos los caracteres de curr_string sean válidos
+        for ch in list(curr_string):
+            if ch not in valid_regex_chars:
                 return False
 
     # Se eliminan # o * seguidos
-    regStringBuilder = ""
-    for regxlc in regString:
-        if regxlc in regexChars:
-            if not regStringBuilder[-1:] in regexChars:
-                regStringBuilder += regxlc
+    reg_string_builder = ""
+    for regxlc in reg_string:
+        if regxlc in regex_chars:
+            if not reg_string_builder[-1:] in regex_chars:
+                reg_string_builder += regxlc
         else:
-            regStringBuilder += regxlc
-    regString = regStringBuilder
+            reg_string_builder += regxlc
+    reg_string = reg_string_builder
 
     # Largos de los strings
-    lr = len(regString)
-    lc = len(currString)
+    lr = len(reg_string)
+    lc = len(curr_string)
 
     # Si ambos strings existen
     if lr > 0 and lc > 0:
 
         # Si no hay elementos regex entonces se comparan como si fuesen simples strings
-        if _charListNotIn(regexChars, regString):
-            return regString == currString
+        if char_list_not_in(regex_chars, reg_string):
+            return reg_string == curr_string
 
         # Si hay regex
         else:
@@ -671,11 +675,11 @@ def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_
             # i.
             while i < lr and j < lc:
 
-                # Si el carácter en regString no es un carácter regex
-                if regString[i] not in regexChars:
+                # Si el carácter en reg_string no es un carácter regex
+                if reg_string[i] not in regex_chars:
 
                     # Si difieren i y j entonces los caracteres son falsos
-                    if not regString[i] == currString[j]:
+                    if not reg_string[i] == curr_string[j]:
                         return False
 
                     # Si no difieren ambos avanzan en 1 posición
@@ -693,38 +697,38 @@ def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_
                     if i == lr - 1:
                         return True
 
-                    # Si no es un carácter final entonces se agregan los caracteres de regString que continúan a nextl
+                    # Si no es un carácter final entonces se agregan los caracteres de reg_string que continúan a nextl
                     else:
-                        for p in regString[i + 1:lr]:
-                            if p not in regexChars:
+                        for p in reg_string[i + 1:lr]:
+                            if p not in regex_chars:
                                 nextl.append(p)
                             else:
                                 break
                         lnextl = len(nextl)
 
-                    # Si lo que queda de currString no alcanza para hacer el match con la lista de caracteres entonces
+                    # Si lo que queda de curr_string no alcanza para hacer el match con la lista de caracteres entonces
                     # los strings son diferentes y la función retorna False.
                     if (lc - j) < lnextl:
                         return False
 
-                    # Se recorre cada carácter de currString hasta que se completa toda la lista de nextl, si se pasa
+                    # Se recorre cada carácter de curr_string hasta que se completa toda la lista de nextl, si se pasa
                     # entonces las listas difieren y la función retorna False.
                     while True:
 
                         # Se recorre cada carácter de nextl y se comprueba igualdad, si se cumplen todas entonces el
                         # puntero j se actualiza y se sigue con la comprobación
-                        areEquals = True
+                        are_equals = True
                         for m in range(0, lnextl):
 
                             # Si los caracteres difieren entonces no son iguales
-                            if currString[j + m] != nextl[m]:
+                            if curr_string[j + m] != nextl[m]:
                                 j += m
                                 i += m
-                                areEquals = False
+                                are_equals = False
                                 break
 
                         # Si eran iguales
-                        if areEquals:
+                        if are_equals:
                             if j + m == lc - 1 and ni + m == lr - 1:
                                 return True
                             else:
@@ -739,7 +743,7 @@ def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_
                             if m == 0:
                                 j += 1
 
-                            # Si se salió del string o el resto de currString no alcanza para comprobar igualdad retorna
+                            # Si se salió del string o el resto de curr_string no alcanza para comprobar igualdad retorna
                             # False.
                             if j + lnextl > lc or j >= lc:
                                 return False
@@ -757,7 +761,7 @@ def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_
 
 
 # noinspection PyShadowingBuiltins
-def sortAndUniq(input):  # @ReservedAssignment
+def sort_and_uniq(input):  # @ReservedAssignment
     """
     Función que elimina datos repetidos.
 
@@ -791,7 +795,7 @@ def string2list(string, separator):
     return string.strip().split(separator)
 
 
-def sumMatrix(matrix):
+def sum_matrix(matrix):
     """
     Función que suma lista de listas.
 
@@ -811,7 +815,7 @@ def sumMatrix(matrix):
         return -1
 
 
-def wipeFile(filename):
+def wipe_file(filename):
     """
     Elimina todo el contenido del archivo pasado por argumento.
 

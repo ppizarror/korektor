@@ -14,7 +14,7 @@ __author__ = "ppizarror"
 from ostype import is_windows
 
 
-def delAccent(txt):
+def del_accent(txt):
     """
     Elimina los acentos de un string.
 
@@ -30,7 +30,7 @@ def delAccent(txt):
     return txt.replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
 
 
-def delAccentByOS(txt):
+def del_accent_by_os(txt):
     """
     Elimina los acentos de un string sólo en Windows.
 
@@ -42,6 +42,6 @@ def delAccentByOS(txt):
     """
 
     if is_windows():
-        return delAccent(txt)
+        return del_accent(txt)
     else:
         return txt

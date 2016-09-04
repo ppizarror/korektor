@@ -31,6 +31,7 @@ test/.data_tests_private/
 
 # Archivos de tests privados.
 test/*_private.py
+test/_runprivate.py
 
 # Archivos de resultados de tests.
 test/.results/results.txt

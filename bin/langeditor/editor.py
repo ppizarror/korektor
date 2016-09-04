@@ -37,11 +37,11 @@ C_DATA = [650, 450, False, False, False, "*//*", False, False]
 DATADOCUMENTS = "doc/"
 DATAICONS = "icons/"
 DATACONFIG = "config/"
-DATALANGS = __actualeditorpath__.replace("bin/langeditor", "resources/langs/")
+DATALANGS = __actualeditorpath__.replace("bin/langeditor", "resources/Langs/")
 DATARECOVER = DATALANGS + ".recover/"
 DEFAULT_FONT_TITLE = "Arial", 10
 EMAIL = "pablo@ppizarror.com"
-LANGFILE = DATACONFIG + "langs.txt"
+LANGFILE = DATACONFIG + "Langs.txt"
 CONFIGURATIONFILE = DATACONFIG + "config.ini"
 ICONPROGRAM = DATAICONS + "icon.ico"
 CONSTANTFILE = DATACONFIG + "const.ini"
@@ -56,7 +56,7 @@ _mult_strings = 40
 ml_columns = ("{0}ID{0}".format(" " * _mult_id), "{0}String{0}".format(" " * _mult_strings))
 
 
-# noinspection PyPep8Naming,PyShadowingNames,PyShadowingNames
+# noinspection PyPep8Naming,PyShadowingNames,PyShadowingNames,PyArgumentEqualDefault
 def loadFromArchive(archive):
     """
     Genera una matriz dado un archivo
@@ -90,7 +90,7 @@ def save_from_list(archive, lista):
     archive.close()
 
 
-def delMatrix(matrix):
+def del_matrix(matrix):
     """
     Borrar una matriz
     :param matrix: Matriz
@@ -103,7 +103,7 @@ def delMatrix(matrix):
 
 
 # noinspection SpellCheckingInspection
-def replaceStrict(a):
+def replace_strict(a):
     """
     Función que reemplaza los caracteres restrictivos
     :param a: String
@@ -115,7 +115,7 @@ def replaceStrict(a):
 
 
 # noinspection SpellCheckingInspection
-def putStrict(a):
+def put_strict(a):
     """
     Función que retorna los caracteres restrictivos
     :param a: String
@@ -125,7 +125,7 @@ def putStrict(a):
                                                                                                                 "'")
 
 
-def isNumerable(x):
+def is_numerable(x):
     """
     Función que comprueba si un texto es dígito
     :param x: String
@@ -137,7 +137,7 @@ def isNumerable(x):
         return False
 
 
-def isWindows():
+def is_windows():
     """
     Función que retorna True/False si el sistema operativo cliente es Windows o no
     :return: Boolean
@@ -158,7 +158,8 @@ def sortby(tree, col, descending):
     """
     data = [(tree.set(child, col), child) for child in tree.get_children('')]  # Obtiene los datos para ordenar
     data.sort(reverse=descending)  # Se reordenan y modifican
-    for indx, item in enumerate(data): tree.move(item[1], '', indx)
+    for indx, item in enumerate(data):
+        tree.move(item[1], '', indx)
     tree.heading(col, command=lambda col=col: sortby(tree, col, int(not descending)))
 
 
@@ -171,9 +172,9 @@ except:
     LANGLIST = ""
 
 
-# Clase pop
-# noinspection PyShadowingNames,PyUnusedLocal,PyMissingOrEmptyDocstring,SpellCheckingInspection
-class pop:
+# Clase Pop
+# noinspection PyShadowingNames,PyUnusedLocal,PyMissingOrEmptyDocstring,SpellCheckingInspection,PyArgumentEqualDefault
+class Pop:
     def __init__(self, properties):
         """
         Función constructora
@@ -182,7 +183,7 @@ class pop:
         """
         title = properties[0]
         icon = properties[1]
-        typeObject = properties[2]
+        type_object = properties[2]
         size = properties[4], properties[3]
         if title == "Error" or title == "Precaucion":
             self.w = Toplevel()
@@ -190,8 +191,8 @@ class pop:
             self.w = Tk()
         self.w.protocol("WM_DELETE_WINDOW", self.kill)
         self.values = []
-        if size[0] != 0 and size[1] != 0: self.w.minsize(width=size[0], height=size[
-            1])  # Alineación de la ventana a la mitad de la pantalla
+        if size[0] != 0 and size[1] != 0:
+            self.w.minsize(width=size[0], height=size[1])  # Alineación de la ventana a la mitad de la pantalla
         self.w.resizable(width=False, height=False)
         self.w.geometry('%dx%d+%d+%d' % (
             size[0], size[1], (self.w.winfo_screenwidth() - size[0]) / 2, (self.w.winfo_screenheight() - size[1]) / 2))
@@ -199,40 +200,41 @@ class pop:
         self.w.title(title)
         self.w.iconbitmap(icon)
         self.sent = False
-        if typeObject == "about":
+        if type_object == "about":
             Label(self.w, text="Creador: " + properties[5], font=DEFAULT_FONT_TITLE, border=5).pack()
             Label(self.w, text="Mail: " + properties[6], font=DEFAULT_FONT_TITLE, border=5).pack()
             Label(self.w, text="Version: " + str(properties[7]), font=DEFAULT_FONT_TITLE, border=5).pack()
             Button(self.w, text="Cerrar", command=self.w.destroy, relief=GROOVE).pack()
             self.w.bind("<Return>", self.destruir)
-        elif typeObject in ["license", "changelog", "ayuda", "longtext"]:
+        elif type_object in ["license", "changelog", "ayuda", "longtext"]:
             archivo = open(properties[5], "r")
-            Yscroll = Scrollbar(self.w)
-            Yscroll.pack(side=RIGHT, fill=Y)
+            yscroll = Scrollbar(self.w)
+            yscroll.pack(side=RIGHT, fill=Y)
             texto = Text(self.w, wrap=NONE,
-                         yscrollcommand=Yscroll.set, xscrollcommand=None)
+                         yscrollcommand=yscroll.set, xscrollcommand=None)
             texto.focus_force()
-            for i in archivo: texto.insert(INSERT, i)
+            for i in archivo:
+                texto.insert(INSERT, i)
             texto.pack()
             texto.configure(state="disabled")
-            Yscroll.config(command=texto.yview)
+            yscroll.config(command=texto.yview)
             archivo.close()
             self.w.bind("<Return>", self.destruir)
             self.w.bind("<Escape>", self.destruir)
-        elif typeObject == "ask":  # Realiza una pregunta que tiene resultado True/False
+        elif type_object == "ask":  # Realiza una pregunta que tiene resultado True/False
             try:
                 winsound.MessageBeep(-1)
             except:
                 pass
             Label(self.w, text=properties[5], font=DEFAULT_FONT_TITLE, border=10).pack()
-            F = Frame(self.w)
-            F.pack()
-            Button(F, text="Si", command=lambda: self.response("si"), width=5, relief=GROOVE).pack(side=LEFT)
-            Label(F, text=" ").pack(side=LEFT)
-            Button(F, text="No", command=lambda: self.response("no"), width=5, relief=GROOVE).pack(side=LEFT)
-            Label(F, text=" ").pack(side=LEFT)
-            Button(F, text="Cancelar", command=lambda: self.response("cancel"), width=8, relief=GROOVE).pack()
-        elif typeObject == "borrar":
+            f = Frame(self.w)
+            f.pack()
+            Button(f, text="Si", command=lambda: self.response("si"), width=5, relief=GROOVE).pack(side=LEFT)
+            Label(f, text=" ").pack(side=LEFT)
+            Button(f, text="No", command=lambda: self.response("no"), width=5, relief=GROOVE).pack(side=LEFT)
+            Label(f, text=" ").pack(side=LEFT)
+            Button(f, text="Cancelar", command=lambda: self.response("cancel"), width=8, relief=GROOVE).pack()
+        elif type_object == "borrar":
             f = Frame(self.w, border=10)
             f.pack()
             Label(f, text="ID ", anchor=E, width=8).pack(side=LEFT)
@@ -242,7 +244,7 @@ class pop:
             self.idsearch.bind("<Return>", self.borrar)
             Button(self.w, text="Borrar", relief=GROOVE, command=self.borrar).pack()
             self.w.bind("<Escape>", self.destruir)
-        elif typeObject == "error":
+        elif type_object == "error":
             try:
                 winsound.MessageBeep(0)
             except:
@@ -252,7 +254,7 @@ class pop:
             Button(self.w, text="Cerrar", command=self.w.destroy, relief=GROOVE).pack()
             self.w.bind("<Return>", self.destruir)
             self.w.bind("<Escape>", self.destruir)
-        elif typeObject == "insert":
+        elif type_object == "insert":
             f = Frame(self.w, border=10)
             f.pack()
             Label(f, text="String ", anchor=E, width=8).pack(side=LEFT)
@@ -262,7 +264,7 @@ class pop:
             self.insertentry.bind("<Return>", self.insert)
             Button(self.w, text="Insertar", relief=GROOVE, command=self.insert).pack()
             self.w.bind("<Escape>", self.destruir)
-        elif typeObject == "modify":
+        elif type_object == "modify":
             f = Frame(self.w, border=10)
             f.pack()
             Label(f, text="String ", anchor=E, width=7).pack(side=LEFT)
@@ -273,7 +275,7 @@ class pop:
             self.insertentry.insert(0, properties[5])
             Button(self.w, text="Modificar", relief=GROOVE, command=self.insert).pack()
             self.w.bind("<Escape>", self.destruir)
-        elif typeObject == "search":
+        elif type_object == "search":
             f = Frame(self.w, border=10)
             f.pack()
             Label(f, text="ID ", anchor=E, width=8).pack(side=LEFT)
@@ -283,7 +285,7 @@ class pop:
             self.idsearch.bind("<Return>", self.search)
             Button(self.w, text="Buscar", relief=GROOVE, command=self.search).pack()
             self.w.bind("<Escape>", self.destruir)
-        elif typeObject == "searchformodify":
+        elif type_object == "searchformodify":
             f = Frame(self.w, border=10)
             f.pack()
             Label(f, text="ID ", anchor=E, width=8).pack(side=LEFT)
@@ -293,7 +295,7 @@ class pop:
             self.idsearch.bind("<Return>", self.search)
             Button(self.w, text="Continuar", relief=GROOVE, command=self.search).pack()
             self.w.bind("<Escape>", self.destruir)
-        elif typeObject == "newlang":
+        elif type_object == "newlang":
             f = Frame(self.w, border=10)
             f.pack()
             Label(f, text="Idioma ", anchor=E, width=8).pack(side=LEFT)
@@ -384,7 +386,7 @@ class pop:
         :return:
         """
         i = self.idsearch.get()
-        if isNumerable(i):
+        if is_numerable(i):
             self.values.append(i)
             self.sent = True
             self.destruir()
@@ -392,6 +394,7 @@ class pop:
 
 # Se cargan las configuraciones
 try:
+    # noinspection PyArgumentEqualDefault
     conf_file = open(CONFIGURATIONFILE, "r")
     for i in conf_file:
         i = i.strip()
@@ -399,13 +402,13 @@ try:
         # noinspection SpellCheckingInspection
         if c_command[0].strip() == "XSIZE":
             c_after_command = str(c_command[1]).split(",")
-            if isNumerable(c_after_command[0]) and int(c_after_command[0]) >= C_DATA[0]: C_DATA[0] = int(
-                c_after_command[0])
+            if is_numerable(c_after_command[0]) and int(c_after_command[0]) >= C_DATA[0]:
+                C_DATA[0] = int(c_after_command[0])
         # noinspection SpellCheckingInspection
         if c_command[0].strip() == "YSIZE":
             c_after_command = str(c_command[1]).split(",")
-            if isNumerable(c_after_command[0]) and int(c_after_command[0]) >= C_DATA[1]: C_DATA[1] = int(
-                c_after_command[0])
+            if is_numerable(c_after_command[0]) and int(c_after_command[0]) >= C_DATA[1]:
+                C_DATA[1] = int(c_after_command[0])
         # noinspection SpellCheckingInspection
         if c_command[0].strip() == "DEFAULTLANG":
             c_after_command = str(c_command[1]).split(",")
@@ -427,7 +430,8 @@ try:
                 C_DATA[4] = False
         if c_command[0].strip() == "DELIMITER":
             c_after_command = str(c_command[1]).split(",")
-            if len(c_after_command[0].strip()) > 0: C_DATA[5] = c_after_command[0].strip()
+            if len(c_after_command[0].strip()) > 0:
+                C_DATA[5] = c_after_command[0].strip()
         # noinspection SpellCheckingInspection
         if c_command[0].strip() == "AUTOTITLE":
             c_after_command = str(c_command[1]).split(",")
@@ -491,8 +495,8 @@ archive.close()
 DATADELIMITER = DATADELIMITER.replace("*", " ")
 
 
-# noinspection PyTypeChecker,PyUnusedLocal,PyShadowingNames,PyMethodMayBeStatic,PyMissingOrEmptyDocstring,PyTupleAssignmentBalance,SpellCheckingInspection
-class langs:
+# noinspection PyTypeChecker,PyUnusedLocal,PyShadowingNames,PyMethodMayBeStatic,PyMissingOrEmptyDocstring,PyTupleAssignmentBalance,SpellCheckingInspection,PyArgumentEqualDefault
+class Langs:
     """
     Clase de manejo de idiomas.
     """
@@ -508,7 +512,7 @@ class langs:
         self.root.title(TITLE)
         self.root.minsize(width=PROGRAMSIZE[0], height=PROGRAMSIZE[1])
         self.root.geometry(
-            '%dx%d+%d+%d' % (PROGRAMSIZE[0], PROGRAMSIZE[1], (self.root.winfo_screenwidth() - PROGRAMSIZE[0]) / 2, \
+            '%dx%d+%d+%d' % (PROGRAMSIZE[0], PROGRAMSIZE[1], (self.root.winfo_screenwidth() - PROGRAMSIZE[0]) / 2,
                              (self.root.winfo_screenheight() - PROGRAMSIZE[1] - 50) / 2))
         self.root.iconbitmap(ICONPROGRAM)
         self.root.focus_force()
@@ -516,11 +520,11 @@ class langs:
         menu = Menu(self.root)
         self.root.config(menu=menu)
         archivomenu = Menu(menu, tearoff=0)
-        archivomenu.add_command(label="Nuevo", command=self.newLang, accelerator="Ctrl+N")
-        archivomenu.add_command(label="Cargar", command=self.loadLang, accelerator="Ctrl+L")
-        archivomenu.add_command(label="Guardar", command=self.saveLang, accelerator="Ctrl+G")
+        archivomenu.add_command(label="Nuevo", command=self.new_lang, accelerator="Ctrl+N")
+        archivomenu.add_command(label="Cargar", command=self.load_lang, accelerator="Ctrl+L")
+        archivomenu.add_command(label="Guardar", command=self.save_lang, accelerator="Ctrl+G")
         archivomenu.add_separator()
-        archivomenu.add_command(label="Salir", command=self.exitLang, accelerator="Ctrl+G")
+        archivomenu.add_command(label="Salir", command=self.exit_lang, accelerator="Ctrl+G")
         menu.add_cascade(label="Archivo", menu=archivomenu)
         edicionmenu = Menu(menu, tearoff=0)
         edicionmenu.add_command(label="Borrar", command=self.borrar, accelerator="Ctrl+B")
@@ -540,21 +544,21 @@ class langs:
         self.root.bind("<Control-b>", self.borrar)
         self.root.bind("<Control-F>", self.buscar)
         self.root.bind("<Control-f>", self.buscar)
-        self.root.bind("<Control-G>", self.saveLang)
-        self.root.bind("<Control-g>", self.saveLang)
+        self.root.bind("<Control-G>", self.save_lang)
+        self.root.bind("<Control-g>", self.save_lang)
         self.root.bind("<Control-I>", self.insertar)
         self.root.bind("<Control-i>", self.insertar)
         self.root.bind("<Control-M>", self.modificar)
         self.root.bind("<Control-m>", self.modificar)
-        self.root.bind("<Control-N>", self.newLang)
-        self.root.bind("<Control-n>", self.newLang)
-        self.root.bind("<Control-L>", self.loadLang)
-        self.root.bind("<Control-l>", self.loadLang)
-        self.root.bind("<Control-S>", self.exitLang)
-        self.root.bind("<Control-s>", self.exitLang)
+        self.root.bind("<Control-N>", self.new_lang)
+        self.root.bind("<Control-n>", self.new_lang)
+        self.root.bind("<Control-L>", self.load_lang)
+        self.root.bind("<Control-l>", self.load_lang)
+        self.root.bind("<Control-S>", self.exit_lang)
+        self.root.bind("<Control-s>", self.exit_lang)
         self.root.bind("<Control-A>", self.helpme)
         self.root.bind("<Control-a>", self.helpme)
-        self.root.protocol("WM_DELETE_WINDOW", self.exitLang)
+        self.root.protocol("WM_DELETE_WINDOW", self.exit_lang)
         # Variables del programa
         self.ml_data = [(0, "STRING", 0)]
         self.loaded = False
@@ -569,8 +573,8 @@ class langs:
             self._delete_all()
             self._hide_tree()
         else:
-            self.loadLang(0, str(lang) + LANGEND)
-        self.lockMenu()
+            self.load_lang(0, str(lang) + LANGEND)
+        self.lock_menu()
         self.root.mainloop(0)
 
     # noinspection PyUnboundLocalVariable
@@ -633,12 +637,13 @@ class langs:
             item = self.tree.selection()[0]
             (a, b) = self.tree.item(item, "values")
             i = self.lookindexfromid(a)
-            q = pop(['Modificar', ICONPROGRAM, 'modify', 77, 300, b])
+            q = Pop(['Modificar', ICONPROGRAM, 'modify', 77, 300, b])
             q.w.mainloop(1)
-            if q.sent and q.values[0] != False:
+            if q.sent and q.values[0] is not False:
                 self.tree.item(item, values=(a, str(q.values[0])))
                 self.ml_data[i] = (a, q.values[0])
-                if q.values[0] != b: self.titlefy(True)
+                if q.values[0] != b:
+                    self.titlefy(True)
             del q
         except:
             pass
@@ -676,7 +681,8 @@ class langs:
         :return:
         """
         child = self.tree.get_children()
-        for i in child: self.tree.delete(i)
+        for i in child:
+            self.tree.delete(i)
 
     def _insert_item(self, item):
         """
@@ -688,7 +694,8 @@ class langs:
         if RESIZE:  # Ajusta el largo de las columnas
             for indx, val in enumerate(item):
                 ilen = tkFont.Font().measure(val)
-                if self.tree.column(ml_columns[indx], width=None) < ilen: self.tree.column(ml_columns[indx], width=ilen)
+                if self.tree.column(ml_columns[indx], width=None) < ilen:
+                    self.tree.column(ml_columns[indx], width=ilen)
 
     def _insert_all(self):
         """
@@ -701,7 +708,7 @@ class langs:
             try:
                 self.tree.insert('', 'end', values=(a, b.decode('utf-8')))
             except:
-                e = pop(["Error al cargar el idioma", ALERTICON, "error", 75, 300, "Hay un error en la linea {0}," + \
+                e = Pop(["Error al cargar el idioma", ALERTICON, "error", 75, 300, "Hay un error en la linea {0}," + \
                          " no se puede cargar. Posible error en el formato del archivo. Este debe ser UTF-8".format(
                              str(int(a)))])
                 e.w.mainloop(0)
@@ -731,7 +738,7 @@ class langs:
         :param e: Event
         :return:
         """
-        pop(["Acerca de", ICONPROGRAM, "about", 115, 220, AUTOR, EMAIL, VERSION]).w.mainloop(0)
+        Pop(["Acerca de", ICONPROGRAM, "about", 115, 220, AUTOR, EMAIL, VERSION]).w.mainloop(0)
 
     def borrar(self, t="", m=False, e=False):
         """
@@ -742,9 +749,9 @@ class langs:
         :return:
         """
         if self.loaded:  # si el idioma esta cargado
-            q = pop(['Borrar', ICONPROGRAM, 'borrar', 77, 280])
+            q = Pop(['Borrar', ICONPROGRAM, 'borrar', 77, 280])
             q.w.mainloop(1)
-            if q.sent and q.values[0] != False:
+            if q.sent and q.values[0] is not False:
                 notfound = ""
                 for k in q.values[0]:
                     item = ""
@@ -766,7 +773,7 @@ class langs:
                         msg = "La ID " + notfound + " no ha sido encontrada."
                     else:
                         msg = "Las IDs: " + notfound + "no han sido encontradas."
-                    e = pop(["Error", ALERTICON, "error", 75, 250, msg])
+                    e = Pop(["Error", ALERTICON, "error", 75, 250, msg])
                     e.w.mainloop(0)
                     del e
             del q
@@ -780,9 +787,9 @@ class langs:
         :return:
         """
         if self.loaded:  # Si hay un idioma ya cargado
-            q = pop(['Buscar', ICONPROGRAM, 'search', 77, 280])
+            q = Pop(['Buscar', ICONPROGRAM, 'search', 77, 280])
             q.w.mainloop(1)
-            if q.sent and q.values[0] != False:
+            if q.sent and q.values[0] is not False:
                 item = ""
                 for i in self.tree.get_children():
                     if int(self.tree.item(i, "values")[0]) == int(q.values[0]):
@@ -792,7 +799,7 @@ class langs:
                         self.tree.focus(item)
                         break
                 if item == "":
-                    e = pop(["Error", ALERTICON, "error", 75, 250, "Elemento no encontrado."])
+                    e = Pop(["Error", ALERTICON, "error", 75, 250, "Elemento no encontrado."])
                     e.w.mainloop(0)
                     del e
             del q
@@ -812,7 +819,7 @@ class langs:
                 break
             k += 1
 
-    def unlockMenu(self):
+    def unlock_menu(self):
         """
         Desbloquea los itemes del menu
         :return:
@@ -820,7 +827,7 @@ class langs:
         for i in range(4):
             self.edicionmenu.entryconfig(i, state=NORMAL)
 
-    def lockMenu(self):
+    def lock_menu(self):
         """
         Bloquea los itemes del menu
         :return:
@@ -837,22 +844,23 @@ class langs:
         j = int(j)
         k = 0
         for i in self.ml_data:
-            if int(i[0]) == j: return k
+            if int(i[0]) == j:
+                return k
             k += 1
         return False
 
-    def exitLang(self, e=False):
+    def exit_lang(self, e=False):
         """
         Función que cierra el programa
         :param e:
         :return:
         """
         if self.loaded and self.changes:  # Comprueba si hay un idioma cargado
-            e = pop(["Aviso", ALERTICON, "ask", 80, 250, "Desea guardar?"])
+            e = Pop(["Aviso", ALERTICON, "ask", 80, 250, "Desea guardar?"])
             e.w.mainloop(1)
             if e.sent:
                 if e.values[0] == "si":
-                    self.saveLang()
+                    self.save_lang()
                 elif e.values[0] == "cancel":
                     return
                 else:
@@ -862,25 +870,25 @@ class langs:
             os.remove("main.pyc")
         except:
             pass
-        if isWindows():
+        if is_windows():
             os.system("taskkill /PID " + str(os.getpid()) + " /F")
         else:
             exit()
 
     # Función que carga la ayuda al programa
     def helpme(self, e=False):
-        pop(["Ayuda", ICONPROGRAM, "license", 400, 600, DATADOCUMENTS + "AYUDA.txt"]).w.mainloop(0)
+        Pop(["Ayuda", ICONPROGRAM, "license", 400, 600, DATADOCUMENTS + "AYUDA.txt"]).w.mainloop(0)
 
     # Función que carga la ayuda de los estados
     def helpsates(self, e=False):
-        pop(["Estados", ICONPROGRAM, "license", 400, 600, DATADOCUMENTS + "STATES.txt"]).w.mainloop(0)
+        Pop(["Estados", ICONPROGRAM, "license", 400, 600, DATADOCUMENTS + "STATES.txt"]).w.mainloop(0)
 
     # Función que inserta un string
     def insertar(self, t="", m=False, e=False):
         if self.loaded:  # Si hay un idioma ya cargado
-            q = pop(['Insertar', ICONPROGRAM, 'insert', 73, 280])
+            q = Pop(['Insertar', ICONPROGRAM, 'insert', 73, 280])
             q.w.mainloop(1)
-            if q.sent and q.values[0] != False:
+            if q.sent and q.values[0] is not False:
                 try:
                     i = int(self.ml_data[len(self.ml_data) - 1][0]) + 1
                 except:
@@ -892,13 +900,13 @@ class langs:
             del q
 
     # Función que crea un nuevo idioma
-    def newLang(self, e=False):
-        q = pop(['Crear nuevo idioma', ICONPROGRAM, 'newlang', 77, 280])
+    def new_lang(self, e=False):
+        q = Pop(['Crear nuevo idioma', ICONPROGRAM, 'newlang', 77, 280])
         q.w.mainloop(1)
         if q.sent:
             lang = q.values[0].upper().strip() + LANGEND
             if lang in LANGLIST:
-                e = pop(["Aviso", ALERTICON, "ask", 80, 250, "Desea reeplazar el idioma?"])
+                e = Pop(["Aviso", ALERTICON, "ask", 80, 250, "Desea reeplazar el idioma?"])
                 e.w.mainloop(1)
                 if e.sent and e.values[0]:
                     self.namelang = lang
@@ -911,21 +919,21 @@ class langs:
                 self._show_tree()
             self.titlefy()
             self._delete_all()
-            delMatrix(self.ml_data)
+            del_matrix(self.ml_data)
         del q
-        self.unlockMenu()
+        self.unlock_menu()
 
     # Función que modifica un string (a buscar)
     def modificar(self, t="", m=False, e=False):
         if self.loaded:  # Si hay un idioma ya cargado
-            q = pop(['ID a modificar', ICONPROGRAM, 'searchformodify', 77, 280])
+            q = Pop(['ID a modificar', ICONPROGRAM, 'searchformodify', 77, 280])
             q.w.mainloop(1)
-            if q.sent and q.values[0] != False:
+            if q.sent and q.values[0] is not False:
                 i = self.lookindexfromid(q.values[0])
                 if i:
-                    e = pop(['Modificar', ICONPROGRAM, 'modify', 77, 300, self.ml_data[i][1]])
+                    e = Pop(['Modificar', ICONPROGRAM, 'modify', 77, 300, self.ml_data[i][1]])
                     e.w.mainloop(1)
-                    if e.sent and e.values[0] != False:
+                    if e.sent and e.values[0] is not False:
                         self.ml_data[i] = (q.values[0], e.values[0], self.ml_data[i][2])
                         for k in self.tree.get_children():
                             if int(self.tree.item(k, "values")[0]) == q.values[0]:
@@ -934,16 +942,16 @@ class langs:
                                 break
                     del e
                 else:
-                    e = pop(["Error", ALERTICON, "error", 75, 250, "Elemento no encontrado."])
+                    e = Pop(["Error", ALERTICON, "error", 75, 250, "Elemento no encontrado."])
                     e.w.mainloop(0)
                     del e
             del q
 
     # Función que carga la licencia del programa
     def licencia(self, e=False):
-        pop(["Licencia GNU", ICONPROGRAM, "license", 400, 600, DATADOCUMENTS + "GNU.txt"]).w.mainloop(0)
+        Pop(["Licencia GNU", ICONPROGRAM, "license", 400, 600, DATADOCUMENTS + "GNU.txt"]).w.mainloop(0)
 
-    def loadLang(self, e=False, t="Noset"):  # Función que carga un idioma
+    def load_lang(self, e=False, t="Noset"):  # Función que carga un idioma
         try:
             if t == "Noset":
                 archivo = str(askopenfilename(title="Cargar idioma", initialdir=DATALANGS, defaultextension=LANGEND,
@@ -955,11 +963,12 @@ class langs:
                 self.namelang = t
             if self.namelang != "":
                 self._delete_all()
-                delMatrix(self.ml_data)
+                del_matrix(self.ml_data)
                 archivo = open(archivo, "r")
                 for i in archivo:
                     item = i.strip().split(DATADELIMITER)
-                    if "\xef\xbb\xbf" in item[0]: item[0] = item[0][3:]
+                    if "\xef\xbb\xbf" in item[0]:
+                        item[0] = item[0][3:]
                     self.ml_data.append((item[0].zfill(5), item[1].replace("|", " ")))
                 archivo.close()
                 self.loaded = True
@@ -968,31 +977,31 @@ class langs:
                 self._autofocus()
                 self.titlefy()
                 self.ml_data.sort()
-                self.unlockMenu()
+                self.unlock_menu()
         except:
             self.loaded = False
             self.namelang = ""
             self._hide_tree()
             self._delete_all()
-            delMatrix(self.ml_data)
-            e = pop(["Error al cargar", ALERTICON, "error", 75, 300, "Error al cargar el idioma"])
+            del_matrix(self.ml_data)
+            e = Pop(["Error al cargar", ALERTICON, "error", 75, 300, "Error al cargar el idioma"])
             e.w.mainloop(0)
             del e
-            self.lockMenu()
+            self.lock_menu()
 
     # Función que guarda un idioma
     # noinspection PyUnresolvedReferences
-    def saveLang(self, e=False):
+    def save_lang(self, e=False):
         if self.loaded:  # Si hay un idioma cargado
             try:
-                if not self.namelang in LANGLIST:  # Si no esta el idioma en la lista se guarda
+                if self.namelang not in LANGLIST:  # Si no esta el idioma en la lista se guarda
                     LANGLIST.append(self.namelang)
                     LANGLIST.sort()
                     save_from_list(LANGFILE, LANGLIST)
                 self.ml_data.sort()
                 archive = open(DATALANGS + self.namelang, "w")  # Se guarda el archivo de idioma
-                for i in self.ml_data: archive.write(
-                    str(int(i[0])) + DATADELIMITER + str(i[1]).replace(" ", "|") + "\n")
+                for i in self.ml_data:
+                    archive.write(str(int(i[0])) + DATADELIMITER + str(i[1]).replace(" ", "|") + "\n")
                 archive.close()
                 if AUTOSAVE:
                     try:
@@ -1006,7 +1015,7 @@ class langs:
                         pass
                 self.titlefy()
             except:
-                e = pop(["Error", ALERTICON, "error", 75, 275, "Error al guardar el idioma"])
+                e = Pop(["Error", ALERTICON, "error", 75, 275, "Error al guardar el idioma"])
                 e.w.mainloop(0)
                 del e
 
@@ -1021,4 +1030,4 @@ class langs:
 
 
 # noinspection PyTypeChecker
-langs(str(C_DATA[2]))
+Langs(str(C_DATA[2]))

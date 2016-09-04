@@ -14,11 +14,11 @@ __author__ = "ppizarror"
 
 # Importación de librerías
 from test._testpath import DIR_TEST_RESULTS, DIR_TEST_RESULTS_LOGGING
-from bin.arguments import argumentParserFactory
-from bin.configloader import configLoader
+from bin.arguments import argument_parser_factory
+from bin.configloader import ConfigLoader
 from bin.errors import ERROR_MATPLOTLIB_NOT_INSTALLED, ERROR_RUNTESTS_CREATE_PLOT, \
     ERROR_RUNTESTS_SAVE_LOG, ERROR_RUNTESTS_SAVE_RESULTS, st_error
-from bin.utils import wipeFile
+from bin.utils import wipe_file
 from config import DIR_CONFIG
 import datetime
 import math
@@ -26,7 +26,7 @@ import platform
 import subprocess
 
 # Configuración de argumentos por consola
-parser = argumentParserFactory('Ejecuta todos los tests.')
+parser = argument_parser_factory('Ejecuta todos los tests.')
 parser.add_argument('-p', '--create-plot', dest='doPlot', action='store_true', \
                     help='Crea un gráfico con todos los resultados en función del tiempo')
 parser.add_argument('--disable-verbose', dest='verbose', action='store_false', \
@@ -54,7 +54,7 @@ RESULT_PLOT_TIME = "results-plot-time.png"
 
 # Se comprueban comandos críticos
 if doReset:
-    wipeFile(DIR_TEST_RESULTS + RESULT_FILE)
+    wipe_file(DIR_TEST_RESULTS + RESULT_FILE)
 
 # Se ejecuta el llamado al shell
 p = subprocess.Popen(COMMANDS, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
@@ -93,7 +93,8 @@ except:
 if doSaveResults:
     try:
         x = ""
-        rsltFile = open(DIR_TEST_RESULTS + RESULT_FILE, "r")
+        # noinspection PyArgumentEqualDefault
+        rsltFile = open(DIR_TEST_RESULTS + RESULT_FILE, 'r')
         for line in rsltFile:
             x = line
         tstNumber = str(int(x.split(" ")[0]) + 1)
@@ -105,6 +106,7 @@ if doSaveResults:
             resfile.write(msgg + "\n")
     except Exception, e:
         if verbose:
+            # noinspection PyArgumentEqualDefault
             st_error(ERROR_RUNTESTS_SAVE_RESULTS, False, "runtests.py", e)
 
 if doSaveLogFile:  # Se guarda el log
@@ -115,6 +117,7 @@ if doSaveLogFile:  # Se guarda el log
         logfile.close()
     except Exception, e:
         if verbose:
+            # noinspection PyArgumentEqualDefault
             st_error(ERROR_RUNTESTS_SAVE_LOG, False, "runtests.py", e)
 
 if verbose:  # Se imprime el consola el estado final
@@ -128,15 +131,16 @@ if doPlot:  # Se crea un gráfico de los resultados en función del tiempo
         _continue = True
     except Exception, e:
         if verbose:
+            # noinspection PyArgumentEqualDefault
             st_error(ERROR_MATPLOTLIB_NOT_INSTALLED, False, "runtests.py", e)
     if _continue:
         try:
             # Se obtienen las configuraciones
-            plotConfig = configLoader(DIR_CONFIG, "plot.ini")
-            dpi_result = int(plotConfig.getValue("DPI", autoNumberify=True))
-            max_data = int(plotConfig.getValue("NUMBER_OF_X_DATA", autoNumberify=True))
-            max_range_var = float(plotConfig.getValue("MAX_RANGE_VAR", autoNumberify=True))
-            y_range_max_coeff = float(plotConfig.getValue("Y_RANGE_COEF_FROM_MAX_VALUE", autoNumberify=True))
+            plotConfig = ConfigLoader(DIR_CONFIG, "plot.ini")
+            dpi_result = int(plotConfig.get_value("DPI", autoNumberify=True))
+            max_data = int(plotConfig.get_value("NUMBER_OF_X_DATA", autoNumberify=True))
+            max_range_var = float(plotConfig.get_value("MAX_RANGE_VAR", autoNumberify=True))
+            y_range_max_coeff = float(plotConfig.get_value("Y_RANGE_COEF_FROM_MAX_VALUE", autoNumberify=True))
 
             # Se cargan los datos
             vec_time = []
@@ -144,7 +148,8 @@ if doPlot:  # Se crea un gráfico de los resultados en función del tiempo
             vec_ok = []
             vec_fail = []
             vec_x = []
-            testdata = open(DIR_TEST_RESULTS + RESULT_FILE, "r")
+            # noinspection PyArgumentEqualDefault
+            testdata = open(DIR_TEST_RESULTS + RESULT_FILE, 'r')
             counter = 0
             for ln in testdata:
                 if "ERROR" not in ln:
@@ -189,6 +194,7 @@ if doPlot:  # Se crea un gráfico de los resultados en función del tiempo
             tme_dsv /= ttl_dns
 
             # Se genera el gráfico temporal
+            # noinspection PyArgumentEqualDefault
             fig, ax = plt.subplots(nrows=1, ncols=1)
             ax.plot(vec_x, vec_time, 'c', label='Tiempo de prueba')
             ax.plot([vec_x[0], vec_x[nlen - 1]], [tme, tme], 'r--', label='Tiempo medio (tme)')
@@ -209,6 +215,7 @@ if doPlot:  # Se crea un gráfico de los resultados en función del tiempo
             plt.close(fig)
 
             # Se genera el gráfico de resultados
+            # noinspection PyArgumentEqualDefault
             fig, ax = plt.subplots(nrows=1, ncols=1)
             ax.plot(vec_x, vec_ok, 'b', label='Pruebas correctas')
             ax.plot(vec_x, vec_fail, 'r', label='Pruebas incorrectas')
@@ -228,4 +235,5 @@ if doPlot:  # Se crea un gráfico de los resultados en función del tiempo
             plt.close(fig)
         except Exception, e:
             if verbose:
+                # noinspection PyArgumentEqualDefault
                 st_error(ERROR_RUNTESTS_CREATE_PLOT, False, "runtests.py", e)

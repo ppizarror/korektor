@@ -176,7 +176,7 @@ def urljoin_parts(base_parts, reference_parts):
 # #         if comp != '..':
 # #             new_comps.append(comp)
 # #         elif new_comps:
-# #             new_comps.pop()
+# #             new_comps.Pop()
 # #     return '/'.join(new_comps)
 
 

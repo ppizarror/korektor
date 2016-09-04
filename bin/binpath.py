@@ -21,7 +21,7 @@ DIR_BIN = __actualpath
 # Directorios ocultos
 _DIR_CONFIG = __actualpath + ".config/"
 _LANG_DIRCONFIG = __actualpath + "langeditor/config/"
-_LANG_DIRLANGS = __actualpath.replace("/bin/", "/resources/langs/")
+_LANG_DIRLANGS = __actualpath.replace("/bin/", "/resources/Langs/")
 
 reload(sys)
 sys.path.append(DIR_BIN)

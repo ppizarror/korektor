@@ -21,10 +21,10 @@ DISABLE_HEAVY_TESTS_MSG = "Se desactivaron los tests pesados"
 
 # Se cargan argumentos desde la consola
 if __name__ == '__main__':
-    from bin.arguments import argumentParserFactory
+    from bin.arguments import argument_parser_factory
 
-    argparser = argumentParserFactory("VerticalScrolledFrame Test", verbose=True, version=True,
-                                      enable_skipped_test=True).parse_args()
+    argparser = argument_parser_factory("VerticalScrolledFrame Test", verbose=True, version=True,
+                                        enable_skipped_test=True).parse_args()
     DISABLE_HEAVY_TESTS = argparser.enableHeavyTest
     VERBOSE = argparser.verbose
 
@@ -45,7 +45,7 @@ class VerticalScrolledFrameTest(unittest.TestCase):
             sucess = True
         except Exception, e:  # @UnusedVariable
             sucess = False
-        assert sucess == True, ERROR_TKINTER_NOT_INSTALLED
+        assert sucess is True, ERROR_TKINTER_NOT_INSTALLED
 
     @staticmethod
     def testImportTkinter():
@@ -61,7 +61,7 @@ class VerticalScrolledFrameTest(unittest.TestCase):
             sucess = True
         except Exception, e:  # @UnusedVariable
             sucess = False
-        assert sucess == True, ERROR_TKINTER_NOT_INSTALLED
+        assert sucess is True, ERROR_TKINTER_NOT_INSTALLED
 
 
 # Test

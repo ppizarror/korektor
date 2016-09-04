@@ -15,7 +15,7 @@ __author__ = "ppizarror"
 from _testpath import *  # @UnusedWildImport
 from lib.package import *  # @UnusedWildImport
 from bin.errors import *  # @UnusedWildImport
-from bin.utils import printBarsConsole
+from bin.utils import print_bars_console
 import unittest
 
 # Constantes test
@@ -25,9 +25,9 @@ VERBOSE = False
 
 # Se cargan argumentos desde la consola
 if __name__ == '__main__':
-    from bin.arguments import argumentParserFactory
+    from bin.arguments import argument_parser_factory
 
-    argparser = argumentParserFactory("Package Test", verbose=True, version=True, enable_skipped_test=True).parse_args()
+    argparser = argument_parser_factory("Package Test", verbose=True, version=True, enable_skipped_test=True).parse_args()
     DISABLE_HEAVY_TESTS = argparser.enableHeavyTest
     VERBOSE = argparser.verbose
 
@@ -42,7 +42,7 @@ class PackageTest(unittest.TestCase):
         :rtype: None
         """
         self.f = FileManager()
-        self.f.setWorkingDirectory(DIR_DATA_TEST)
+        self.f.set_working_directory(DIR_DATA_TEST)
         if VERBOSE:
             self.f.enable_verbose()
         else:
@@ -56,23 +56,23 @@ class PackageTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        p = Package(self.f.inspectSingleFile("Folder 3"), True)
+        p = Package(self.f.inspect_single_file("Folder 3"), True)
         if VERBOSE:
-            printBarsConsole("Testeo Folder 3")
+            print_bars_console("Testeo Folder 3")
             print "Archivos en forma raw:",
-            p._printRawFiles()
+            p._print_raw_files()
             print "Nombre del paquete:",
-            print p.getPackageName()
+            print p.get_package_name()
             print "Archivos del paquete:"
-            p._printFileList()
+            p._print_file_list()
             # noinspection SpellCheckingInspection
             print "Jerarquia del paquete:"
-            p._printHierarchy()
+            p._print_hierarchy()
             print "Numero de subcarpetas:",
-            print p.getNumberOfSubfolders()
-        assert p.getPackageName() == "Folder 3", PACKAGE_TEST_ERROR_INVALID_NAME
-        assert p.getNumberOfSubfolders() == 3, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
-        assert p.getNumberOfElements() == 8, PACKAGE_TEST_ERROR_COUNT_FILES
+            print p.get_number_of_subfolders()
+        assert p.get_package_name() == "Folder 3", PACKAGE_TEST_ERROR_INVALID_NAME
+        assert p.get_number_of_subfolders() == 3, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
+        assert p.get_number_of_elements() == 8, PACKAGE_TEST_ERROR_COUNT_FILES
         del p
 
     def testFEmpty(self):
@@ -82,21 +82,21 @@ class PackageTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        p = Package(self.f.inspectSingleFile("Folder 0"), True)
+        p = Package(self.f.inspect_single_file("Folder 0"), True)
         if VERBOSE:
-            printBarsConsole("Testeo folder sin contenido")
-            print "Lista de archivos:", p.getFileList()
-            print "Nombre del paquete:", p.getPackageName()
-            print "Numero de archivos:", p.getNumberOfElements()
-            print "Numero de subcarpetas:", p.getNumberOfSubfolders()
+            print_bars_console("Testeo folder sin contenido")
+            print "Lista de archivos:", p.get_file_list()
+            print "Nombre del paquete:", p.get_package_name()
+            print "Numero de archivos:", p.get_number_of_elements()
+            print "Numero de subcarpetas:", p.get_number_of_subfolders()
             print "Jerarquía:"
-            p._printHierarchy()
-        assert p.getNumberOfElements() == 0, PACKAGE_TEST_ERROR_COUNT_FILES
-        assert p.getNumberOfSubfolders() == 0, PACKAGE_TEST_ERROR_COUNT_FILES
-        assert p.getPackageName() == "Folder 0", PACKAGE_TEST_ERROR_INVALID_NAME
-        assert p.isFile("") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.checkIfExist("") == False, PACKAGE_TEST_FOUND_INEXISTENT_FILE
+            p._print_hierarchy()
+        assert p.get_number_of_elements() == 0, PACKAGE_TEST_ERROR_COUNT_FILES
+        assert p.get_number_of_subfolders() == 0, PACKAGE_TEST_ERROR_COUNT_FILES
+        assert p.get_package_name() == "Folder 0", PACKAGE_TEST_ERROR_INVALID_NAME
+        assert p.is_file("") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.check_if_exist("") is False, PACKAGE_TEST_FOUND_INEXISTENT_FILE
         del p
 
     def testF4(self):
@@ -106,15 +106,15 @@ class PackageTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        p = Package(self.f.inspectSingleFile("Folder 4"), True)
+        p = Package(self.f.inspect_single_file("Folder 4"), True)
         if VERBOSE:
-            printBarsConsole("Testeo folder 4")
-            p._printHierarchy()
-        assert p.getPackageName() == "Folder 4", PACKAGE_TEST_ERROR_INVALID_NAME
-        assert p.getNumberOfElements() == 10, PACKAGE_TEST_ERROR_COUNT_FILES
-        assert p.getNumberOfSubfolders() == 4, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
-        assert p.isFile("Zip Folder") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFile("") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+            print_bars_console("Testeo folder 4")
+            p._print_hierarchy()
+        assert p.get_package_name() == "Folder 4", PACKAGE_TEST_ERROR_INVALID_NAME
+        assert p.get_number_of_elements() == 10, PACKAGE_TEST_ERROR_COUNT_FILES
+        assert p.get_number_of_subfolders() == 4, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
+        assert p.is_file("Zip Folder") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_file("") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
         del p
 
     def testInexistente(self):
@@ -124,20 +124,20 @@ class PackageTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        p = Package(self.f.inspectSingleFile("Fake name"))
-        p.generateHierarchy()
+        p = Package(self.f.inspect_single_file("Fake name"))
+        p.generate_hierarchy()
         if VERBOSE:
-            printBarsConsole("Testeo de carpeta inexistente")
-            print "Lista de archivos:", p.getFileList()
-            print "Nombre del paquete:", p.getPackageName()
-            print "Numero de elementos:", p.getNumberOfElements()
-            print "Numero de subcarpetas:", p.getNumberOfSubfolders()
-        assert p.getNumberOfElements() == 0, PACKAGE_TEST_ERROR_COUNT_FILES
-        assert p.getNumberOfSubfolders() == 0, PACKAGE_TEST_ERROR_COUNT_FILES
-        assert p.getPackageName() == PACKAGE_NO_NAME, PACKAGE_TEST_ERROR_INVALID_NAME
-        assert p.isFile("") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.checkIfExist("") == False, PACKAGE_TEST_FOUND_INEXISTENT_FILE
+            print_bars_console("Testeo de carpeta inexistente")
+            print "Lista de archivos:", p.get_file_list()
+            print "Nombre del paquete:", p.get_package_name()
+            print "Numero de elementos:", p.get_number_of_elements()
+            print "Numero de subcarpetas:", p.get_number_of_subfolders()
+        assert p.get_number_of_elements() == 0, PACKAGE_TEST_ERROR_COUNT_FILES
+        assert p.get_number_of_subfolders() == 0, PACKAGE_TEST_ERROR_COUNT_FILES
+        assert p.get_package_name() == PACKAGE_NO_NAME, PACKAGE_TEST_ERROR_INVALID_NAME
+        assert p.is_file("") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.check_if_exist("") is False, PACKAGE_TEST_FOUND_INEXISTENT_FILE
         del p
 
     @unittest.skipIf(DISABLE_HEAVY_TESTS, DISABLE_HEAVY_TESTS_MSG)
@@ -148,58 +148,58 @@ class PackageTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        p = Package(self.f.inspectSingleFile("Folder 5"), True)
+        p = Package(self.f.inspect_single_file("Folder 5"), True)
         if VERBOSE:
-            p._printHierarchy()
-            printBarsConsole("Testeo folder 5")
+            p._print_hierarchy()
+            print_bars_console("Testeo folder 5")
 
         # Testeo general
-        assert p.getPackageName() == "Folder 5", PACKAGE_TEST_ERROR_INVALID_NAME
-        assert p.getNumberOfElements() == 25, PACKAGE_TEST_ERROR_COUNT_FILES
-        assert p.getNumberOfSubfolders() == 12, PACKAGE_TEST_ERROR_COUNT_FILES
+        assert p.get_package_name() == "Folder 5", PACKAGE_TEST_ERROR_INVALID_NAME
+        assert p.get_number_of_elements() == 25, PACKAGE_TEST_ERROR_COUNT_FILES
+        assert p.get_number_of_subfolders() == 12, PACKAGE_TEST_ERROR_COUNT_FILES
 
         # Testeo de carpetas
-        assert p.isFolder("Subfolder 2 with zip") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("Subfolder 1 with zip") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("Folder 1 inside subfolder 1") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("Folder 2 inside subfolder 1") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("Folder 3 inside subfolder 1") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("Rar Folder inside Zip Folder") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("Rar Folder inside Rar Folder") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("Folder 1 inside folder 2 inside subfolder 1") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("Folder 1 inside folder 2 inside subfolder 2") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("main.java") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("Content 9.txt") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("A2.txt") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("Subfolder 1") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Subfolder 2 with zip") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Subfolder 1 with zip") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Folder 1 inside subfolder 1") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Folder 2 inside subfolder 1") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Folder 3 inside subfolder 1") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Rar Folder inside Zip Folder") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Rar Folder inside Rar Folder") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Folder 1 inside folder 2 inside subfolder 1") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Folder 1 inside folder 2 inside subfolder 2") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("main.java") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Content 9.txt") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("A2.txt") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Subfolder 1") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
 
         # Testeo de archivos
-        assert p.isFile("Subfolder 2 with zip") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Subfolder 1 with zip") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Folder 1 inside subfolder 1") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Folder 2 inside subfolder 1") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Folder 3 inside subfolder 1") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Rar Folder inside Zip Folder") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Rar Folder inside Rar Folder") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Folder 1 inside folder 2 inside subfolder 1") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Folder 1 inside folder 2 inside subfolder 2") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Content 14.txt") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Content.txt") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Subfolder with zip") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Zip Folder") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Content 2 inside rar") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Content 1 inside rar") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Content 3 inside rar.txt") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Content 2 inside zip.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("A2.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Content 5.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Content K.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Parte1.java") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Content 11.java") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Content 2 inside rar.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Content 2 inside rar.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Content 1.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Subfolder 2 with zip") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Subfolder 1 with zip") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Folder 1 inside subfolder 1") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Folder 2 inside subfolder 1") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Folder 3 inside subfolder 1") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Rar Folder inside Zip Folder") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Rar Folder inside Rar Folder") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Folder 1 inside folder 2 inside subfolder 1") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Folder 1 inside folder 2 inside subfolder 2") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Content 14.txt") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Content.txt") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Subfolder with zip") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Zip Folder") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Content 2 inside rar") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Content 1 inside rar") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Content 3 inside rar.txt") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Content 2 inside zip.txt") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("A2.txt") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Content 5.txt") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Content K.txt") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Parte1.java") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Content 11.java") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Content 2 inside rar.txt") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Content 2 inside rar.txt") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Content 1.txt") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
         del p
 
     def testSeguidas(self):
@@ -209,17 +209,17 @@ class PackageTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        p = Package(self.f.inspectSingleFile("Folder 6"), True)
+        p = Package(self.f.inspect_single_file("Folder 6"), True)
         if VERBOSE:
-            p._printHierarchy()
-            printBarsConsole("Testeo folder 6 - Carpetas seguidas")
-            print "Chequeo de existencia de Hello world:", p.checkIfExist("Hello world.txt")
-        assert p.getNumberOfSubfolders() == 4, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
-        assert p.getNumberOfElements() == 1, PACKAGE_TEST_ERROR_COUNT_FILES
-        assert p.isFile("Hello world.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Subfolder 1") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFolder("Hello world.txt") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("Subfolder 1") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+            p._print_hierarchy()
+            print_bars_console("Testeo folder 6 - Carpetas seguidas")
+            print "Chequeo de existencia de Hello world:", p.check_if_exist("Hello world.txt")
+        assert p.get_number_of_subfolders() == 4, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
+        assert p.get_number_of_elements() == 1, PACKAGE_TEST_ERROR_COUNT_FILES
+        assert p.is_file("Hello world.txt") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Subfolder 1") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_folder("Hello world.txt") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Subfolder 1") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
         del p
 
     def testSeguidasEmpty(self):
@@ -229,20 +229,20 @@ class PackageTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        p = Package(self.f.inspectSingleFile("Folder 6-EMPTY"), True)
+        p = Package(self.f.inspect_single_file("Folder 6-EMPTY"), True)
         if VERBOSE:
-            p._printHierarchy()
-            printBarsConsole("Testeo folder 6 - Vacía")
-            print "Lista de archivos:", p.getFileList()
-            print "Nombre del paquete:", p.getPackageName()
-            print "Numero de elementos:", p.getNumberOfElements()
-            print "Numero de subcarpetas:", p.getNumberOfSubfolders()
-        assert p.getNumberOfElements() == 0, PACKAGE_TEST_ERROR_COUNT_FILES
-        assert p.getNumberOfSubfolders() == 0, PACKAGE_TEST_ERROR_COUNT_FILES
-        assert p.getPackageName() == "Folder 6-EMPTY", PACKAGE_TEST_ERROR_INVALID_NAME
-        assert p.isFile("") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.checkIfExist("") == False, PACKAGE_TEST_FOUND_INEXISTENT_FILE
+            p._print_hierarchy()
+            print_bars_console("Testeo folder 6 - Vacía")
+            print "Lista de archivos:", p.get_file_list()
+            print "Nombre del paquete:", p.get_package_name()
+            print "Numero de elementos:", p.get_number_of_elements()
+            print "Numero de subcarpetas:", p.get_number_of_subfolders()
+        assert p.get_number_of_elements() == 0, PACKAGE_TEST_ERROR_COUNT_FILES
+        assert p.get_number_of_subfolders() == 0, PACKAGE_TEST_ERROR_COUNT_FILES
+        assert p.get_package_name() == "Folder 6-EMPTY", PACKAGE_TEST_ERROR_INVALID_NAME
+        assert p.is_file("") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.check_if_exist("") is False, PACKAGE_TEST_FOUND_INEXISTENT_FILE
         del p
 
     def testSimple(self):
@@ -252,16 +252,16 @@ class PackageTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        p = Package(self.f.inspectSingleFile("Folder 1"), True)
+        p = Package(self.f.inspect_single_file("Folder 1"), True)
         if VERBOSE:
-            printBarsConsole("Testeo folder 1")
-            p._printHierarchy()
+            print_bars_console("Testeo folder 1")
+            p._print_hierarchy()
             print "Numero de elementos:",
-            print p.getNumberOfElements()
-        assert p.getNumberOfElements() == 2, PACKAGE_TEST_ERROR_COUNT_FILES
-        assert p.getNumberOfSubfolders() == 0, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
-        assert p.isFile("Content 3.txt") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Content 1.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+            print p.get_number_of_elements()
+        assert p.get_number_of_elements() == 2, PACKAGE_TEST_ERROR_COUNT_FILES
+        assert p.get_number_of_subfolders() == 0, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
+        assert p.is_file("Content 3.txt") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Content 1.txt") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
         del p
 
     def testPackageWithFilemanager(self):
@@ -273,13 +273,13 @@ class PackageTest(unittest.TestCase):
         """
         p = PackageFileManager(self.f, "Folder 4", True)
         if VERBOSE:
-            printBarsConsole("Testeo folder 4")
-            p._printHierarchy()
-        assert p.getPackageName() == "Folder 4", PACKAGE_TEST_ERROR_INVALID_NAME
-        assert p.getNumberOfElements() == 10, PACKAGE_TEST_ERROR_COUNT_FILES
-        assert p.getNumberOfSubfolders() == 4, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
-        assert p.isFile("Zip Folder") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFile("") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+            print_bars_console("Testeo folder 4")
+            p._print_hierarchy()
+        assert p.get_package_name() == "Folder 4", PACKAGE_TEST_ERROR_INVALID_NAME
+        assert p.get_number_of_elements() == 10, PACKAGE_TEST_ERROR_COUNT_FILES
+        assert p.get_number_of_subfolders() == 4, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
+        assert p.is_file("Zip Folder") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_file("") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
         del p
 
     # noinspection SpellCheckingInspection
@@ -291,30 +291,30 @@ class PackageTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        self.f.disable_extractIfFolderAlreadyExists()
+        self.f.disable_extract_if_folder_already_exists()
         p = PackageFileManager(self.f, "Folder 8-COMPSD", True)
         if VERBOSE:
-            printBarsConsole("Testeo folder 8 con archivos comprimidos de igual nombre - extracción deshabilitada")
-            p._printHierarchy()
-        assert p.getPackageName() == "Folder 8-COMPSD", PACKAGE_TEST_ERROR_INVALID_NAME
-        assert p.getNumberOfElements() == 15, PACKAGE_TEST_ERROR_COUNT_FILES
-        assert p.getNumberOfSubfolders() == 9, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
+            print_bars_console("Testeo folder 8 con archivos comprimidos de igual nombre - extracción deshabilitada")
+            p._print_hierarchy()
+        assert p.get_package_name() == "Folder 8-COMPSD", PACKAGE_TEST_ERROR_INVALID_NAME
+        assert p.get_number_of_elements() == 15, PACKAGE_TEST_ERROR_COUNT_FILES
+        assert p.get_number_of_subfolders() == 9, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
 
         # Asserts file
-        assert p.isFile("Zip Folder") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFile("Parte1.java") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Parte2.java") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("PartE1.java") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Content 1 inside rar.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Content 1 inside rAr.txt") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
-        assert p.isFile("Content 1.txt") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Zip Folder") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_file("Parte1.java") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Parte2.java") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("PartE1.java") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Content 1 inside rar.txt") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Content 1 inside rAr.txt") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
+        assert p.is_file("Content 1.txt") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FILE
 
         # Asserts folder
-        assert p.isFolder("Zip Folder") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("Zip FOlder") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("Rar Folder") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("Zip Folder TARGET") == True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
-        assert p.isFolder("Zip Folder TARGEt") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Zip Folder") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Zip FOlder") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Rar Folder") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Zip Folder TARGET") is True, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
+        assert p.is_folder("Zip Folder TARGEt") is False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
 
     def testFindFile(self):
         """
@@ -323,20 +323,20 @@ class PackageTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        p = Package(self.f.inspectSingleFile("Folder 6"), True)
+        p = Package(self.f.inspect_single_file("Folder 6"), True)
         if VERBOSE:
-            printBarsConsole("Testeo folder 6 - Busqueda de ubicación de archivos")
-            p._printHierarchy()
+            print_bars_console("Testeo folder 6 - Busqueda de ubicación de archivos")
+            p._print_hierarchy()
         t = "/Subfolder 1/Subfolder 2/Subfolder 3/Subfolder 4/Hello world.txt"
-        assert p.findFileLocation("Hello world.txt") == t, PACKAGE_TEST_BAD_SEARCH_LOCATION
-        assert p.findFileLocation("main.java") == PACKAGE_FILE_NOT_FOUND, PACKAGE_TEST_BAD_SEARCH_LOCATION
+        assert p.find_file_location("Hello world.txt") == t, PACKAGE_TEST_BAD_SEARCH_LOCATION
+        assert p.find_file_location("main.java") == PACKAGE_FILE_NOT_FOUND, PACKAGE_TEST_BAD_SEARCH_LOCATION
         t = "/Subfolder 1/Subfolder 2/Subfolder 3/Subfolder 4/"
-        assert p.findFileLocation("Subfolder 4") == t, PACKAGE_TEST_BAD_SEARCH_LOCATION
+        assert p.find_file_location("Subfolder 4") == t, PACKAGE_TEST_BAD_SEARCH_LOCATION
         t = "/Subfolder 1/Subfolder 2/Subfolder 3/"
-        assert p.findFileLocation("Subfolder 3") == t, PACKAGE_TEST_BAD_SEARCH_LOCATION
+        assert p.find_file_location("Subfolder 3") == t, PACKAGE_TEST_BAD_SEARCH_LOCATION
         t = "/Subfolder 1/"
-        assert p.findFileLocation("Subfolder 1") == t, PACKAGE_TEST_BAD_SEARCH_LOCATION
-        assert p.findFileLocation("Subfolder 5") == PACKAGE_FILE_NOT_FOUND, PACKAGE_TEST_BAD_SEARCH_LOCATION
+        assert p.find_file_location("Subfolder 1") == t, PACKAGE_TEST_BAD_SEARCH_LOCATION
+        assert p.find_file_location("Subfolder 5") == PACKAGE_FILE_NOT_FOUND, PACKAGE_TEST_BAD_SEARCH_LOCATION
         del t
 
     def testDepthFile(self):
@@ -346,17 +346,17 @@ class PackageTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        p = Package(self.f.inspectSingleFile("Folder 9-SIM3ZIP"), True)
+        p = Package(self.f.inspect_single_file("Folder 9-SIM3ZIP"), True)
         if VERBOSE:
-            printBarsConsole("Testeo folder 9 similar a 3 con archivos zip - Busqueda de profundidad de archivos")
-            p._printHierarchy()
-        assert p.getFileDepth("Zip Folder 2") == 1, PACKAGE_TEST_BAD_SEARCH_DEPTH
-        assert p.getFileDepth("Zip Folder") == 0, PACKAGE_TEST_BAD_SEARCH_DEPTH
-        assert p.getFileDepth("Zip Folder 3") == PACKAGE_FILE_INVALID_DEPTH, PACKAGE_TEST_BAD_SEARCH_DEPTH
-        assert p.getFileDepth("Content A.txt") == 0, PACKAGE_TEST_BAD_SEARCH_DEPTH
-        assert p.getFileDepth("Content C.txt") == 1, PACKAGE_TEST_BAD_SEARCH_DEPTH
-        assert p.getFileDepth("Content E.txt") == 2, PACKAGE_TEST_BAD_SEARCH_DEPTH
-        assert p.getFileDepth("Content Z.txt") == PACKAGE_FILE_INVALID_DEPTH, PACKAGE_TEST_BAD_SEARCH_DEPTH
+            print_bars_console("Testeo folder 9 similar a 3 con archivos zip - Busqueda de profundidad de archivos")
+            p._print_hierarchy()
+        assert p.get_file_depth("Zip Folder 2") == 1, PACKAGE_TEST_BAD_SEARCH_DEPTH
+        assert p.get_file_depth("Zip Folder") == 0, PACKAGE_TEST_BAD_SEARCH_DEPTH
+        assert p.get_file_depth("Zip Folder 3") == PACKAGE_FILE_INVALID_DEPTH, PACKAGE_TEST_BAD_SEARCH_DEPTH
+        assert p.get_file_depth("Content A.txt") == 0, PACKAGE_TEST_BAD_SEARCH_DEPTH
+        assert p.get_file_depth("Content C.txt") == 1, PACKAGE_TEST_BAD_SEARCH_DEPTH
+        assert p.get_file_depth("Content E.txt") == 2, PACKAGE_TEST_BAD_SEARCH_DEPTH
+        assert p.get_file_depth("Content Z.txt") == PACKAGE_FILE_INVALID_DEPTH, PACKAGE_TEST_BAD_SEARCH_DEPTH
 
     def testErrorAssertionPackage(self):
         """
@@ -365,10 +365,10 @@ class PackageTest(unittest.TestCase):
         :return: void
         :rtype: None
         """
-        p = Package(self.f.inspectSingleFile("Folder 9-SIM3ZIP"), False)
-        p.enable_exceptionAsString()
-        p.enable_exceptionCode()
-        assert p._printHierarchy() == "PACKAGE_ERROR_NOT_HIERARCHY_CREATED", PACKAGE_TEST_BAD_EXCEPTION_TREATMENT
+        p = Package(self.f.inspect_single_file("Folder 9-SIM3ZIP"))
+        p.enable_exception_as_string()
+        p.enable_exception_code()
+        assert p._print_hierarchy() == "PACKAGE_ERROR_NOT_HIERARCHY_CREATED", PACKAGE_TEST_BAD_EXCEPTION_TREATMENT
 
 
 # Main test

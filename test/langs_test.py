@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-bin/langs TEST
+bin/Langs TEST
 Test visual al módulo encargado de cargar los idiomas.
 
 Autor: PABLO PIZARRO @ github.com/ppizarror
@@ -20,19 +20,19 @@ if __name__ == '__main__':
 
     print _LANG_DIRCONFIG
     print _LANG_DIRLANGS
-    lang = langLoader("TEST", verbose=True)
-    langconfig.printParameters()
-    print langconfig.getParameters()
-    langavaiable.printParameters()
-    langtranslateconfig.printParameters()
-    print langselfconfig.getParameters()
-    print langselfconfig.isTrue("TRANSLATIONS")
+    lang = LangLoader("TEST", verbose=True)
+    langconfig.print_parameters()
+    print langconfig.get_parameters()
+    langavaiable.print_parameters()
+    langtranslateconfig.print_parameters()
+    print langselfconfig.get_parameters()
+    print langselfconfig.is_true("TRANSLATIONS")
     print lang.get(10)
     print lang.get(12)
     # noinspection PyTypeChecker
     print lang.get("a")
     # print lang.translate(11, "eng")
-    lang.printAll()
+    lang.print_all()
     print lang.get(14, 1, 2, 3)
     print lang.get(14, 1, 2, 3, noformat=True)
     print lang.get(12, "pablo")

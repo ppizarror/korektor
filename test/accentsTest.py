@@ -24,9 +24,9 @@ VERBOSE = False
 
 # Se cargan argumentos desde la consola
 if __name__ == '__main__':
-    from bin.arguments import argumentParserFactory
+    from bin.arguments import argument_parser_factory
 
-    argparser = argumentParserFactory("Accents Test", verbose=True, version=True, enable_skipped_test=True).parse_args()
+    argparser = argument_parser_factory("Accents Test", verbose=True, version=True, enable_skipped_test=True).parse_args()
     DISABLE_HEAVY_TESTS = argparser.enableHeavyTest
     VERBOSE = argparser.verbose
 

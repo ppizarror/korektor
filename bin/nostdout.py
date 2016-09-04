@@ -13,7 +13,7 @@ __author__ = "ppizarror"
 
 
 # noinspection PyMissingOrEmptyDocstring
-class noStdOut:
+class NoStdOut:
     """
     Desactiva el print
     """

@@ -9,8 +9,8 @@ Fecha: AGOSTO 2016
 Licencia: GPLv2
 """
 
-__author__ = "Pablo Pizarro [@ppizarror]"
+__author__ = 'Pablo Pizarro [@ppizarror]'
 # noinspection SpellCheckingInspection
-__credits__ = ["Pablo pizarro [@ppizarror]", "Marko Kreen", "John J. Lee", "@ponty"]
-__email__ = "pablo.pizarro@ing.uchile.cl"
-__maintainer__ = "Pablo Pizarro [@ppizarror]"
+__credits__ = ['Pablo pizarro [@ppizarror]', 'Marko Kreen', 'John J. Lee', '@ponty']
+__email__ = 'pablo.pizarro@ing.uchile.cl'
+__maintainer__ = 'Pablo Pizarro [@ppizarror]'

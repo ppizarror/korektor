@@ -20,7 +20,7 @@ __actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace("\\", "/"
 DIR_DOC = __actualpath + "doc/"
 DIR_ICONS = __actualpath + "icons/"
 DIR_IMAGES = __actualpath + "images/"
-DIR_LANGS = __actualpath + "langs/"
+DIR_LANGS = __actualpath + "Langs/"
 DIR_RESOURCES = __actualpath
 
 # Directorios internos

@@ -24,22 +24,26 @@ try:
 except:
     _IMPORTED[0] = 0
 
+if not is_windows():
+    import os
+
 # Constantes
-# noinspection SpellCheckingInspection
-_CMD_COLORS = {"blue": 0x10,
-               "gray": 0x80,
-               "green": 0x20,
-               "lblue": 0x90,
-               "lgray": 0x70,
-               "lgreen": 0xA0,
-               "lred": 0xC0,
-               "purple": 0x50,
-               "white": 0xF0,
-               "yellow": 0x60,
-               "lpurple": 0xD0,
-               "lyellow": 0xE0,
-               "red": 0x40
-               }
+COLOR_AQUA = "3"
+COLOR_BLACK = "0"
+COLOR_BLUE = "1"
+COLOR_GRAY = "8"
+COLOR_GREEN = "2"
+COLOR_LAQUA = "B"
+COLOR_LBLUE = "9"
+COLOR_LGREEN = "A"
+COLOR_LPURPLE = "D"
+COLOR_LRED = "C"
+COLOR_LWHITE = "F"
+COLOR_LYELLOW = "E"
+COLOR_PURPLE = "5"
+COLOR_RED = "4"
+COLOR_WHITE = "7"
+COLOR_YELLOW = "6"
 
 
 def color_cmd(cmd, color):
@@ -48,14 +52,13 @@ def color_cmd(cmd, color):
 
     :param cmd: String a imprimir en consola
     :type cmd: str
-    :param color: Color
-    :type color: str
+    :param color: Número del color
+    :type color: int
 
     :return: void
     :rtype: None
     """
-    if color in _CMD_COLORS and _IMPORTED[0]:
-        color = _CMD_COLORS[color]
+    if _IMPORTED[0] and is_windows():
         try:
             ct_krnl = ctypes.windll.kernel32.GetStdHandle(-11)  # @UndefinedVariable
             ctypes.windll.kernel32.SetConsoleTextAttribute(ct_krnl, color)  # @UndefinedVariable
@@ -83,20 +86,37 @@ def clrscr():
             WConio.clrscr()  # @UndefinedVariable
         except:
             pass
+    else:
+        if not is_windows():
+            os.system('clear')
+
+
+def create_color(background, text):
+    """
+    Función que crea un color.
+
+    :param background: Color del fondo
+    :type background: str
+    :param text: Color del texto
+    :type text: str
+
+    :return: Número del color
+    :rtype: int
+    """
+    return eval("0x" + background + text)
 
 
 def single_color(color):
     """
     Establece la consola en un sólo color.
 
-    :param color: String del color
-    :type color: str
+    :param color: Número del color
+    :type color: int
 
     :return: void
     :rtype: None
     """
-    if color in _CMD_COLORS and _IMPORTED[0]:
-        color = _CMD_COLORS[color]
+    if _IMPORTED[0] and is_windows():
         try:
             ct_krnl = ctypes.windll.kernel32.GetStdHandle(-11)  # @UndefinedVariable
             ctypes.windll.kernel32.SetConsoleTextAttribute(ct_krnl, color)  # @UndefinedVariable
@@ -105,30 +125,145 @@ def single_color(color):
 
 
 # noinspection PyClassHasNoInit
-class Color:
+class Colors:
     """
     Permite manejar colores en la terminal.
     """
 
-    if is_windows():
-        PURPLE = '\033[95m'
-        CYAN = '\033[96m'
-        DARKCYAN = '\033[36m'
-        BLUE = '\033[94m'
-        GREEN = '\033[92m'
-        YELLOW = '\033[93m'
-        RED = '\033[91m'
-        BOLD = '\033[1m'
-        UNDERLINE = '\033[4m'
-        END = '\033[0m'
-    else:
-        PURPLE = ''
-        CYAN = ''
-        DARKCYAN = ''
-        BLUE = ''
-        GREEN = ''
-        YELLOW = ''
-        RED = ''
-        BOLD = ''
-        UNDERLINE = ''
-        END = ''
+    @staticmethod
+    def bold():
+        """
+        Texto en negrita.
+
+        :return: String con formato
+        :rtype: str
+        """
+        if is_windows():
+            return ''
+        else:
+            return '\033[1m'
+
+    @staticmethod
+    def blue():
+        """
+        Colors azul.
+
+        :return: String con color
+        :rtype: str
+        """
+        if is_windows():
+            single_color(create_color(COLOR_BLACK, COLOR_RED))
+            return ''
+        else:
+            return '\033[94m'
+
+    @staticmethod
+    def cyan():
+        """
+        Colors púrpura.
+
+        :return: String con color
+        :rtype: str
+        """
+        if is_windows():
+            single_color(create_color(COLOR_BLACK, COLOR_LAQUA))
+            return ''
+        else:
+            return '\033[96m'
+
+    @staticmethod
+    def dark_cyan():
+        """
+        Colors cian oscuro.
+
+        :return: String con color
+        :rtype: str
+        """
+        if is_windows():
+            single_color(create_color(COLOR_BLACK, COLOR_LBLUE))
+            return ''
+        else:
+            return '\033[36m'
+
+    @staticmethod
+    def end():
+        """
+        Terminación del formato.
+
+        :return: String con formato
+        :rtype: str
+        """
+        if is_windows():
+            single_color(create_color(COLOR_BLACK, COLOR_WHITE))
+            return ''
+        else:
+            return '\033[0m'
+
+    @staticmethod
+    def green():
+        """
+        Colors verde.
+
+        :return: String con color
+        :rtype: str
+        """
+        if is_windows():
+            single_color(create_color(COLOR_BLACK, COLOR_GREEN))
+            return ''
+        else:
+            return '\033[92m'
+
+    @staticmethod
+    def purple():
+        """
+        Colors púrpura.
+
+        :return: String con color
+        :rtype: str
+        """
+        if is_windows():
+            single_color(create_color(COLOR_BLACK, COLOR_PURPLE))
+            return ''
+        else:
+            return '\033[95m'
+
+    @staticmethod
+    def red():
+        """
+        Colors rojo.
+
+        :return: String con color
+        :rtype: str
+        """
+        if is_windows():
+            single_color(create_color(COLOR_BLACK, COLOR_RED))
+            return ''
+        else:
+            return '\033[91m'
+
+    @staticmethod
+    def underline():
+        """
+        Texto subrayado.
+
+        :return: String con formato
+        :rtype: str
+        """
+        if is_windows():
+            return ''
+        else:
+            return '\033[4m'
+
+    @staticmethod
+    def yellow():
+        """
+        Colors verde.
+
+        :return: String con color
+        :rtype: str
+        """
+        if is_windows():
+            single_color(create_color(COLOR_BLACK, COLOR_YELLOW))
+            return ''
+        else:
+            return '\033[93m'
