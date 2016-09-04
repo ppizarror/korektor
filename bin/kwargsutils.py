@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# noinspection SpellCheckingInspection
 """
 KWARGSUTILS
 Funciones utilitarias para tratar los argumentos del tipo **kwargs
@@ -9,11 +10,6 @@ Fecha: 2016
 Licencia: GPLv2
 """
 __author__ = "ppizarror"
-
-# Importación de librerías
-if __name__ == '__main__':
-    # noinspection PyUnresolvedReferences
-    from binpath import *  # @UnusedWildImport
 
 
 def kwargExistsKey(kwargs, keyParam):

@@ -12,20 +12,22 @@ __author__ = "ppizarror"
 
 # Importación de librerías
 from argparse import ArgumentParser, SUPPRESS
-from kwargsUtils import *  # @UnusedWildImport
+from accents import delAccentByOS
+from kwargsutils import *  # @UnusedWildImport
 
 # Constantes del programa
-_TITLE_AUTHOR = "Autor del software o modulo."
+_TITLE_AUTHOR = "Autor del software o módulo."
 _TITLE_HELP = "Muestra este mensaje de ayuda."
 _TITLE_OPTIONALS = "Argumentos opcionales"
 _TITLE_POSITIONALS = "Argumentos posicionales"
 _TITLE_SKIPPED = "Activa los tests pesados"
 _TITLE_VERBOSE = "Activa el verbose."
-_TITLE_VERSION = "Muestra la version del programa."
+_TITLE_VERSION = "Muestra la versión del programa."
 
 
 # noinspection PyTypeChecker
 def argumentParserFactory(descripcion="", **kwargs):
+    # noinspection SpellCheckingInspection
     """
     Crea un parser de argumentos para ser tratados en consola.
 
@@ -42,10 +44,10 @@ def argumentParserFactory(descripcion="", **kwargs):
         - title_optionals = Titulo de los argumentos opcionales.
         - title_positionals = Titulo de los argumentos posicionales.
         - title_verbose = Mensaje de ayuda al activar o desactivar el verbose.
-        - title_skipped_test = Mensaje de ayuda de la funcion --enable-skipped
+        - title_skipped_test = Mensaje de ayuda de la función --enable-skipped
         - title_version = Mensaje de ayuda al mostrar la versión del programa.
 
-    :param descripcion: Descripcion de la bateria de argumentos
+    :param descripcion: Descripción de la batería de argumentos
     :type descripcion: str
     :param kwargs: Keywords
     :type kwargs: list
@@ -57,25 +59,29 @@ def argumentParserFactory(descripcion="", **kwargs):
     from _author import __author__ as author
     show_author_software = True
 
-    # Se revisan argumentos opcionales
-    title_positionals = kwargGetValue(kwargs, "title_positionals", _TITLE_POSITIONALS)
-    title_optionals = kwargGetValue(kwargs, "title_optionals", _TITLE_OPTIONALS)
-    title_author = kwargGetValue(kwargs, "title_author", _TITLE_AUTHOR)
-    title_help = kwargGetValue(kwargs, "title_help", _TITLE_HELP)
-    title_skipped = kwargGetValue(kwargs, "title_skipped", _TITLE_SKIPPED)
-    title_verbose = kwargGetValue(kwargs, "title_verbose", _TITLE_VERBOSE)
-    title_version = kwargGetValue(kwargs, "title_version", _TITLE_VERSION)
+    # Se revisan argumentos opcionales, str
+    title_positionals = delAccentByOS(kwargGetValue(kwargs, "title_positionals", _TITLE_POSITIONALS))
+    title_optionals = delAccentByOS(kwargGetValue(kwargs, "title_optionals", _TITLE_OPTIONALS))
+    title_author = delAccentByOS(kwargGetValue(kwargs, "title_author", _TITLE_AUTHOR))
+    title_help = delAccentByOS(kwargGetValue(kwargs, "title_help", _TITLE_HELP))
+    title_skipped = delAccentByOS(kwargGetValue(kwargs, "title_skipped", _TITLE_SKIPPED))
+    title_verbose = delAccentByOS(kwargGetValue(kwargs, "title_verbose", _TITLE_VERBOSE))
+    title_version = delAccentByOS(kwargGetValue(kwargs, "title_version", _TITLE_VERSION))
+
+    # Argumentos booleanos
     skipped = kwargIsTrueParam(kwargs, "enable_skipped_test")  # Mostrar el comando enable-skipped
     version = kwargIsTrueParam(kwargs, "version")  # Mostrar comando version
     verbose = kwargIsTrueParam(kwargs, "verbose")  # Mostrar el comando verbose
     show_author = kwargIsTrueParam(kwargs, "show_author")  # Mostrar el comando author
-    if "author" in kwargs:  # Definir el autor del software
-        author = kwargs["author"]
+
+    # Definir el autor del software
+    if "author" in kwargs:
+        author = delAccentByOS(kwargs["author"])
         show_author_software = False
 
     # Se crea el parser
     if descripcion != "":
-        parser = ArgumentParser(description=descripcion, add_help=False)
+        parser = ArgumentParser(description=delAccentByOS(descripcion), add_help=False)
     else:
         parser = ArgumentParser(add_help=False)
     parser._positionals.title = title_positionals
@@ -90,7 +96,8 @@ def argumentParserFactory(descripcion="", **kwargs):
             author = softwareAuthor + " | " + __email__
         else:
             author = "%(prog)s " + author
-        parser.add_argument('--author', dest='version', action='version', version=author, help=title_author)
+        parser.add_argument('--author', dest='version', action='version', version=delAccentByOS(author),
+                            help=title_author)
 
     # Se agrega el skipped
     if skipped:
@@ -99,7 +106,7 @@ def argumentParserFactory(descripcion="", **kwargs):
 
     # Se agrega el verbose
     if verbose:
-        parser.add_argument('--verbose', dest='verbose', action='store_true', help=title_verbose)
+        parser.add_argument('-v', '--verbose', dest='verbose', action='store_true', help=title_verbose)
 
     # Se agrega la version
     if version:

@@ -10,8 +10,8 @@ Licencia: GPLv2
 """
 __author__ = "ppizarror"
 
-# Importación de librerías de sistema
-import os
+# Importación de librerías
+from ostype import is_windows
 
 
 def delAccent(txt):
@@ -24,6 +24,7 @@ def delAccent(txt):
     :return: String con acentos eliminados
     :rtype: str
     """
+
     txt = txt.replace("Á", "A").replace("É", "E").replace(
         "Í", "I").replace("Ó", "O").replace("Ú", "U")
     return txt.replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
@@ -39,19 +40,8 @@ def delAccentByOS(txt):
     :return: String con acentos eliminados
     :rtype: str
     """
-    if isWindows():
+
+    if is_windows():
         return delAccent(txt)
     else:
         return txt
-
-
-def isWindows():
-    """
-    Función que retorna True/False si el sistema operativo cliente es Windows o no.
-
-    :return: Booleano indicando pertenencia
-    :rtype: bool
-    """
-    if os.name == "nt":
-        return True
-    return False

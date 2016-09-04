@@ -16,10 +16,7 @@ Licencia: GPLv2
 __author__ = "ppizarror"
 
 # Importación de librerías
-if __name__ == '__main__':
-    # noinspection PyUnresolvedReferences
-    from binpath import *  # @UnusedWildImport
-from kwargsUtils import kwargIsTrueParam
+from kwargsutils import kwargIsTrueParam
 from utils import convertToNumber, string2list
 import errors
 
@@ -28,6 +25,7 @@ CONFIG_COMMENT = "#"
 CONFIG_LOAD = "El archivo de configuraciones '{0}' ha sido cargado correctamente"
 CONFIG_PRINTNOCONFIG = "No se encontraron configuraciones"
 CONFIG_PRINTPARAM = "\t${0} : {1}"
+# noinspection SpellCheckingInspection
 CONFIG_PRINTPARAMETER = "Parametros cargados:"
 CONFIG_PRINTPARAMSIMPLE = "\t{0}"
 CONFIG_SAVED = "El archivo de configuraciones '{0}' ha sido guardado exitosamente"
@@ -160,7 +158,7 @@ class configLoader:
 
     def getParameters(self):
         """
-        Retorna una lista con todos los parametros cargados.
+        Retorna una lista con todos los parámetros cargados.
 
         :return: Lista de parámetros
         :rtype: list
@@ -172,6 +170,7 @@ class configLoader:
             allconfigs.append(j)
         return allconfigs
 
+    # noinspection SpellCheckingInspection
     def getValue(self, param, **kwargs):
         """
         Retorna el valor del parámetro param.
@@ -239,7 +238,7 @@ class configLoader:
 
     def paramExists(self, param):
         """
-        Retorna true/false si es que el parametro <param> existe.
+        Retorna true/false si es que el parámetro <param> existe.
 
         :param param: Parámetro a buscar
         :type param: str, unicode

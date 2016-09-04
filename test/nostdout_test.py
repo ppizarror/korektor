@@ -16,4 +16,4 @@ if __name__ == '__main__':
     # noinspection PyUnresolvedReferences
     from _testpath import *  # @UnusedWildImport
     # noinspection PyUnresolvedReferences
-    from bin.noStdOut import *  # @UnusedWildImport
+    from bin.nostdout import *  # @UnusedWildImport

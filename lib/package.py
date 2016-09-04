@@ -17,8 +17,8 @@ if __name__ == '__main__':
 # noinspection PyUnresolvedReferences
 from bin.errors import *  # @UnusedWildImport
 from bin.utils import printHierachyList, numberOfSublists
-from bin.varType import *  # @UnusedWildImport
-from lib.fileManager import FileManager
+from bin.vartype import *  # @UnusedWildImport
+from lib.filemanager import FileManager
 
 # Constantes del módulo
 PACKAGE_DO_NOT_EXIST = "PACKAGE_DO_NOT_EXIST"
@@ -31,49 +31,55 @@ PACKAGE_NO_NAME = "PACKAGE_NO_NAME"
 class Package(varTypedClass, exceptionBehaviour):
     """
     Clase paquete, maneja funciones que permiten manejar listas con archivos del estilo z:/a/b/...
-    con funciones auxiliares que buscan archivos, direcciones, profunidad, etc.
+    con funciones auxiliares que buscan archivos, direcciones, profundidad, etc.
     """
 
-    def __init__(self, files, generateHierachy=False):
+    def __init__(self, files, generateHierarchy=False):
         """
         Constructor de la clase.
 
         :param files: Lista de archivos generada por un FileManager
         :type files: list
-        :param generateHierachy: Generar Jerarquía automáticamente
-        :type generateHierachy: bool
+        :param generateHierarchy: Generar Jerarquía automáticamente
+        :type generateHierarchy: bool
 
         :return: void
         :rtype: None
         """
-
         # Se instancian los super
         exceptionBehaviour.__init__(self)
         varTypedClass.__init__(self)
 
         # Se chequean los tipos de variable
         self._checkVariableType(files, TYPE_LIST, "Package.__init()__.files")
-        self._checkVariableType(generateHierachy, TYPE_BOOL, "Package.__init()__.generateHierachy")
+        self._checkVariableType(generateHierarchy, TYPE_BOOL, "Package.__init()__.generateHierarchy")
 
         # Variables de clase
-        self._hierachyFiles = []
+        self._hierarchyFiles = []
         self._packageFiles = []
         self._packageName = ""
         self._rawfiles = files
 
         # Variables de estado
         self._isGeneratedName = False
-        self._isgeneratedHierachyFiles = False
+        self._isgeneratedHierarchyFiles = False
         self._isGeneratedPackageFiles = False
+
+        # Variables de validación
         self._isValid = False
+        self._notvalidFiles = []
+        self._notValidHierarchyFiles = []
+        self._validFiles = []
+        self._validHierarchyFiles = []
         self._validated = False
-        self._validatedFiles = []
+        self._validatedFiles = []  # 0: Ubicación real, 1: Nombre en structure, 3: Nombre nuevo de la ruta, 4: Nombre del archivo
+        self._validatedFilesHierarchyCreated = False
 
         # Se crea el paquete
         self._generatePackageName(files)
         self._generatePackageFiles(files)
-        if generateHierachy:
-            self.generateHierachy()
+        if generateHierarchy:
+            self.generateHierarchy()
 
     def checkIfExist(self, f):
         """
@@ -125,39 +131,56 @@ class Package(varTypedClass, exceptionBehaviour):
                 return folderResults[2]
         return PACKAGE_FILE_INVALID_DEPTH
 
-    def generateHierachy(self):
+    def generateHierarchy(self):
         """
-        Crea una lista de jerarquía de archivos.
+        Crea la lista de jerarquía para el paquete.
 
         :return: void
         :rtype: None
         """
         if self._isGeneratedPackageFiles:
-            self._hierachyFiles.append(self._packageName)
-            for i in self._packageFiles:
-                if "/" not in i:
-                    self._hierachyFiles.append(i)
-                else:
-                    # Se añaden las carpetas
-                    j = i.split("/")
-                    sublvl = self._hierachyFiles
-                    for k in range(0, len(j) - 1):
-                        # Se busca en cada elemento del subnivel
-                        found = False
-                        for m in range(0, len(sublvl)):
-                            if isinstance(sublvl[m], list):  # Si es un nombre de carpeta
-                                if sublvl[m][0] == j[k]:
-                                    sublvl = sublvl[m]
-                                    found = True
-                                    break
-                        if not found:
-                            sublvl.append([j[k]])
-                            sublvl = sublvl[len(sublvl) - 1]
-                    # Se añade el archivo
-                    sublvl.append(j[len(j) - 1])
-            self._isgeneratedHierachyFiles = True
+            self._generateHierarchyFromFileList(self._packageFiles, self._packageName, self._hierarchyFiles)
+            self._isgeneratedHierarchyFiles = True
         else:
             return self._throwException("PACKAGE_ERROR_NOT_INDEXED_FILES_YET")
+
+    @staticmethod
+    def _generateHierarchyFromFileList(packageFiles, packageName, HierarchyFileList):
+        """
+        Crea una lista de jerarquía a partir de una lista de nombres de archivos.
+
+        :param packageFiles: Lista de archivos a revisar
+        :type packageFiles: list
+        :param packageName: Nombre del paquete
+        :type packageName: str, unicode
+        :param HierarchyFileList: Lista de jerarquía nueva
+        :type HierarchyFileList: list
+
+        :return: void
+        :rtype: None
+        """
+        HierarchyFileList.append(packageName)
+        for i in packageFiles:
+            if "/" not in i:
+                HierarchyFileList.append(i)
+            else:
+                # Se añaden las carpetas
+                j = i.split("/")
+                sublvl = HierarchyFileList
+                for k in range(0, len(j) - 1):
+                    # Se busca en cada elemento del subnivel
+                    found = False
+                    for m in range(0, len(sublvl)):
+                        if isinstance(sublvl[m], list):  # Si es un nombre de carpeta
+                            if sublvl[m][0] == j[k]:
+                                sublvl = sublvl[m]
+                                found = True
+                                break
+                    if not found:
+                        sublvl.append([j[k]])
+                        sublvl = sublvl[len(sublvl) - 1]
+                # Se añade el archivo
+                sublvl.append(j[len(j) - 1])
 
     def _generatePackageFiles(self, filelist):
         """
@@ -211,17 +234,33 @@ class Package(varTypedClass, exceptionBehaviour):
         else:
             return self._throwException("PACKAGE_ERROR_NOT_INDEXED_FILES_YET")
 
-    def getHierachyFiles(self):
+    def getHierarchyFiles(self):
         """
         Retorna la lista de jerarquía del paquete
 
         :return: Lista de jerarquía de archivos
         :rtype: list
         """
-        if self._isgeneratedHierachyFiles:
-            return self._hierachyFiles
+        if self._isgeneratedHierarchyFiles:
+            return self._hierarchyFiles
         else:
-            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+            return self._throwException("PACKAGE_ERROR_NOT_HIERARCHY_CREATED")
+
+    def _getExternalHierarchyFiles(self, externalPackageFiles, externalPackageName):
+        """
+        Retorna la jerarquía de archivos utilizando una lista de archivos y nombre de paquete externos.
+
+        :param externalPackageFiles: Lista de archivos externa a crear una jerarquía.
+        :type externalPackageFiles: list
+        :param externalPackageName: Nombre del paquete externo.
+        :type externalPackageName: str, unicode
+
+        :return: Lista de jerarquía
+        :rtype: list
+        """
+        hierarchyList = []
+        self._generateHierarchyFromFileList(externalPackageFiles, externalPackageName, hierarchyList)
+        return hierarchyList
 
     def getNumberOfElements(self):
         """
@@ -245,11 +284,10 @@ class Package(varTypedClass, exceptionBehaviour):
         :return: Número de sub-carpetas
         :rtype: int
         """
-
-        if self._isgeneratedHierachyFiles:
-            return numberOfSublists(self._hierachyFiles)
+        if self._isgeneratedHierarchyFiles:
+            return numberOfSublists(self._hierarchyFiles)
         else:
-            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+            return self._throwException("PACKAGE_ERROR_NOT_HIERARCHY_CREATED")
 
     def getPackageName(self):
         """
@@ -272,32 +310,6 @@ class Package(varTypedClass, exceptionBehaviour):
         """
         if self._validated:
             return self._validatedFiles
-        else:
-            return self._throwException("PACKAGE_ERROR_NOT_VALIDATED_YET")
-
-    def printFileList(self):
-        """
-        Imprime en consola la lista de archivos del paquete.
-
-        :return: void
-        :rtype: None
-        """
-        if self._isGeneratedPackageFiles:
-            for pfle in self._packageFiles:
-                print pfle
-        else:
-            return self._throwException("PACKAGE_ERROR_NOT_INDEXED_FILES_YET")
-
-    def _printValidatedFiles(self):
-        """
-        Imprime en consola la lista de archivos validados del paquete.
-
-        :return: void
-        :rtype: None
-        """
-        if self._validated:
-            for vpfle in self._validatedFiles:
-                print vpfle
         else:
             return self._throwException("PACKAGE_ERROR_NOT_VALIDATED_YET")
 
@@ -338,10 +350,10 @@ class Package(varTypedClass, exceptionBehaviour):
                         return [True, s + "/" + i, d]
             return [False, PACKAGE_FILE_NOT_FOUND, PACKAGE_FILE_INVALID_DEPTH]
 
-        if self._isgeneratedHierachyFiles:
-            return _recursiveSearchFile(self._hierachyFiles, fl, 0, "")
+        if self._isgeneratedHierarchyFiles:
+            return _recursiveSearchFile(self._hierarchyFiles, fl, 0, "")
         else:
-            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+            return self._throwException("PACKAGE_ERROR_NOT_HIERARCHY_CREATED")
 
     def isFile(self, f):
         """
@@ -353,14 +365,14 @@ class Package(varTypedClass, exceptionBehaviour):
         :return: Booleano indicando pertenencia
         :rtype: bool
         """
-        if self._isgeneratedHierachyFiles:
+        if self._isgeneratedHierarchyFiles:
             self._checkVariableType(f, TYPE_STR, "f")
             if len(f) > 0:
                 return self._isFile(f)[0]
             else:
                 return False
         else:
-            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+            return self._throwException("PACKAGE_ERROR_NOT_HIERARCHY_CREATED")
 
     def _isFolder(self, fl):
         """
@@ -405,10 +417,10 @@ class Package(varTypedClass, exceptionBehaviour):
             if d == 0:
                 return [False, PACKAGE_FILE_NOT_FOUND, PACKAGE_FILE_INVALID_DEPTH]
 
-        if self._isgeneratedHierachyFiles:
-            return _recursiveSearchFolder(self._hierachyFiles, fl, 0, "")
+        if self._isgeneratedHierarchyFiles:
+            return _recursiveSearchFolder(self._hierarchyFiles, fl, 0, "")
         else:
-            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+            return self._throwException("PACKAGE_ERROR_NOT_HIERARCHY_CREATED")
 
     def isFolder(self, f):
         """
@@ -420,14 +432,14 @@ class Package(varTypedClass, exceptionBehaviour):
         :return: Booleano indicando pertenencia
         :rtype: bool
         """
-        if self._isgeneratedHierachyFiles:
+        if self._isgeneratedHierarchyFiles:
             self._checkVariableType(f, TYPE_STR, "f")
             if len(f) > 0:
                 return self._isFolder(f)[0]
             else:
                 return False
         else:
-            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+            return self._throwException("PACKAGE_ERROR_NOT_HIERARCHY_CREATED")
 
     def isValid(self):
         """
@@ -450,6 +462,7 @@ class Package(varTypedClass, exceptionBehaviour):
     def _markAsValid(self):
         """
         Indica que la estructura del paquete es válida.
+        Sólo puede hacerse a través de un validador.
 
         :return: void
         :rtype: None
@@ -459,15 +472,29 @@ class Package(varTypedClass, exceptionBehaviour):
     def _markAsValidated(self):
         """
         Indica que el paquete ya ha sido revisado por el validador.
+        Sólo puede hacerse a través de un validador.
 
         :return: void
         :rtype: None
         """
         self._validated = True
 
-    def printHierachy(self, tabsLeft=0):
+    def _printFileList(self):
         """
-        Imprime la lista de archivos en forma de jerarquía.
+        Imprime en consola la lista de archivos del paquete.
+
+        :return: void
+        :rtype: None
+        """
+        if self._isGeneratedPackageFiles:
+            for pfle in self._packageFiles:
+                print pfle
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_INDEXED_FILES_YET")
+
+    def _printHierarchy(self, tabsLeft=0):
+        """
+        Imprime en consola la lista de archivos en forma de jerarquía.
 
         :param tabsLeft: Número de tabs a la izquierda de los mensajes
         :type tabsLeft: int
@@ -475,17 +502,36 @@ class Package(varTypedClass, exceptionBehaviour):
         :return: void
         :rtype: None
         """
-        if self._isgeneratedHierachyFiles:
+        if self._isgeneratedHierarchyFiles:
             if len(self._packageFiles) == 0:
                 print PACKAGE_FILE_NOT_FOUND
             elif self.getNumberOfElements() == 0:
                 print PACKAGE_EMPTY
             else:
-                printHierachyList(self._hierachyFiles, 0, tabsLeft)
+                printHierachyList(self._hierarchyFiles, 0, tabsLeft)
         else:
-            return self._throwException("PACKAGE_ERROR_NOT_HIERACHY_CREATED")
+            return self._throwException("PACKAGE_ERROR_NOT_HIERARCHY_CREATED")
 
-    def printRawFiles(self):
+    def _printNotValidHierachyList(self, tabsLeft=0):
+        """
+        Imprime en consola la jerarquía de los archivos no válidos del paquete.
+
+        :param tabsLeft: Número de tabs a la izquierda de los mensajes
+        :type tabsLeft: int
+
+        :return: void
+        :rtype: None
+        """
+        if self._validated:
+            if self._validatedFilesHierarchyCreated:
+                if len(self._notValidHierarchyFiles) > 0:
+                    printHierachyList(self._notValidHierarchyFiles, 0, tabsLeft)
+            else:
+                return self._throwException("PACKAGE_ERROR_NOT_HIERARCHY_INVALID_CREATED")
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_VALIDATED_YET")
+
+    def _printRawFiles(self):
         """
         Imprime en consola la lista de archivos sin tratar del paquete.
 
@@ -494,18 +540,67 @@ class Package(varTypedClass, exceptionBehaviour):
         """
         print self._rawfiles
 
-    def _setValidatedFiles(self, vfiles):
+    def _printValidHierachyList(self, tabsLeft=0):
         """
-        Define los archivos válidos.
+        Imprime en consola la jerarquía de los archivos válidos del paquete.
 
-        :param vfiles: Lista con archivos válidos.
-        :type vfiles: list
+        :param tabsLeft: Número de tabs a la izquierda de los mensajes
+        :type tabsLeft: int
 
         :return: void
         :rtype: None
         """
+        if self._validated:
+            if self._validatedFilesHierarchyCreated:
+                if len(self._validHierarchyFiles) > 0:
+                    printHierachyList(self._validHierarchyFiles, 0, tabsLeft)
+            else:
+                return self._throwException("PACKAGE_ERROR_NOT_HIERARCHY_VALID_CREATED")
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_VALIDATED_YET")
+
+    def _printValidatedFileList(self):
+        """
+        Imprime en consola la lista de archivos validados del paquete.
+
+        :return: void
+        :rtype: None
+        """
+        if self._validated:
+            for vpfle in self._validatedFiles:
+                print vpfle
+        else:
+            return self._throwException("PACKAGE_ERROR_NOT_VALIDATED_YET")
+
+    # noinspection SpellCheckingInspection
+    def _setValidatedFiles(self, vfiles, generate_hierarchies):
+        """
+        Define los archivos válidos, y crea la lista de archivos no válidos del paquete.
+
+        :param vfiles: Lista con archivos válidos.
+        :type vfiles: list
+        :param generate_hierarchies: Indica si crear la jerarquía de los archivos válidos e inválidos
+        :type generate_hierarchies: bool
+
+        :return: void
+        :rtype: None
+        """
+        # Se almacenan los archivos validados
         self._checkVariableType(vfiles, TYPE_LIST, "Package._setValidatedFiles.vfiles")
         self._validatedFiles = vfiles
+
+        # Se genera la lista de archivos válidos e inválidos
+        for indx in range(0, len(vfiles)):
+            self._validFiles.append(vfiles[indx][0])
+        for pfile in self._packageFiles:
+            if pfile not in self._validFiles:
+                self._notvalidFiles.append(pfile)
+
+        # Se genera la jerarquía de los archivos válidos e inválidos
+        if generate_hierarchies:
+            self._validHierarchyFiles = self._getExternalHierarchyFiles(self._validFiles, self._packageName)
+            self._notValidHierarchyFiles = self._getExternalHierarchyFiles(self._notvalidFiles, self._packageName)
+            self._validatedFilesHierarchyCreated = True
 
 
 # Clase paquete que utiliza un filemanager
@@ -515,7 +610,7 @@ class PackageFileManager(Package):
     y un string indicando el nombre del archivo a analizar
     """
 
-    def __init__(self, fileManager, packageName, generateHierachy=False):
+    def __init__(self, fileManager, packageName, generateHierarchy=False):
         """
         Constructor de la clase.
 
@@ -523,14 +618,13 @@ class PackageFileManager(Package):
         :type fileManager: FileManager
         :param packageName: Nombre del paquete a analizar
         :type packageName: str
-        :param generateHierachy: Generar Jerarquía automáticamente
-        :type generateHierachy: bool
+        :param generateHierarchy: Generar Jerarquía automáticamente
+        :type generateHierarchy: bool
 
         :return: void
         :rtype: None
         """
-
-        # Comprobacion de tipos
+        # Comprobación de tipos
         self._checkVariableType(fileManager, TYPE_OTHER, "PackageFileManager.__init()__.fileManager", FileManager)
         self._checkVariableType(packageName, TYPE_STR, "PackageFileManager.__init()__.packageName")
 
@@ -538,7 +632,7 @@ class PackageFileManager(Package):
         self._filemanager = fileManager
 
         # Se crea un paquete normal
-        Package.__init__(self, fileManager.inspectSingleFile(packageName), generateHierachy)
+        Package.__init__(self, fileManager.inspectSingleFile(packageName), generateHierarchy)
 
     def _deleteLastExtractedFiles(self):
         """

@@ -17,6 +17,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+# noinspection SpellCheckingInspection
 r"""RAR archive reader.
 
 This is Python module for Rar archive reading.  The interface
@@ -95,7 +96,7 @@ from subprocess import Popen, PIPE, STDOUT
 import sys, os, struct, errno
 from tempfile import mkstemp
 
-# only needed for encryped headers
+# only needed for encrypted headers
 try:
     try:
         # noinspection PyUnresolvedReferences
@@ -141,26 +142,27 @@ else:
     # noinspection PyShadowingBuiltins
     unicode = str  # @ReservedAssignment
 
-##
-## Module configuration.  Can be tuned after importing.
-##
+# #
+# # Module configuration.  Can be tuned after importing.
+# #
 
-#: default fallback charset
+# : default fallback charset
 DEFAULT_CHARSET = "windows-1252"
 
-#: list of encodings to try, with fallback to DEFAULT_CHARSET if none succeed
+# : list of encodings to try, with fallback to DEFAULT_CHARSET if none succeed
 TRY_ENCODINGS = ('utf8', 'utf-16le')
 
-#: 'unrar', 'rar' or full path to either one
+# : 'unrar', 'rar' or full path to either one
 UNRAR_TOOL = "unrar"
 
-#: Command line args to use for opening file for reading.
+# : Command line args to use for opening file for reading.
+# noinspection SpellCheckingInspection
 OPEN_ARGS = ('p', '-inul')
 
-#: Command line args to use for extracting file to disk.
+# : Command line args to use for extracting file to disk.
 EXTRACT_ARGS = ('x', '-y', '-idq')
 
-#: args for testrar()
+# : args for testrar()
 TEST_ARGS = ('t', '-idq')
 
 #
@@ -175,33 +177,34 @@ TEST_ARGS = ('t', '-idq')
 #
 
 ALT_TOOL = 'bsdtar'
+# noinspection SpellCheckingInspection
 ALT_OPEN_ARGS = ('-x', '--to-stdout', '-f')
 ALT_EXTRACT_ARGS = ('-x', '-f')
 ALT_TEST_ARGS = ('-t', '-f')
 ALT_CHECK_ARGS = ('--help',)
 
-#: whether to speed up decompression by using tmp archive
+# : whether to speed up decompression by using tmp archive
 USE_EXTRACT_HACK = 1
 
-#: limit the filesize for tmp archive usage
+# : limit the filesize for tmp archive usage
 HACK_SIZE_LIMIT = 20 * 1024 * 1024
 
-#: whether to parse file/archive comments.
+# : whether to parse file/archive comments.
 NEED_COMMENTS = 1
 
-#: whether to convert comments to unicode strings
+# : whether to convert comments to unicode strings
 UNICODE_COMMENTS = 0
 
-#: Convert RAR time tuple into datetime() object
+# : Convert RAR time tuple into datetime() object
 USE_DATETIME = 0
 
-#: Separator for path name components.  RAR internally uses '\\'.
-#: Use '/' to be similar with zipfile.
+# : Separator for path name components.  RAR internally uses '\\'.
+# : Use '/' to be similar with zipfile.
 PATH_SEP = '\\'
 
-##
-## rar constants
-##
+# #
+# # rar constants
+# #
 
 # block types
 RAR_BLOCK_MARK = 0x72  # r
@@ -275,25 +278,28 @@ RAR_M3 = 0x33
 RAR_M4 = 0x34
 RAR_M5 = 0x35
 
-##
-## internal constants
-##
+# #
+# # internal constants
+# #
 
 RAR_ID = b"Rar!\x1a\x07\x00"
 ZERO = b"\0"
 EMPTY = b""
 
+# noinspection SpellCheckingInspection
 S_BLK_HDR = Struct('<HBHH')
+# noinspection SpellCheckingInspection
 S_FILE_HDR = Struct('<LLBLLBBHL')
 S_LONG = Struct('<L')
 S_SHORT = Struct('<H')
 S_BYTE = Struct('<B')
+# noinspection SpellCheckingInspection
 S_COMMENT_HDR = Struct('<HBBH')
 
 
-##
-## Public interface
-##
+# #
+# # Public interface
+# #
 
 class Error(Exception):
     """Base class for rarfile errors."""
@@ -307,6 +313,7 @@ class NotRarFile(Error):
     """The file is not RAR archive."""
 
 
+# noinspection SpellCheckingInspection
 class BadRarName(Error):
     """Cannot guess multipart name components."""
 
@@ -396,7 +403,7 @@ def is_rarfile(xfile):
     return buf == RAR_ID
 
 
-# noinspection PySingleQuotedDocstring
+# noinspection PySingleQuotedDocstring,SpellCheckingInspection
 class RarInfo(object):
     r'''An entry in rar archive.
 
@@ -501,13 +508,13 @@ class RarInfo(object):
         return (self.flags & RAR_FILE_PASSWORD) > 0
 
 
-# noinspection PySingleQuotedDocstring,PyMethodMayBeStatic,PyPropertyAccess,PyTypeChecker,PyUnusedLocal,PyShadowingBuiltins,PyChainedComparisons,PyUnresolvedReferences
+# noinspection PySingleQuotedDocstring,PyMethodMayBeStatic,PyPropertyAccess,PyTypeChecker,PyUnusedLocal,PyShadowingBuiltins,PyChainedComparisons,PyUnresolvedReferences,SpellCheckingInspection
 class RarFile(object):
     '''Parse RAR structure, provide access to files in archive.
     '''
 
-    #: Archive comment.  Byte string or None.  Use :data:`UNICODE_COMMENTS`
-    #: to get automatic decoding to unicode.
+    # : Archive comment.  Byte string or None.  Use :data:`UNICODE_COMMENTS`
+    # : to get automatic decoding to unicode.
     comment = None
 
     def __init__(self, rarfile, mode="r", charset=None, info_callback=None,
@@ -773,9 +780,9 @@ class RarFile(object):
         """
         return self._parse_error
 
-    ##
-    ## private methods
-    ##
+    # #
+    # # private methods
+    # #
 
     def _set_error(self, msg, *args):
         if args:
@@ -1309,9 +1316,9 @@ class RarFile(object):
                 os.unlink(tmpname)
 
 
-##
-## Utility classes
-##
+# #
+# # Utility classes
+# #
 
 # noinspection PyUnboundLocalVariable,PyMissingOrEmptyDocstring
 class UnicodeFilename(object):
@@ -1373,7 +1380,7 @@ class UnicodeFilename(object):
         return self.buf.decode("utf-16le", "replace")
 
 
-# noinspection PyTypeChecker
+# noinspection PyTypeChecker,SpellCheckingInspection
 class RarExtFile(RawIOBase):
     """Base class for file-like object that :meth:`RarFile.open` returns.
 
@@ -1388,7 +1395,7 @@ class RarExtFile(RawIOBase):
     access available: :meth:`RarExtFile.readline` and ``for ln in f``.
     """
 
-    #: Filename of the archive entry
+    # : Filename of the archive entry
     name = None
 
     def __init__(self, rf, inf):
@@ -1566,7 +1573,7 @@ class RarExtFile(RawIOBase):
         return self.read()
 
 
-# noinspection PyUnusedLocal
+# noinspection PyUnusedLocal,SpellCheckingInspection
 class PipeReader(RarExtFile):
     """Read data from pipe, handle tempfile cleanup."""
 
@@ -1654,7 +1661,7 @@ class PipeReader(RarExtFile):
         return got
 
 
-# noinspection PyArgumentList
+# noinspection PyArgumentList,SpellCheckingInspection
 class DirectReader(RarExtFile):
     """Read uncompressed data directly from archive."""
 
@@ -1853,9 +1860,9 @@ class XFile(object):
         self.close()
 
 
-##
-## Utility functions
-##
+# #
+# # Utility functions
+# #
 
 # noinspection PyMissingOrEmptyDocstring
 def is_filelike(obj):
@@ -1869,6 +1876,7 @@ def is_filelike(obj):
     return True
 
 
+# noinspection SpellCheckingInspection
 def rar3_s2k(psw, salt):
     """String-to-key hash for RAR3."""
 
@@ -1974,7 +1982,7 @@ def to_datetime(t):
     return datetime(year, mon, day, h, m, s, us)
 
 
-# noinspection PyAugmentAssignment,PyShadowingBuiltins,PyTrailingSemicolon,PyRedundantParentheses
+# noinspection PyAugmentAssignment,PyShadowingBuiltins,PyTrailingSemicolon,PyRedundantParentheses,SpellCheckingInspection
 def parse_dos_time(stamp):
     """Parse standard 32-bit DOS timestamp."""
 
@@ -2021,7 +2029,7 @@ def custom_check(cmd, ignore_retcode=False):
     return out
 
 
-# noinspection PyUnusedLocal
+# noinspection PyUnusedLocal,SpellCheckingInspection
 def add_password_arg(cmd, psw, required=False):
     """Append password switch to commandline."""
     if UNRAR_TOOL == ALT_TOOL:

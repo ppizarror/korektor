@@ -6,8 +6,15 @@ En data se incluyen todos los archivos externos lógicos requeridos por korektor
 corregir tareas. Además en data se almacenaran posibles resultados, listas, información
 externa, etc.
 
+Carpetas internas:
+    RESULTS = Almacena archivos con resultados de ejecuciones, estadísticas, etc.
+        GRAPHS = Registros en gráficos de los resultados de las pruebas de los paquetes.
+        LOGS = Archivos que almacenan el log de cada prueba.
+    STRUCTURE = Representa la estructura que debe tener cada archivo subido.
+    UPLOADS = Es la carpeta a la cual se añadirán los paquetes validados para ser corridos y probados.
+
 Autor: PABLO PIZARRO @ github.com/ppizarror
-Fecha: OCTUBRE 2015
+Fecha: OCTUBRE 2015 - 2016
 Licencia: GPLv2
 """
 __author__ = "ppizarror"

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Adminsitra la direccion de directorios de la aplicación, se pueden incluir todos los
+Administra la dirección de directorios de la aplicación, se pueden incluir todos los
 directorios salvo bin/.
 
 Autor: PABLO PIZARRO @ github.com/ppizarror

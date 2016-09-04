@@ -16,7 +16,7 @@ from libpath import *
 # noinspection PyUnresolvedReferences
 from bin import configLoader, __version__
 # noinspection PyUnresolvedReferences
-from lib import fileManager
+from lib import filemanager
 
 # noinspection PyUnresolvedReferences
 # noinspection PyProtectedMember

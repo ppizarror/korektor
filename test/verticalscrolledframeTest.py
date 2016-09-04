@@ -41,7 +41,7 @@ class VerticalScrolledFrameTest(unittest.TestCase):
         """
         sucess = False
         try:
-            from bin.verticalScrolledFrame import VerticalScrolledFrame  # @UnusedWildImport @UnusedImport
+            from bin.verticalscrolledframe import VerticalScrolledFrame  # @UnusedWildImport @UnusedImport
             sucess = True
         except Exception, e:  # @UnusedVariable
             sucess = False

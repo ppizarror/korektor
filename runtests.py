@@ -15,7 +15,7 @@ __author__ = "ppizarror"
 # Importación de librerías
 from test._testpath import DIR_TEST_RESULTS, DIR_TEST_RESULTS_LOGGING
 from bin.arguments import argumentParserFactory
-from bin.configLoader import configLoader
+from bin.configloader import configLoader
 from bin.errors import ERROR_MATPLOTLIB_NOT_INSTALLED, ERROR_RUNTESTS_CREATE_PLOT, \
     ERROR_RUNTESTS_SAVE_LOG, ERROR_RUNTESTS_SAVE_RESULTS, st_error
 from bin.utils import wipeFile
@@ -25,10 +25,10 @@ import math
 import platform
 import subprocess
 
-# Configuracion de argumentos por consola
-parser = argumentParserFactory("Ejecuta todos los tests.")
+# Configuración de argumentos por consola
+parser = argumentParserFactory('Ejecuta todos los tests.')
 parser.add_argument('-p', '--create-plot', dest='doPlot', action='store_true', \
-                    help='Crea un grafico con todos los resultados en funcion del tiempo')
+                    help='Crea un gráfico con todos los resultados en función del tiempo')
 parser.add_argument('--disable-verbose', dest='verbose', action='store_false', \
                     help='Desactiva el printing en consola.')
 parser.add_argument('--dont-save-log', dest='doSaveLogFile', action='store_false', \
@@ -89,7 +89,7 @@ try:  # Se genera el mensaje de resultados
 except:
     msgg += "ERROR"
 
-# Se agrega el estado de ejecucion al archivo de resultados en RESULT_FILE
+# Se agrega el estado de ejecución al archivo de resultados en RESULT_FILE
 if doSaveResults:
     try:
         x = ""
@@ -105,7 +105,7 @@ if doSaveResults:
             resfile.write(msgg + "\n")
     except Exception, e:
         if verbose:
-            st_error(ERROR_RUNTESTS_SAVE_RESULTS, False, "run_tests.py", e)
+            st_error(ERROR_RUNTESTS_SAVE_RESULTS, False, "runtests.py", e)
 
 if doSaveLogFile:  # Se guarda el log
     try:
@@ -115,12 +115,12 @@ if doSaveLogFile:  # Se guarda el log
         logfile.close()
     except Exception, e:
         if verbose:
-            st_error(ERROR_RUNTESTS_SAVE_LOG, False, "run_tests.py", e)
+            st_error(ERROR_RUNTESTS_SAVE_LOG, False, "runtests.py", e)
 
 if verbose:  # Se imprime el consola el estado final
     print result
 
-if doPlot:  # Se crea un grafico de los resultados en función del tiempo
+if doPlot:  # Se crea un gráfico de los resultados en función del tiempo
     _continue = False
     try:
         import matplotlib.pyplot as plt  # @UnresolvedImport @UnusedImport
@@ -128,7 +128,7 @@ if doPlot:  # Se crea un grafico de los resultados en función del tiempo
         _continue = True
     except Exception, e:
         if verbose:
-            st_error(ERROR_MATPLOTLIB_NOT_INSTALLED, False, "run_tests.py", e)
+            st_error(ERROR_MATPLOTLIB_NOT_INSTALLED, False, "runtests.py", e)
     if _continue:
         try:
             # Se obtienen las configuraciones
@@ -228,4 +228,4 @@ if doPlot:  # Se crea un grafico de los resultados en función del tiempo
             plt.close(fig)
         except Exception, e:
             if verbose:
-                st_error(ERROR_RUNTESTS_CREATE_PLOT, False, "run_tests.py", e)
+                st_error(ERROR_RUNTESTS_CREATE_PLOT, False, "runtests.py", e)

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# noinspection SpellCheckingInspection
 """
 HASHDIR
 Maneja el checksum de los archivos.
@@ -45,7 +46,7 @@ def get_depth(folder):
     :param folder: Carpeta
     :type folder: str
 
-    :return: String con la profunidad del directorio
+    :return: String con la profundidad del directorio
     :rtype: str
     """
     return "\t" * count_depth(folder)
@@ -148,7 +149,7 @@ def path_checksum(path, verbose=False):
     """
     Genera el md5 de un directorio.
 
-    :param path: Directorio raiz
+    :param path: Directorio raíz
     :type path: str
     :param verbose: Indica si imprime
     :type verbose: bool

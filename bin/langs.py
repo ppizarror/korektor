@@ -12,7 +12,7 @@ __author__ = "ppizarror"
 
 # Importación de librerías y obtención de directorios
 from binpath import _LANG_DIRCONFIG, _LANG_DIRLANGS, _DIR_CONFIG
-from configLoader import configLoader
+from configloader import configLoader
 from utils import googleTranslate
 import errors
 import math
@@ -20,8 +20,10 @@ import math
 # noinspection PyProtectedMember
 # Se cargan las configuraciones
 langselfconfig = configLoader(_DIR_CONFIG, "langs.ini")
+# noinspection SpellCheckingInspection
 langconfig = configLoader(_LANG_DIRCONFIG, "const.ini")
 langavaiable = configLoader(_LANG_DIRCONFIG, "langs.txt")
+# noinspection SpellCheckingInspection
 langtranslateconfig = configLoader(_DIR_CONFIG, "langstransl.ini")
 
 # Constantes del programa
@@ -34,12 +36,12 @@ NULL_IDENTIFIER = "NULL_LANG_ID<"
 NULL_LANG = NULL_IDENTIFIER + "{0}>"
 
 
-# Definicion de funciones
+# Definición de funciones
 def _totalspaces(index):
     """
     Retorna la cantidad de espacios.
 
-    :param index: Indice
+    :param index: Índice
     :type index: int
 
     :return: Cantidad de espacios
@@ -91,9 +93,9 @@ class langLoader:
 
     def get(self, index, *args, **kwargs):
         """
-        Retorna un string asociado al indice -index- en el archivo de idiomas cargado.
+        Retorna un string asociado al índice -index- en el archivo de idiomas cargado.
 
-        :param index: Indice del string
+        :param index: Índice del string
         :type index: int, string
         :param args: Argumentos
         :type args: list
@@ -105,7 +107,7 @@ class langLoader:
         """
         if str(index).isdigit():
             try:  # Si existe el lang en la matriz de datos
-                # noinspection PyUnresolvedReferences
+                # noinspection PyUnresolvedReferences,SpellCheckingInspection
                 if kwargs.get("noformat") or len(args) == 0:
                     return self.lang[index]
                 else:
@@ -132,7 +134,7 @@ class langLoader:
         """
         Función que traduce un texto usando el servicio de google traductor.
 
-        :param index: Indice del string
+        :param index: Índice del string
         :type index: int
         :param to: Idioma destino
         :type to: str
@@ -144,6 +146,7 @@ class langLoader:
         if langselfconfig.isTrue("TRANSLATIONS"):  # Si el servicio de traducciones esta activado
             if not NULL_IDENTIFIER in text:
                 try:  # Se consulta por la traducción al servicio de google
+                    # noinspection SpellCheckingInspection
                     return googleTranslate(text, to, str(langtranslateconfig.getValue("WEB_HEADER")),
                                            str(langtranslateconfig.getValue("WEB_GOOGLETRANSLATE")))
                 except:  # Si ocurre algún error en la traducción

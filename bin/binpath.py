@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 BINPATH
-Adminsitra el path de /bin.
+Administra el path de /bin.
 
 Autor: PABLO PIZARRO @ github.com/ppizarror
 Fecha: OCTUBRE 2015 - 2016

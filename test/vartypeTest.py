@@ -13,7 +13,7 @@ __author__ = "ppizarror"
 # Importación de librerías
 # noinspection PyUnresolvedReferences
 from _testpath import *  # @UnusedWildImport
-from bin.varType import *  # @UnusedWildImport
+from bin.vartype import *  # @UnusedWildImport
 from bin.errors import ERR_CHECKTYPE
 import unittest
 

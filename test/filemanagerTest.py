@@ -12,9 +12,10 @@ __author__ = "ppizarror"
 
 # Importación de librerías
 from _testpath import *  # @UnusedWildImport
-from lib.fileManager import *  # @UnusedWildImport
-from bin.utils import printBarsConsole, equalLists
+from lib.filemanager import *  # @UnusedWildImport
 from bin.errors import FILEMANAGER_ERROR_RESTORE_WD, FILEMANAGER_ERROR_SCAN, FILEMANAGER_ERROR_WD
+from bin.ostype import is_windows
+from bin.utils import printBarsConsole, equalLists
 import unittest
 
 # Constantes de los test
@@ -64,7 +65,7 @@ class FileManagerTest(unittest.TestCase):
             printBarsConsole("Testeo del wd")
             print "Wd actual: ", self.fm.getWorkingDirectory()
         b = self.fm.getWorkingDirectory()
-        if isWindows():
+        if is_windows():
             self.fm.setWorkingDirectory("C:/")
             if VERBOSE:
                 print "Wd actual: ", self.fm.getWorkingDirectory()
@@ -88,7 +89,7 @@ class FileManagerTest(unittest.TestCase):
         """
         self.fm.restoreWD()
         if VERBOSE:
-            printBarsConsole("Testeo de carpetas unicas")
+            printBarsConsole("Testeo de carpetas únicas")
             print self.fm.inspectSingleFile("Folder 1")
         t = ['Folder 1/Content 1.txt', \
              'Folder 1/Content 2.txt']
@@ -253,6 +254,7 @@ class FileManagerTest(unittest.TestCase):
         assert equalLists(t, self.fm.inspectSingleFile("Folder 5")) == True, FILEMANAGER_ERROR_SCAN
         del t
 
+    # noinspection SpellCheckingInspection
     @unittest.skipIf(DISABLE_HEAVY_TESTS, DISABLE_HEAVY_TESTS_MSG)
     def testCompressedFileAlreadyExists(self):
         """

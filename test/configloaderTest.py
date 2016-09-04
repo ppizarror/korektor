@@ -13,7 +13,7 @@ __author__ = "ppizarror"
 
 # Importación de librerías
 from _testpath import *  # @UnusedWildImport
-from bin.configLoader import *  # @UnusedWildImport
+from bin.configloader import *  # @UnusedWildImport
 from bin.errors import ERROR_TEST_CONFIGLOADER_BAD_GET_VALUE
 import unittest
 
@@ -43,6 +43,7 @@ class ConfigLoaderTest(unittest.TestCase):
         """
         self.binconfig = configLoader(DIR_BIN + ".config/", "bin.ini", verbose=VERBOSE)
 
+    # noinspection SpellCheckingInspection
     def testMain(self):
         """
         Test principal, en el cual se cargan la mayoría de las funciones del configLoader.

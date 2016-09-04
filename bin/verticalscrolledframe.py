@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# noinspection SpellCheckingInspection
 """
 VERTICALSCROLLEDFRAME
 Este archivo provee una clase para administrar ventanas con barras de deslizamiento en Tkinter.
@@ -7,7 +8,7 @@ Este archivo provee una clase para administrar ventanas con barras de deslizamie
 Autor: http://tkinter.unpythonic.net/wiki/VerticalScrolledFrame
 """
 
-# Importación de liberías
+# Importación de librerías
 from Tkinter import Frame, Scrollbar, Canvas, NW, BOTH, TRUE, LEFT, RIGHT, VERTICAL, FALSE, Y
 
 

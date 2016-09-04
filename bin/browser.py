@@ -22,6 +22,7 @@ import mechanize
 
 
 # Funciones de clase
+# noinspection SpellCheckingInspection
 def unescape(text):
     """
     Reemplaza los caracteres html.
@@ -33,7 +34,7 @@ def unescape(text):
     :rtype: str
     """
 
-    # noinspection PyShadowingNames
+    # noinspection PyShadowingNames,PyUnresolvedReferences
     def fixup(m):
         """
         Elimina caracteres no unicode en un string.
@@ -41,7 +42,7 @@ def unescape(text):
         :param m: String a tratar
         :type m: str
 
-        :return: String con carácteres tratados
+        :return: String con caracteres tratados
         :rtype: str
         """
         text = m.group(0)
@@ -70,7 +71,7 @@ class Browser:
 
     def __init__(self):
         """
-        Función constuctora.
+        Función constructora.
 
         :return: void
         :rtype: None
@@ -166,7 +167,7 @@ class Browser:
 
     def getForms(self):
         """
-        Obtener una lista con los formulaios de la página web.
+        Obtener una lista con los formularios de la página web.
 
         :return: Lista de nombres de formulario
         :rtype: list
@@ -185,6 +186,7 @@ class Browser:
         """
         return self.br
 
+    # noinspection SpellCheckingInspection
     def selectFormById(self, formid):
         """
         Definir un formulario como activo mediante un id.
@@ -208,6 +210,7 @@ class Browser:
         else:
             return errors.BR_ERRORxNO_FORMID
 
+    # noinspection SpellCheckingInspection
     def selectFormByName(self, formname):
         """
         Definir un formulario como activo mediante un ID.

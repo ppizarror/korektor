@@ -17,14 +17,15 @@ if __name__ == '__main__':
 import os  # @Reimport
 import shutil  # @UnusedImport
 import zipfile
-from bin.configLoader import configLoader  # @UnresolvedImport
+from bin.configloader import configLoader  # @UnresolvedImport
 import bin.errors as err  # @UnresolvedImport @UnusedImport
-from bin.utils import isHiddenFile, isFolder, isWindows, appendListToList
-from bin.varType import varTypedClass
+from bin.ostype import is_windows
+from bin.utils import isHiddenFile, isFolder, appendListToList
+from bin.vartype import varTypedClass
 from config import DIR_CONFIG  # @UnresolvedImport
 from data import DIR_UPLOADS  # @UnusedImport
 
-if isWindows():  # Se define el ejecutable de unrar para Windows
+if is_windows():  # Se define el ejecutable de unrar para Windows
     from bin.binpath import DIR_BIN
 
     try:
@@ -42,8 +43,8 @@ else:  # Si no es windows se utiliza la librería patool
 # Constantes
 _DEFAULT_FILE_ENCODING = "utf-8"
 _DEFAULT_RAR_EXTRACT_ENCODING = "utf8"
-_FILEMANAGER_Y_EXTRACT_COMPRSD_FILE = "_inspectFiles extrayo el archivo '{0}' a pesar de que ya existe como carpeta."
-_FILEMANAGER_NO_EXTRACT_COMPRSD_FILE = "_inspectFiles no extrayo el archivo '{0}' dado que este ya existe."
+_FILEMANAGER_Y_EXTRACT_COMPRSD_FILE = "_inspectFiles extrajo el archivo '{0}' a pesar de que ya existe como carpeta."
+_FILEMANAGER_NO_EXTRACT_COMPRSD_FILE = "_inspectFiles no extrajo el archivo '{0}' dado que este ya existe."
 
 
 class FileManager(varTypedClass, err.exceptionBehaviour):
@@ -51,6 +52,7 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
     Administra archivos, carga archivos, etc.
     """
 
+    # noinspection SpellCheckingInspection
     def __init__(self, wd=DIR_UPLOADS):
         """
         Constructor de la clase.
@@ -61,7 +63,6 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
         :return: void
         :rtype: None
         """
-
         # Se instancian los super
         err.exceptionBehaviour.__init__(self)
         varTypedClass.__init__(self)
@@ -85,7 +86,7 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
         self._ignoredFiles = folderConfig.getValueListed("IGNORE")
         self._removeOnExtract = config.isTrue("REMOVE_ON_EXTRACT")
 
-        # Parámetros de carácteres
+        # Parámetros de caracteres
         self._doCharactersRestricted = config.isTrue("CHARACTERS_DO_RESTRICT")
         self._needDotOnFile = packageConfig.isTrue("NEED_DOT_ON_FILE")
         self._validChars = packageConfig.getValue("VALID_CHARACTERS")
@@ -127,7 +128,7 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
 
     def disable_doRemoveExtractedFolders(self):
         """
-        Desactiva el borrar las carpetas extraidas tras el análisis.
+        Desactiva el borrar las carpetas extraídas tras el análisis.
 
         :return: void
         :rtype: None
@@ -154,7 +155,7 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
 
     def disable_restrictCharacters(self):
         """
-        Desactiva el restringir los carácteres inválidos definidos en el parámetro de configuración VALID_CHARACTERS
+        Desactiva el restringir los caracteres inválidos definidos en el parámetro de configuración VALID_CHARACTERS
         dentro de config/packages.ini.
 
         :return: void
@@ -164,7 +165,7 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
 
     def disable_structureCharacters(self):
         """
-        Desactiva los carácteres de la estructura como válidos, VALID_STRUCTURE_CHARACTERS reemplaza a VALID_CHARACTERS.
+        Desactiva los caracteres de la estructura como válidos, VALID_STRUCTURE_CHARACTERS reemplaza a VALID_CHARACTERS.
 
         :return: void
         :rtype: None
@@ -200,7 +201,7 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
 
     def enable_doRemoveExtractedFolders(self):
         """
-        Activa el borrar las carpetas extraidas tras el análisis.
+        Activa el borrar las carpetas extraídas tras el análisis.
 
         :return: void
         :rtype: None
@@ -218,7 +219,7 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
 
     def enable_restrictCharacters(self):
         """
-        Activa el restringir los carácteres inválidos definidos en el parámetro de configuración VALID_CHARACTERS dentro
+        Activa el restringir los caracteres inválidos definidos en el parámetro de configuración VALID_CHARACTERS dentro
         de config/packages.ini.
 
         :return: void
@@ -228,7 +229,7 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
 
     def enable_structureCharacters(self):
         """
-        Activa los carácteres de la estructura como válidos, VALID_STRUCTURE_CHARACTERS reemplaza a VALID_CHARACTERS.
+        Activa los caracteres de la estructura como válidos, VALID_STRUCTURE_CHARACTERS reemplaza a VALID_CHARACTERS.
 
         :return: void
         :rtype: None
@@ -255,9 +256,9 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
 
     def _getValidRegexChars(self):
         """
-        Retorna el string de los carácteres válidos para el regex.
+        Retorna el string de los caracteres válidos para el regex.
 
-        :return: String con carácteres válidos
+        :return: String con caracteres válidos
         :rtype: str
         """
         return str(self._validRegexChars)
@@ -285,9 +286,9 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
         :return: Lista de archivos encontrados
         :rtype: list
         """
+        foldersExtractedOnProcess = []  # Carpetas extraídas @UnusedVariable
 
-        foldersExtractedOnProcess = []  # Carpetas extraidas @UnusedVariable
-
+        # noinspection SpellCheckingInspection
         def _isValidFile(filnm):
             """
             Verifica si un nombre de un archivo es válido.
@@ -303,9 +304,10 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
                     return False
             return not isHiddenFile(str(filnm))
 
+        # noinspection SpellCheckingInspection
         def _isValidFolderName(filnm):
             """
-            Verifica si un nombre de una carpeta es válido (carácteres).
+            Verifica si un nombre de una carpeta es válido (caracteres).
 
             :param filnm: String del nombre de la carpeta
             :type filnm: str
@@ -313,16 +315,17 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
             :return: Booleano indicando validez
             :rtype: bool
             """
-            # Si los carácteres son restrictivos
+            # Si los caracteres son restrictivos
             if self._doCharactersRestricted:
                 for c in filnm:
                     if c not in self._validChars:
                         return False
             return True
 
+        # noinspection SpellCheckingInspection
         def _isValidFileName(filnm):
             """
-            Verifica si un nombre de un archivo es válido (carácteres).
+            Verifica si un nombre de un archivo es válido (caracteres).
 
             :param filnm: String del nombre del archivo
             :type filnm: str
@@ -330,7 +333,7 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
             :return: Booleano indicando validez
             :rtype: bool
             """
-            # Si los carácteres son restrictivos
+            # Si los caracteres son restrictivos
             if self._doCharactersRestricted:
                 for c in filnm:
                     if c not in self._validChars:
@@ -358,7 +361,6 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
             :return: void
             :rtype: None
             """
-
             if not _isValidFile(filename):  # Si el archivo no es válido
                 return
 
@@ -406,8 +408,8 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
                         else:
                             print _FILEMANAGER_NO_EXTRACT_COMPRSD_FILE.format(newfilename)
                 if doExtract:
-                    # Si el sistema operativo huesped es Windows
-                    if isWindows():
+                    # Si el sistema operativo huésped es Windows
+                    if is_windows():
                         try:
                             rarfile.RarFile(rootpath + filename, "r", 'utf8').extractall(rootpath + newfilename + "/")
                         except Exception, ex:
@@ -442,7 +444,7 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
 
         def _removeExtractedFolders():
             """
-            Función que elimina las carpetas extraidas durante el proceso de análisis.
+            Función que elimina las carpetas extraídas durante el proceso de análisis.
 
             :return: void
             :rtype: None
@@ -585,7 +587,7 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
         for f in os.listdir(self._wd.decode(self._fileEncoding)):  # @ReservedAssignment
             print f
 
-    def printSingleFile(self, filename):
+    def _printSingleFile(self, filename):
         """
         Imprime los archivos dentro de una sola carpeta.
 
@@ -597,7 +599,7 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
         """
         print self._printFileList(self.inspectSingleFile(filename), filename)
 
-    def printTree(self):
+    def _printTree(self):
         """
         Imprime los archivos de cada una de las carpetas del working directory.
 
@@ -606,7 +608,7 @@ class FileManager(varTypedClass, err.exceptionBehaviour):
         """
         for f in os.listdir(self._wd.decode(self._fileEncoding)):  # @ReservedAssignment
             if f is not None:
-                self.printSingleFile(f)
+                self._printSingleFile(f)
 
     def restoreWD(self):
         """

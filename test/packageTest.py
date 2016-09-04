@@ -60,13 +60,14 @@ class PackageTest(unittest.TestCase):
         if VERBOSE:
             printBarsConsole("Testeo Folder 3")
             print "Archivos en forma raw:",
-            p.printRawFiles()
+            p._printRawFiles()
             print "Nombre del paquete:",
             print p.getPackageName()
             print "Archivos del paquete:"
-            p.printFileList()
+            p._printFileList()
+            # noinspection SpellCheckingInspection
             print "Jerarquia del paquete:"
-            p.printHierachy()
+            p._printHierarchy()
             print "Numero de subcarpetas:",
             print p.getNumberOfSubfolders()
         assert p.getPackageName() == "Folder 3", PACKAGE_TEST_ERROR_INVALID_NAME
@@ -89,7 +90,7 @@ class PackageTest(unittest.TestCase):
             print "Numero de archivos:", p.getNumberOfElements()
             print "Numero de subcarpetas:", p.getNumberOfSubfolders()
             print "Jerarquía:"
-            p.printHierachy()
+            p._printHierarchy()
         assert p.getNumberOfElements() == 0, PACKAGE_TEST_ERROR_COUNT_FILES
         assert p.getNumberOfSubfolders() == 0, PACKAGE_TEST_ERROR_COUNT_FILES
         assert p.getPackageName() == "Folder 0", PACKAGE_TEST_ERROR_INVALID_NAME
@@ -108,7 +109,7 @@ class PackageTest(unittest.TestCase):
         p = Package(self.f.inspectSingleFile("Folder 4"), True)
         if VERBOSE:
             printBarsConsole("Testeo folder 4")
-            p.printHierachy()
+            p._printHierarchy()
         assert p.getPackageName() == "Folder 4", PACKAGE_TEST_ERROR_INVALID_NAME
         assert p.getNumberOfElements() == 10, PACKAGE_TEST_ERROR_COUNT_FILES
         assert p.getNumberOfSubfolders() == 4, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
@@ -124,7 +125,7 @@ class PackageTest(unittest.TestCase):
         :rtype: None
         """
         p = Package(self.f.inspectSingleFile("Fake name"))
-        p.generateHierachy()
+        p.generateHierarchy()
         if VERBOSE:
             printBarsConsole("Testeo de carpeta inexistente")
             print "Lista de archivos:", p.getFileList()
@@ -149,7 +150,7 @@ class PackageTest(unittest.TestCase):
         """
         p = Package(self.f.inspectSingleFile("Folder 5"), True)
         if VERBOSE:
-            p.printHierachy()
+            p._printHierarchy()
             printBarsConsole("Testeo folder 5")
 
         # Testeo general
@@ -203,14 +204,14 @@ class PackageTest(unittest.TestCase):
 
     def testSeguidas(self):
         """
-        Testeo de varias carpetas concantenadas.
+        Testeo de varias carpetas concatenados.
 
         :return: void
         :rtype: None
         """
         p = Package(self.f.inspectSingleFile("Folder 6"), True)
         if VERBOSE:
-            p.printHierachy()
+            p._printHierarchy()
             printBarsConsole("Testeo folder 6 - Carpetas seguidas")
             print "Chequeo de existencia de Hello world:", p.checkIfExist("Hello world.txt")
         assert p.getNumberOfSubfolders() == 4, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
@@ -230,8 +231,8 @@ class PackageTest(unittest.TestCase):
         """
         p = Package(self.f.inspectSingleFile("Folder 6-EMPTY"), True)
         if VERBOSE:
-            p.printHierachy()
-            printBarsConsole("Testeo folder 6 - Vacia")
+            p._printHierarchy()
+            printBarsConsole("Testeo folder 6 - Vacía")
             print "Lista de archivos:", p.getFileList()
             print "Nombre del paquete:", p.getPackageName()
             print "Numero de elementos:", p.getNumberOfElements()
@@ -254,7 +255,7 @@ class PackageTest(unittest.TestCase):
         p = Package(self.f.inspectSingleFile("Folder 1"), True)
         if VERBOSE:
             printBarsConsole("Testeo folder 1")
-            p.printHierachy()
+            p._printHierarchy()
             print "Numero de elementos:",
             print p.getNumberOfElements()
         assert p.getNumberOfElements() == 2, PACKAGE_TEST_ERROR_COUNT_FILES
@@ -273,7 +274,7 @@ class PackageTest(unittest.TestCase):
         p = PackageFileManager(self.f, "Folder 4", True)
         if VERBOSE:
             printBarsConsole("Testeo folder 4")
-            p.printHierachy()
+            p._printHierarchy()
         assert p.getPackageName() == "Folder 4", PACKAGE_TEST_ERROR_INVALID_NAME
         assert p.getNumberOfElements() == 10, PACKAGE_TEST_ERROR_COUNT_FILES
         assert p.getNumberOfSubfolders() == 4, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
@@ -281,6 +282,7 @@ class PackageTest(unittest.TestCase):
         assert p.isFile("") == False, PACKAGE_TEST_FOUND_NOT_CORRECT_FOLDER
         del p
 
+    # noinspection SpellCheckingInspection
     @unittest.skipIf(DISABLE_HEAVY_TESTS, DISABLE_HEAVY_TESTS_MSG)
     def testPackageWithCompressedAlreadyExistsDisableExtract(self):
         """
@@ -292,8 +294,8 @@ class PackageTest(unittest.TestCase):
         self.f.disable_extractIfFolderAlreadyExists()
         p = PackageFileManager(self.f, "Folder 8-COMPSD", True)
         if VERBOSE:
-            printBarsConsole("Testeo folder 8 con archivos comprimidos de igual nombre - extraccion dehabilitada")
-            p.printHierachy()
+            printBarsConsole("Testeo folder 8 con archivos comprimidos de igual nombre - extracción deshabilitada")
+            p._printHierarchy()
         assert p.getPackageName() == "Folder 8-COMPSD", PACKAGE_TEST_ERROR_INVALID_NAME
         assert p.getNumberOfElements() == 15, PACKAGE_TEST_ERROR_COUNT_FILES
         assert p.getNumberOfSubfolders() == 9, PACKAGE_TEST_ERROR_COUNT_SUBFOLDERS
@@ -323,8 +325,8 @@ class PackageTest(unittest.TestCase):
         """
         p = Package(self.f.inspectSingleFile("Folder 6"), True)
         if VERBOSE:
-            printBarsConsole("Testeo folder 6 - Busqueda de ubicacion de archivos")
-            p.printHierachy()
+            printBarsConsole("Testeo folder 6 - Busqueda de ubicación de archivos")
+            p._printHierarchy()
         t = "/Subfolder 1/Subfolder 2/Subfolder 3/Subfolder 4/Hello world.txt"
         assert p.findFileLocation("Hello world.txt") == t, PACKAGE_TEST_BAD_SEARCH_LOCATION
         assert p.findFileLocation("main.java") == PACKAGE_FILE_NOT_FOUND, PACKAGE_TEST_BAD_SEARCH_LOCATION
@@ -347,7 +349,7 @@ class PackageTest(unittest.TestCase):
         p = Package(self.f.inspectSingleFile("Folder 9-SIM3ZIP"), True)
         if VERBOSE:
             printBarsConsole("Testeo folder 9 similar a 3 con archivos zip - Busqueda de profundidad de archivos")
-            p.printHierachy()
+            p._printHierarchy()
         assert p.getFileDepth("Zip Folder 2") == 1, PACKAGE_TEST_BAD_SEARCH_DEPTH
         assert p.getFileDepth("Zip Folder") == 0, PACKAGE_TEST_BAD_SEARCH_DEPTH
         assert p.getFileDepth("Zip Folder 3") == PACKAGE_FILE_INVALID_DEPTH, PACKAGE_TEST_BAD_SEARCH_DEPTH
@@ -365,7 +367,8 @@ class PackageTest(unittest.TestCase):
         """
         p = Package(self.f.inspectSingleFile("Folder 9-SIM3ZIP"), False)
         p.enable_exceptionAsString()
-        assert p.printHierachy() == "PACKAGE_ERROR_NOT_HIERACHY_CREATED", PACKAGE_TEST_BAD_EXCEPTION_TREATMENT
+        p.enable_exceptionCode()
+        assert p._printHierarchy() == "PACKAGE_ERROR_NOT_HIERARCHY_CREATED", PACKAGE_TEST_BAD_EXCEPTION_TREATMENT
 
 
 # Main test

@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# noinspection SpellCheckingInspection
 """
 DELSPECIAL
-Elimina carácteres especiales
+Elimina caracteres especiales
 
 Autor: PABLO PIZARRO @ github.com/ppizarror
 Fecha: 2014-2015
@@ -10,7 +11,7 @@ Licencia: GPLv2
 """
 __author__ = "ppizarror"
 
-# importación de librerias
+# importación de librerías
 import sys
 
 reload(sys)

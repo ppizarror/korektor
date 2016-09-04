@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# noinspection SpellCheckingInspection
 """
 NOSTDOUT
 Desactiva el standard output de python.

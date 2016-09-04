@@ -15,8 +15,9 @@ __author__ = "ppizarror"
 # Importación de librerías
 from _testpath import *  # @UnusedWildImport
 # noinspection PyUnresolvedReferences
-from bin.errors import *
-from lib.packageValidator import *  # @UnusedWildImport
+from bin.errors import *  # @UnusedWildImport
+from bin.utils import printBarsConsole
+from lib.packagevalidator import *  # @UnusedWildImport
 import unittest
 
 # Constantes de los test
@@ -37,10 +38,11 @@ if __name__ == '__main__':
 
 # Clase UnitTest
 class PackageValidatorTest(unittest.TestCase):
+    # noinspection SpellCheckingInspection
     @staticmethod
     def testValidPackage():
         """
-        Testeo del hierachy tree boollist.
+        Testeo del hierarchy tree boollist.
 
         :return: void
         :rtype: None
@@ -51,23 +53,23 @@ class PackageValidatorTest(unittest.TestCase):
         validator.loadStructure()
 
         l = [False, False, False]
-        assert validator._checkHierachyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierarchyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         l = [False, True, True]
-        assert validator._checkHierachyTree(l) == True, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierarchyTree(l) == True, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         l = [False, True, False]
-        assert validator._checkHierachyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierarchyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         l = [True, True, True]
-        assert validator._checkHierachyTree(l) == True, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierarchyTree(l) == True, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         l = [True, [False, True], True]
-        assert validator._checkHierachyTree(l) == True, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierarchyTree(l) == True, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         l = [True, [True, False], True]
-        assert validator._checkHierachyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierarchyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         l = [True, [True, [True, [True, False, False, True], True], True], True]
-        assert validator._checkHierachyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierarchyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         l = [True, [False, [False, True], [False, True, True, True]], False]
-        assert validator._checkHierachyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierarchyTree(l) == False, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         l = [True, [False, [False, [False, [False, [False, [True], True], True]]]]]
-        assert validator._checkHierachyTree(l) == True, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
+        assert validator._checkHierarchyTree(l) == True, VALIDATOR_TEST_ERROR_CHECK_HIERACHY_TREE
         del l
 
     @staticmethod
@@ -86,7 +88,7 @@ class PackageValidatorTest(unittest.TestCase):
         v.setStructureDirectory(DIR_DATA_TEST + "STRUCTURE EMPTY")
         v.loadStructure()
 
-        # Carpeta vacia y structure vacia
+        # Carpeta vacía y structure vacía
         p = PackageFileManager(f, "Folder 0", True)
         p.enable_exceptionThrow()
         # self.validator.validatePackage(p)
@@ -122,11 +124,23 @@ class PackageValidatorTest(unittest.TestCase):
 
         # Prints estructuras a verificar
         if VERBOSE:
-            p.printHierachy()
+            printBarsConsole("Testeo Folder 10 con STRUCTURE SINGLE FILE")
+            p._printHierarchy()
             print ""
             v._printStructureHierachy()
 
-        v.validatePackage(p)
+        # Se valida el paquete
+        v.validatePackage(p, VERBOSE)
+
+        # Prints jerarquías de archivos
+        if VERBOSE:
+            print ""
+            printBarsConsole("Jerarquías de archivos válidos / no validos", 1)
+            p._printValidHierachyList(1)
+            print ""
+            p._printNotValidHierachyList(1)
+            print ""
+
         assert p.isValid() == True, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
 
     # noinspection PyMethodMayBeStatic
@@ -148,11 +162,23 @@ class PackageValidatorTest(unittest.TestCase):
 
         # Prints estructuras a verificar
         if VERBOSE:
-            p.printHierachy()
+            printBarsConsole("Testeo Folder 11 con STRUCTURE SIMPLE")
+            p._printHierarchy()
             print ""
             v._printStructureHierachy()
 
-        v.validatePackage(p)
+        # Se valida el paquete
+        v.validatePackage(p, VERBOSE)
+
+        # Prints jerarquías de archivos
+        if VERBOSE:
+            print ""
+            printBarsConsole("Jerarquías de archivos válidos / no validos", 1)
+            p._printValidHierachyList(1)
+            print ""
+            p._printNotValidHierachyList(1)
+            print ""
+
         assert p.isValid() == True, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
 
     # noinspection PyMethodMayBeStatic
@@ -174,11 +200,23 @@ class PackageValidatorTest(unittest.TestCase):
 
         # Prints estructuras a verificar
         if VERBOSE:
-            p.printHierachy()
+            printBarsConsole("Testeo Package-validation 1 con STRUCTURE")
+            p._printHierarchy()
             print ""
             v._printStructureHierachy()
 
-        v.validatePackage(p)
+        # Se valida el paquete
+        v.validatePackage(p, VERBOSE)
+
+        # Prints jerarquías de archivos
+        if VERBOSE:
+            print ""
+            printBarsConsole("Jerarquías de archivos válidos / no validos", 1)
+            p._printValidHierachyList(1)
+            print ""
+            p._printNotValidHierachyList(1)
+            print ""
+
         assert p.isValid() == True, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
 
     # noinspection PyMethodMayBeStatic
@@ -200,11 +238,23 @@ class PackageValidatorTest(unittest.TestCase):
 
         # Prints estructuras a verificar
         if VERBOSE:
-            p.printHierachy()
+            printBarsConsole("Testeo de Package-validation 2 con STRUCTURE")
+            p._printHierarchy()
             print ""
             v._printStructureHierachy()
 
-        v.validatePackage(p)
+        # Se valida el paquete
+        v.validatePackage(p, VERBOSE)
+
+        # Prints jerarquías de archivos
+        if VERBOSE:
+            print ""
+            printBarsConsole("Jerarquías de archivos válidos / no validos", 1)
+            p._printValidHierachyList(1)
+            print ""
+            p._printNotValidHierachyList(1)
+            print ""
+
         assert p.isValid() == True, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
 
     # noinspection PyMethodMayBeStatic
@@ -226,11 +276,13 @@ class PackageValidatorTest(unittest.TestCase):
 
         # Prints estructuras a verificar
         if VERBOSE:
-            p.printHierachy()
+            printBarsConsole("Testeo Package-validation 3 con STRUCTURE")
+            p._printHierarchy()
             print ""
             v._printStructureHierachy()
 
-        v.validatePackage(p)
+        # Se valida el paquete
+        v.validatePackage(p, VERBOSE)
 
         # Falla por regex en name_surname
         assert p.isValid() == False, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
@@ -254,11 +306,23 @@ class PackageValidatorTest(unittest.TestCase):
 
         # Prints estructuras a verificar
         if VERBOSE:
-            p.printHierachy()
+            printBarsConsole("Testeo Package-validation 4 con STRUCTURE 2")
+            p._printHierarchy()
             print ""
             v._printStructureHierachy()
 
-        v.validatePackage(p)
+        # Se valida el paquete
+        v.validatePackage(p, VERBOSE)
+
+        # Prints jerarquías de archivos
+        if VERBOSE:
+            print ""
+            printBarsConsole("Jerarquías de archivos válidos / no validos", 1)
+            p._printValidHierachyList(1)
+            print ""
+            p._printNotValidHierachyList(1)
+            print ""
+
         assert p.isValid() == True, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
 
     # noinspection PyMethodMayBeStatic
@@ -280,11 +344,62 @@ class PackageValidatorTest(unittest.TestCase):
 
         # Prints estructuras a verificar
         if VERBOSE:
-            p.printHierachy()
+            printBarsConsole("Testeo Package-validation 5 con STRUCTURE 2")
+            p._printHierarchy()
             print ""
             v._printStructureHierachy()
 
-        v.validatePackage(p)
+        # Se valida el paquete
+        v.validatePackage(p, VERBOSE)
+        p._printValidatedFileList()
+
+        # Prints jerarquías de archivos
+        if VERBOSE:
+            print ""
+            printBarsConsole("Jerarquías de archivos válidos / no validos", 1)
+            p._printValidHierachyList(1)
+            print ""
+            p._printNotValidHierachyList(1)
+            print ""
+
+        assert p.isValid() == True, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
+
+    @staticmethod
+    def testDoubleSubfolders():
+        """
+        Test de validación de dos carpetas.
+
+        :return: void
+        :rtype: None
+        """
+        f = FileManager(DIR_DATA_TEST)
+        f.disable_removeOnExtract()
+        f.enable_structureCharacters()
+        v = PackageValidator()
+        v.enable_exceptions()
+        p = PackageFileManager(f, "Package-validation 6", True)
+        p.enable_exceptionThrow()
+        v.setStructureDirectory(DIR_DATA_TEST + "STRUCTURE 3")
+
+        # Prints estructuras a verificar
+        if VERBOSE:
+            printBarsConsole("Testeo Package-validation 6 con STRUCTURE 3")
+            p._printHierarchy()
+            print ""
+            v._printStructureHierachy()
+
+        # Se valida el paquete
+        v.validatePackage(p, VERBOSE)
+
+        # Prints jerarquías de archivos
+        if VERBOSE:
+            print ""
+            printBarsConsole("Jerarquías de archivos válidos / no validos", 1)
+            p._printValidHierachyList(1)
+            print ""
+            p._printNotValidHierachyList(1)
+            print ""
+
         assert p.isValid() == True, VALIDATOR_TEST_ERROR_VALIDATE_EMPTY_BOTH
 
 

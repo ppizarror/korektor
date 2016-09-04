@@ -13,8 +13,10 @@ __author__ = "ppizarror"
 # Importación de librerías de entorno
 # noinspection PyUnresolvedReferences
 from binpath import *  # @UnusedWildImport
+# noinspection PyUnresolvedReferences
+from accents import delAccentByOS  # @UnusedImport
 from browser import Browser
-from kwargsUtils import kwargIsTrueParam
+from kwargsutils import kwargIsTrueParam
 import errors
 
 # Importación de librerías de sistema
@@ -164,7 +166,7 @@ def equalLists(list1, list2):
 # noinspection PyUnusedLocal
 def generateRandom6():
     """
-    Genera un string de 6 carácteres aleatorios.
+    Genera un string de 6 caracteres aleatorios.
 
     :return: String
     :rtype: str
@@ -175,7 +177,7 @@ def generateRandom6():
 # noinspection PyUnusedLocal
 def generateRandom12():
     """
-    Genera un string de 12 carácteres aleatorios.
+    Genera un string de 12 caracteres aleatorios.
 
     :return: String
     :rtype: str
@@ -183,6 +185,7 @@ def generateRandom12():
     return ''.join(choice(string.ascii_uppercase) for i in range(12))  # @UnusedVariable
 
 
+# noinspection SpellCheckingInspection
 def getBetweenTags(html, tagi, tagf):
     """
     Función que retorna un valor entre dos tags.
@@ -229,6 +232,7 @@ def getHour():
     return time.ctime(time.time())[11:16]
 
 
+# noinspection SpellCheckingInspection
 def getDate():
     """
     Obtiene la fecha del dia actual.
@@ -322,7 +326,7 @@ def googleTranslate(text, translate_lang, header, web, source_lang=None):
     :type translate_lang: str
     :param header: Header web
     :type header: str
-    :param web: Web de traduccion
+    :param web: Web de traducción
     :type web: str
     :param source_lang: Idioma origen
     :type source_lang: str
@@ -414,18 +418,6 @@ def isTrue(a):
         return False
 
 
-def isWindows():
-    """
-    Función que retorna True/False si el sistema operativo cliente es Windows o no.
-
-    :return: Booleano indicando pertenencia
-    :rtype: bool
-    """
-    if os.name == "nt":
-        return True
-    return False
-
-
 def makeCallable(function):
     """
     Función que crea una función llamable.
@@ -506,22 +498,24 @@ def obtenerFecha():
     return str(fecha.day) + "/" + str(fecha.month) + "/" + str(fecha.year)
 
 
-def printBarsConsole(s):
+def printBarsConsole(s, tabs=0):
     """
     Función que imprime unas barras en un mensaje.
 
     :param s: String a imprimir
     :type s: str
+    :param tabs: Número de tabs a imprimir a la izquierda
+    :type tabs: int
 
     :return: void
     :rtype: None
     """
     l = len(s)
-    u = ""
+    u = "{0}".format("\t" * tabs)
     for i in range(l):  # @UnusedVariable
         u += "-"
     print u
-    print s
+    print "{0} {1}".format("\t" * tabs, delAccentByOS(s))
     print u
 
 
@@ -548,7 +542,7 @@ def printHierachyBoolList(lst, level=0):
 
     :param lst: Lista de jerarquía booleana de jerarquía
     :type lst: list
-    :param level: Nivel de profunididad
+    :param level: Nivel de profundidad
     :type level: int
 
     :return: void
@@ -569,7 +563,7 @@ def printHierachyList(lst, level, tabsLeft):
 
     :param lst: Lista de jerarquía
     :type lst: list
-    :param level: Nivel de profunididad
+    :param level: Nivel de profundidad
     :type level: int
     :param tabsLeft: Número de tabs a la izquierda
     :type tabsLeft: int
@@ -585,6 +579,7 @@ def printHierachyList(lst, level, tabsLeft):
             print('\t' * tabsLeft + '    ' * level + '+---' + l)
 
 
+# noinspection SpellCheckingInspection
 def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_CHARS_LIST, **kwargs):
     """
     Compara dos strings el cual regString posee regex.
@@ -596,9 +591,9 @@ def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_
     :type regString: str, unicode
     :param currString: String a comparar
     :type currString: str, unicode
-    :param validRegexChars: String de carácteres válidos
+    :param validRegexChars: String de caracteres válidos
     :type validRegexChars: str, unicode
-    :param regexChars: Lista de carácteres inválidos
+    :param regexChars: Lista de caracteres inválidos
     :type regexChars: list
     :param kwargs: Keywords
     :type kwargs: dict
@@ -609,9 +604,9 @@ def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_
 
     def _charListNotIn(charList, word):
         """
-        Comprueba que una lista de carácteres no esté en una palabra <word>.
+        Comprueba que una lista de caracteres no esté en una palabra <word>.
 
-        :param charList: Lista de carácteres
+        :param charList: Lista de caracteres
         :type charList: list
         :param word: Palabra a analizar
         :type word: str, unicode
@@ -624,7 +619,7 @@ def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_
                 return False
         return True
 
-    # Se tratan los strigs
+    # Se tratan los strings
     regString = str(regString)
     currString = str(currString)
 
@@ -639,7 +634,7 @@ def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_
         except:
             print validRegexChars
 
-        # Se comprueba que todos los carácteres de currString sean válidos
+        # Se comprueba que todos los caracteres de currString sean válidos
         for ch in list(currString):
             if ch not in validRegexChars:
                 return False
@@ -679,7 +674,7 @@ def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_
                 # Si el carácter en regString no es un carácter regex
                 if regString[i] not in regexChars:
 
-                    # Si difieren i y j entonces los carácteres son falsos
+                    # Si difieren i y j entonces los caracteres son falsos
                     if not regString[i] == currString[j]:
                         return False
 
@@ -690,7 +685,7 @@ def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_
                 # Si el carácter es un regex
                 else:
 
-                    # Lista de carácteres que continúan
+                    # Lista de caracteres que continúan
                     nextl = []
                     ni = i + 1
 
@@ -698,7 +693,7 @@ def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_
                     if i == lr - 1:
                         return True
 
-                    # Si no es un carácter final entonces se agregan los carácteres de regString que continúan a nextl
+                    # Si no es un carácter final entonces se agregan los caracteres de regString que continúan a nextl
                     else:
                         for p in regString[i + 1:lr]:
                             if p not in regexChars:
@@ -707,12 +702,12 @@ def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_
                                 break
                         lnextl = len(nextl)
 
-                    # Si lo que queda de currString no alcanza para hacer el match con la lista de carácteres entonces
+                    # Si lo que queda de currString no alcanza para hacer el match con la lista de caracteres entonces
                     # los strings son diferentes y la función retorna False.
                     if (lc - j) < lnextl:
                         return False
 
-                    # Se recorre cada caracter de currString hasta que se completa toda la lista de nextl, si se pasa
+                    # Se recorre cada carácter de currString hasta que se completa toda la lista de nextl, si se pasa
                     # entonces las listas difieren y la función retorna False.
                     while True:
 
@@ -721,7 +716,7 @@ def regexCompare(regString, currString, validRegexChars=None, regexChars=_REGEX_
                         areEquals = True
                         for m in range(0, lnextl):
 
-                            # Si los carácteres difieren entonces no son iguales
+                            # Si los caracteres difieren entonces no son iguales
                             if currString[j + m] != nextl[m]:
                                 j += m
                                 i += m

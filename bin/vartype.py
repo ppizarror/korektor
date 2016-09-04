@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# noinspection SpellCheckingInspection
 """
 VARTYPE
 Maneja los tipos de variables.
@@ -25,6 +26,7 @@ TYPE_OTHER = "Other"
 TYPE_STR = "String"
 
 
+# noinspection SpellCheckingInspection
 def checkVariableType(var, clss, otherClass=None):
     """
     Chequea si una variable es de una determinada clase o no.
@@ -70,6 +72,7 @@ class varTypedClass(exceptionBehaviour):
         """
         pass
 
+    # noinspection SpellCheckingInspection
     def _checkVariableType(self, var, typeVar, paramName, otherClass=None):
         """
         Chequea si una variable es de una determinada clase o no.

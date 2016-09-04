@@ -15,7 +15,7 @@ if __name__ == '__main__':
     # Importación de librerías
     # noinspection PyUnresolvedReferences
     from _testpath import *  # @UnusedWildImport
-    from bin.configLoader import configLoader
+    from bin.configloader import configLoader
     from bin.utils import compareVersion, getVersion, printBarsConsole
     from config import DIR_CONFIG
     from bin import __version__
@@ -38,4 +38,5 @@ if __name__ == '__main__':
     version = getVersion(label, header, web)
     print "Version local:", __version__
     print "Version web:", version
+    # noinspection SpellCheckingInspection
     print "Comparacion version (1) Local, (2) Web ===> (1)", versionDict[compareVersion(__version__, version)], "(2)"

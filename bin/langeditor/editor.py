@@ -10,7 +10,7 @@ Licencia: GPLv2
 """
 __author__ = "ppizarror"
 
-# Importación de librerias
+# Importación de librerías
 from Tkinter import *  # @UnusedWildImport
 import os
 import sys  # @UnusedImport @Reimport
@@ -54,7 +54,6 @@ LANGEND = ".lng"
 _mult_id = 1
 _mult_strings = 40
 ml_columns = ("{0}ID{0}".format(" " * _mult_id), "{0}String{0}".format(" " * _mult_strings))
-print ml_columns
 
 
 # noinspection PyPep8Naming,PyShadowingNames,PyShadowingNames
@@ -103,6 +102,7 @@ def delMatrix(matrix):
             matrix.pop(0)  # @UnusedVariable
 
 
+# noinspection SpellCheckingInspection
 def replaceStrict(a):
     """
     Función que reemplaza los caracteres restrictivos
@@ -114,6 +114,7 @@ def replaceStrict(a):
         "'", "%XII%")
 
 
+# noinspection SpellCheckingInspection
 def putStrict(a):
     """
     Función que retorna los caracteres restrictivos
@@ -126,7 +127,7 @@ def putStrict(a):
 
 def isNumerable(x):
     """
-    Función que comprueba si un texto es digito
+    Función que comprueba si un texto es dígito
     :param x: String
     :return: Boolean
     """
@@ -149,14 +150,14 @@ def isWindows():
 # noinspection PyShadowingNames
 def sortby(tree, col, descending):
     """
-    Función que ordena las columnas segun orden
+    Función que ordena las columnas según orden
     :param tree:
     :param col:
     :param descending:
     :return:
     """
     data = [(tree.set(child, col), child) for child in tree.get_children('')]  # Obtiene los datos para ordenar
-    data.sort(reverse=descending)  # Se reonrdenan y modifican
+    data.sort(reverse=descending)  # Se reordenan y modifican
     for indx, item in enumerate(data): tree.move(item[1], '', indx)
     tree.heading(col, command=lambda col=col: sortby(tree, col, int(not descending)))
 
@@ -171,7 +172,7 @@ except:
 
 
 # Clase pop
-# noinspection PyShadowingNames,PyUnusedLocal,PyMissingOrEmptyDocstring
+# noinspection PyShadowingNames,PyUnusedLocal,PyMissingOrEmptyDocstring,SpellCheckingInspection
 class pop:
     def __init__(self, properties):
         """
@@ -395,24 +396,29 @@ try:
     for i in conf_file:
         i = i.strip()
         c_command = i.split("=")
+        # noinspection SpellCheckingInspection
         if c_command[0].strip() == "XSIZE":
             c_after_command = str(c_command[1]).split(",")
             if isNumerable(c_after_command[0]) and int(c_after_command[0]) >= C_DATA[0]: C_DATA[0] = int(
                 c_after_command[0])
+        # noinspection SpellCheckingInspection
         if c_command[0].strip() == "YSIZE":
             c_after_command = str(c_command[1]).split(",")
             if isNumerable(c_after_command[0]) and int(c_after_command[0]) >= C_DATA[1]: C_DATA[1] = int(
                 c_after_command[0])
+        # noinspection SpellCheckingInspection
         if c_command[0].strip() == "DEFAULTLANG":
             c_after_command = str(c_command[1]).split(",")
             if (c_after_command[0].strip() != "%") and (c_after_command[0].strip().upper() + LANGEND in LANGLIST):
                 C_DATA[2] = c_after_command[0].strip().upper()
+        # noinspection SpellCheckingInspection
         if c_command[0].strip() == "AUTOFOCUS":
             c_after_command = str(c_command[1]).split(",")
             if c_after_command[0].strip().upper() == "ON":
                 C_DATA[3] = True
             else:
                 C_DATA[3] = False
+        # noinspection SpellCheckingInspection
         if c_command[0].strip() == "REZISE":
             c_after_command = str(c_command[1]).split(",")
             if c_after_command[0].strip().upper() == "ON":
@@ -422,12 +428,14 @@ try:
         if c_command[0].strip() == "DELIMITER":
             c_after_command = str(c_command[1]).split(",")
             if len(c_after_command[0].strip()) > 0: C_DATA[5] = c_after_command[0].strip()
+        # noinspection SpellCheckingInspection
         if c_command[0].strip() == "AUTOTITLE":
             c_after_command = str(c_command[1]).split(",")
             if c_after_command[0].strip().upper() == "ON":
                 C_DATA[6] = True
             else:
                 C_DATA[6] = False
+        # noinspection SpellCheckingInspection
         if c_command[0].strip() == "AUTOSAVE":
             c_after_command = str(c_command[1]).split(",")
             if c_after_command[0].strip().upper() == "ON":
@@ -440,21 +448,30 @@ except:
     archivo = open(CONFIGURATIONFILE, "w")
     archivo.write("#Archivo de Configuraciones\n")
     archivo.write("#No haga cambios indebidos, ellos pueden afectar al comportamiento del programa\n\n")
+    # noinspection SpellCheckingInspection
     archivo.write("#Largo minimo en pixeles del programa, min: 600px\n")
-    archivo.write("XSIZE = " + str(C_DATA[0]) + "\n\n")
+    # noinspection SpellCheckingInspection
+    archivo.write("XSIZE = {0}\n\n".format(str(C_DATA[0])))
+    # noinspection SpellCheckingInspection
     archivo.write("#Alto minimo en pixeles del programa, min: 400px\n")
-    archivo.write("YSIZE = " + str(C_DATA[1]) + "\n\n")
+    # noinspection SpellCheckingInspection
+    archivo.write("YSIZE = {0}\n\n".format(str(C_DATA[1])))
     archivo.write("#Idioma a cargar por defecto\n")
+    # noinspection SpellCheckingInspection
     archivo.write("DEFAULTLANG = %\n\n")
     archivo.write("#Autofocus de la lista\n")
+    # noinspection SpellCheckingInspection
     archivo.write("AUTOFOCUS = ON\n\n")
     archivo.write("#Reescalado de las columnas tras insertar un elemento\n")
+    # noinspection SpellCheckingInspection
     archivo.write("REZISE = OFF\n\n")
     archivo.write("#Delimitador de los archivos\n")
     archivo.write("DELIMITER = " + str(C_DATA[5]).replace(" ", "*") + "\n\n")
     archivo.write("#Automaticamente se formatea el string\n")
+    # noinspection SpellCheckingInspection,SpellCheckingInspection
     archivo.write("AUTOTITLE = OFF\n\n")
     archivo.write("#Auto guardar\n")
+    # noinspection SpellCheckingInspection
     archivo.write("AUTOSAVE = ON")
     archivo.close()
 
@@ -474,7 +491,7 @@ archive.close()
 DATADELIMITER = DATADELIMITER.replace("*", " ")
 
 
-# noinspection PyTypeChecker,PyUnusedLocal,PyShadowingNames,PyMethodMayBeStatic,PyMissingOrEmptyDocstring,PyTupleAssignmentBalance
+# noinspection PyTypeChecker,PyUnusedLocal,PyShadowingNames,PyMethodMayBeStatic,PyMissingOrEmptyDocstring,PyTupleAssignmentBalance,SpellCheckingInspection
 class langs:
     """
     Clase de manejo de idiomas.

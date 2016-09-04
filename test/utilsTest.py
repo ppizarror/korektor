@@ -13,13 +13,16 @@ __author__ = "ppizarror"
 # noinspection PyUnresolvedReferences
 from _testpath import *  # @UnusedWildImport
 from bin.errors import *  # @UnusedWildImport
-from bin.kwargsUtils import *  # @UnusedWildImport
+from bin.kwargsutils import *  # @UnusedWildImport
+from bin.ostype import is_windows
 from bin.utils import *  # @UnusedWildImport
 import unittest
+import os  # @Reimport
 
 # Constantes de los test
 DISABLE_HEAVY_TESTS = True
 DISABLE_HEAVY_TESTS_MSG = "Se desactivaron los tests pesados"
+# noinspection SpellCheckingInspection
 REGEX_VALID_CHARS = "ABCDEFGHIJKLMÑNOPQRSTUVWXYZÁÉÍÓÚ abcdefghijklmñnopqrstuvwxyzáéíóú0123456789_.-/".decode("utf-8")
 VERBOSE = False
 
@@ -58,7 +61,7 @@ class UtilsTest(unittest.TestCase):
             print getHour()
             print generateRandom6()
             print getTerminalSize()
-        assert equalLists(loadFile("__init__.ini"), []) == True, "Error al cargar archivo vacio"
+        assert equalLists(loadFile("__init__.ini"), []) == True, "Error al cargar archivo vacío"
         t = [1, 2, 3, 4, 5, 10]
         r = sortAndUniq([1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 10, 5])
         assert equalLists(t, r) == True, "Error al ordenar lista"
@@ -89,6 +92,7 @@ class UtilsTest(unittest.TestCase):
         assert isHiddenFile("file") == False, ERR_HDNFL
         assert isHiddenFile(1) == True, ERR_HDNFL
 
+    # noinspection SpellCheckingInspection
     def testRegexCompare(self):
         """
         Testeo del regex utilizado en el packageValidator.
@@ -172,6 +176,14 @@ class UtilsTest(unittest.TestCase):
         assert convertToNumber("a") == 10, ERR_NUMBER_CONVERTION  # Hexadecimal
         assert convertToNumber(5) == 5, ERR_NUMBER_CONVERTION  # No conversión
         assert convertToNumber("1.4") == 1.4, ERR_NUMBER_CONVERTION  # Número flotante
+
+    def testOS(self):
+        """
+        Testea el sistema operativo
+        :return:
+        """
+        if os.name == "nt":  # Se comprueba que el sistema sea Windows si es que os.name es NT
+            assert is_windows() == True, ERROR_GETTING_OS
 
 
 # Main test

@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# -*- coding: utf-8 -*-
 """Dump archive contents, test extraction."""
 
 # noinspection PyUnresolvedReferences
@@ -21,6 +22,7 @@ def bytearray(v):  # @ReservedAssignment
 rf.UNICODE_COMMENTS = 1
 rf.USE_DATETIME = 1
 
+# noinspection SpellCheckingInspection
 usage = """
 dumprar [switches] [ARC1 ARC2 ...] [@ARCLIST]
 switches:
@@ -35,8 +37,10 @@ switches:
   --         stop switch parsing
 """.strip()
 
+# noinspection PyNonAsciiChar,SpellCheckingInspection
 os_list = ['DOS', 'OS2', 'WIN', 'UNIX', 'MACOS', 'BEOS']
 
+# noinspection SpellCheckingInspection
 block_strs = ['MARK', 'MAIN', 'FILE', 'OLD_COMMENT', 'OLD_EXTRA',
               'OLD_SUB', 'OLD_RECOVERY', 'OLD_AUTH', 'SUB', 'ENDARC']
 
@@ -48,6 +52,7 @@ def rarType(type):  # @ReservedAssignment
     return block_strs[type - rf.RAR_BLOCK_MARK]
 
 
+# noinspection SpellCheckingInspection
 main_bits = (
     (rf.RAR_MAIN_VOLUME, "VOL"),
     (rf.RAR_MAIN_COMMENT, "COMMENT"),
@@ -62,6 +67,7 @@ main_bits = (
     (rf.RAR_LONG_BLOCK, "LONG"),
 )
 
+# noinspection SpellCheckingInspection
 endarc_bits = (
     (rf.RAR_ENDARC_NEXT_VOLUME, "NEXTVOL"),
     (rf.RAR_ENDARC_DATACRC, "DATACRC"),
@@ -71,6 +77,7 @@ endarc_bits = (
     (rf.RAR_LONG_BLOCK, "LONG"),
 )
 
+# noinspection SpellCheckingInspection
 file_bits = (
     (rf.RAR_FILE_SPLIT_BEFORE, "SPLIT_BEFORE"),
     (rf.RAR_FILE_SPLIT_AFTER, "SPLIT_AFTER"),
@@ -158,7 +165,7 @@ def fmt_time(t):
     return "%04d-%02d-%02d %02d:%02d:%02d" % t
 
 
-# noinspection PyMissingOrEmptyDocstring
+# noinspection PyMissingOrEmptyDocstring,SpellCheckingInspection
 def show_item(h):
     st = rarType(h.type)
     unknown = h.header_size - h.header_base
@@ -226,7 +233,7 @@ def check_crc(f, inf):
         print ('crc error')
 
 
-# noinspection PyMissingOrEmptyDocstring
+# noinspection PyMissingOrEmptyDocstring,SpellCheckingInspection
 def test_read_long(r, inf):
     f = r.open(inf.filename)
     total = 0
@@ -318,7 +325,7 @@ def test_real(fn, psw):
         r.testrar()
 
 
-# noinspection PyMissingOrEmptyDocstring
+# noinspection PyMissingOrEmptyDocstring,SpellCheckingInspection
 def test(fn, psw):
     try:
         test_real(fn, psw)

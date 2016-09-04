@@ -11,14 +11,13 @@ Licencia: GPLv2
 __author__ = "ppizarror"
 
 # Importación de librerías
-if __name__ == '__main__':
-    # noinspection PyUnresolvedReferences
-    from binpath import *  # @UnusedWildImport
+# noinspection PyUnresolvedReferences
+from binpath import *  # @UnusedWildImport
 import ctypes
-import os  # @Reimport
+from ostype import is_windows
 
 # Importación de librerías restringidas
-_IMPORTED = [1, 1]
+_IMPORTED = [1]
 try:
     # noinspection PyUnresolvedReferences
     import WConio  # @UnresolvedImport
@@ -26,6 +25,7 @@ except:
     _IMPORTED[0] = 0
 
 # Constantes
+# noinspection SpellCheckingInspection
 _CMD_COLORS = {"blue": 0x10,
                "gray": 0x80,
                "green": 0x20,
@@ -110,7 +110,7 @@ class Color:
     Permite manejar colores en la terminal.
     """
 
-    if os.name != "nt":
+    if is_windows():
         PURPLE = '\033[95m'
         CYAN = '\033[96m'
         DARKCYAN = '\033[36m'

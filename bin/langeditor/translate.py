@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 TRANSLATE
-Traduce gracias a google traductor los idiomas de Hero of Antair
+Traduce gracias a google traductor los idiomas
 Método lento pero automático
 
 Autor: PABLO PIZARRO @ github.com/ppizarror
@@ -106,10 +106,10 @@ if tolang in LANGS:  # Si el idioma existe
         print "El archivo se ha traducido correctamente"
         newarchive.close()
     else:
-        print "Error :: El nombre del archivo de destino no puede estar vacio!"
+        print "Error :: El nombre del archivo de destino no puede estar vacío!"
     archivo.close()
 else:  # Si el idioma no está en la lista de idiomas disponibles
-    print "Error :: El idioma '{0}' no existe, consulte la documentacion!".format(tolang)
+    print "Error :: El idioma '{0}' no existe, consulte la documentación!".format(tolang)
 
 print "Cerrando programa ...",
 os.system("taskkill /PID " + str(os.getpid()) + " /F")

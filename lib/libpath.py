@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Adminsitra la direccion de directorios de la aplicación
+Administra la dirección de directorios de la aplicación
 Se pueden incluir todos los directorios salvo bin/.
 
-Autor: PABLO PIZARRO @ pgithub.com/ppizarror
+Autor: PABLO PIZARRO @ github.com/ppizarror
 Fecha: ABRIL 2015
 Licencia: GPLv2
 """
