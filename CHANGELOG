@@ -1,5 +1,5 @@
                                  CHANGELOG                                 
-                     Version 0.2.9-1, Septiembre 2016
+                     Version 0.2.9-2, Septiembre 2016
                      
 [0.0.1]
 	+Creada la estructura del programa, creados bin y lib. >Bin: Sirve para
@@ -741,5 +741,7 @@
 	+Corrección de errores en determinadas variables de funciones.
 	+Corrección ortográfica menor al CHANGELOG.
 	+Se reformatean los test para eliminar la sintaxis == {s} por is {s}.
+	+Se organizan imports de librerías en bin/rarfile.py.
 	+Se corrige error en el generador del CHANGELOG, el cual cambiaba la
-	 última entrada de una versión por la primera de la siguiente.
+	 última entrada de una versión por la primera de la siguiente, y no
+	 agregaba la última entrada añadida al CHANGELOG.
