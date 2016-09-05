@@ -1,5 +1,5 @@
                                  CHANGELOG                                 
-                     Version 0.2.8-1, Septiembre 2016
+                     Version 0.2.9-1, Septiembre 2016
                      
 [0.0.1]
 	+Creada la estructura del programa, creados bin y lib. >Bin: Sirve para
@@ -72,8 +72,8 @@
 	 /structure.
 	+Modificaciones al módulo bin/ConfigLoader.py, agregando la función
 	 get_value_listed con lista de valores por para metro de configuración.
-	+Se agrega la función is_folder_utils y is_hidden_file_utils al módulo utils.py. Ambas
-	 funciones están relacionadas con el manejo de archivos.
+	+Se agrega la función is_folder_utils y is_hidden_file_utils al módulo
+	 utils.py. Ambas funciones están relacionadas con el manejo de archivos.
 
 [0.0.5]
 	+Se agregan archivos de configuraciones para el núcleo, las carpetas, los
@@ -102,9 +102,9 @@
 
 [0.0.7]
 	+Se agregan las funciones getters y setters en packageTester.
-	+Se agregan funciones is_folder_utils, isZip y validate en package tester, las
-	 cuales están destinadas a manejar archivos en el filesystem del sistema
-	 operativo huésped. Ambas usan extensivamente la librería OS.
+	+Se agregan funciones is_folder_utils, isZip y validate en package tester,
+	 las cuales están destinadas a manejar archivos en el filesystem del
+	 sistema operativo huésped. Ambas usan extensivamente la librería OS.
 	+Se agrega __autor__ a todos los módulos de la aplicación.
 	+Se corrige la identación en utils.py.
 	-Se renombra la clase packageTester a Package.
@@ -221,8 +221,8 @@
 	+Se agregan errores asociados al filemanager en errors.py.
 	+Refactorización menor del módulo hashdir.py.
 	+Refactorización menor del módulo Langs.py.
-	+Se agrega la función append_list_to_list a utils.py, la cual permite clonar
-	 los contenidos de una lista a otra, similar a un merge.
+	+Se agrega la función append_list_to_list a utils.py, la cual permite
+	 clonar los contenidos de una lista a otra, similar a un merge.
 	+Se agregan tests asociados al regex en utils.py.
 	+Refactorización menor de __init__.py en config/.
 	+Se agrega el archivo .gitkeep a los archivos a ser ignorados por el
@@ -567,8 +567,8 @@
 	 objetivo eliminar por completo el contenido de un determinado archivo
 	 pasado por argumento.
 	+Nueva clase: VarTypedClass, esta clase está asociada al manejo de tipos
-	 de variable, provee la función _check_variable_type la cual chequea si una
-	 variable es de una determinada clase.
+	 de variable, provee la función _check_variable_type la cual chequea si
+	 una variable es de una determinada clase.
 	+Se agrega la opción MAX_RANGE_VAR a config/plot.ini, esta entrada esta
 	 relacionada al máximo de rango que un resultado puede tolerarse para
 	 calcular el promedio normalizado de la muestra de resultados totales.
@@ -588,10 +588,10 @@
 	+Se eliminan constantes innecesarias en el packageValidator.
 	+Package y PackageValidator heredan desde VarTypedClass y
 	 exceptionAsStringClass.
-	+Se agregan las funciones _get_structure_filelist y ge tStructurePackage al
+	+Se agregan las funciones _get_structure_filelist y getStructurePackage al
 	 packageValidator. Estas tienen por objetivo retornar la información de
 	 la estructura cargada.
-	+Se agregan las funciones load_structure, printStruct ureHierachy,
+	+Se agregan las funciones load_structure, printStructureHierachy,
 	 set_structure_directory y validate_package a la clase packageValidator.
 	+Se agrega la opción --reset al módulo runtests.py, esta opción por
 	 consola permite reiniciar el archivo que almacena los resultados de los
@@ -643,8 +643,8 @@
 	 el fileManager.
 	+Corregido error al no decodificar los nombres de los archivos escaneados
 	 en el fileManager.
-	+Se agregan las funciones getHierachyFiles a la clase Package.
-	+Se agrega la creación de un hierachyBool para el paquete de la
+	+Se agregan las funciones getHierarchyFiles a la clase Package.
+	+Se agrega la creación de un hierarchyBool para el paquete de la
 	 estructura en el packageValidator. Esta lista tiene por objetivo observar
 	 cual de los archivos de la estructura está cumplida por un determinado
 	 paquete en el validator.
@@ -663,9 +663,9 @@
 	 boolHierachyLists.
 	+Se agrega la opción de activar o desactivar el lanzamiento de
 	 excepciones en errors.py.
-	+Se añade la función number_of_sublists a utils, esta función retorna el
-	 número de sublistas de contiene una lista.
-	+Se agrega argumento extra a print_hierachy_list en utils, este argumento
+	+Se añade la función number_of_sublists a utils, esta función retorna
+	 el número de sublistas de contiene una lista.
+	+Se agrega argumento extra a print_hierarchy_list en utils, este argumento
 	 permite añadir una serie de tabs a la izquierda de cada print.
 	+La función regex_compare fué reescrita a la totalidad, ahora se cumplen
 	 todos los tests, corrigiendo multitud de errores tanto de ejecución como
@@ -731,3 +731,13 @@
 	+Se añade un test para probar paquetes que tengan más de una carpeta.
 	+Se optimiza una subfunción del regex_compare para incrementar la
 	 velocidad de comparación.
+
+[0.2.9]
+	+Se añade un test para probar el tipo de sistema operativo en Windows
+	 para utilsTest.py.
+	+Todas las funciones y clases fueron reformateadas para ajustarse a la
+	 convención PEP-8.
+	+Se reescribió el módulo colors.py para introducir colores en Windows.
+	+Corrección de errores en determinadas variables de funciones.
+	+Corrección ortográfica menor al CHANGELOG.
+	+Se reformatean los test para eliminar la sintaxis == {s} por is {s}.
