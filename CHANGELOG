@@ -10,9 +10,9 @@
 	+Se agrega la librería Wconio para manejar la ventana de comandos.
 	+Se agrega el módulo VerticalScrolledFrame.
 	+Se agrega una licencia.
+	+Se agrega un README básico.
 
 [0.0.2]
-	+Se agrega un README básico.
 	+Se agrega un .gitignore.
 	+Se agregan los __init__.py a las carpetas bin y lib.
 	+Se añaden las carpetas config, data y resources. >Config: Almancena
@@ -46,9 +46,9 @@
 	+Se corrige la ortografía de algunos comentarios.
 	+Se modifica el archivo export.py del langeditor.
 	+Se modifica el archivo transformer.py del langeditor.
+	+Se modifica el archivo editor.py del langeditor.
 
 [0.0.3]
-	+Se modifica el archivo editor.py del langeditor.
 	+Se modifica el archivo translate.py del langeditor.
 	+Se agregan las carpetas plugins, results y uploads. >/plugins/:
 	 Administra los plugins de la aplicación. >/data/results/: Almacena los
@@ -61,9 +61,9 @@
 	+Se agrega un .config/ al módulo /lib.
 	+Se agrega un .config/ al módulo /bin.
 	+Se corrigen errores asociados a la importación de librerías.
+	+Se refactoriza en general el código existente.
 
 [0.0.4]
-	+Se refactoriza en general el código existente.
 	+Se agrega un __init__.py a plugins, indicando estructura y dirección
 	 principal de directorios.
 	+Se agrega la carpeta /data/structure/ para almacenar la estructura que
@@ -74,10 +74,10 @@
 	 get_value_listed con lista de valores por para metro de configuración.
 	+Se agrega la función is_folder_utils y is_hidden_file_utils al módulo
 	 utils.py. Ambas funciones están relacionadas con el manejo de archivos.
-
-[0.0.5]
 	+Se agregan archivos de configuraciones para el núcleo, las carpetas, los
 	 paquetes y la interfaz gráfica.
+
+[0.0.5]
 	+Se agrega la clase packageTester en package.py. La cual carga paquetes en
 	 formato .zip y comprueba que tengan un formato especifico determinado por
 	 la disposición de los archivos en /structure.
@@ -88,10 +88,10 @@
 	+Se agregan varias constantes de estado para package.py, en concreto se
 	 añaden PACKAGE_TESTER_ERROR_NO_FOUND, ZIP_VALI DATE_FAIL y
 	 ZIP_VALIDATE_OK.
-
-[0.0.6]
 	+Se agrega la posibilidad de comparar por regex los paquetes en
 	 packageTester.
+
+[0.0.6]
 	+Corrección de errores a la hora de descomprimir archivos con
 	 packageTester.
 	+Refactorización del archivo utils.py, adaptando al formato PEP-8.
@@ -99,9 +99,9 @@
 	+Se agrega la función de cargar estructura en packageTester, esta
 	 función realiza un trae en /structure/ y almacena los archivos en una
 	 lista con el fin de comparar luego con regex.
+	+Se agregan las funciones getters y setters en packageTester.
 
 [0.0.7]
-	+Se agregan las funciones getters y setters en packageTester.
 	+Se agregan funciones is_folder_utils, isZip y validate en package tester,
 	 las cuales están destinadas a manejar archivos en el filesystem del
 	 sistema operativo huésped. Ambas usan extensivamente la librería OS.
@@ -111,17 +111,17 @@
 	+Se corrigen errores en la inspección de archivos en Package, agregando
 	 nuevas funcionalidades en el walk interno.
 	+Se corrigen las funciones isZip y is_folder_utils.
-
-[0.0.8]
 	+Refactorización de la función validate, la cual se renombró a
 	 validateStructure.
+
+[0.0.8]
 	+Se agrega un test al módulo package.py.
 	+Se agrega la funcionalidad de descompresión RAR en los sistemas
 	 operativos de Windows y OS-X. Para ello se incluyó la librería de
 	 dominio publico rarfile. https://pypi.python.org/pypi/rarfile/
+	+Se agregan los módulos rarfile.py, dumprar.py al paquete /bin.
 
 [0.0.9]
-	+Se agregan los módulos rarfile.py, dumprar.py al paquete /bin.
 	+Se modifica el modulo utisl.py, corrigiendo errores en la función
 	 is_folder_utils.
 	+Se da soporte a WINDOWS.
@@ -129,9 +129,9 @@
 	 hacer walk por el directorio de archivos.
 	+Refactorización completa de la función getStructure de Package.
 	+Corrección de errores en general en el módulo Package.
+	+Se agrega la función isRar al módulo Package.
 
 [0.1.0]
-	+Se agrega la función isRar al módulo Package.
 	+Se agregan test relacionados al manejo de archivos .rar.
 	+Refactorización de todos los archivos de configuraciones. Se eliminan
 	 espacios en muerto, se cambian los comentarios en cada uno de ellos.
@@ -148,10 +148,10 @@
 	+Refactorización de la librería langeditor.
 	+Refactorización de la librería mechanize.
 	+Se repara la importación de módulos en package.py.
-
-[0.1.1]
 	+Se corrigen errores en las funciones de identificación de paquetes .zip
 	 y .rar en Package.
+
+[0.1.1]
 	+Refactorización de los __init__.py en /plugins y /resources.
 	+Modificación del módulo ConfigLoader, se repara un error a la hora de
 	 cargar configuraciones booleanas, acentando tantos los valores, 1, TRUE y
@@ -160,9 +160,9 @@
 	+Refactorización del módulo mechanize.
 	+Se especifican los elementos importados en el módulo package.
 	+Se eliminan printigs en el código de package.
+	-Se eliminan algunos test en package.
 
 [0.1.2]
-	-Se eliminan algunos test en package.
 	+Refactorización menor de utils.py
 	+Se elimina la restricción del *.exe en el .gitignore.
 	+Se corrige el __init__.py de /bin.
@@ -198,20 +198,20 @@
 	 directorios. >Contiene además las funciones auxiliares de isZip y isRar,
 	 originales del módulo package.
 	+Se agregan múltiples test a filemanager.
-
-[0.1.3]
 	-Se eliminan las funciones asociadas al manejo de paquetes comprimidos en
 	 package.py.
+
+[0.1.3]
 	-Se eliminan varios test inválidos en package.py
 	+Se agregan archivos dummy .gitkeep en varios directorios vacíos por
 	 defecto con el fin de no ser eliminados por git.
 	+Se configura el .gitignore para admitir este tipo de archivos.
 	+Se modifica el nombre de la carpeta de tests, de _test/ a .test/ con el
 	 fin de permanecer ocultas en sistemas operativos con arquitectura POSIX.
-
-[0.1.4]
 	+Se corrigen los __init__.py respectivos para hacer valida la
 	 modificación de los directorios.
+
+[0.1.4]
 	+Refactorización menor de package.py y plugins.py.
 	+Refactorización del módulo VerticalScrolledFrame.py.
 	+Refactorización menor del módulo binpath.py.
@@ -241,9 +241,9 @@
 	+Se agrega la función de tree para el filemanager.
 	+Se agregan tests al filemanager asociados al cambio del working
 	 directory.
+	+Refactorización menor del módulo libpath.py.
 
 [0.1.5]
-	+Refactorización menor del módulo libpath.py.
 	+El módulo package se cambia de nombre a packages.py.
 	-Se eliminan los test unitarios de cada uno de los módulos del programa
 	 (aquellos que residían en las sentencias __name__ == "__main__").
@@ -259,10 +259,10 @@
 	 Linux. Para ello se importan distintas librerías en cada uno de los
 	 sistemas operativos huéspedes.
 	+Se cambia el nombre de algunas variables en el filemanager.
-
-[0.1.6]
 	+Corrección de errores en la importación de módulos en el file
 	 manager.py.
+
+[0.1.6]
 	+Se corrigen errores a la hora de extraer los archivos .rar y .zip.
 	 Además se agrega una lista de carpetas extraídas con el fin de poder
 	 eliminarlas tras analizar los archivos que contiene un determinado
@@ -281,10 +281,10 @@
 	-Se elimina la carpeta data/.tests
 	+Se crea una carpeta .data_tests dentro de /tests con el fin de almacenar
 	 tests públicos.
-
-[0.1.7]
 	+Se crean varios archivos de testeo publico el cual contienen
 	 combinaciones de archivos rar, zip, subcarpetas y archivos.
+
+[0.1.7]
 	+Se modifica el archivo .gitignore para evitar subir contenido que se
 	 almacene dentro de .data_tests_private/.
 	+Se renombra el archivo VerticalScrolledFrame.py a
@@ -308,9 +308,9 @@
 	+Se arreglan comentarios en los archivos de configuraciones core.ini y
 	 folder.ini.
 	+Refactorización menor en lib/__init__.py.
+	+El modulo filemanager.py se renombra a fileManager.py.
 
 [0.1.8]
-	+El modulo filemanager.py se renombra a fileManager.py.
 	+Se crean los módulos de testeo fileManagerTest.py y package
 	 ValidatorTest.py.
 	+Se modifica el archivo .gitignore agregando una restricción a los
@@ -342,10 +342,10 @@
 	 noStdOutTest.py, packageTest.py,packageValidationTest.py, rarfileTest.py
 	 y verticalScrolled FramTest.py.
 	+Se agregan nuevos test para packageTest.
-
-[0.1.9]
 	-Se eliminan entradas a archivos de tests privados en package
 	 ValidationTest.py y fileManagerTest.py.
+
+[0.1.9]
 	+Corrección de errores menores en general.
 	+Se crea un control de versiones (CHANGELOG).
 	+Se agrega comprobación de tipo de variable en Package.
@@ -363,9 +363,9 @@
 	+Se renombra el archivo filemanagerTest.py a fileManagerTest.py.
 	+Se agrega un directorio de iconos en resources/
 	+Se refactorizan algunos módulos.
+	+Se cambia el header al archivo verticalScrolledFrame.py.
 
 [0.2.0]
-	+Se cambia el header al archivo verticalScrolledFrame.py.
 	+Se incluye autor en archivos externos.
 	+Se repara error en la no distinción entre package inexistente y package
 	 vacío.
@@ -380,11 +380,11 @@
 	+Corrección de errores en la búsqueda de carpetas en el Package.
 	+Se agregan nuevas carpetas para los tests de paquetes pub licos: Folder
 	 6-EMPTY/ y Folder 7/.
-
-[0.2.1]
 	+Se agrega un template para la creación sencilla de módulos de testeo.
 	 Incluye imputación básica de módulos y un esquema de clase de
 	 UnitTest.
+
+[0.2.1]
 	+Se renombra testpath.py a _testpath.py. Además, se modifica la carga por
 	 defecto de este módulo a obligatoria para to dos los tests.
 	+Se refactorizan y eliminan errores de importación en las librerías
@@ -419,9 +419,9 @@
 	+Refactorización menor en utilsTest.py.
 	+Se crea un nuevo archivo de testeo varTypeTest.py el cual prueba las
 	 funciones de bin/varType.
+	+Renombrada la carpeta de tests de tests/ a test/.
 
 [0.2.2]
-	+Renombrada la carpeta de tests de tests/ a test/.
 	+Se corrige error al no subir la carpeta .data_tests_pri vate/ a la
 	 estructura de los tests debido a estar vacía.
 	+Se agrega entrada de error asociado a la instalación de la librería
@@ -453,11 +453,11 @@
 	+Se modifica la forma de imprimir errores en el fileManagerTest.py.
 	 Además se agregan pruebas tanto en este archivo como en packageTest.py
 	 los cuales testean con el directorio 'Folder 8-COMPSD'.
-
-[0.2.3]
 	+Se agrega una clase UnitTest a verticalScrolledFrame debido a errores
 	 detectados en sistemas Linux tras no tener instalada la librería Tkinter
 	 (python-tk).
+
+[0.2.3]
 	+Se agrega restricción al .gitignore para evitar archivos en la carpeta
 	 .results/ tras ejecutar los diversos tests.
 	-Se elimina la carpeta licence/ de resources/.
@@ -509,22 +509,22 @@
 	 los comandos --disable-verbose, --dont-save-log y
 	--dont-save-results.
 	+Refactorización de los archivos _template.py y _test path.py en test/.
-
-[0.2.4]
 	+El VERBOSE de los test ahora se carga como argumento de la consola en los
 	 archivos de testeo accentsTest.py, configLoaderTest.py, errorsTest.py,
 	 fileManagerTest.py,packageTest.py, packageValidatorTest.py, rarfileTes
 	 t.py, utilsTest.py y verTypeTest.py.
+
+[0.2.4]
 	+Corrección menor en entradas del CHANGELOG.
 	+Formateo completo del código para todos los módulos según el formato
 	 PEP-8.
 	+Runtests ahora crea gráficos de los tiempos medios de cada prueba,
 	 guardándolos en el directorio .results/. En cada uno de ellos se indica
 	 el tiempo medio de las pruebas y su evolución temporal.
-
-[0.2.5]
 	+Nueva entrada en configuraciones: plot.ini, para manejar las
 	 configuraciones de ploteo generales del software.
+
+[0.2.5]
 	+Nuevas entradas de errores asociados a runtests.py en bin/errors.py.
 	+Se agrega documentación a todos los módulos, clases y funciones del
 	 programa. Indicando comentarios, variables de cada una de las funciones,
@@ -601,12 +601,12 @@
 	 leyenda.
 	+Se agregan entradas de testeo de conversión de números en el
 	 configLoaderTest.py.
-
-[0.2.6]
 	+Se agregan las entradas de testeo testFindFile, testDepthFile y
 	 testErrorAssertionPackage en el packageTest.py las cuales tienen por
 	 objetivo ubicar la profundidad de un archivo, o su ubicación en forma de
 	 string, o la retornacion de errores como un string.
+
+[0.2.6]
 	+Se agregan entradas de testeo testKwargs y testNumberConverter en
 	 utilsTest.py, estas entradas tienen el propósito de testear las
 	 funciones auxiliares para el tratamiento de los **kwargs, y además
@@ -653,10 +653,10 @@
 	+Se corrige error al crear un gráfico con entradas ERROR en el archivo de
 	 resultados.
 	+Se agrega documentación a todas las funciones de los tests.
-
-[0.2.7]
 	+Se modifica el inicio de los test de unittest.main() a una estructura mas
 	 compleja con TestLoader() para aceptar argumentos por consola.
+
+[0.2.7]
 	+Re-escritura de el CHANGELOG, arreglando errores ortográficos, y
 	 añadiendo otros elementos como fechas o versión del archivo.
 	+Se agregan tests en packageValidatorTest para compro bar las
@@ -692,9 +692,9 @@
 	+Se añaden múltiples test a PackageValidatorTest en test/.
 	+Se añaden múltiples test de regex_compare a UtilsTest en test/.
 	+Se añaden múltiples carpetas de testeo en .data_tests/.
+	+Se corrigen errores al cargar configuraciones que no existen en Langs.py.
 
 [0.2.8]
-	+Se corrigen errores al cargar configuraciones que no existen en Langs.py.
 	+Se renombran múltiples archivos adoptando la convención PEP-8.
 	+Corrección ortográfica de múltiples comentarios y documentación en
 	 todos los módulos y librerías del programa.
@@ -727,17 +727,19 @@
 	 dirección lógica en comparación con la estructura analizada.
 	+Se añaden múltiples entradas para imprimir en consola las listas de
 	 archivos válidas e inválidas de cada paquete por medio del comando
-	--verbose en el test del PackageValidator.
+	 verbose en el test del PackageValidator.
 	+Se añade un test para probar paquetes que tengan más de una carpeta.
 	+Se optimiza una subfunción del regex_compare para incrementar la
 	 velocidad de comparación.
-
-[0.2.9]
 	+Se añade un test para probar el tipo de sistema operativo en Windows
 	 para utilsTest.py.
+
+[0.2.9]
 	+Todas las funciones y clases fueron reformateadas para ajustarse a la
 	 convención PEP-8.
 	+Se reescribió el módulo colors.py para introducir colores en Windows.
 	+Corrección de errores en determinadas variables de funciones.
 	+Corrección ortográfica menor al CHANGELOG.
 	+Se reformatean los test para eliminar la sintaxis == {s} por is {s}.
+	+Se corrige error en el generador del CHANGELOG, el cual cambiaba la
+	 última entrada de una versión por la primera de la siguiente.
