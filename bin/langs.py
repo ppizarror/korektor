@@ -11,6 +11,7 @@ Licencia: GPLv2
 __author__ = "ppizarror"
 
 # Importación de librerías y obtención de directorios
+# noinspection PyProtectedMember
 from binpath import _LANG_DIRCONFIG, _LANG_DIRLANGS, _DIR_CONFIG
 from configloader import ConfigLoader
 from utils import google_translate
@@ -50,7 +51,7 @@ def _totalspaces(index):
     return int(round(math.log(index, 10), 2) + 1) * " "
 
 
-# noinspection PyArgumentEqualDefault
+# noinspection PyArgumentEqualDefault,PyTypeChecker
 class LangLoader:
     """
     Carga un archivo de idioma y maneja sus elementos, adicionalmente traduce líneas.

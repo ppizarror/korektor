@@ -25,7 +25,7 @@ _TITLE_VERBOSE = "Activa el verbose."
 _TITLE_VERSION = "Muestra la versión del programa."
 
 
-# noinspection PyTypeChecker
+# noinspection PyTypeChecker,PyProtectedMember
 def argument_parser_factory(descripcion="", **kwargs):
     # noinspection SpellCheckingInspection
     """

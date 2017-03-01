@@ -19,7 +19,7 @@ from bin.utils import print_bars_console, equal_lists
 import unittest
 
 # Constantes de los test
-DISABLE_HEAVY_TESTS = True
+DISABLE_HEAVY_TESTS = False
 DISABLE_HEAVY_TESTS_MSG = "Se desactivaron los tests pesados"
 VERBOSE = False
 

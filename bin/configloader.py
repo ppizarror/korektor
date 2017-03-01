@@ -34,7 +34,7 @@ FALSE = "FALSE"
 TRUE = "TRUE"
 
 
-# noinspection PyArgumentEqualDefault
+# noinspection PyArgumentEqualDefault,PyTypeChecker
 class ConfigLoader:
     """
     Carga configuraciones y retorna sus elementos.

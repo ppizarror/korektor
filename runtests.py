@@ -13,6 +13,7 @@ Licencia: GPLv2
 __author__ = "ppizarror"
 
 # Importación de librerías
+# noinspection PyProtectedMember
 from test._testpath import DIR_TEST_RESULTS, DIR_TEST_RESULTS_LOGGING
 from bin.arguments import argument_parser_factory
 from bin.configloader import ConfigLoader
@@ -27,24 +28,32 @@ import subprocess
 
 # Configuración de argumentos por consola
 parser = argument_parser_factory('Ejecuta todos los tests.')
-parser.add_argument('-p', '--create-plot', dest='doPlot', action='store_true', \
+parser.add_argument('-p', '--create-plot', dest='doPlot', action='store_true',
                     help='Crea un gráfico con todos los resultados en función del tiempo')
-parser.add_argument('--disable-verbose', dest='verbose', action='store_false', \
+parser.add_argument('--disable-verbose', dest='verbose', action='store_false',
                     help='Desactiva el printing en consola.')
-parser.add_argument('--dont-save-log', dest='doSaveLogFile', action='store_false', \
-                    help='Desactiva el guardado de resultados.')
-parser.add_argument('--dont-save-results', dest='doSaveResults', action='store_false', \
-                    help='Desactiva el guardado de resultados.')
-parser.add_argument('--reset', dest='doReset', action='store_true', \
+parser.add_argument('--dont-save', dest='doSaveAnything', action='store_false',
+                    help='Desactiva todos los guardados de datos.')
+parser.add_argument('--dont-save-log', dest='doSaveLogFile', action='store_false',
+                    help='Desactiva el guardado del log del test.')
+parser.add_argument('--dont-save-results', dest='doSaveResults', action='store_false',
+                    help='Desactiva el guardado de resultados del test.')
+parser.add_argument('--reset', dest='doReset', action='store_true',
                     help='Reinicia los resultados a cero.')
 args = parser.parse_args()
 
 # Se guardan las configuraciones locales
 doPlot = args.doPlot
 doReset = args.doReset
+doSave = args.doSaveAnything
 doSaveLogFile = args.doSaveLogFile
 doSaveResults = args.doSaveResults
 verbose = args.verbose
+
+# Si se desactivan todos los guardados
+if not doSave:
+    doSaveLogFile = False
+    doSaveResults = False
 
 # Constantes del programa
 COMMANDS = "python -m unittest discover -s test -p *Test.py"
@@ -74,6 +83,7 @@ sg = "0.0s"
 # Mensaje de los resultados
 msgg = hr + " " + os + " "
 
+# noinspection PyBroadException
 try:  # Se genera el mensaje de resultados
     if rl == 6:  # Resultado correcto
         msg = result_list[2].replace("\r", "").split(" ")
@@ -91,6 +101,7 @@ except:
 
 # Se agrega el estado de ejecución al archivo de resultados en RESULT_FILE
 if doSaveResults:
+    # noinspection PyBroadException
     try:
         x = ""
         # noinspection PyArgumentEqualDefault
@@ -153,12 +164,16 @@ if doPlot:  # Se crea un gráfico de los resultados en función del tiempo
             counter = 0
             for ln in testdata:
                 if "ERROR" not in ln:
-                    nln = str(ln).strip().split(" ")
-                    vec_fail.append(int(nln[6]))
-                    vec_ok.append(int(nln[5]))
-                    vec_test.append(nln[1] + " " + nln[1])
-                    vec_time.append(float(nln[4].replace("s", "")))
-                    vec_x.append(int(nln[0]))
+                    # noinspection PyBroadException
+                    try:
+                        nln = str(ln).strip().split(" ")
+                        vec_fail.append(int(nln[6]))
+                        vec_ok.append(int(nln[5]))
+                        vec_test.append(nln[1] + " " + nln[1])
+                        vec_time.append(float(nln[4].replace("s", "")))
+                        vec_x.append(int(nln[0]))
+                    except:
+                        pass
             testdata.close()
             counter = len(vec_x)
 

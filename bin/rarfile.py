@@ -107,7 +107,6 @@ try:
         # noinspection PyUnresolvedReferences
         from cryptography.hazmat.backends import default_backend
 
-
         # noinspection PyMissingOrEmptyDocstring,PyPep8Naming
         class AES_CBC_Decrypt(object):
             block_size = 16
@@ -121,7 +120,6 @@ try:
     except ImportError:
         # noinspection PyUnresolvedReferences
         from Crypto.Cipher import AES
-
 
         # noinspection PyMissingOrEmptyDocstring,PyPep8Naming
         class AES_CBC_Decrypt(object):
@@ -511,7 +509,7 @@ class RarInfo(object):
         return (self.flags & RAR_FILE_PASSWORD) > 0
 
 
-# noinspection PySingleQuotedDocstring,PyMethodMayBeStatic,PyPropertyAccess,PyTypeChecker,PyUnusedLocal,PyShadowingBuiltins,PyChainedComparisons,PyUnresolvedReferences,SpellCheckingInspection,PyArgumentEqualDefault,PyPep8Naming
+# noinspection PySingleQuotedDocstring,PyMethodMayBeStatic,PyPropertyAccess,PyTypeChecker,PyUnusedLocal,PyShadowingBuiltins,PyChainedComparisons,PyUnresolvedReferences,SpellCheckingInspection,PyArgumentEqualDefault,PyPep8Naming,PyDunderSlots,PyAugmentAssignment
 class RarFile(object):
     '''Parse RAR structure, provide access to files in archive.
     '''
@@ -1383,7 +1381,7 @@ class UnicodeFilename(object):
         return self.buf.decode("utf-16le", "replace")
 
 
-# noinspection PyTypeChecker,SpellCheckingInspection
+# noinspection PyTypeChecker,SpellCheckingInspection,PyProtectedMember
 class RarExtFile(RawIOBase):
     """Base class for file-like object that :meth:`RarFile.open` returns.
 
@@ -1664,7 +1662,7 @@ class PipeReader(RarExtFile):
         return got
 
 
-# noinspection PyArgumentList,SpellCheckingInspection,PyArgumentEqualDefault
+# noinspection PyArgumentList,SpellCheckingInspection,PyArgumentEqualDefault,PyProtectedMember
 class DirectReader(RarExtFile):
     """Read uncompressed data directly from archive."""
 

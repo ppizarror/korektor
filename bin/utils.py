@@ -455,7 +455,7 @@ def number_of_sublists(l):
     return count
 
 
-# noinspection PyArgumentEqualDefault
+# noinspection PyArgumentEqualDefault,PyBroadException
 def load_file(archive, lang=_MSG_LOADINGFILE, **kwargs):
     """
     Carga un archivo y retorna una lista con las líneas del archivo.
@@ -583,7 +583,7 @@ def print_hierachy_list(lst, level, tabs_left):
             print('\t' * tabs_left + '    ' * level + '+---' + l)
 
 
-# noinspection SpellCheckingInspection
+# noinspection SpellCheckingInspection,PyBroadException
 def regex_compare(reg_string, curr_string, valid_regex_chars=None, regex_chars=_REGEX_CHARS_LIST, **kwargs):
     """
     Compara dos strings el cual reg_string posee regex.
@@ -806,6 +806,7 @@ def sum_matrix(matrix):
     :rtype: float
     """
     suma = 0.0
+    # noinspection PyBroadException
     try:
         for j in matrix:
             for k in j:
@@ -815,6 +816,7 @@ def sum_matrix(matrix):
         return -1
 
 
+# noinspection PyBroadException
 def wipe_file(filename):
     """
     Elimina todo el contenido del archivo pasado por argumento.

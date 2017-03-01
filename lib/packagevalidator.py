@@ -31,6 +31,7 @@ _VL_TRUE = 11
 _VL_TRUE_CHECKED = 12
 
 
+# noinspection PyProtectedMember
 class PackageValidator(VarTypedClass, ExceptionBehaviour):
     """
     Clase que permite validar que los paquetes tengan una estructura adecuada, para ello se instancia

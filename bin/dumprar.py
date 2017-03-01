@@ -103,7 +103,7 @@ file_parms = ("D64", "D128", "D256", "D512",
               "D1024", "D2048", "D4096", "DIR")
 
 
-# noinspection PyMissingOrEmptyDocstring
+# noinspection PyMissingOrEmptyDocstring,PyAugmentAssignment
 def xprint(m, *args):
     if sys.hexversion < 0x3000000:
         m = m.decode('utf8')

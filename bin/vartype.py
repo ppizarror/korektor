@@ -57,7 +57,7 @@ def check_variable_type(var, clss, other_class=None):
         return False
 
 
-# noinspection PyMissingConstructor
+# noinspection PyMissingConstructor,PyTypeChecker
 class VarTypedClass(ExceptionBehaviour):
     """
     Clase asociada al manejo de tipos de variable.

@@ -343,6 +343,7 @@ class FileManager(VarTypedClass, err.ExceptionBehaviour):
                 return "." in filnm
             return True
 
+        # noinspection PyBroadException
         def _inspect(rootpath, filename, filelist, extracted_folders, depth):
             """
             Inspecciona todos los archivos de un paquete.
@@ -426,10 +427,8 @@ class FileManager(VarTypedClass, err.ExceptionBehaviour):
                         try:
                             # noinspection PyArgumentEqualDefault
                             rarfile.RarFile(rootpath + filename, 'r', 'utf8').extractall(rootpath + newfilename + "/")
-                            # Archive(rootpath + filename).extractall(rootpath + newfilename + "/") # Para linux con Archive/pyunpack
                         except Exception, ex:
                             print ""
-                            # err.st_error(err.ERROR_RARUNCOMPRESS, True, "pyunpack", e) # Para linux con Archive/pyunpack
                             err.st_error(err.ERROR_RARUNCOMPRESS_LINUX, True, "rarfile", ex)
                     if self._removeOnExtract:
                         os.remove(rootpath + filename)
@@ -516,7 +515,7 @@ class FileManager(VarTypedClass, err.ExceptionBehaviour):
         """
         return is_folder_utils(rootpath, filename)
 
-    # noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic,PyBroadException
     def _is_rar(self, rootpath, filename):
         """
         Comprueba si el paquete es un archivo rar.
@@ -539,7 +538,7 @@ class FileManager(VarTypedClass, err.ExceptionBehaviour):
                 return False
         return False
 
-    # noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic,PyBroadException
     def _is_zip(self, rootpath, filename):
         """
         Comprueba si un paquete es un zip.

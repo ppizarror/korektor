@@ -24,6 +24,7 @@ import tkFont
 import ttk
 import datetime
 
+# noinspection PyBroadException
 try:
     # noinspection PyUnresolvedReferences
     import winsound
@@ -163,6 +164,7 @@ def sortby(tree, col, descending):
     tree.heading(col, command=lambda col=col: sortby(tree, col, int(not descending)))
 
 
+# noinspection PyBroadException
 try:
     # noinspection PyTypeChecker
     LANGLIST = loadFromArchive(LANGFILE)
@@ -173,7 +175,7 @@ except:
 
 
 # Clase Pop
-# noinspection PyShadowingNames,PyUnusedLocal,PyMissingOrEmptyDocstring,SpellCheckingInspection,PyArgumentEqualDefault
+# noinspection PyShadowingNames,PyUnusedLocal,PyMissingOrEmptyDocstring,SpellCheckingInspection,PyArgumentEqualDefault,PyBroadException
 class Pop:
     def __init__(self, properties):
         """
@@ -393,6 +395,7 @@ class Pop:
 
 
 # Se cargan las configuraciones
+# noinspection PyBroadException
 try:
     # noinspection PyArgumentEqualDefault
     conf_file = open(CONFIGURATIONFILE, "r")
@@ -495,7 +498,7 @@ archive.close()
 DATADELIMITER = DATADELIMITER.replace("*", " ")
 
 
-# noinspection PyTypeChecker,PyUnusedLocal,PyShadowingNames,PyMethodMayBeStatic,PyMissingOrEmptyDocstring,PyTupleAssignmentBalance,SpellCheckingInspection,PyArgumentEqualDefault
+# noinspection PyTypeChecker,PyUnusedLocal,PyShadowingNames,PyMethodMayBeStatic,PyMissingOrEmptyDocstring,PyTupleAssignmentBalance,SpellCheckingInspection,PyArgumentEqualDefault,PyBroadException
 class Langs:
     """
     Clase de manejo de idiomas.
