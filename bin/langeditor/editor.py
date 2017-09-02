@@ -41,7 +41,7 @@ DATACONFIG = "config/"
 DATALANGS = __actualeditorpath__.replace("bin/langeditor", "resources/Langs/")
 DATARECOVER = DATALANGS + ".recover/"
 DEFAULT_FONT_TITLE = "Arial", 10
-EMAIL = "pablo@ppizarror.com"
+EMAIL = "pablo.pizarro@ing.uchile.cl"
 LANGFILE = DATACONFIG + "Langs.txt"
 CONFIGURATIONFILE = DATACONFIG + "config.ini"
 ICONPROGRAM = DATAICONS + "icon.ico"
@@ -519,6 +519,7 @@ class Langs:
                              (self.root.winfo_screenheight() - PROGRAMSIZE[1] - 50) / 2))
         self.root.iconbitmap(ICONPROGRAM)
         self.root.focus_force()
+        # self.root.tk.call('tk', 'scaling', '-displayof', '.', 100 / 72.0)
         # Menu
         menu = Menu(self.root)
         self.root.config(menu=menu)

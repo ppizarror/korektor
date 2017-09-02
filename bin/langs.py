@@ -18,13 +18,10 @@ from utils import google_translate
 import errors
 import math
 
-# noinspection PyProtectedMember
 # Se cargan las configuraciones
 langselfconfig = ConfigLoader(_DIR_CONFIG, "Langs.ini")
-# noinspection SpellCheckingInspection
 langconfig = ConfigLoader(_LANG_DIRCONFIG, "const.ini")
 langavaiable = ConfigLoader(_LANG_DIRCONFIG, "Langs.txt")
-# noinspection SpellCheckingInspection
 langtranslateconfig = ConfigLoader(_DIR_CONFIG, "langstransl.ini")
 
 # Constantes del programa

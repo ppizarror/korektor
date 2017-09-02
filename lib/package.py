@@ -301,7 +301,7 @@ class Package(VarTypedClass, ExceptionBehaviour):
         else:
             return self._throw_exception("PACKAGE_ERROR_NO_NAME")
 
-    def _get_validated_files(self):
+    def get_validated_files(self):
         """
         Retorna la lista de los archivos validados.
 
