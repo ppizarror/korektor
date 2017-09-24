@@ -1,12 +1,15 @@
-# Korektor
-[![@ppizarror](http://ppizarror.com/resources/images/autor.svg)](http://ppizarror.com)
-[![Licencia GPL](http://ppizarror.com/resources/images/licenciagpl2.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
-[![Python](http://ppizarror.com/resources/images/python27.svg)](https://www.python.org/downloads/)
-
-Corrector automático de tareas. Aún en desarrollo.
+<h1 align="center">
+  <img alt="Korektor" src="http://ppizarror.com/resources/other/python.png" width="200px" height="200px" />
+  <br /><br />
+  Korektor</h1>
+<p align="center">Corrector automático de tareas. Aún en desarrollo</p>
+<div align="center"><a href="http://ppizarror.com"><img alt="@ppizarror" src="http://ppizarror.com/badges/autor.svg" /></a>
+<a href="https://www.gnu.org/licenses/gpl-2.0.html/"><img alt="Licencia GPL v2" src="http://ppizarror.com/badges/licenciagpl2.svg" /></a>
+<a href="https://www.python.org/downloads/"><img alt="Python 2.7" src="http://ppizarror.com/badges/python27.svg" /></a>
+</div><br />
 
 ## Licencia
-Este proyecto está licenciado bajo GPLv2 (GNU General Public License, version 2) [https://www.gnu.org/licenses/gpl-2.0.html].
+Este proyecto está licenciado bajo GPLv2 (GNU General Public License, version 2) [https://www.gnu.org/licenses/gpl-2.0.html]
 
 ## Autor
-<a href="http://ppizarror.com">Pablo Pizarro R.</a> | 2015-2017.
+<a href="http://ppizarror.com" title="ppizarror">Pablo Pizarro R.</a> | 2015 - 2017
